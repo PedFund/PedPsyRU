@@ -1,0 +1,12 @@
+{
+  "name": "pedpsyru-core-pilot",
+  "version": "0.1.0",
+  "private": true,
+  "description": "ПедПси: пилот контракта и бланка Томаса—Килманна",
+  "engines": {"node": ">=22"},
+  "scripts": {
+    "test": "node --test tests/tki-contract.test.js tests/tki-form.test.js",
+    "test:tki": "node --test tests/tki-contract.test.js",
+    "test:form": "node --test tests/tki-form.test.js"
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "purpose": "Synthetic key comparison; no respondent data or questionnaire texts",
+  "reference": {
+    "source": "https://pedobrazovanie.ru/images/JOURNAL/archive2016/2016-11-5q8c/36.pdf",
+    "authors": "Кардашина С.В., Шаньгина Н.В., 2016",
+    "location": "Таблицы 2–6, печатные страницы 219–220, PDF страницы 4–5",
+    "reviewed_at": "2026-10-02",
+    "verification": "Read from the publication text; original user form not yet available"
+  },
+  "scale_order": ["competing", "collaborating", "compromising", "avoiding", "accommodating"],
+  "reference_pair_scales": [
+    ["avoiding", "accommodating"],
+    ["compromising", "collaborating"],
+    ["competing", "accommodating"],
+    ["compromising", "accommodating"],
+    ["collaborating", "avoiding"],
+    ["avoiding", "competing"],
+    ["avoiding", "compromising"],
+    ["competing", "collaborating"],
+    ["avoiding", "competing"],
+    ["competing", "compromising"],
+    ["collaborating", "accommodating"],
+    ["avoiding", "compromising"],
+    ["compromising", "competing"],
+    ["collaborating", "competing"],
+    ["accommodating", "avoiding"],
+    ["accommodating", "competing"],
+    ["competing", "avoiding"],
+    ["accommodating", "compromising"],
+    ["collaborating", "avoiding"],
+    ["collaborating", "compromising"],
+    ["accommodating", "collaborating"],
+    ["compromising", "competing"],
+    ["collaborating", "avoiding"],
+    ["accommodating", "compromising"],
+    ["competing", "accommodating"],
+    ["compromising", "collaborating"],
+    ["avoiding", "accommodating"],
+    ["competing", "collaborating"],
+    ["compromising", "avoiding"],
+    ["accommodating", "collaborating"]
+  ],
+  "known_legacy_difference": {"item_id": "q21", "alternative": "A", "legacy": "avoiding", "reference": "accommodating"},
+  "legacy_profiles": [
+    {"id": "all_A", "answers": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "expected": [6, 6, 6, 7, 5]},
+    {"id": "all_B", "answers": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "expected": [6, 6, 6, 6, 6]},
+    {"id": "alternating", "answers": "ABABABABABABABABABABABABABABAB", "expected": [7, 9, 7, 5, 2]}
+  ]
+}
