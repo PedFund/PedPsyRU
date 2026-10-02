@@ -7,48 +7,168 @@
     "reviewed_at": "2026-10-02",
     "verification": "Read from publication tables; user supplied form and confirmed 21A accommodating / 21B collaborating on 2026-10-02"
   },
-  "scale_order": ["competing", "collaborating", "compromising", "avoiding", "accommodating"],
+  "scale_order": [
+    "competing",
+    "collaborating",
+    "compromising",
+    "avoiding",
+    "accommodating"
+  ],
   "reference_pair_scales": [
-    ["avoiding", "accommodating"],
-    ["compromising", "collaborating"],
-    ["competing", "accommodating"],
-    ["compromising", "accommodating"],
-    ["collaborating", "avoiding"],
-    ["avoiding", "competing"],
-    ["avoiding", "compromising"],
-    ["competing", "collaborating"],
-    ["avoiding", "competing"],
-    ["competing", "compromising"],
-    ["collaborating", "accommodating"],
-    ["avoiding", "compromising"],
-    ["compromising", "competing"],
-    ["collaborating", "competing"],
-    ["accommodating", "avoiding"],
-    ["accommodating", "competing"],
-    ["competing", "avoiding"],
-    ["accommodating", "compromising"],
-    ["collaborating", "avoiding"],
-    ["collaborating", "compromising"],
-    ["accommodating", "collaborating"],
-    ["compromising", "competing"],
-    ["collaborating", "avoiding"],
-    ["accommodating", "compromising"],
-    ["competing", "accommodating"],
-    ["compromising", "collaborating"],
-    ["avoiding", "accommodating"],
-    ["competing", "collaborating"],
-    ["compromising", "avoiding"],
-    ["accommodating", "collaborating"]
+    [
+      "avoiding",
+      "accommodating"
+    ],
+    [
+      "compromising",
+      "collaborating"
+    ],
+    [
+      "competing",
+      "accommodating"
+    ],
+    [
+      "compromising",
+      "accommodating"
+    ],
+    [
+      "collaborating",
+      "avoiding"
+    ],
+    [
+      "avoiding",
+      "competing"
+    ],
+    [
+      "avoiding",
+      "compromising"
+    ],
+    [
+      "competing",
+      "collaborating"
+    ],
+    [
+      "avoiding",
+      "competing"
+    ],
+    [
+      "competing",
+      "compromising"
+    ],
+    [
+      "collaborating",
+      "accommodating"
+    ],
+    [
+      "avoiding",
+      "compromising"
+    ],
+    [
+      "compromising",
+      "competing"
+    ],
+    [
+      "collaborating",
+      "competing"
+    ],
+    [
+      "accommodating",
+      "avoiding"
+    ],
+    [
+      "accommodating",
+      "competing"
+    ],
+    [
+      "competing",
+      "avoiding"
+    ],
+    [
+      "accommodating",
+      "compromising"
+    ],
+    [
+      "collaborating",
+      "avoiding"
+    ],
+    [
+      "collaborating",
+      "compromising"
+    ],
+    [
+      "accommodating",
+      "collaborating"
+    ],
+    [
+      "compromising",
+      "competing"
+    ],
+    [
+      "collaborating",
+      "avoiding"
+    ],
+    [
+      "accommodating",
+      "compromising"
+    ],
+    [
+      "competing",
+      "accommodating"
+    ],
+    [
+      "compromising",
+      "collaborating"
+    ],
+    [
+      "avoiding",
+      "accommodating"
+    ],
+    [
+      "competing",
+      "collaborating"
+    ],
+    [
+      "compromising",
+      "avoiding"
+    ],
+    [
+      "accommodating",
+      "collaborating"
+    ]
   ],
-  "known_legacy_difference": {"item_id": "q21", "alternative": "A", "legacy": "avoiding", "reference": "accommodating"},
-  "corrected_profiles": [
-    {"id": "all_A", "answers": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "expected": [6, 6, 6, 6, 6]},
-    {"id": "all_B", "answers": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "expected": [6, 6, 6, 6, 6]},
-    {"id": "alternating", "answers": "ABABABABABABABABABABABABABABAB", "expected": [7, 9, 7, 4, 3]}
-  ],
-  "legacy_profiles": [
-    {"id": "all_A", "answers": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "expected": [6, 6, 6, 7, 5]},
-    {"id": "all_B", "answers": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "expected": [6, 6, 6, 6, 6]},
-    {"id": "alternating", "answers": "ABABABABABABABABABABABABABABAB", "expected": [7, 9, 7, 5, 2]}
+  "profiles": [
+    {
+      "id": "all_A",
+      "answers": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "expected": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "all_B",
+      "answers": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB",
+      "expected": [
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
+    },
+    {
+      "id": "alternating",
+      "answers": "ABABABABABABABABABABABABABABAB",
+      "expected": [
+        7,
+        9,
+        7,
+        4,
+        3
+      ]
+    }
   ]
 }
