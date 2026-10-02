@@ -185,6 +185,12 @@ function createParticipantAccess(db,{now=Date.now}={}) {
       // No individual result, key, digest, credentials or source_text. Result publication is separate 01е.
       return {...attempt,responses,demo:true,persistence:false};
     },
+    requireAttempt(token,id) {
+      const actor=resolve(token);
+      const attempt=typeof id==='string' && id.length>0 && ownAttempts(actor,id)[0];
+      if(!attempt){audit(db,now(),"attempt_access","deny","NOT_AVAILABLE",actor);fail(404,"NOT_AVAILABLE");}
+      return {actor,attempt};
+    },
     requireSession: resolve
   };
 }

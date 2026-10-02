@@ -1,6 +1,7 @@
 "use strict";
 
 (async function () {
+  if(location.pathname==="/take")return;
   const byId = id => document.getElementById(id);
   const questionnaire = byId("questionnaire");
   const submit = byId("submit");

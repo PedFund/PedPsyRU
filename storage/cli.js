@@ -29,7 +29,8 @@ if (!["migrate","seed","check"].includes(command) || process.argv.length !== 3) 
       "participant_credentials","participant_sessions","staff_credentials","staff_sessions","access_audit_events"];
     const counts = Object.fromEntries(tables.map(table => [table, db.prepare(`SELECT count(*) AS count FROM ${table}`).get().count]));
     console.log(JSON.stringify({database: filename, dataset_kind: "demo", counts, integrity: "ok", foreign_keys: "ok",
-      answer_writes_connected: false, participant_access_schema: true, staff_access_schema: true}, null, 2));
+      draft_service_available: true, draft_http_requires_participant_session: true,
+      completion_service_available: false, participant_access_schema: true, staff_access_schema: true}, null, 2));
   } catch (error) {
     console.error("Training database operation failed:", error.message);
     process.exitCode = 1;

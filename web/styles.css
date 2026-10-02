@@ -12,6 +12,8 @@ button, input { font: inherit; }
 #staff-answers strong { color: var(--teal); }
 .download-link { display: inline-block; border-radius: 12px; padding: 13px 20px; background: var(--teal); color: white; text-decoration: none; font-weight: 650; }
 .download-link:hover { background: #08656a; }
+#save-panel[data-state="conflict"], #save-panel[data-state="failed"], #save-panel[data-state="auth"] { border-color: var(--error); }
+#save-panel[data-state="saving"] { border-color: #91bfc7; }
 #access-attempts { padding-left: 22px; }
 #access-attempts li { margin-bottom: 10px; }
 button { border: 0; border-radius: 12px; padding: 13px 20px; background: var(--teal); color: white; cursor: pointer; font-weight: 650; }

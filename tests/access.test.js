@@ -196,7 +196,7 @@ test("revocation during password hashing cannot create a session",async t=>{
   service.revoke(actors[0].login_id);assert.equal(await pending,null);
   assert.equal(db.prepare("SELECT count(*) AS n FROM participant_sessions").get().n,0);
 });
-test("01д.3 permits no answer mutation, completion, individual report or privileged export",async t=>{
+test("legacy attempt route permits no mutation, completion, individual report or privileged export",async t=>{
   const {db,actors,login,base,get}=await setup(t);const signed=await login();
   const before=db.prepare("SELECT * FROM responses ORDER BY attempt_id,item_id").all();
   for(const method of ["POST","PUT","PATCH","DELETE"]){

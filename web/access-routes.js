@@ -10,13 +10,13 @@ function cookieToken(header) {
 }
 const cookie = token => COOKIE+"="+token+"; Path=/; HttpOnly; SameSite=Strict; Max-Age="+(SESSION_TTL_MS/1000);
 const clearCookie = COOKIE+"=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0";
-async function readJson(req) {
+async function readJson(req,maxBytes=2048) {
   if (req.headers["content-type"]?.split(";")[0].trim().toLowerCase()!=="application/json") throw new AccessError(415,"JSON_REQUIRED");
   const chunks=[];let bytes=0;
-  for await (const chunk of req) {bytes+=chunk.length;if(bytes>2048){req.resume();throw new AccessError(413,"BODY_TOO_LARGE");}chunks.push(chunk);}
+  for await (const chunk of req) {bytes+=chunk.length;if(bytes>maxBytes){req.resume();throw new AccessError(413,"BODY_TOO_LARGE");}chunks.push(chunk);}
   try {return JSON.parse(Buffer.concat(chunks).toString("utf8"));} catch {throw new AccessError(400,"INVALID_JSON");}
 }
-async function handleAccess(req,res,url,json,access) {
+async function handleAccess(req,res,url,json,access,drafts=null) {
   if (!url.pathname.startsWith("/api/auth/") && !url.pathname.startsWith("/api/participant/")) return false;
   try {
     if (!access) throw new AccessError(503,"ACCESS_NOT_CONFIGURED");
@@ -29,20 +29,29 @@ async function handleAccess(req,res,url,json,access) {
       const result=await access.login(await readJson(req),token);
       if (!result) throw new AccessError(401,"INVALID_LOGIN");
       res.setHeader("Set-Cookie",cookie(result.token));
-      json(200,{demo:true,persistence:false,role:"participant",csrf_token:result.csrf_token,expires_at_ms:result.expires_at_ms});
+      json(200,{demo:true,persistence:!!drafts,role:"participant",csrf_token:result.csrf_token,expires_at_ms:result.expires_at_ms});
     } else if (logout && req.method==="POST") {
       if (req.headers.origin!=="http://"+req.headers.host) throw new AccessError(403,"ORIGIN_REJECTED");
       access.logout(token,req.headers["x-csrf-token"]);
       res.setHeader("Set-Cookie",clearCookie);json(200,{signed_out:true});
+    } else if (/^\/api\/participant\/attempts\/[^/]+\/draft$/.test(url.pathname)) {
+      access.requireSession(token);
+      if(!drafts)throw new AccessError(503,"DRAFTS_NOT_CONFIGURED");
+      const id=url.pathname.split("/")[4];
+      if(req.method==="GET")json(200,{attempt:drafts.read(token,id)});
+      else if(req.method==="PUT") {
+        if(req.headers.origin!=="http://"+req.headers.host)throw new AccessError(403,"ORIGIN_REJECTED");
+        json(200,{attempt:drafts.save(token,id,await readJson(req,8192),req.headers["x-csrf-token"])});
+      } else throw new AccessError(405,"METHOD_NOT_ALLOWED");
     } else if (url.pathname==="/api/auth/session" && req.method==="GET") {
-      json(200,access.session(token));
+      json(200,{...access.session(token),persistence:!!drafts});
     } else if (url.pathname==="/api/participant/attempts" && req.method==="GET") {
-      json(200,{demo:true,persistence:false,attempts:access.list(token)});
+      json(200,{demo:true,persistence:!!drafts,attempts:access.list(token)});
     } else if (/^\/api\/participant\/attempts\/[^/]+$/.test(url.pathname) && req.method==="GET") {
       json(200,{attempt:access.read(token,url.pathname.split("/").at(-1))});
     } else {
       access.requireSession(token);
-      // No draft writes, completion, exports or privileged role endpoints in 01д.3.
+      // Only the explicit /draft snapshot route writes; no completion or participant export.
       if (["/api/auth/login","/api/auth/logout","/api/auth/session","/api/participant/attempts"].includes(url.pathname)
         || /^\/api\/participant\/attempts\/[^/]+$/.test(url.pathname)) throw new AccessError(405,"METHOD_NOT_ALLOWED");
       throw new AccessError(404,"NOT_AVAILABLE");

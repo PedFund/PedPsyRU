@@ -11,6 +11,9 @@ const {handleAdmin} = require("./admin-routes.js");
 const MAX_BODY_BYTES = 16384;
 const assets = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
+  ["/take", ["index.html", "text/html; charset=utf-8"]],
+  ["/draft.js", ["draft.js", "text/javascript; charset=utf-8"]],
+  ["/draft-model.js", ["draft-model.js", "text/javascript; charset=utf-8"]],
   ["/styles.css", ["styles.css", "text/css; charset=utf-8"]],
   ["/app.js", ["app.js", "text/javascript; charset=utf-8"]],
   ["/form-model.js", ["form-model.js", "text/javascript; charset=utf-8"]],
@@ -20,7 +23,7 @@ const assets = new Map([
   ["/admin.js", ["admin.js", "text/javascript; charset=utf-8"]]
 ]);
 
-function createDemoServer({access=null,adminAccess=null}={}) {
+function createDemoServer({access=null,adminAccess=null,drafts=null}={}) {
   return http.createServer(async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
@@ -38,7 +41,7 @@ function createDemoServer({access=null,adminAccess=null}={}) {
     const url = new URL(req.url, "http://127.0.0.1");
     try {
       if (await handleAdmin(req,res,url,json,adminAccess)) return;
-      if (await handleAccess(req,res,url,json,access)) return;
+      if (await handleAccess(req,res,url,json,access,drafts)) return;
       if (url.pathname === "/api/form" && req.method === "GET") {
         return json(200, {
           demo: true, persistence: false,
@@ -93,12 +96,13 @@ if (require.main === module) {
   const {createAdminAccess} = require("../storage/admin-access.js");
   const filename=path.join(__dirname,"..",".local","training.sqlite");
   // No automatic database creation/seed/default passwords. Fail closed if not prepared.
-  let db,access=null,adminAccess=null;
+  let db,access=null,adminAccess=null,drafts=null;
   if (require("node:fs").existsSync(filename)) {
     db=openDatabase(filename);migrate(db);access=createParticipantAccess(db);
     adminAccess=createAdminAccess(db);
+    drafts=require("../storage/drafts.js").createDraftStore(db,access);
   }
-  const server = createDemoServer({access,adminAccess});
+  const server = createDemoServer({access,adminAccess,drafts});
   server.on("close",() => {if(db?.isOpen)db.close();});
   server.requestTimeout=10000;server.headersTimeout=10000;
   server.on("error", error => {console.error("Demo server:", error.code); process.exitCode = 1;});

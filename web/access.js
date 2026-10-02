@@ -12,9 +12,10 @@
     const {attempts}=await list.json();
     byId("account-heading").textContent="Назначения · "+data.display_code;
     byId("access-attempts").replaceChildren();
-    for(const attempt of attempts){const row=document.createElement("li");row.textContent=attempt.stage_code+" · "+attempt.group_name+" · "+(attempt.status==="draft"?"Не завершено":"Завершено");byId("access-attempts").append(row);}
+    for(const attempt of attempts){const row=document.createElement("li");row.textContent=attempt.stage_code+" · "+attempt.group_name+" · "+(attempt.status==="draft"?"Не завершено":"Завершено")+" · ";
+      const link=document.createElement("a");link.href="/take?attempt="+encodeURIComponent(attempt.attempt_id);link.textContent=attempt.status==="draft"?"Продолжить прохождение":"Посмотреть протокол";row.append(link);byId("access-attempts").append(row);}
     if(!attempts.length){const row=document.createElement("li");row.textContent="Доступных назначений нет.";byId("access-attempts").append(row);}
-    byId("access-login").hidden=true;byId("access-account").hidden=false;byId("access-status").textContent="Вход выполнен. Ответы из демонстрационного бланка пока не сохраняются.";
+    byId("access-login").hidden=true;byId("access-account").hidden=false;byId("access-status").textContent="Вход выполнен. Откройте назначение: сохраняются подтверждённые сервером ответы и текущий слайд.";
   }
   byId("access-login").addEventListener("submit",async event=>{
     event.preventDefault();byId("login-button").disabled=true;
