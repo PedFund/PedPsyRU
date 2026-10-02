@@ -55,4 +55,4 @@ async function handleAccess(req,res,url,json,access) {
   }
   return true;
 }
-module.exports={handleAccess,cookieToken,COOKIE};
+module.exports={handleAccess,cookieToken,COOKIE,readJson};

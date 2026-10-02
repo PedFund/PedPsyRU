@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ru">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ПедПси · управление платформой</title><link rel="stylesheet" href="/styles.css"><script src="/admin.js" defer></script></head>
+<body>
+  <header class="site-header"><a class="brand" href="/">ПедПси</a><span class="demo-badge">Тренировочная платформа</span></header>
+  <main class="layout">
+    <aside class="sidebar"><p class="eyebrow">Шаг 01д.3б</p><h1>Управление платформой</h1>
+      <div class="notice"><strong>Все исследования · обе роли</strong><p>Администратор и суперадминистратор могут просматривать и скачивать первичные ответы всех исследований.</p></div>
+      <p class="muted">Сейчас здесь только вымышленные данные. Новые ответы из демонстрационного бланка пока не сохраняются.</p>
+      <p><a href="/access">Вход участника</a> · <a href="/">Проверка бланка</a></p>
+    </aside>
+    <div class="content">
+      <section class="instruction-card"><h2 id="staff-heading">Вход администратора</h2>
+        <form id="staff-login">
+          <p><label for="staff-code">Персональный код</label><br><input id="staff-code" autocomplete="username" maxlength="80" required></p>
+          <p><label for="staff-password">Пароль</label><br><input id="staff-password" type="password" autocomplete="current-password" maxlength="256" required></p>
+          <button id="staff-submit" type="submit">Войти</button>
+        </form>
+        <p id="staff-status" role="status">Проверяем вход…</p>
+        <div id="staff-account" hidden><p id="staff-role-note"></p><button id="staff-logout" type="button" class="secondary">Выйти</button></div>
+        <noscript><p>Для входа нужен JavaScript.</p></noscript>
+      </section>
+      <section id="staff-data" hidden>
+        <section class="instruction-card"><h2>Все исследования</h2><ul id="staff-studies"></ul>
+          <p>Скачивание сохраняет первичные ответы, тексты вариантов, пропуски и версии в JSON. Это не обработка результатов.</p>
+          <a id="download-all" class="download-link" href="/api/admin/answers.json" download="pedpsy-all-answers.json">Скачать все ответы · JSON</a>
+        </section>
+        <section class="instruction-card"><h2>Протоколы участников</h2><p id="staff-page-info"></p><div id="staff-attempts"></div>
+          <div class="action-buttons"><button id="staff-prev" class="secondary" type="button">Назад</button><button id="staff-next" class="secondary" type="button">Далее</button></div>
+        </section>
+        <section id="staff-detail" class="instruction-card" hidden><h2 id="staff-detail-heading">Первичные ответы</h2><p id="staff-detail-info"></p>
+          <a id="download-one" class="download-link" download="pedpsy-attempt-answers.json">Скачать этот протокол · JSON</a><ol id="staff-answers"></ol>
+        </section>
+      </section>
+    </div>
+  </main>
+</body></html>

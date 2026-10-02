@@ -4,8 +4,14 @@ body { margin: 0; background: var(--bg); color: var(--ink); line-height: 1.55; }
 [hidden] { display: none !important; }
 a { color: var(--teal); }
 button, input { font: inherit; }
-#access-login input { width: 100%; max-width: 420px; border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; background: white; color: var(--ink); }
-#access-login label { font-size: 14px; font-weight: 650; }
+#access-login input, #staff-login input { width: 100%; max-width: 420px; border: 1px solid var(--line); border-radius: 10px; padding: 11px 13px; background: white; color: var(--ink); }
+#access-login label, #staff-login label { font-size: 14px; font-weight: 650; }
+.staff-row { border-top: 1px solid var(--line); padding: 18px 0; }
+#staff-answers { padding-left: 24px; }
+#staff-answers li { border-top: 1px solid var(--line); padding: 16px 0; }
+#staff-answers strong { color: var(--teal); }
+.download-link { display: inline-block; border-radius: 12px; padding: 13px 20px; background: var(--teal); color: white; text-decoration: none; font-weight: 650; }
+.download-link:hover { background: #08656a; }
 #access-attempts { padding-left: 22px; }
 #access-attempts li { margin-bottom: 10px; }
 button { border: 0; border-radius: 12px; padding: 13px 20px; background: var(--teal); color: white; cursor: pointer; font-weight: 650; }

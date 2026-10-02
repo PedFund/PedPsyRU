@@ -1,6 +1,6 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
-Дата: 2026-10-02. Локальная SQLite-база/seed созданы в 01д.2; **01д.3а добавила вход участника и scoped чтение**. SQL 002: participant_credentials, participant_sessions, login_throttles, access_audit_events. Это не API записи формы и не административный кабинет. Границы — ACCESS_VALIDATION.md, права — ACCESS_POLICY.md, будущие операции — STORAGE_CONTRACT.md.
+Дата: 2026-10-02. SQLite/seed созданы в 01д.2; 01д.3а — вход участника/scoped чтение; **01д.3б — глобальный просмотр/скачивание обеими административными ролями**. SQL 002/003 отделяют participant и staff credentials/sessions от диагностики. API записи формы еще нет. Границы — ACCESS_VALIDATION.md и ADMIN_VALIDATION.md, права — ACCESS_POLICY.md, будущие операции — STORAGE_CONTRACT.md.
 
 | Объект | Поля пилота | Связи |
 |---|---|---|
@@ -48,7 +48,7 @@
 |---|---|---|
 | `users` | id, status, временные поля | Аккаунты исследователей/администраторов; без открытых паролей. Организации/квоты вне этого пилота |
 | `study_memberships` | study_id, user_id, role, status | Явные полномочия в исследовании; unique(study_id,user_id,role). Клиент не задает себе роль |
-| `studies` | id, title, status, dataset_kind | Тестовый seed — одно синтетическое исследование, не архитектурный предел числа исследований |
+| `studies` | id, title, status, dataset_kind | Тестовый seed — два синтетических исследования, не архитектурный предел числа исследований |
 | `research_groups` | id, study_id, name, kind, status | kind: control/experimental/other; произвольное число групп |
 | `research_stages` | id, study_id, code, ordinal, status, based_on_stage_id? | unique(study_id,code) и unique(study_id,ordinal), ordinal >= 0; предыдущий этап из того же исследования, копируются настройки, не ответы |
 | `instrument_releases` | id, method_id, form_id, form_version, method_version_id, handler_version, contract_version, form_digest, key_digest, verification_state, publication_state, artifact_ref | Выпуск связывает точные версии формы/ключа/обработчика; используемый выпуск неизменяем. У TKI key_verified, но полная методика остается draft |
@@ -68,9 +68,9 @@ Snapshot выпуска нужен для воспроизводимости, н
 
 ## Доступ и согласия — связанные модели
 
-Credentials и сессии отделены от диагностики. Миграция 002 реализовала participant_credentials (study/participant, login_id, scrypt scheme/salt/hash, version/status), participant_sessions (token_hash, credential/scope/version, время/отзыв), login_throttles и access_audit_events (актор/область, действие, исход/причина без ответов). Согласия consent_events и глобальные/административные credentials пока не реализованы. Первая миграция/seed никаких credentials/настоящих согласий не создает; отдельная CLI выдает только синтетический индивидуальный вход.
+Миграция 002: participant_credentials (study/participant, login_id, scrypt scheme/salt/hash, version/status), participant_sessions (token_hash, credential/scope/version, время/отзыв), login_throttles и append-only access_audit_events. Миграция 003: staff_credentials (user_id UNIQUE FK, login_id UNIQUE, фиксированная role administrator/superadministrator, scrypt scheme/salt/hash, version/status) и staff_sessions (token_hash, credential/user/role composite FK, версия, время/отзыв). Staff login/role/user identity нельзя UPDATE/REPLACE/DELETE; отзыв увеличивает версию и блокирует сессии. User.status=disabled блокирует доступ. Миграции 001/002 не редактировались.
 
-По уточнению владельца админ и суперадмин могут просматривать/скачивать первичные ответы. Глобальные роли и точный охват исследований определяются явно перед административным 01д.3б; таких credentials сейчас нет. Матрица — ACCESS_POLICY.md. Для реального режима согласия/основания, юрисдикция и несовершеннолетние остаются отдельными решениями.
+В access_audit_events добавлены nullable actor_role, resource_id, record_count; ответы/тексты/пароли/токены туда не записываются. Старый participant-аудит совместим. В обеих staff-ролях область — все исследования, включая закрытые. study_memberships не заменяет глобальную роль и не дает исследователю staff-экспорт. Policy разрешает researchers.manage обеим ролям и methods.manage только superadministrator; эти manager-операции еще не реализованы. Согласия consent_events, юрисдикция и несовершеннолетние — отдельные решения. Seed не создает credentials; staff CLI не назначает роль произвольному существующему исследователю, а выдает отдельную вымышленную учетную запись.
 
 ## Состояния и воспроизводимость
 
@@ -84,4 +84,4 @@ T1/T2 — новое участие на этапе и новая попытка
 
 ## Вне первой миграции
 
-Полный кабинет, паспорт, приглашения/QR, организации, квоты, редактор библиотеки, групповое качество, агрегаты, статистика, административный экспорт, специальные grants и реальный набор. Серверы/облака не устанавливались, JS-ядро не переписывалось. Схема credentials/сессий участника создана в 002; на основном файле нет auto credentials/универсальных паролей. Согласия и административные роли — следующие задачи.
+Полный кабинет, паспорт, приглашения/QR, организации, квоты, редактор библиотеки, manager CRUD, групповое качество, агрегаты, статистика, специальные grants и реальный набор. Административное чтение/JSON-экспорт реализовано отдельной миграцией 003; запись новой формы — следующий блок 01д.4. Серверы/облака не устанавливались, JS-ядро не переписывалось. Нет auto credentials/универсальных паролей.

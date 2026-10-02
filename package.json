@@ -1,6 +1,6 @@
 {
   "name": "pedpsyru-core-pilot",
-  "version": "0.6.0",
+  "version": "0.7.0",
   "private": true,
   "description": "ПедПси: пилот контракта и бланка Томаса—Килманна",
   "engines": {"node": ">=22.17.1"},
@@ -17,6 +17,10 @@
     "test:access": "node --test tests/access.test.js",
     "auth:issue": "node storage/access-cli.js issue",
     "auth:reset": "node storage/access-cli.js reset",
-    "auth:revoke": "node storage/access-cli.js revoke"
+    "auth:revoke": "node storage/access-cli.js revoke",
+    "test:admin": "node --test tests/admin-access.test.js",
+    "staff:issue": "node storage/staff-cli.js issue",
+    "staff:reset": "node storage/staff-cli.js reset",
+    "staff:revoke": "node storage/staff-cli.js revoke"
   }
 }

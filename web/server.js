@@ -7,6 +7,7 @@ const path = require("node:path");
 const form = require("../methods/tki/form.json");
 const {scoreTki, CONTRACT_VERSION, METHOD_VERSION_ID, HANDLER_VERSION} = require("../core/tki-contract.js");
 const {handleAccess} = require("./access-routes.js");
+const {handleAdmin} = require("./admin-routes.js");
 const MAX_BODY_BYTES = 16384;
 const assets = new Map([
   ["/", ["index.html", "text/html; charset=utf-8"]],
@@ -14,10 +15,12 @@ const assets = new Map([
   ["/app.js", ["app.js", "text/javascript; charset=utf-8"]],
   ["/form-model.js", ["form-model.js", "text/javascript; charset=utf-8"]],
   ["/access", ["access.html", "text/html; charset=utf-8"]],
-  ["/access.js", ["access.js", "text/javascript; charset=utf-8"]]
+  ["/access.js", ["access.js", "text/javascript; charset=utf-8"]],
+  ["/admin", ["admin.html", "text/html; charset=utf-8"]],
+  ["/admin.js", ["admin.js", "text/javascript; charset=utf-8"]]
 ]);
 
-function createDemoServer({access=null}={}) {
+function createDemoServer({access=null,adminAccess=null}={}) {
   return http.createServer(async (req, res) => {
     res.setHeader("Cache-Control", "no-store");
     res.setHeader("X-Content-Type-Options", "nosniff");
@@ -34,6 +37,7 @@ function createDemoServer({access=null}={}) {
     if (req.headers["sec-fetch-site"] === "cross-site") return json(403, {error: "ORIGIN_REJECTED"});
     const url = new URL(req.url, "http://127.0.0.1");
     try {
+      if (await handleAdmin(req,res,url,json,adminAccess)) return;
       if (await handleAccess(req,res,url,json,access)) return;
       if (url.pathname === "/api/form" && req.method === "GET") {
         return json(200, {
@@ -86,13 +90,15 @@ if (require.main === module) {
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error("Invalid PEDPSY_DEMO_PORT");
   const {openDatabase,migrate} = require("../storage/database.js");
   const {createParticipantAccess} = require("../storage/access.js");
+  const {createAdminAccess} = require("../storage/admin-access.js");
   const filename=path.join(__dirname,"..",".local","training.sqlite");
   // No automatic database creation/seed/default passwords. Fail closed if not prepared.
-  let db,access=null;
+  let db,access=null,adminAccess=null;
   if (require("node:fs").existsSync(filename)) {
     db=openDatabase(filename);migrate(db);access=createParticipantAccess(db);
+    adminAccess=createAdminAccess(db);
   }
-  const server = createDemoServer({access});
+  const server = createDemoServer({access,adminAccess});
   server.on("close",() => {if(db?.isOpen)db.close();});
   server.requestTimeout=10000;server.headersTimeout=10000;
   server.on("error", error => {console.error("Demo server:", error.code); process.exitCode = 1;});

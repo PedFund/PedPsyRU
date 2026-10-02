@@ -71,7 +71,7 @@ function schemaComplete(db,study,attempt,releaseId) {
 
 test("migration creates 13 domain tables with FK enabled and is repeatable", t => {
   const db = openDatabase();t.after(() => db.close());
-  assert.equal(migrate(db),2);assert.equal(migrate(db),0);
+  assert.equal(migrate(db),3);assert.equal(migrate(db),0);
   assert.equal(db.prepare("PRAGMA foreign_keys").get().foreign_keys,1);
   const tables = db.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all().map(row => row.name);
   for (const table of ["users","study_memberships","studies","research_groups","research_stages","instrument_releases","release_items","assignments","participants","stage_enrollments","attempts","responses","attempt_results"]) assert.ok(tables.includes(table));

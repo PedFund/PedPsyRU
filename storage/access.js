@@ -189,4 +189,6 @@ function createParticipantAccess(db,{now=Date.now}={}) {
   };
 }
 
-module.exports = {createParticipantAccess,passwordRecord,AccessError,SCHEME,SESSION_TTL_MS,IDLE_TTL_MS,LOGIN_WINDOW_MS,LOGIN_LIMIT};
+// Shared security primitives only; participant scope and scoring are unchanged.
+module.exports = {createParticipantAccess,passwordRecord,AccessError,SCHEME,SESSION_TTL_MS,IDLE_TTL_MS,LOGIN_WINDOW_MS,LOGIN_LIMIT,
+  derive,SCRYPT,validLogin,validPassword,validToken,csrfFor,equalText,GLOBAL_WINDOW_MS,GLOBAL_LIMIT};
