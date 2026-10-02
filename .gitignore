@@ -12,3 +12,6 @@ tmp/
 !.env.example
 *.log
 .idea/
+.local/
+*.sqlite
+*.sqlite-*
