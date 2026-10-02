@@ -71,7 +71,7 @@ function schemaComplete(db,study,attempt,releaseId) {
 
 test("migration creates 13 domain tables with FK enabled and is repeatable", t => {
   const db = openDatabase();t.after(() => db.close());
-  assert.equal(migrate(db),1);assert.equal(migrate(db),0);
+  assert.equal(migrate(db),2);assert.equal(migrate(db),0);
   assert.equal(db.prepare("PRAGMA foreign_keys").get().foreign_keys,1);
   const tables = db.prepare("SELECT name FROM sqlite_schema WHERE type='table'").all().map(row => row.name);
   for (const table of ["users","study_memberships","studies","research_groups","research_stages","instrument_releases","release_items","assignments","participants","stage_enrollments","attempts","responses","attempt_results"]) assert.ok(tables.includes(table));
@@ -87,7 +87,7 @@ test("migration checksum, gaps and unknown history fail closed", t => {
   writeFileSync(path.join(directory,"001_training.sql"),migrationSql,"utf8");
   writeFileSync(path.join(directory,"003_extra.sql"),"SELECT 1;","utf8");
   assert.throws(() => migrate(db,directory),/MIGRATION_SEQUENCE_INVALID/);
-  db.prepare("UPDATE schema_migrations SET version=2 WHERE version=1").run();
+  db.prepare("UPDATE schema_migrations SET version=99 WHERE version=1").run();
   assert.throws(() => migrate(db),/MIGRATION_HISTORY_MISMATCH/);
 });
 test("failed multi-migration transaction leaves no partial schema", t => {
