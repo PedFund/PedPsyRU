@@ -8,11 +8,15 @@ const Processor = require("../processor.js");
 const Contract = require("../core/tki-contract.js");
 const labels = ["Соперничество", "Сотрудничество", "Компромисс", "Избегание", "Приспособление"];
 const method = Methods.byId.tki_ru_30_pairs;
+const correctedKey = require("../methods/tki/keys/1.0.0.json");
 const request = (answers = Array(30).fill("B")) => ({
   contract_version: Contract.CONTRACT_VERSION,
-  method_version_id: Contract.METHOD_VERSION_ID,
-  handler_version: Contract.HANDLER_VERSION,
+  method_version_id: Contract.LEGACY_METHOD_VERSION_ID,
+  handler_version: Contract.LEGACY_HANDLER_VERSION,
   responses: answers.map((value, index) => ({item_id: "q" + String(index + 1).padStart(2, "0"), value}))
+});
+const correctedRequest = (answers = Array(30).fill("B")) => ({
+  ...request(answers), method_version_id: Contract.METHOD_VERSION_ID, handler_version: Contract.HANDLER_VERSION
 });
 const referenceScore = answers => {
   const scores = Object.fromEntries(fixture.scale_order.map(code => [code, 0]));
@@ -138,4 +142,110 @@ test("a changed key cannot silently retain the draft version", () => {
     assert.equal(result.warnings[0].code, "KEY_SNAPSHOT_CHANGED");
     assert.deepEqual(result.measures, []);
   } finally {method.scales.Соперничество = previous;}
+});
+
+test("key 1.0.0 assigns all 60 alternatives to the reference scales, including 21A/B", () => {
+  const assignments = new Map();
+  for (const [label, key] of Object.entries(correctedKey.scales)) {
+    const tokens = key.split(/\s+/);
+    assert.equal(tokens.length, 12, label);
+    for (const token of tokens) {
+      assert.ok(!assignments.has(token), "duplicate alternative " + token);
+      assignments.set(token, fixture.scale_order[labels.indexOf(label)]);
+    }
+  }
+  assert.equal(assignments.size, 60);
+  fixture.reference_pair_scales.forEach((pair, index) => {
+    for (const [offset, alternative] of ["A", "B"].entries()) {
+      assert.equal(assignments.get(String(index + 1) + alternative), pair[offset], String(index + 1) + alternative);
+    }
+  });
+  assert.equal(assignments.get("21A"), "accommodating");
+  assert.equal(assignments.get("21B"), "collaborating");
+});
+
+test("new version returns corrected fixed profiles with no source-conflict flag", () => {
+  for (const profile of fixture.corrected_profiles) {
+    const input = correctedRequest([...profile.answers]);
+    const before = JSON.stringify(input);
+    const result = Contract.scoreTki(input);
+    assert.equal(result.status, "scored");
+    assert.equal(result.method_version_id, "tki_ru_30_pairs@1.0.0");
+    assert.equal(result.handler_version, "tki-contract-0.2.0");
+    assert.deepEqual(result.measures.map(measure => measure.value), profile.expected);
+    assert.deepEqual(result.measures.map(measure => measure.code), fixture.scale_order);
+    assert.equal(result.validation_state, "key_verified");
+    assert.equal(result.quality.usable_for_aggregation, true);
+    assert.deepEqual(result.warnings, []);
+    assert.deepEqual(result.classifications, []);
+    assert.equal(JSON.stringify(input), before);
+    input.responses.reverse();
+    assert.deepEqual(Contract.scoreTki(input), result);
+  }
+});
+
+test("switching each pair B to A matches the reference; version delta is only 21A", () => {
+  for (let index = 0; index < 30; index++) {
+    const answers = Array(30).fill("B"); answers[index] = "A";
+    const current = Contract.scoreTki(correctedRequest(answers)).measures.map(measure => measure.value);
+    assert.deepEqual(current, referenceScore(answers), "pair " + (index + 1));
+    const old = Contract.scoreTki(request(answers)).measures.map(measure => measure.value);
+    assert.deepEqual(current.map((value, i) => value - old[i]), index === 20 ? [0, 0, 0, -1, 1] : [0, 0, 0, 0, 0]);
+  }
+});
+
+test("each corrected scale reaches both 0 and 12; all complete profiles sum to 30", () => {
+  for (const [scaleIndex, code] of fixture.scale_order.entries()) {
+    for (const maximize of [true, false]) {
+      const answers = fixture.reference_pair_scales.map(pair => {
+        const offset = maximize ? pair.indexOf(code) : pair.findIndex(candidate => candidate !== code);
+        return offset === 1 ? "B" : "A";
+      });
+      const result = Contract.scoreTki(correctedRequest(answers));
+      assert.equal(result.status, "scored");
+      const scores = result.measures.map(measure => measure.value);
+      assert.equal(scores[scaleIndex], maximize ? 12 : 0, code);
+      assert.equal(scores.reduce((sum, value) => sum + value, 0), 30);
+      assert.ok(scores.every(value => value >= 0 && value <= 12));
+    }
+  }
+});
+
+test("new key keeps strict completeness and validation rules", () => {
+  for (const value of [null, "", "C", "А", "Б", 1]) {
+    const input = correctedRequest(); input.responses[0].value = value;
+    const result = Contract.scoreTki(input);
+    assert.equal(result.status, "invalid");
+    assert.deepEqual(result.measures, []);
+    assert.equal(result.quality.usable_for_aggregation, false);
+  }
+  const input = correctedRequest(); input.responses.pop();
+  const result = Contract.scoreTki(input);
+  assert.equal(result.status, "incomplete");
+  assert.equal(result.quality.usable_for_aggregation, false);
+  assert.deepEqual(result.measures, []);
+});
+
+test("mixed legacy/current version identifiers are rejected", () => {
+  for (const input of [
+    {...correctedRequest(), handler_version: Contract.LEGACY_HANDLER_VERSION},
+    {...request(), handler_version: Contract.HANDLER_VERSION}
+  ]) {
+    const result = Contract.scoreTki(input);
+    assert.equal(result.status, "blocked");
+    assert.equal(result.warnings[0].code, "UNSUPPORTED_VERSION");
+    assert.deepEqual(result.measures, []);
+  }
+});
+
+test("mutating the corrected key blocks new scoring and leaves legacy callable", () => {
+  const original = correctedKey.scales.Соперничество;
+  try {
+    correctedKey.scales.Соперничество += " 1A";
+    const result = Contract.scoreTki(correctedRequest());
+    assert.equal(result.status, "blocked");
+    assert.equal(result.warnings[0].code, "KEY_SNAPSHOT_CHANGED");
+    assert.deepEqual(result.measures, []);
+    assert.equal(Contract.scoreTki(request()).status, "scored");
+  } finally {correctedKey.scales.Соперничество = original;}
 });

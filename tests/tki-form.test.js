@@ -59,7 +59,8 @@ test("Markdown blank includes all 60 options in the same order", () => {
 test("form text is separate from keys and source approval remains explicit", () => {
   assert.equal(form.provenance.authority, "user_supplied_text");
   assert.equal(form.provenance.source_verification, "pending");
-  assert.equal(form.provenance.scoring_key_verification, "conflict_q21_A");
+  assert.equal(form.provenance.scoring_key_verification, "key_verified_1.0.0");
+  assert.equal(form.provenance.scoring_key_version_id, "tki_ru_30_pairs@1.0.0");
   assert.equal(form.instruction_status, "technical_draft");
   for (const item of form.items) for (const option of item.options) {
     assert.deepEqual(Object.keys(option).sort(), ["label", "source_text", "text", "value"]);

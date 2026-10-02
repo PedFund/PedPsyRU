@@ -5,7 +5,7 @@
     "authors": "Кардашина С.В., Шаньгина Н.В., 2016",
     "location": "Таблицы 2–6, печатные страницы 219–220, PDF страницы 4–5",
     "reviewed_at": "2026-10-02",
-    "verification": "Read from the publication text; original user form not yet available"
+    "verification": "Read from publication tables; user supplied form and confirmed 21A accommodating / 21B collaborating on 2026-10-02"
   },
   "scale_order": ["competing", "collaborating", "compromising", "avoiding", "accommodating"],
   "reference_pair_scales": [
@@ -41,6 +41,11 @@
     ["accommodating", "collaborating"]
   ],
   "known_legacy_difference": {"item_id": "q21", "alternative": "A", "legacy": "avoiding", "reference": "accommodating"},
+  "corrected_profiles": [
+    {"id": "all_A", "answers": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "expected": [6, 6, 6, 6, 6]},
+    {"id": "all_B", "answers": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "expected": [6, 6, 6, 6, 6]},
+    {"id": "alternating", "answers": "ABABABABABABABABABABABABABABAB", "expected": [7, 9, 7, 4, 3]}
+  ],
   "legacy_profiles": [
     {"id": "all_A", "answers": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA", "expected": [6, 6, 6, 7, 5]},
     {"id": "all_B", "answers": "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBB", "expected": [6, 6, 6, 6, 6]},

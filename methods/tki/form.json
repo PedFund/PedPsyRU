@@ -17,7 +17,8 @@
     ],
     "changes": "Только объединение грамматического рода отвечающего через /; пробельные символы приведены к обычным пробелам.",
     "source_verification": "pending",
-    "scoring_key_verification": "conflict_q21_A"
+    "scoring_key_verification": "key_verified_1.0.0",
+    "scoring_key_version_id": "tki_ru_30_pairs@1.0.0"
   },
   "response_format": {
     "type": "forced_choice",

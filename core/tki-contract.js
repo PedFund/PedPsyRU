@@ -1,14 +1,18 @@
 "use strict";
 
-// Draft adapter: preserves the existing scorer and labels its results as unverified.
+// Explicit versions retain legacy behavior and route new calculations to key 1.0.0.
 const {createHash} = require("node:crypto");
 const Methods = require("../methods.js");
 const Processor = require("../processor.js");
+const CorrectedKey = require("../methods/tki/keys/1.0.0.json");
 
 const CONTRACT_VERSION = "1.0";
-const METHOD_VERSION_ID = "tki_ru_30_pairs@legacy-5.5.8-draft";
-const HANDLER_VERSION = "tki-contract-0.1.0";
-const KEY_DIGEST = "79bd631d151ffc5d8a984cb4746135a7a73a3da6ad7901959da107d638654925";
+const METHOD_VERSION_ID = "tki_ru_30_pairs@1.0.0";
+const HANDLER_VERSION = "tki-contract-0.2.0";
+const LEGACY_METHOD_VERSION_ID = "tki_ru_30_pairs@legacy-5.5.8-draft";
+const LEGACY_HANDLER_VERSION = "tki-contract-0.1.0";
+const KEY_DIGEST = "45bc0c8a1b3f154fb3da5df629da6c42613609633594c4f5f54014a301cded7d";
+const LEGACY_KEY_DIGEST = "79bd631d151ffc5d8a984cb4746135a7a73a3da6ad7901959da107d638654925";
 const SCALE_CODES = Object.freeze({
   "Соперничество": "competing",
   "Сотрудничество": "collaborating",
@@ -24,17 +28,21 @@ function keyDigest(method) {
 }
 
 function scoreTki(request) {
+  const legacy = request?.method_version_id === LEGACY_METHOD_VERSION_ID && request?.handler_version === LEGACY_HANDLER_VERSION;
+  const expectedMethodVersion = legacy ? LEGACY_METHOD_VERSION_ID : METHOD_VERSION_ID;
+  const expectedHandlerVersion = legacy ? LEGACY_HANDLER_VERSION : HANDLER_VERSION;
+  const expectedDigest = legacy ? LEGACY_KEY_DIGEST : KEY_DIGEST;
   const result = {
     contract_version: CONTRACT_VERSION,
-    method_version_id: METHOD_VERSION_ID,
-    handler_version: HANDLER_VERSION,
+    method_version_id: expectedMethodVersion,
+    handler_version: expectedHandlerVersion,
     status: "invalid",
-    validation_state: "requires_source_verification",
+    validation_state: legacy ? "requires_source_verification" : "key_verified",
     quality: {valid_response_count: 0, complete: false, usable_for_aggregation: false},
     measures: [],
     classifications: [],
     warnings: [],
-    calculation: {algorithm_id: "tki_ru_30_pairs", key_digest: "sha256:" + KEY_DIGEST}
+    calculation: {algorithm_id: "tki_ru_30_pairs", key_digest: "sha256:" + expectedDigest}
   };
   const reject = (code, details = {}, status = "invalid") => {
     result.status = status;
@@ -42,7 +50,7 @@ function scoreTki(request) {
     return result;
   };
   if (!request || typeof request !== "object" || Array.isArray(request)) return reject("INVALID_REQUEST");
-  if (request.contract_version !== CONTRACT_VERSION || request.method_version_id !== METHOD_VERSION_ID || request.handler_version !== HANDLER_VERSION) {
+  if (request.contract_version !== CONTRACT_VERSION || request.method_version_id !== expectedMethodVersion || request.handler_version !== expectedHandlerVersion) {
     return reject("UNSUPPORTED_VERSION", {}, "blocked");
   }
   if (!Array.isArray(request.responses)) return reject("INVALID_RESPONSES");
@@ -64,25 +72,26 @@ function scoreTki(request) {
   if (missing.length) return reject("MISSING_ANSWERS", {item_ids: missing}, "incomplete");
   result.quality.complete = true;
 
-  const method = Methods.byId.tki_ru_30_pairs;
-  if (!method || keyDigest(method) !== KEY_DIGEST) return reject("KEY_SNAPSHOT_CHANGED", {}, "blocked");
+  const method = legacy ? Methods.byId.tki_ru_30_pairs : CorrectedKey;
+  if (!method || keyDigest(method) !== expectedDigest) return reject("KEY_SNAPSHOT_CHANGED", {}, "blocked");
   const scored = Processor.scoreComplete(method, answers);
   if (scored.status !== "Обработано" || scored.warnings.length || Object.keys(scored.metrics).length !== 5) {
     return reject("LEGACY_SCORING_FAILED", {}, "error");
   }
   const scores = Object.values(scored.metrics);
-  if (!scores.every(value => Number.isInteger(value) && value >= 0) || scores.reduce((sum, value) => sum + value, 0) !== 30) {
+  if (!scores.every(value => Number.isInteger(value) && value >= 0 && (legacy || value <= 12)) || scores.reduce((sum, value) => sum + value, 0) !== 30) {
     return reject("SCORING_INVARIANT_FAILED", {}, "error");
   }
   result.status = "scored";
   result.measures = Object.entries(scored.metrics).map(([label, value]) => ({
     code: SCALE_CODES[label], label, value, value_type: "number", representation: "raw", precision: 0
   }));
-  result.warnings.push({
+  result.quality.usable_for_aggregation = !legacy;
+  if (legacy) result.warnings.push({
     code: "KEY_SOURCE_CONFLICT", severity: "warning",
     details: {item_id: "q21", alternative: "A", legacy_scale: "avoiding", publication_scale: "accommodating"}
   });
   return result;
 }
 
-module.exports = {scoreTki, CONTRACT_VERSION, METHOD_VERSION_ID, HANDLER_VERSION};
+module.exports = {scoreTki, CONTRACT_VERSION, METHOD_VERSION_ID, HANDLER_VERSION, LEGACY_METHOD_VERSION_ID, LEGACY_HANDLER_VERSION};
