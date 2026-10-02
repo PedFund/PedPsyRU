@@ -30,7 +30,8 @@ if (!["migrate","seed","check"].includes(command) || process.argv.length !== 3) 
     const counts = Object.fromEntries(tables.map(table => [table, db.prepare(`SELECT count(*) AS count FROM ${table}`).get().count]));
     console.log(JSON.stringify({database: filename, dataset_kind: "demo", counts, integrity: "ok", foreign_keys: "ok",
       draft_service_available: true, draft_http_requires_participant_session: true,
-      completion_service_available: false, participant_access_schema: true, staff_access_schema: true}, null, 2));
+      completion_service_available: true, completion_http_requires_participant_session: true,
+      participant_access_schema: true, staff_access_schema: true}, null, 2));
   } catch (error) {
     console.error("Training database operation failed:", error.message);
     process.exitCode = 1;

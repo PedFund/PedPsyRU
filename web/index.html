@@ -62,9 +62,9 @@
         </div>
       </form>
       <section id="result" class="result-card" tabindex="-1" aria-labelledby="result-heading" hidden>
-        <p class="eyebrow">Проверка передачи ответов</p>
+        <p class="eyebrow" id="result-kind">Проверка передачи ответов</p>
         <h2 id="result-heading">Ответы обработаны</h2>
-        <p>Все 30 ответов переданы проверенному обработчику. Ни ответы, ни результат не сохранены.</p>
+        <p id="result-note">Все 30 ответов переданы проверенному обработчику. Ни ответы, ни результат не сохранены.</p>
         <div id="measures" class="measures"></div>
         <p class="muted">Технический просмотр сырых баллов, не психологическое заключение. Нормы, уровни и интерпретации не применяются.</p>
       </section>
@@ -78,6 +78,10 @@
   <dialog id="reload-dialog" aria-labelledby="reload-heading"><h2 id="reload-heading">Загрузить сохранённый черновик?</h2>
     <p>Локальные изменения, которые сервер не подтвердил, будут заменены сохранённым состоянием. Другая вкладка не будет перезаписана.</p>
     <div class="action-buttons"><button id="cancel-reload" class="secondary" type="button">Остаться здесь</button><button id="confirm-reload" type="button">Загрузить с сервера</button></div>
+  </dialog>
+  <dialog id="complete-dialog" aria-labelledby="complete-heading"><h2 id="complete-heading">Завершить прохождение?</h2>
+    <p>Будут обработаны только подтверждённые сервером ответы. После завершения ответы нельзя изменить или очистить. Вы увидите пять сырых баллов, без норм и психологического заключения.</p>
+    <div class="action-buttons"><button id="cancel-complete" class="secondary" type="button">Продолжить заполнение</button><button id="confirm-complete" type="button">Завершить и получить результат</button></div>
   </dialog>
 </body>
 </html>

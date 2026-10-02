@@ -16,7 +16,7 @@ async function readJson(req,maxBytes=2048) {
   for await (const chunk of req) {bytes+=chunk.length;if(bytes>maxBytes){req.resume();throw new AccessError(413,"BODY_TOO_LARGE");}chunks.push(chunk);}
   try {return JSON.parse(Buffer.concat(chunks).toString("utf8"));} catch {throw new AccessError(400,"INVALID_JSON");}
 }
-async function handleAccess(req,res,url,json,access,drafts=null) {
+async function handleAccess(req,res,url,json,access,drafts=null,completion=null) {
   if (!url.pathname.startsWith("/api/auth/") && !url.pathname.startsWith("/api/participant/")) return false;
   try {
     if (!access) throw new AccessError(503,"ACCESS_NOT_CONFIGURED");
@@ -34,6 +34,15 @@ async function handleAccess(req,res,url,json,access,drafts=null) {
       if (req.headers.origin!=="http://"+req.headers.host) throw new AccessError(403,"ORIGIN_REJECTED");
       access.logout(token,req.headers["x-csrf-token"]);
       res.setHeader("Set-Cookie",clearCookie);json(200,{signed_out:true});
+    } else if (/^\/api\/participant\/attempts\/[^/]+\/(?:complete|result)$/.test(url.pathname)) {
+      access.requireSession(token);
+      if(!completion)throw new AccessError(404,"NOT_AVAILABLE");
+      const id=url.pathname.split("/")[4],finish=url.pathname.endsWith("/complete");
+      if(finish && req.method==="POST") {
+        if(req.headers.origin!=="http://"+req.headers.host)throw new AccessError(403,"ORIGIN_REJECTED");
+        json(200,{completion:completion.complete(token,id,await readJson(req),req.headers["x-csrf-token"])});
+      } else if(!finish && req.method==="GET")json(200,{completion:completion.read(token,id)});
+      else throw new AccessError(405,"METHOD_NOT_ALLOWED");
     } else if (/^\/api\/participant\/attempts\/[^/]+\/draft$/.test(url.pathname)) {
       access.requireSession(token);
       if(!drafts)throw new AccessError(503,"DRAFTS_NOT_CONFIGURED");
@@ -51,7 +60,7 @@ async function handleAccess(req,res,url,json,access,drafts=null) {
       json(200,{attempt:access.read(token,url.pathname.split("/").at(-1))});
     } else {
       access.requireSession(token);
-      // Only the explicit /draft snapshot route writes; no completion or participant export.
+      // Only explicit draft/completion routes mutate; no participant export.
       if (["/api/auth/login","/api/auth/logout","/api/auth/session","/api/participant/attempts"].includes(url.pathname)
         || /^\/api\/participant\/attempts\/[^/]+$/.test(url.pathname)) throw new AccessError(405,"METHOD_NOT_ALLOWED");
       throw new AccessError(404,"NOT_AVAILABLE");

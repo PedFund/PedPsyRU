@@ -3,13 +3,13 @@
   if(location.pathname!=="/take")return;
   const el=id=>document.getElementById(id),form=el("questionnaire"),fields=new Map(),answers=Object.create(null);
   const params=new URLSearchParams(location.search),id=params.get("attempt");
-  let data,csrf=null,slideIndex=0,showMissing=false,readOnly=false,queue;
+  let data,csrf=null,slideIndex=0,showMissing=false,readOnly=false,queue,finishing=false,completionPaused=false;
   el("mode-heading").textContent="Тренировочное прохождение";
   el("mode-note").textContent="Только вымышленные ответы. Восстановятся ответы и слайд, сохранение которых подтвердил сервер. Несохранённые изменения могут потеряться.";
-  el("mode-footer").textContent="ПедПси · тренировочная база · черновик сохраняется, итоговый результат пока не формируется";
+  el("mode-footer").textContent="ПедПси · тренировочная база · ответы и сырые результаты сохраняются";
   el("save-panel").hidden=false;el("result").hidden=true;
   el("reset-note").textContent="Ваш сохранённый черновик будет очищен: ответы удалятся, прохождение вернётся к первой паре. Завершённые протоколы не изменяются.";
-  el("submit").textContent="Проверить полноту";
+  el("submit").textContent="Завершить прохождение";
   async function request(url,options={}) {
     const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),10000);
     try {
@@ -29,16 +29,19 @@
     el("save-panel").dataset.state=state.status;
     el("reload-draft").hidden=!["conflict","failed","completed"].includes(state.status);
     el("draft-login").hidden=state.status!=="auth";
-    const paused=state.blocked && !readOnly;
-    for(const field of fields.values())for(const input of field.querySelectorAll("input"))input.disabled=state.blocked;
-    el("reset").disabled=state.blocked;el("submit").disabled=state.blocked;
+    if(finishing)el("save-status").textContent="Сохраняем последний снимок и завершаем прохождение…";
+    if(completionPaused){el("save-status").textContent="Завершение не подтверждено. Протокол мог уже завершиться. Сначала загрузите состояние с сервера; запись остановлена.";el("reload-draft").hidden=false;el("draft-login").hidden=false;}
+    const locked=state.blocked || finishing || completionPaused;
+    const paused=(state.blocked && !readOnly) || finishing || completionPaused;
+    for(const field of fields.values())for(const input of field.querySelectorAll("input"))input.disabled=locked;
+    el("reset").disabled=locked;el("submit").disabled=locked;
     el("previous").disabled=paused || slideIndex===0;el("next").disabled=paused;
   }
   function summary() {
     const state=PedPsyForm.summarize(data.form.items,answers);
     el("progress").value=state.answered;el("progress-text").textContent="Заполнено "+state.answered+" из "+state.total;
     el("remaining").textContent=state.complete?"Все пары заполнены":"Осталось пар: "+state.missing.length;
-    el("submit-hint").textContent="Черновик сохраняется автоматически. Проверка полноты не завершает исследование и не рассчитывает результат.";
+    el("submit-hint").textContent=readOnly?"Завершённые ответы нельзя изменить или очистить.":"Черновик сохраняется автоматически. Для завершения нужны все 30 ответов; после завершения изменить их нельзя.";
     for(const [itemId,field] of fields){const missing=showMissing && state.missing.includes(itemId);field.classList.toggle("is-missing",missing);
       field.querySelector(".pair-error").hidden=!missing;for(const input of field.querySelectorAll("input"))input.setAttribute("aria-invalid",String(missing));}
     el("errors").hidden=!showMissing || state.complete;el("error-text").textContent="Не выбран ответ в парах: "+state.missing.length+".";
@@ -62,11 +65,12 @@
     summary();
   }
   function navigate(index) {
-    if(queue.state().blocked && !readOnly)return;
+    if(finishing || completionPaused || (queue.state().blocked && !readOnly))return;
     const before=slideIndex;showSlide(index,true);if(!readOnly && before!==slideIndex)edited();
   }
   function apply(s) {
-    data=s;readOnly=s.status!=="draft";showMissing=false;
+    data=s;readOnly=s.status!=="draft";showMissing=false;completionPaused=false;
+    el("result").hidden=true;el("measures").replaceChildren();
     fields.clear();el("questions").replaceChildren();for(const itemId of Object.keys(answers))delete answers[itemId];
     for(const response of s.responses)answers[response.item_id]=response.value;
     for(const item of s.form.items){
@@ -86,6 +90,23 @@
     el("draft-context").textContent=s.stage_code+" · "+s.group_name+" · "+(readOnly?"Завершено":"Черновик");
     el("load-status").textContent="";summary();showSlide(s.form.items.findIndex(i=>i.id===s.current_item_id));queue.load(s);
   }
+  function showResult(saved) {
+    if(saved.attempt_id!==id || saved.release_id!==data.release_id || saved.status!=="completed" || saved.result?.status!=="scored")throw new Error("INVALID_RESULT_ACK");
+    el("measures").replaceChildren();for(const measure of saved.result.measures){
+      const row=document.createElement("div");row.className="measure";const label=document.createElement("span"),value=document.createElement("strong");
+      label.textContent=measure.label;value.textContent=measure.value+" / 12";row.append(label,value);el("measures").append(row);
+    }
+    el("result-kind").textContent="Сохранённый учебный результат";el("result-heading").textContent="Прохождение завершено";
+    el("result-note").textContent="Все 30 ответов и результат сохранены. Расчёт выполнен по закреплённой версии, ключ 1.0.0. Проверен ключ, полная методическая инструкция ещё проверяется.";
+    el("load-status").textContent="Результат восстановлен с сервера · "+saved.calculated_at;
+    el("result").hidden=false;
+  }
+  async function loadSaved() {
+    apply((await request("/api/participant/attempts/"+id+"/draft")).attempt);
+    if(readOnly){try{showResult((await request("/api/participant/attempts/"+id+"/result")).completion);}
+      catch(error){el("load-status").textContent="Протокол завершён, но результат сейчас не удалось загрузить. Повторите загрузку сохранённого состояния.";
+        el("reload-draft").hidden=false;if(error.status===401)el("draft-login").hidden=false;}}
+  }
   try {
     if(params.size!==1 || !id || !/^[0-9a-f-]{36}$/.test(id))throw new Error("INVALID_ATTEMPT");
     const session=await request("/api/auth/session");csrf=session.csrf_token;
@@ -93,22 +114,34 @@
       const {attempt}=await request("/api/participant/attempts/"+id+"/draft",{method:"PUT",headers:{"Content-Type":"application/json","X-CSRF-Token":csrf},body:JSON.stringify(input)});
       if(attempt.attempt_id!==id || attempt.release_id!==data.release_id)throw new Error("INVALID_SAVE_ACK");return attempt;
     }});
-    apply((await request("/api/participant/attempts/"+id+"/draft")).attempt);
+    await loadSaved();
   }catch(error){
     el("load-status").textContent=error.status===401?"Для этого прохождения нужен персональный вход.":"Черновик недоступен. Проверьте назначение или попробуйте позже.";
     el("save-status").textContent="Прохождение не загружено, запись не выполняется.";el("draft-login").hidden=false;return;
   }
   form.addEventListener("submit",async event=>{
-    event.preventDefault();if(queue.state().blocked)return;
+    event.preventDefault();if(queue.state().blocked || finishing || completionPaused)return;
     if(!PedPsyForm.slideState(data.form.items,slideIndex).isLast){navigate(slideIndex+1);return;}
     showMissing=true;if(!summary().complete){el("errors").focus();return;}
-    const state=await queue.flush();if(state.status==="saved")el("load-status").textContent="Все 30 ответов сохранены как черновик. Завершение и итоговый результат подключим следующим шагом.";
+    el("complete-dialog").showModal();
+  });
+  el("cancel-complete").addEventListener("click",()=>el("complete-dialog").close());
+  el("confirm-complete").addEventListener("click",async()=>{
+    el("complete-dialog").close();if(finishing || completionPaused || queue.state().blocked)return;
+    finishing=true;renderStatus(queue.state());
+    try{
+      const state=await queue.flush();if(state.status!=="saved")return;
+      const {completion}=await request("/api/participant/attempts/"+id+"/complete",{method:"POST",
+        headers:{"Content-Type":"application/json","X-CSRF-Token":csrf},body:JSON.stringify({expected_revision:state.revision})});
+      await loadSaved();if(!readOnly)throw new Error("INVALID_COMPLETION_STATE");showResult(completion);el("result").focus();
+    }catch(error){completionPaused=true;if(error.status===401)el("draft-login").hidden=false;}
+    finally{finishing=false;renderStatus(queue.state());}
   });
   el("previous").addEventListener("click",()=>navigate(slideIndex-1));el("next").addEventListener("click",()=>navigate(slideIndex+1));
   el("reset").addEventListener("click",()=>el("reset-dialog").showModal());
   el("cancel-reset").addEventListener("click",()=>el("reset-dialog").close());
   el("confirm-reset").addEventListener("click",()=>{
-    el("reset-dialog").close();if(queue.state().blocked)return;
+    el("reset-dialog").close();if(queue.state().blocked || finishing || completionPaused)return;
     for(const itemId of Object.keys(answers))delete answers[itemId];for(const field of fields.values())for(const input of field.querySelectorAll("input"))input.checked=false;
     showMissing=false;el("load-status").textContent="";showSlide(0,true);edited();
   });
@@ -116,7 +149,7 @@
   el("cancel-reload").addEventListener("click",()=>el("reload-dialog").close());
   el("confirm-reload").addEventListener("click",async()=>{
     el("reload-dialog").close();el("reload-draft").disabled=true;
-    try{apply((await request("/api/participant/attempts/"+id+"/draft")).attempt);}
+    try{await loadSaved();}
     catch(error){el("save-status").textContent="Не удалось загрузить сохранённое состояние. Запись остаётся остановленной.";if(error.status===401)el("draft-login").hidden=false;}
     finally{el("reload-draft").disabled=false;}
   });
