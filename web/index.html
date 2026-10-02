@@ -17,8 +17,8 @@
   <main class="layout">
     <aside class="sidebar" aria-label="Информация о прохождении">
       <p class="eyebrow">Библиотека методик / TKI</p>
-      <h1>Поведение<br>в конфликте</h1>
-      <p class="intro">Тест Томаса—Килманна.<br>Общий бланк для мужчин и женщин.</p>
+      <h1>Поведение в конфликте</h1>
+      <p class="intro">Тест Томаса—Килманна</p>
       <section class="progress-panel" aria-labelledby="progress-heading">
         <h2 id="progress-heading">Ваш прогресс</h2>
         <p id="progress-text" aria-live="polite">Заполнено 0 из 30</p>
@@ -44,8 +44,14 @@
         </section>
         <div id="questions"></div>
         <div class="actions">
+          <p id="slide-counter" class="slide-counter" aria-live="polite">Вопрос 1 из 30</p>
           <p id="submit-hint">Для проверки нужны ответы на все 30 пар.</p>
-          <div class="action-buttons"><button id="reset" type="button" class="secondary" disabled>Начать заново</button><button id="submit" type="submit" disabled>Проверить ответы</button></div>
+          <div class="action-buttons slide-navigation" aria-label="Переход между вопросами">
+            <button id="previous" type="button" class="secondary" disabled>Назад</button>
+            <button id="next" type="button" disabled>Далее</button>
+            <button id="submit" type="submit" disabled hidden>Проверить ответы</button>
+          </div>
+          <button id="reset" type="button" class="restart-button secondary" disabled>Начать заново</button>
         </div>
       </form>
       <section id="result" class="result-card" tabindex="-1" aria-labelledby="result-heading" hidden>

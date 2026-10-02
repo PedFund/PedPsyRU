@@ -17,5 +17,11 @@
       responses: items.map(item => ({item_id: item.id, value: answers[item.id]}))
     };
   }
-  return {summarize, buildRequest};
+  function slideState(items, index) {
+    if (!items.length || !Number.isInteger(index)) throw new Error("INVALID_SLIDE");
+    const current = Math.max(0, Math.min(items.length - 1, index));
+    return {index: current, item_id: items[current].id, number: current + 1,
+      total: items.length, isFirst: current === 0, isLast: current === items.length - 1};
+  }
+  return {summarize, buildRequest, slideState};
 });

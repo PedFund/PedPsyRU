@@ -5,14 +5,31 @@
   const questionnaire = byId("questionnaire");
   const submit = byId("submit");
   const reset = byId("reset");
+  const previous = byId("previous");
+  const next = byId("next");
   const answers = Object.create(null);
   const fields = new Map();
   let data;
   let showMissing = false;
   let revision = 0;
   let pending;
+  let slideIndex = 0;
   function hideResult() {byId("result").hidden = true; byId("measures").replaceChildren();}
-  function focusPair(id) {fields.get(id).querySelector("input").focus();}
+  function showSlide(index, focus = true) {
+    const state = PedPsyForm.slideState(data.form.items, index);
+    slideIndex = state.index;
+    for (const [id, field] of fields) field.hidden = id !== state.item_id;
+    byId("slide-counter").textContent = "Вопрос " + state.number + " из " + state.total;
+    previous.disabled = state.isFirst;
+    next.hidden = state.isLast;
+    submit.hidden = !state.isLast;
+    if (focus) fields.get(state.item_id).focus();
+  }
+  function focusPair(id) {
+    showSlide(data.form.items.findIndex(item => item.id === id), false);
+    const field = fields.get(id);
+    (field.querySelector("input:checked") || field.querySelector("input")).focus();
+  }
   function update() {
     const state = PedPsyForm.summarize(data.form.items, answers);
     byId("progress").value = state.answered;
@@ -57,7 +74,7 @@
     byId("versions").textContent = "Бланк " + data.form.version + " · ключ 1.0.0";
     for (const item of data.form.items) {
       const field = document.createElement("fieldset");
-      field.className = "question"; field.id = item.id;
+      field.className = "question"; field.id = item.id; field.hidden = true; field.tabIndex = -1;
       const legend = document.createElement("legend"); legend.textContent = "Пара " + item.number;
       field.append(legend);
       for (const option of item.options) {
@@ -73,13 +90,16 @@
       const error = document.createElement("p"); error.id = item.id + "-error"; error.className = "pair-error"; error.textContent = "Выберите один вариант — а или б."; error.hidden = true;
       field.append(error); fields.set(item.id, field); byId("questions").append(field);
     }
-    byId("load-status").textContent = ""; submit.disabled = false; reset.disabled = false; update();
+    byId("load-status").textContent = ""; submit.disabled = false; reset.disabled = false; next.disabled = false;
+    update(); showSlide(0, false);
   } catch {
     byId("load-status").textContent = "Не удалось загрузить бланк. Проверьте, что локальный сервер запущен, и обновите страницу.";
     return;
   }
   questionnaire.addEventListener("submit", async event => {
-    event.preventDefault(); hideResult(); showMissing = true;
+    event.preventDefault();
+    if (!PedPsyForm.slideState(data.form.items, slideIndex).isLast) {showSlide(slideIndex + 1); return;}
+    hideResult(); showMissing = true;
     const state = update();
     if (!state.complete) {byId("errors").focus(); return;}
     const currentRevision = revision;
@@ -108,6 +128,8 @@
       if (pending === controller) {pending = null; submit.disabled = false; submit.textContent = "Проверить ответы";}
     }
   });
+  previous.addEventListener("click", () => showSlide(slideIndex - 1));
+  next.addEventListener("click", () => showSlide(slideIndex + 1));
   reset.addEventListener("click", () => byId("reset-dialog").showModal());
   byId("cancel-reset").addEventListener("click", () => byId("reset-dialog").close());
   byId("confirm-reset").addEventListener("click", () => {

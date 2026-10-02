@@ -49,6 +49,9 @@ progress::-moz-progress-bar { background: var(--teal); border-radius: 8px; }
 .option-code { color: var(--teal); font-weight: 750; margin-right: 6px; }
 .pair-error { color: var(--error); font-size: 13px; margin: 12px 0 0; }
 .actions { padding: 23px 0; border-top: 1px solid var(--line); }
+.slide-counter { color: var(--teal); font-weight: 750; margin-bottom: 8px; }
+.slide-navigation { justify-content: space-between; }
+.restart-button { margin-top: 22px; font-size: 13px; padding: 9px 15px; }
 #submit-hint { color: var(--muted); font-size: 13px; }
 .action-buttons { display: flex; flex-wrap: wrap; gap: 10px; }
 .error-box { background: #fff1f1; color: #802830; border: 1px solid #e8b1b4; border-radius: 14px; padding: 22px; margin-bottom: 22px; }

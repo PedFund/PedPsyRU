@@ -1,7 +1,7 @@
 "use strict";
 const assert = require("node:assert/strict");
 const {test} = require("node:test");
-const {summarize, buildRequest} = require("../web/form-model.js");
+const {summarize, buildRequest, slideState} = require("../web/form-model.js");
 const form = require("../methods/tki/form.json");
 const Contract = require("../core/tki-contract.js");
 const versions = {contract_version: Contract.CONTRACT_VERSION, method_version_id: Contract.METHOD_VERSION_ID, handler_version: Contract.HANDLER_VERSION};
@@ -37,4 +37,30 @@ test("complete request preserves IDs and versions without copying text or extra 
 test("reset state has no responses or complete flag", () => {
   const state = summarize(form.items, {});
   assert.deepEqual(state, {total: 30, answered: 0, missing: form.items.map(item => item.id), complete: false});
+});
+
+test("each of 30 slide positions identifies exactly one pair", () => {
+  for (let i = 0; i < 30; i++) {
+    const state = slideState(form.items, i);
+    assert.equal(state.item_id, "q" + String(i + 1).padStart(2, "0"));
+    assert.equal(state.number, i + 1);
+    assert.equal(state.total, 30);
+    assert.equal(state.isFirst, i === 0);
+    assert.equal(state.isLast, i === 29);
+  }
+});
+
+test("slide navigation stays within first and last positions", () => {
+  assert.equal(slideState(form.items, -1).index, 0);
+  assert.equal(slideState(form.items, 30).index, 29);
+  assert.throws(() => slideState([], 0), /INVALID_SLIDE/);
+  assert.throws(() => slideState(form.items, NaN), /INVALID_SLIDE/);
+});
+
+test("moving back or to a missing pair preserves answers and request order", () => {
+  const answers = Object.fromEntries(form.items.map(item => [item.id, "A"]));
+  const before = JSON.stringify(answers);
+  for (const i of [0, 1, 29, 20, 0]) slideState(form.items, i);
+  assert.equal(JSON.stringify(answers), before);
+  assert.deepEqual(buildRequest(form.items, answers, versions).responses[20], {item_id: "q21", value: "A"});
 });
