@@ -2,6 +2,10 @@
 
 Дата: 2026-10-03. Репозиторий: `PedFund/PedPsyRU`.
 
+## Фаза3 — начата по указанию владельца
+
+Selectel отложен; текущая задача — платформа, synthetic development. **03а реализована локально**, пока не объявляется интегрированной: отдельные researcher/staff contracts, named policy/own scope, текущий PostgreSQL resolver и обязательный аудит, 005 researcher auth tables/version guard. Проверка разрешения не заменяет transaction authorization будущей мутации. Staff export/control требует fresh MFA. Исходный TKI/форма/ключ/SQLite сохранены. Проверки/PR будут добавлены после фактической приемки; подробности —ACCOUNT_ACCESS_VALIDATION. Следом03б/03в, затем03г–03з; вся фаза еще не завершена.
+
 ## Подготовка следующей фазы
 
 ### Продолжение после смены модели

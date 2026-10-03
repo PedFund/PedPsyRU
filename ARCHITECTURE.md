@@ -6,6 +6,8 @@
 
 ## Принятые границы
 
+03а: `src/ports/accounts.ts` и `account-policy.ts` — named policy и внутренний principal; `PostgresAccountAccess` — текущий session/membership resolver с mandatory audit. Чистая матрица сама не аутентифицирует клиента. Check не дает полномочие будущему write; под transaction locks он должен повторяться. Researcher realm не открывает diagnostic RLS. Это еще не staff login/MFA enrollment или кабинет. Selectel отложен владельцем, работа только над synthetic платформой.
+
 Фактические слои: `src/ports` —async transaction/identity interfaces; `src/application` —participation/API orchestration; `src/scoring` —оболочка неизменного JS-core; `src/adapters` —SQLite/PG UnitOfWork и PG identity/snapshot/migrator; `src/http` —Fastify health и явно составляемый participant APIv2; `src/bootstrap` —composition roots. HTTP не импортирует pg/storage/adapters, application/ports не выполняют I/O; AST guard проверяет направления/циклы и типовые/runtime imports. Это не полный SAST/научная приемка.
 
 `npm start` сохраняет прежний4173; `start:platform` —health-only4174; `start:platform:demo` —v2 только при явной synthetic loopback PG-конфигурации, без автоматических migrations/seed/password provisioning. Старый UI/SQLite не переключены. Build копирует необходимые исходные JS/data artifacts побайтово, в том числе прежние security primitives; dist игнорируется, никакие базы/секреты туда не копируются. Snapshot переносится offline в пустой target, credentials/sessions создаются заново. Новый API проходит отдельную HTTP/PG приемку; права будущих manager/processing endpoints не считаются реализованными этой основой.
