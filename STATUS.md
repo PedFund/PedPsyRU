@@ -12,7 +12,9 @@ Selectel отложен; текущая задача — платформа, syn
 
 **03г интегрирована через[PR#19](https://github.com/PedFund/PedPsyRU/pull/19)**, merge892999a45b441494347860c6b01957e2f0dd4c01; headf40d86ce/run37137129375 все6jobs success,191base+64PG,153blobs/preview сверены. Обе MFA staff роли invite/block, one-use24h preview без email/URL, quota1/default, separate own researcher login/home/CSRF. Block не удаляет исследования/ответы.
 
-**03д реализуется локально:** только fresh superadmin назначает административные роли активному исследователю или меняет роль другого staff. Promotion явно заменяет researcher realm (отзыв), новый staff все равно password→MFA. Role/version/session/challenges/audit атомарны; session history сохранена ON UPDATE CASCADE после revoke. Self role mutation запрещена, control lock защищает last active superadmin от concurrent reciprocal demotions. Offline first-superadmin bootstrap —owner-only private function, только synthetic DB, один раз, не HTTP/startup.6 новых PG scenarios ожидают CI,70PG/base191. Далее03е–03з; фаза не завершена.
+**03д интегрирована через[PR#20](https://github.com/PedFund/PedPsyRU/pull/20)**, merge1519f63d7f8141e96c6b0204825ce855671c090c; headff937d85/run37137562347 все6jobs success,191base+70PG,157blobs/preview сверены. Superadmin-only/fresh/role/version/revoke, researcher promotion без password-only diagnostics, self/last superadmin guards, private owner-only first synthetic bootstrap.
+
+**03е реализуется локально:** обе staff роли глобально читают/скачивают ответы и сохраненные индивидуальные результаты.010 один SQL statement формирует согласованный whitelist snapshot, без mixed revisions/keys/source/password material;500protocols/4MiB, отказ вместо truncation, обязательный meta audit/повтор authority/fresh export proof. Никаких write/process/method API.6PG tests ожидают CI,191base+76PG; далее03ж/03з —кабинеты/сквозная приемка.
 
 ## Подготовка следующей фазы
 

@@ -51,3 +51,13 @@ Accept сохраняет salted scrypt только после актуальн
 Первый synthetic superadmin создается отдельно `bootstrap_first_superadmin` под schema owner (SECURITY INVOKER, PUBLIC/runtime EXECUTE отсутствует, controlled demo/ci database name, guard first-only/advisory lock/audit). Не startup/migration/HTTP signup. В development реального bootstrap/паролей не выдавалось. Production bootstrap/восстановление ключей/доверенный оператор отдельно, не основание для размещения.
 
 6 actual PG tests: admin/participant/self/strict DTO/fresh denied; role bump/relogin/recovery/history; explicit researcher promotion/no password-only capability; reciprocal concurrent demotions оставляют1superadmin; audit rollback; actual private owner-only first bootstrap/second denial.191base+70PG ожидают текущий CI.
+
+03д интегрирована#20/1519f63d после всех6jobs run37137562347 success,191base+70PG;157blobs/preview совпали.
+
+## 03е: диагностика обеим административным ролям
+
+010 fixed private functions и PostgresStaffDiagnostics: both actual MFA staff roles global directory/read/download по принятой матрице, researcher/participant/pending/unknown/revoked denied. Download требует fresh proof, whitelist JSON включает raw A/B и сохраненные пять raw measures/версии/digest результатов; не source_text/key/hash/password/factor/form_snapshot. Не изменяет/не пересчитывает completed. User IDs/display_code —synthetic data; HTTP/реальное использование не делает их публичными.
+
+Весь протокол/ответы/result в одном SQL statement MVCC snapshot: конкурентный save/complete не смешивает ревизии. Runtime не получает доступ к private tables, SECdefiner функция проверяет current authority под locks и повторяет его после формирования; mandatory meta audit и touch доcommit. Ограничения500records/4MiB и отсутствие truncation; отсутствующий/неправильный ID404. JSON bytes повторно проверяются Node до commit/выдачи. Directory тоже bounded. Download будет толькоPOST+CSRF/Origin в03ж, не GET side effect/download by guessed URL.
+
+6 actual PG scenarios: both roles/all studies/original result/whitelist/audit; all forbidden realms/revoke; fresh/missing/closed study; concurrent consistent snapshots/immutable; audit rollback; byte/cardinality limits.191base+76PG ожидают текущий CI. Processing/method manager endpoints не добавлены.
