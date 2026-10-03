@@ -1,6 +1,6 @@
 # Зависимости, архитектурные проверки и безопасность
 
-Дата подготовки: 2026-10-03. Область: TKI-пилот и старт фазы 2. Runtime приложения этой подготовкой не изменяется. Фактический результат CI фиксируется в PHASE2_HANDOFF.md; наличие YAML не объявляется успешным запуском или защитой ветки.
+Дата:2026-10-03. Область: TKI-пилот и завершенная фаза2; подготовительная история сохранена ниже. Фактический результат —PHASE2_ACCEPTANCE/STATUS: финальный head5b42cce7/run37130462614 все6jobs success,179base+38PG18.6,0errors/skip. Это не server branch protection, независимый security аудит или production deployment.
 
 ## Зависимости и обновления
 
@@ -14,11 +14,11 @@
 | @types/node | 22.20.5 / MIT, dev | Типы нижней поддержанной CI-линии |
 | @types/pg | 8.23.1 / MIT, dev | Типы драйвера, не runtime package |
 
-Прямые версии/лицензии получены из первичного npm registry; дерево lockfile содержит 65 пакетов, MIT/BSD-3-Clause/ISC/Apache-2.0, все resolved registry.npmjs.org, SHA-512 integrity, install scripts отсутствуют. `check:dependencies` автоматически проверяет эти условия, точные версии и manifest/lock consistency; high/critical audit по-прежнему блокирует CI. Локально npm audit дал 0 известных advisories для этого дерева. Это не полная проверка исходников зависимостей. TypeScript 6 выбран для compiler API, не вслепую latest 7 native compiler. `pg` пока не открывает соединений.
+Прямые версии/лицензии получены из первичного npm registry; дерево lockfile содержит 65 пакетов, MIT/BSD-3-Clause/ISC/Apache-2.0, все resolved registry.npmjs.org, SHA-512 integrity, install scripts отсутствуют. `check:dependencies` автоматически проверяет эти условия, точные версии и manifest/lock consistency; high/critical audit по-прежнему блокирует CI. Локально npm audit дал 0 известных advisories для этого дерева. Это не полная проверка исходников зависимостей. TypeScript 6 выбран для compiler API, не вслепую latest 7 native compiler. `pg` используется реальными synthetic UnitOfWork/auth/import/restore/API tests; Windows без PG/Docker не объявляется local engine proof.
 
 Поддержка/основания: [Fastify LTS](https://fastify.dev/docs/latest/Reference/LTS/), [транзакции pg](https://node-postgres.com/features/transactions), [TypeScript options](https://www.typescriptlang.org/docs/handbook/compiler-options.html), [registry Fastify](https://registry.npmjs.org/fastify/5.12.5), [registry pg](https://registry.npmjs.org/pg/8.23.1), [registry TS6](https://registry.npmjs.org/typescript/6.0.3). Перед real deployment повторить проверку текущих Node patches и всего дерева. Историческая таблица ниже описывает подготовку, не текущий пакетный состав.
 
-В 02в прежнее regex-извлечение заменено compiler AST: literal CommonJS/ESM imports, exports/import types, TS `.js` resolution, циклы и границы src. Computed loaders/require aliases блокируются. CI добавляет strict typecheck и build внутри npm test; игнорируемый dist запрещен в Git. Guard не доказывает отсутствие всех вариантов исполнения динамического кода или скрытого сетевого I/O, не заменяет SAST/ручное review; реальные DTO/auth/DB проверяются следующими задачами. Health не раскрывает конфигурацию/данные, logger отключен, каркас только loopback, 4173 не переключается.
+В02в regex-извлечение заменено compiler AST:literal CommonJS/ESM imports,exports/import types,TS `.js` resolution,cycles/src layers. Computed loaders/require aliases блокируются. CI выполняетstrict typecheck/build, dist запрещен вGit. Guard не полный SAST; реальные DTO/auth/DB/CAS/revoke/rollback/restore/API проверены в02г–02з. Health не раскрывает данные, loggeroff, synthetic bootstraploopback;4173 не переключен. Ниже исторический реестр подготовки до установки пакетов.
 
 | Компонент | Зафиксировано сейчас | Контроль |
 |---|---|---|
@@ -46,11 +46,14 @@ Runtime PG role: точечные SELECT/INSERT/column UPDATE grants, нет DDL
 | Tests (Node 22), Tests (Node 24) | npm ci, границы модулей/пакетов/артефактов, node --check, все тесты | Реальное размещение, научная валидность, полная межбраузерная матрица |
 | Dependency audit | npm audit всего lockfile; high/critical блокируют | Неизвестные уязвимости и безопасность собственного кода |
 | Secret scan | Gitleaks всей доступной Git-истории с fetch-depth:0, --redact=100 | Поиск всех персональных данных и всех возможных секретов |
+| PostgreSQL18 isolation | Runtime RLS/ACL, contracts/CAS/locks/revoke/audit, domain import/pg_dump restore и actual HTTP/API | Production RPO/RTO/нагрузка, научная валидность и готовый staff MFA enrollment |
 | Required checks | Успех всех перечисленных jobs; failure/cancelled/skipped блокируют | Серверное применение требования к merge, пока не включена защита main |
 
 Workflow имеет только contents:read, Actions закреплены полным SHA, checkout не сохраняет credentials. Нет pull_request_target, production secrets, выгрузок базы или автоматического деплоя. Сканер не отправляет исходники внешнему SaaS. Ограничены время и параллельные запуски. Синтетические тесты создают временные базы и используют loopback; основной файл .local не загружается.
 
-`scripts/check-architecture.js` проверяет текущие literal CommonJS зависимости: core не зависит от I/O/БД/web/пакетов, storage не зависит от web, нет циклов/неразрешенных пакетов/опасных файлов в Git. В CI нужен настоящий checkout; локальная папка без .git проверяется явно как локальная копия. Это узкий регрессионный анализ принятых форм imports, не полноценный JS parser или SAST; намеренный обход/aliasing им не исключается. При переходе к TS/ESM в 02в заменить извлечение зависимостей AST-инструментом с обоснованной devDependency, не маскировать ошибки guard.
+`scripts/check-architecture.js` выполняет compiler AST анализ JS/TS: core не зависит от I/O/БД/web/packages; чистыеports/application не имеют I/O; HTTP не импортируетDB/adapters;storage не зависит отweb;cycles/computedloading/requirealiases/dev-onlyruntimeimports и опасныеGitartifacts блокируются. CI требуетcheckout, local без.git явно обозначен. Это регрессионный guard принятыхграниц, не полныйSAST; malicious execution/network/security proof им не заменяется.
+
+Participant auth004 дает ограниченные backend-only lookup/issue/revoke/throttle/denialfunctions, не directSELECTauth и не клиентскийSQL. Secrets/serverrole довереныBFF; RLS не защищает от произвольного кода с украденнымиDBcredentials. Fixed search_path/PUBLICrevoke/minimalgrants, privilegechecks, opaquehash,currentstatus/version/time иscope rechecks остаются обязательными. PostgreSQL schema tests вместе с API подтверждают обе validMFAstaff globalread, participantownwrites, no staff impersonation. РеальнаяMFAsetup/step-up/recovery—фаза3. SQL/HTTP ошибок/секретов вответах/logs нет;metadataauditfailclose.
 
 Guard проверен отрицательными примерами: core→storage/network, storage→web, цикл, computed loading, отсутствующий файл, необъявленный пакет, .env/SQLite/выгрузка. Разрешены node:sqlite в storage и комментарий про import-adapter; проверена совместимость с действующим пилотом.
 

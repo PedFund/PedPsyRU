@@ -2,7 +2,7 @@
 
 Дата: 2026-10-03. Основной репозиторий разработки — `PedFund/PedPsyRU`.
 
-Пилот ниже интегрирован в main через PR #7. Фаза2 развивается по `PHASE2_DESIGN.md`: JS/TypeScript + PostgreSQL, прежний вычислитель, Россия/Selectel и согласованные целевые права. 02а–02ж находятся в main через#8–#13;02з в ветке приемки, ее текущий CI/merge статус —STATUS/BACKLOG. Рабочие participant API/PostgreSQL и manager/MFA/production — разные уровни готовности. Автоматические проверки —SECURITY_AND_DEPENDENCIES.md, приемка —PHASE2_ACCEPTANCE.md.
+Пилот ниже интегрирован в main через PR #7. Фаза2 реализована по `PHASE2_DESIGN.md`: JS/TypeScript + PostgreSQL, прежний вычислитель, Россия/Selectel и согласованные целевые права. 02а–02з находятся в main через#8–#14; актуальный CI/merge статус —STATUS/BACKLOG. Рабочие participant API/PostgreSQL и еще не реализованные manager/MFA/production — разные уровни готовности. Автоматические проверки —SECURITY_AND_DEPENDENCIES.md, приемка —PHASE2_ACCEPTANCE.md. Следующая техническая задача03а, не повторный аудит/переписывание фазы2.
 
 ## Принятые границы
 

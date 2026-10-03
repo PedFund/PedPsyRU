@@ -24,7 +24,22 @@
 | 02д. PostgreSQL схема и изоляция | 02г | Отдельная временная БД, миграции повторяемы, составные FK/ограничения/индексы, runtime role/RLS, изоляция пула | Интегрировано через #11, merge 687b207d; все 6 jobs run 37126725992 success, включая реальный PG18.6 |
 | 02е. PostgreSQL-адаптер и конкуренция | 02д | Те же контрактные тесты двух адаптеров, один client/transaction, CAS, двойной complete, revoke/save, rollback audit | Интегрировано через #12, merge597c3cf9; 171base+27PG, все6jobs run37128052555 success |
 | 02ж. Перенос снимка и восстановление | 02е | Копия demo переносится с теми же UUID/версией/digest/баллами; backup восстановлен в отдельную БД; источник сохранен | Интегрировано через#13, merge5bfb5c44;174base+30PG, все6jobs run37128667436 success, реальный backup restore |
-| 02з. Приемка фазы 2 | 02в–02ж | Сквозной TKI через новое API/БД, отрицательные проверки, успешный актуальный CI, документированные restore/rollback и интеграция | Реализуется в codex/phase2-api-acceptance; новый participant API/E2E, production/реальные участники отдельно |
+| 02з. Приемка фазы 2 | 02в–02ж | Сквозной TKI через новое API/БД, отрицательные проверки, успешный актуальный CI, документированные restore/rollback и интеграция | Интегрировано через#14, merge4a86cb44;179base+38PG, все6jobs run37130462614 success; фаза2:8из8 |
+
+## Фаза3: следующие небольшие задачи
+
+Целевые права уже согласованы, реализация еще не начата. Технические детали/библиотеки выбираются самостоятельно с прежним dependency review, UI/control не заменяет server authorization. Реальные accounts/mail/production не выдаются автоматически. Не перескакивать через staff MFA dependency ради удобства кабинета.
+
+| Задача | Зависимость | Проверяемый результат | Состояние |
+|---|---|---|---|
+| 03а. Контракты researcher/staff и централизованные permissions | Фаза2 | Идентичность/роль/session version, named operations и scope; таблицы/ports/положительные и отрицательные tests без выдачи новых прав | Следующий шаг; synthetic only |
+| 03б. Administrative login pending MFA и отзыв | 03а | Один пароль не открывает staff API; pending challenge не participant/staff capability; reset/block отзывают сессии, anti-enumeration/throttle/audit | Запланировано |
+| 03в. Второй фактор и recovery | 03б | Реальный второй фактор, replay/expiry/attempt limits, безопасное хранение секрета и одноразовое recovery; только после обоих факторов staff session; sensitive operations требуют актуального MFA proof | Запланировано; без платного SMS/email сервиса |
+| 03г. Приглашение/блокировка исследователя | 03в | Обе staff роли приглашают/блокируют, researchers проходят свой login; invite одноразовый/срок, квота/status/audit/revoke, чужой researcher denied | Запланировано; доставка пока synthetic preview, реальный email provider отдельно |
+| 03д. Назначение staff-ролей | 03в | Только superadministrator, audit/повторная проверка MFA, atomic version/revoke, нет self escalation и удаления последнего active superadmin | Запланировано; первоначальный bootstrap отдельно offline, без публичного signup |
+| 03е. Глобальное чтение и скачивание протоколов/результатов | 03в | Обе staff роли читают/скачивают все разрешенные raw answers и индивидуальные результаты; researcher/participant denied, immutable inputs/results, scoped metadata audit/export limits | Запланировано; админ без process/method rights |
+| 03ж. Кабинеты ролей и MFA UI | 03г–03е | Браузер выполняет принятые операции; не показывать недоступные действия, каждое действие сервером проверено; секрет второго фактора не в логах/localStorage | Запланировано; отдельные маленькие UI commits |
+| 03з. Приемка учетных записей/кабинетов | 03а–03ж | Сквозной invite/login/MFA/block/relogin/role/export, положительные и отрицательные HTTP/PG/browser tests, current CI/main и документация | Запланировано; не production/реальные участники |
 
 Технические шаги **01а–01е**, включая **01д.4**, находятся в main после единственного разрешенного объединения [PR #7](https://github.com/PedFund/PedPsyRU/pull/7). Итоговое дерево точно сверено, 134 теста повторно прошли после merge. #1 автоматически отмечен GitHub merged, #2–#6 закрыты как замененные #7; ветки/история сохранены. Следующие функциональные ветки начинаются от актуальной main, не от промежуточной цепочки. Только вымышленные данные; реальный контур/production требуют отдельных утверждений. Следующая фаза по ROADMAP — 2 (производственная архитектура), не немедленное развертывание. Отчет — INTEGRATION_VALIDATION.md.
 
