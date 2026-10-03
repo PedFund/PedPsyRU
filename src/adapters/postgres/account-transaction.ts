@@ -11,7 +11,7 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
     }catch(e){await client.query("ROLLBACK");throw e;}
   }catch(e){
     if(e&&typeof e==="object"&&"code"in e&&"message"in e){
-      if(e.code==="42501"&&["FORBIDDEN","MFA_RECHECK_REQUIRED"].includes(String(e.message)))throw new ParticipationError(403,String(e.message));
+      if(e.code==="42501"&&["FORBIDDEN","MFA_RECHECK_REQUIRED","SELF_ROLE_CHANGE_FORBIDDEN","LAST_SUPERADMIN_REQUIRED"].includes(String(e.message)))throw new ParticipationError(403,String(e.message));
       if(e.code==="54000"&&["INVITE_THROTTLED","EXPORT_LIMIT"].includes(String(e.message)))throw new ParticipationError(e.message==="INVITE_THROTTLED"?429:413,String(e.message));
     }
     throw mapPostgresError(e);
