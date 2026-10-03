@@ -1,5 +1,7 @@
 # Фаза 3 — аккаунты и кабинеты
 
+03ж интегрирована#22/226b2298 после всех6jobs run37140067802 success:195base+79PG,171blobs/preview/parents.03з —actual browser acceptance, см.PHASE3_ACCEPTANCE; полная production/методическая готовность не заявляется. Разделы ниже «ожидают CI» описывают историческое состояние каждой подзадачи; подтвержденные результаты —STATUS/BACKLOG.
+
 ## 03ж: HTTP и кабинет
 
 Явная composition на4174 сохраняет участнический API и добавляет accounts. Password pending capability только в HttpOnly cookie; JSON содержит CSRF, не bearer. Раздельные staff/researcher cookies очищают другой realm при успешном входе. Same-origin/Host/FetchSite/JSON/body8192/CSRF/no-store/нейтральные errors и mandatory meta denial audit; HTTPS Host-prefix/Secure. Static allowlist/CSP self/no-inline/no-referrer без исходников/key/credentials. Сервер повторно проверяет каждый write/export, не доверяет UI роли.

@@ -128,3 +128,4 @@ jobs:
           PGTEST_HOST: 127.0.0.1
           PGTEST_PORT: '5432'
           PGTEST_CONTAINER: ${{ job.services.postgres.id }}
+          PGTEST_BROWSER: google-chrome # Preinstalled official runner; mandatory real browser, no downloads.
