@@ -49,7 +49,7 @@
 |---|---|---|
 |04а. Создание исследования|Фаза3|Интегрировано#25/fc77aa0d: own draft/title/UUID/version/membership/audit;196base+84PG/3Chrome, all6CI run37144756732. Active quota enforcement —04е, draft не active|
 |04б. Группы|04а|Интегрировано#26/head67c0681a:КГ/ЭГ/other, foreign denied/unique/CAS race;197base+85PG/3Chrome, all6run37145236483|
-|04в. Этапы|04а|T0/T1/T2 и собственные этапы/порядок; cross-study ссылки запрещены|
+|04в. Этапы|04а|Интегрировано#27/headdc7cb07e: T0/T1/T2/custom/order/scope/CAS;198base+86PG/3Chrome, all6run37145591825|
 |04г. Назначения методик|04б+04в|Свой набор для каждой group×stage, только существующий pinned approved release; editor/key/science не изменяется|
 |04д. Копирование настроек этапа|04г|T1 копирует настройки T0 отдельно по группам, но не ответы/попытки/участников/результаты; missing T0 не угадывается|
 |04е. Жизненный цикл|04а–04д|Draft/active/closed и квота проверены в transaction, активные pinned назначения не изменяются задним числом; новые manager права отдельно согласуются|

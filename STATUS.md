@@ -2,6 +2,8 @@
 
 ## Фаза4 начата —2026-10-03
 
+04в интегрированаPR#27/headdc7cb07e/run37145591825 all6success:198base+86PG/3Chrome. Custom stage/order/duplicate/cross-study/CAS подтверждены.04г method assignments следующий отдельныйPR;04д copy и04е lifecycle/quota локально подготовлены, не входят в#27. ВыпускTKI остаетсяscientific draft/key_verified, не опубликован/переутвержден.
+
 04б интегрированаPR#26/head67c0681a/run37145236483 all6success:197base+85PG и3Chrome. Group kinds/foreign group+study/duplicate/currentversion/concurrentCAS фактически проверены; snapshot2/legacy1/backup регрессии зеленые.04в отдельный следующий техническийPR —T0/T1/T2/custom/pорядок/scope, готов локально;04г assignments только локальная подготовка, не runtime предыдущегоPR.
 
 04а интегрирована[PR#25](https://github.com/PedFund/PedPsyRU/pull/25), mergefc77aa0df4f5eba4c83b73c7314b77005c5b7492; finale51bfc88/run37144756732 all6success,196base+84PG и3/3 дополнительных Chrome.182blob/preview/actual merge verified. Legacy snapshot1 и новыйsnapshot2/nonzero revision фактически проверены.04б группы подготовлены отдельным блоком поверхfresh main;04в этапы локально подготовлены, не интегрированы. Локальныйscope/strict tests групп/этапов3/3, полный actualCI каждого блока обязателен.
