@@ -3,7 +3,8 @@ const fs = require("node:fs");
 const path = require("node:path");
 const {execFileSync} = require("node:child_process");
 const {isBuiltin} = require("node:module");
-const runtimeFile = p => /^(core\/|storage\/|web\/|methods\/|processor\.js$|methods\.js$)/.test(p) && p.endsWith(".js");
+const ts = require("typescript");
+const runtimeFile = p => /^(src\/|core\/|storage\/|web\/|methods\/|processor\.js$|methods\.js$)/.test(p) && /\.(?:[cm]?js|ts)$/.test(p);
 const mathFile = p => /^(core\/|methods\/|processor\.js$|methods\.js$)/.test(p);
 
 function repositoryFiles(root) {
@@ -16,7 +17,7 @@ function repositoryFiles(root) {
     const files = [];
     function walk(dir) {
       for (const entry of fs.readdirSync(path.join(root, dir), {withFileTypes: true})) {
-        if ([".git", ".local", "node_modules"].includes(entry.name)) continue;
+        if ([".git", ".local", "node_modules", "dist"].includes(entry.name)) continue;
         const name = path.posix.join(dir, entry.name);
         if (entry.isSymbolicLink()) throw new Error("Symlink requires review: " + name);
         if (entry.isDirectory()) walk(name); else files.push(name);
@@ -27,10 +28,50 @@ function repositoryFiles(root) {
   }
 }
 
+function extractImports(file, source) {
+  const ast = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true,
+    file.endsWith(".ts") ? ts.ScriptKind.TS : ts.ScriptKind.JS);
+  const imports = [], errors = [];
+  if (ast.parseDiagnostics.length) errors.push("Invalid syntax: " + file);
+  const add = (node, typeOnly = false) => {
+    if (!node || !ts.isStringLiteral(node)) errors.push("Unsupported computed module loading: " + file);
+    else imports.push({specifier: node.text, typeOnly});
+  };
+  function visit(node) {
+    if (ts.isImportDeclaration(node)) add(node.moduleSpecifier, Boolean(node.importClause?.isTypeOnly));
+    else if (ts.isExportDeclaration(node) && node.moduleSpecifier) add(node.moduleSpecifier, node.isTypeOnly);
+    else if (ts.isImportEqualsDeclaration(node) && ts.isExternalModuleReference(node.moduleReference)) add(node.moduleReference.expression, node.isTypeOnly);
+    else if (ts.isImportTypeNode(node) && ts.isLiteralTypeNode(node.argument)) add(node.argument.literal, true);
+    else if (ts.isCallExpression(node) && (node.expression.kind === ts.SyntaxKind.ImportKeyword ||
+      ts.isIdentifier(node.expression) && node.expression.text === "require")) {
+      if (node.arguments.length !== 1) errors.push("Unsupported module arguments: " + file);
+      else add(node.arguments[0]);
+    } else if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression) &&
+      ts.isIdentifier(node.expression.expression) && ["require", "module"].includes(node.expression.expression.text)) {
+      errors.push("Unsupported indirect module loading: " + file);
+    } else if (ts.isIdentifier(node) && node.text === "require" &&
+      !(ts.isCallExpression(node.parent) && node.parent.expression === node) &&
+      !(ts.isPropertyAccessExpression(node.parent) && node.parent.expression === node && node.parent.name.text === "main")) {
+      errors.push("Unsupported require alias: " + file);
+    }
+    ts.forEachChild(node, visit);
+  }
+  visit(ast);
+  return {imports, errors};
+}
+
+function relativeTarget(file, specifier, available) {
+  const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
+  const candidates = [target];
+  if (target.endsWith(".js")) candidates.push(target.slice(0, -3) + ".ts", target.slice(0, -3) + ".d.ts");
+  if (!path.posix.extname(target)) candidates.push(target + ".js", target + ".ts", target + ".d.ts", target + "/index.js", target + "/index.ts");
+  return candidates.find(p => available.has(p)) || target;
+}
+
 function checkArchitecture(files, sources, manifest, approvedPackages = []) {
   const errors = [], graph = new Map();
   const available = new Set(files);
-  const forbidden = /(^|\/)(?:\.local|node_modules|data\/raw|outputs?|Data)(?:\/|$)|\.(?:sqlite(?:-.*)?|db|xlsx?|zip|pem|p12|pfx)$/i;
+  const forbidden = /(^|\/)(?:\.local|node_modules|dist|data\/raw|outputs?|Data)(?:\/|$)|\.(?:sqlite(?:-.*)?|db|xlsx?|zip|pem|p12|pfx)$/i;
   for (const file of files) {
     if (forbidden.test(file) || /(^|\/)\.env(?:\.|$)/.test(file) && !file.endsWith(".env.example")) errors.push("Forbidden repository artifact: " + file);
   }
@@ -40,28 +81,42 @@ function checkArchitecture(files, sources, manifest, approvedPackages = []) {
   for (const file of files.filter(runtimeFile)) {
     const source = sources[file];
     if (typeof source !== "string") {errors.push("Missing source: " + file); continue;}
-    // A deliberately narrow check for the pilot's literal CommonJS imports.
-    // This is a dependency regression guard, not a JavaScript security parser.
-    const calls = [...source.matchAll(/\brequire\s*\(/g)];
-    const imports = [...source.matchAll(/\brequire\s*\(\s*(["'])([^"']+)\1\s*\)/g)].map(m => m[2]);
-    if (calls.length !== imports.length || /\bimport\s*\(|^\s*import(?:\s|["'{*])/m.test(source)) errors.push("Unsupported dynamic/ESM dependency; review guard first: " + file);
+    const {imports, errors: parseErrors} = extractImports(file, source);
+    errors.push(...parseErrors);
     const edges = [];
-    for (const specifier of imports) {
+    for (const {specifier, typeOnly} of imports) {
       if (isBuiltin(specifier)) {
         if (mathFile(file) && specifier !== "node:crypto") errors.push("Calculation core imports I/O or runtime module: " + file + " -> " + specifier);
+        if (/^src\/(ports|application|scoring)\//.test(file)) errors.push("Pure layer imports runtime module: " + file + " -> " + specifier);
         continue;
       }
       if (!specifier.startsWith(".")) {
         const name = specifier.startsWith("@") ? specifier.split("/").slice(0, 2).join("/") : specifier.split("/")[0];
         if (!Object.hasOwn(manifest.dependencies || {}, name)) errors.push("Undeclared runtime package: " + file + " -> " + name);
         if (mathFile(file)) errors.push("Calculation core imports external package: " + file);
+        if (/^src\/(ports|application|scoring)\//.test(file)) errors.push("Pure layer imports external package: " + file);
+        if (file.startsWith("src/http/") && name !== "fastify") errors.push("HTTP directly imports non-HTTP package: " + file + " -> " + name);
         continue;
       }
-      const target = path.posix.normalize(path.posix.join(path.posix.dirname(file), specifier));
+      const target = relativeTarget(file, specifier, available);
       if (!available.has(target)) errors.push("Missing or external relative dependency: " + file + " -> " + target);
       if (mathFile(file) && !mathFile(target) && !/^methods\/.*\.json$/.test(target)) errors.push("Calculation core crosses boundary: " + file + " -> " + target);
       if (file.startsWith("storage/") && /^(web|tests|scripts)\//.test(target)) errors.push("Storage crosses boundary: " + file + " -> " + target);
-      if (target.endsWith(".js")) edges.push(target);
+      if (file.startsWith("src/")) {
+        const layer = file.split("/")[1];
+        const allowed = {
+          ports: /^(src\/ports\/|core\/.*\.d\.ts$)/,
+          application: /^(src\/(application|ports|scoring)\/)/,
+          scoring: /^(src\/(scoring|ports)\/|core\/)/,
+          adapters: /^(src\/(adapters|ports)\/|core\/|storage\/)/,
+          http: /^(src\/(http|application|ports)\/)/,
+          bootstrap: /^(src\/|storage\/)/
+        }[layer];
+        const declarationTarget = target.endsWith(".js") ? target.slice(0, -3) + ".d.ts" : target;
+        if (!allowed || !allowed.test(target) && !(typeOnly && layer === "ports" && allowed.test(declarationTarget)))
+          errors.push("Platform layer crosses boundary: " + file + " -> " + target);
+      }
+      if (/\.(?:[cm]?js|ts)$/.test(target)) edges.push(target);
     }
     graph.set(file, edges);
   }
@@ -87,4 +142,4 @@ if (require.main === module) {
   if (errors.length) {console.error(errors.join("\n")); process.exitCode = 1;}
   else console.log("Architecture/package/artifact checks passed (" + (tracked ? "Git tracked files" : "local files; Git index not verified") + ").");
 }
-module.exports = {checkArchitecture, repositoryFiles};
+module.exports = {checkArchitecture, repositoryFiles, extractImports};

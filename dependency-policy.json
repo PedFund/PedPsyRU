@@ -1,5 +1,5 @@
 {
   "version": 1,
-  "approvedNpmPackages": [],
-  "note": "No external npm packages in the pilot. Adding one requires a documented purpose, license, maintenance/security review, pinned lockfile and CI. See SECURITY_AND_DEPENDENCIES.md."
+  "approvedNpmPackages": ["fastify", "pg", "typescript", "@types/node", "@types/pg"],
+  "note": "Exact versions in package-lock.json; purposes, licenses and review in SECURITY_AND_DEPENDENCIES.md. Dev packages are not permitted as runtime imports."
 }
