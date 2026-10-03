@@ -2,6 +2,8 @@
 
 ## Итог фазы3 —2026-10-03
 
+Повторная проверка финального документирующего PR#24: первый headff98b5b8/run37141248193 получил79/80PG (browser command timeout), остальные195base/security/dependencies success. Merge не выполнен. В CI browser fixture добавлены безопасные фиксированные labels этапов/имя command без params/secrets, следующая проверка обязательна. Подтвержденный функциональный03з/#23 ниже остается отдельным успешным прогоном, не доказательством отсутствия нестабильности.
+
 **Порученная фаза3 завершена:8из8 задач интегрированы в main через#16–#23.** Финальная03з —[PR#23](https://github.com/PedFund/PedPsyRU/pull/23), merge b5c337572e7b108bf2bb9681133cf849a8126ae5, актуальный head50ad6c7b/[run37140560958](https://github.com/PedFund/PedPsyRU/actions/runs/37140560958) все6jobs completed/success:195base наNode22/24 +**80/80PG18.6**, включая actual Chrome/MFA/cabinets/actual JSON download,0fail/cancel/skip.174blobs/preview/parents сверены.9 исходных math/core/form/key blobs unchanged относительно фазы2; никаких новых научных норм. Приемка —PHASE3_ACCEPTANCE.
 
 Сделаны separate accounts/current permissions/пароль pending MFA/настоящий TOTP/recovery/приглашения и блокировка исследователей/super-only roles/глобальный staff raw+stored result read/export/кабинеты/required metadata audit/negative HTTP/PG tests. Эти технические операции выполняются сервером, не одной лишь UI-матрицей. Не выполнены methods editor/processing/manual jobs/email/aggregates/конструктор/real data/Selectel/production key custody. Тарифный branch protection не активирован; manual current-head gate выполнялся перед каждым merge.

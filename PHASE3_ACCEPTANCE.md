@@ -32,4 +32,6 @@
 
 ## Интеграция
 
+Первый повторный CI финального documentary headff98b5b8/run37141248193 получил79/80PG: browser command timeout, прочие195base/security/dependencies success. Merge остановлен, scenario не skipped. Для диагностики добавлены только фиксированные labels этапов и имя CDP command (без params/credentials/OTP/ответов). Причина/результат следующего прогона еще не доказаны; это не объявляется исправлением runtime platform. Все required checks снова обязательны на новом head.
+
 03а#16/a061badc,03б#17/db7b327a,03в#18/ff3519dd,03г#19/892999a4,03д#20/1519f63d,03е#21/dcc4f2a3,03ж#22/226b2298,03з#23/b5c33757. На каждом актуальном head все6jobs success до merge, новая задача от текущей main, без force/reset/delete/openPR mass merge. Локальные файлы не имеют `.git`; сравниваются Git blob hashes с connector tree, не выдается утверждение о clean local branch. Финальная актуализация документов после03з идет отдельным documentation-only PR с тем же required gate.
