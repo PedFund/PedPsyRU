@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## Итог фазы3 —2026-10-03
+
+**Порученная фаза3 завершена:8из8 задач интегрированы в main через#16–#23.** Финальная03з —[PR#23](https://github.com/PedFund/PedPsyRU/pull/23), merge b5c337572e7b108bf2bb9681133cf849a8126ae5, актуальный head50ad6c7b/[run37140560958](https://github.com/PedFund/PedPsyRU/actions/runs/37140560958) все6jobs completed/success:195base наNode22/24 +**80/80PG18.6**, включая actual Chrome/MFA/cabinets/actual JSON download,0fail/cancel/skip.174blobs/preview/parents сверены.9 исходных math/core/form/key blobs unchanged относительно фазы2; никаких новых научных норм. Приемка —PHASE3_ACCEPTANCE.
+
+Сделаны separate accounts/current permissions/пароль pending MFA/настоящий TOTP/recovery/приглашения и блокировка исследователей/super-only roles/глобальный staff raw+stored result read/export/кабинеты/required metadata audit/negative HTTP/PG tests. Эти технические операции выполняются сервером, не одной лишь UI-матрицей. Не выполнены methods editor/processing/manual jobs/email/aggregates/конструктор/real data/Selectel/production key custody. Тарифный branch protection не активирован; manual current-head gate выполнялся перед каждым merge.
+
+Локально в браузере доступен **только UI preview4175, API503 без PostgreSQL**. Полный account flow проверен на disposable PG/Chrome вGitHub, не на отсутствующей локальной PG. Старый4173/SQLite не переключены. Следующая фаза4 —конструктор; разбивка04а–04з вBACKLOG, код не начат. Исторические даты/промежуточные «реализуется» ниже не означают открытые задачи прежних фаз.
+
 Дата: 2026-10-03. Репозиторий: `PedFund/PedPsyRU`.
 
 ## Фаза3 — начата по указанию владельца
@@ -18,7 +26,7 @@ Selectel отложен; текущая задача — платформа, syn
 
 **03ж интегрирована через [PR#22](https://github.com/PedFund/PedPsyRU/pull/22)**, merge226b229833806d3c5684e3fc184730ed412d7dce; head0dc853a9/run37140067802 все6jobs success,195base+79PG,171blobs/preview/parents сверены. Единый Fastify boundary participant+accounts, pending/staff/researcher HttpOnly Strict cookies, same-origin/CSRF/neutral errors/mandatory denial audit. Кабинеты/MFA/recovery/invite/block/super-only roles/global read/export, каждое право сервером проверено; методы/обработка не включены.3 настоящих PG workspace HTTP scenarios прошли, не только mocks. Preview4175 UI-only/API503; локальной PostgreSQL нет.4173/SQLite не переключены.
 
-**03з реализуется:** обязательный настоящий Chrome в disposable PG CI, без новых npm dependencies/browser downloads. Сквозные обе staff роли/password/MFA/recovery/перезагрузка/выход/read/actual JSON download/invite/accept/researcher own home, XSS textContent, HttpOnly/no storage и responsive390. Browser без PG локально проверен только визуально. План195base+80PG (включая один настоящий browser scenario), результат CI пока не подтвержден. Детали/границы —PHASE3_ACCEPTANCE.
+**03з интегрирована#23/b5c33757:** head50ad6c7b/run37140560958 все6jobs success,195base+80PG, actual browser scenario прошел за3.75s. Обе staff/password/MFA/recovery/reload/logout/read/actual download/invite/accept/own home/XSS/HttpOnly/no storage/responsive390 проверены на настоящей synthetic PostgreSQL.174blobs/preview/parents сверены. Без новых dependencies/browser downloads/Selectel/реальных данных. Фаза3:8из8; следующаяфаза4 не начата.
 
 ## Подготовка следующей фазы
 

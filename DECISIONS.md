@@ -1,5 +1,11 @@
 # Журнал решений
 
+## 2026-10-03 — фаза3: аккаунты, MFA, кабинеты и честная приёмка
+
+Согласованные права не расширены: обе staff global read/download raw+stored results и researcher invite/block; только super назначает staff roles. Researcher —own metadata, без individual diagnostics; methods/processing/aggregate names вpolicy не превращаются в готовые endpoints. TOTP RFC4226/6238 + стандартный Node AES256GCM, externalkey/defaultnone, recovery одноразовые digests; password pending не staff capability. Внешний productionkey lifecycle пока не принят, scientific TKI/core/form/key9blobs неизменны.
+
+Без новых npmdependencies. Unified account/participant Fastify composition, отдельные HttpOnlyStrict cookies/CSRF/origin/required metadata audit. Local UI-only4175 с явным503 вместо simulated login, полный PG4174 проверен disposable CI/Chrome. Actual Chrome использует preinstalled official runner и temporaryprofile; no-sandbox только isolated headlessCI, не runtime protection. Six current-head jobs gates перед каждым#16–#23 merge, финал195base+80PG/actualbrowser. Никакой оплаты/Selectel/cloud/publication/realdata. User отложил Selectel; фаза4-конструктор только следующий план, код не начат.
+
 ## 2026-10-03 — PG18 и тестовая изоляция 02д
 
 Выбран PostgreSQL18.6 из поддерживаемых PostgreSQL/Selectel; official postgres:18.6-bookworm digest 3725f4e2 закреплен по первичному Docker Hub metadata. На локальном Windows нет Docker/PG, поэтому реальный engine выполняется в отдельном обязательном CI service/job с loopback-only port и новыми synthetic DB/roles. Не установлен системный сервис, не приобретены облачные ресурсы, не развернут Selectel. CI service trust — только одноразовое локальное окружение с synthetic data, не production configuration.

@@ -1,11 +1,13 @@
 # PedPsyRU
 Информационно-аналитическая платформа организации, проведения и анализа психолого-педагогических исследований
 
-Фаза3: аккаунты/MFA/контроль/диагностика03а–03е в main;03ж —кабинеты и HTTP, актуальное подтверждение —STATUS/BACKLOG. Без PostgreSQL можно посмотреть интерфейс: `npm run build`, `npm run start:platform:ui`, [кабинет4175](http://127.0.0.1:4175/workspace). Это **только UI**, API отвечает503, тестовых успешных входов не подделывает. Полный `start:platform:demo` на4174 дополнительно требует внешний `PEDPSY_MFA_KEY` (canonical base64,32randombytes) и заранее подготовленную synthetic PostgreSQL/аккаунты; bootstrap не создает их сам. Не публикуйте этот локальный контур и не вводите реальные данные. Selectel отложен.
+**Фаза3 завершена:8из8 задач/03а–03з в main через#16–#23.** Аккаунты/реальная MFA/recovery/кабинеты/researcher invite-block/super-only roles/обе staff global raw+stored results read/download.195base(Node22/24)+80PG18.6, настоящий Chrome/JSONdownload/all6CI. [Приёмка](PHASE3_ACCEPTANCE.md), [статус](STATUS.md), [следующий конструктор04а–04з](BACKLOG.md); новая фаза пока не начата.
 
-**Текущая точка: фаза2 завершена, 8 из 8 задач в main.** Типизированный backend, PostgreSQL/RLS, проверенный перенос и restore, защищенный участнический API с прежним TKI. Это synthetic техническая основа, не законченная production-платформа. [Приемка](PHASE2_ACCEPTANCE.md), [статус](STATUS.md), [следующие небольшие задачи03а–03з](BACKLOG.md).
+Без PostgreSQL можно посмотреть интерфейс: `npm run build`, `npm run start:platform:ui`, [кабинет4175](http://127.0.0.1:4175/workspace). Это **только UI**, API отвечает503, тестовых успешных входов не подделывает. Полный `start:platform:demo` на4174 дополнительно требует внешний `PEDPSY_MFA_KEY` (canonical base64,32randombytes) и заранее подготовленную synthetic PostgreSQL/аккаунты; bootstrap не создает их сам. Не публикуйте этот локальный контур и не вводите реальные данные. Selectel отложен.
 
-Новый APIv2 включается только через явно подготовленный synthetic PostgreSQL loopback профиль: `npm run build`, `npm run start:platform:demo`. Без PEDPSY_PG_DEMO/валидных PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD изenv он отказывается запускаться; ни миграции, ни seed, ни accounts автоматически не создаются. `start:platform` остается health-only4174; текущий браузер4173 —прежний пилот. Реальное размещение Selectel/данные/MFA менеджеров —отдельные задачи.
+Фаза2 также завершена,8из8: типизированный backend/PostgreSQL/RLS/import/restore/participant API с прежним TKI. Это synthetic техническая основа, не законченная production-платформа. [Историческая приемка фазы2](PHASE2_ACCEPTANCE.md).
+
+Новый APIv2 включается только через явно подготовленный synthetic PostgreSQL loopback профиль. Без PEDPSY_PG_DEMO/валидных PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD иMFAkey изenv он отказывается запускаться; ни миграции, ни seed, ни accounts автоматически не создаются. `start:platform` остается health-only4174;4173 —прежний пилот. Реальное размещение Selectel/данные/keycustody —отдельные задачи, не уже выполненный выпуск.
 
 Первый небольшой этап — бланк и вычислительный контракт Томаса—Килманна. Общий бланк для мужчин и женщин создан из текста владельца проекта; грамматические формы отвечающего объединены через `/`.
 

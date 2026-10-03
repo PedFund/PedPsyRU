@@ -1,6 +1,6 @@
 # Фаза 3 — аккаунты и кабинеты
 
-03ж интегрирована#22/226b2298 после всех6jobs run37140067802 success:195base+79PG,171blobs/preview/parents.03з —actual browser acceptance, см.PHASE3_ACCEPTANCE; полная production/методическая готовность не заявляется. Разделы ниже «ожидают CI» описывают историческое состояние каждой подзадачи; подтвержденные результаты —STATUS/BACKLOG.
+03ж интегрирована#22/226b2298 после всех6jobs run37140067802 success:195base+79PG,171blobs/preview/parents.03з интегрирована#23/b5c33757, head50ad6c7b/run37140560958 все6jobs success:195base+80PG,174blobs/preview/parents; actual browser acceptance за3.75s, см.PHASE3_ACCEPTANCE. Фаза3:8из8, полная production/методическая готовность не заявляется. Разделы ниже «ожидают CI» описывают историческое состояние каждой подзадачи; подтвержденные результаты —STATUS/BACKLOG.
 
 ## 03ж: HTTP и кабинет
 

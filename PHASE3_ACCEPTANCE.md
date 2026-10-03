@@ -1,6 +1,6 @@
 # Фаза 3 — техническая приёмка аккаунтов и кабинетов
 
-Дата2026-10-03. Только synthetic development, Selectel отложен владельцем.03а–03ж интегрированы#16–#22;03з реализуется, результаты следующего CI не считаются полученными заранее. Актуальные интеграция/CI —STATUS/BACKLOG. Следующая фаза4 —конструктор, автоматически не начата.
+Дата2026-10-03. Только synthetic development, Selectel отложен владельцем.**03а–03з:8из8 интегрированы#16–#23.** Финальный merge b5c337572e7b108bf2bb9681133cf849a8126ae5; head50ad6c7b/[run37140560958](https://github.com/PedFund/PedPsyRU/actions/runs/37140560958) все6jobs success,195base(Node22/24)+80PG18.6,0fail/cancel/skip.174blobs/preview/parents сверены. Actual browser scenario прошел за3.75s, не skipped/mocked. Следующая фаза4 —конструктор, автоматически не начата.
 
 ## Проверяемые сценарии
 
@@ -13,7 +13,7 @@
 |03д roles|Только fresh super, self/last guard, version/session revoke; owner-only first synthetic bootstrap,6PG|
 |03е diagnostics|Обе staff все исследования/raw+immutable stored result;500/4MiB/no truncation/self-consistent snapshot/required audit,6PG|
 |03ж HTTP/UI|4HTTP boundary tests и3actual PG account HTTP flows,195base+79PG passed run37140067802|
-|03з browser|Один обязательный Chrome test с actual PG/listen/cookies/UI/download; не mock DOM.80PG ожидают новый CI|
+|03з browser|Один обязательный Chrome test с actual PG/listen/cookies/UI/download; не mock DOM.80/80PG passed run37140560958,0fail/skip|
 
 `tests/postgres-workspace-browser.integration.js`: две реальные password→MFA→recovery-confirmation роли, глобальные протоколы/5 сохраненных показателей, настоящее скачивание JSON и audit; reload/current session/logout/private DOM cleanup; admin без staff roles, invite/accept/researcher own home и отсутствие staff pane; hostile title отображается текстом; mobile390/desktop, JS не читает HttpOnly cookie, local/sessionStorage пусты. Browser fixture только Linux synthetic CI/loopback4174/одноразовый профиль, не пользовательский Windows browser. Отсутствие Chrome/PG **ошибка, не skip**. Используется уже установленный [Chrome официального runner](https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md), [CDP Target](https://chromedevtools.github.io/devtools-protocol/tot/Target/) / [Runtime](https://chromedevtools.github.io/devtools-protocol/tot/Runtime/). Дополнительного npm пакета или browser download нет. `--no-sandbox` только ephemeral headless CI; не флаг сервера или схема production. Только test-owned temp профиль/выгрузка удаляются; наружу не публикуются.
 
@@ -21,7 +21,7 @@
 
 ## Что не готово и не запускалось
 
-- Local4175 —UI-only503 без PostgreSQL; локального PG/Docker нет. Настоящий engine/browser пока проверяется только GitHub ephemeral CI. Старый4173/SQLite не переключены.
+- Local4175 —UI-only503 без PostgreSQL; локального PG/Docker нет. Настоящий engine/browser проверен только GitHub ephemeral CI. Старый4173/SQLite не переключены.
 - Public/real staff bootstrap/reset/выдача real accounts/персональные данные/операторские соглашения/minors/purpose/retention не выполнены. Password-only reset confirmed MFA не предусмотрен.
 - Runtime external32byte MFA key обязателен, AES-GCM не заменяет production key custody/rotation/backup/recovery policy.
 - Invite preview передается вручную; реальный email provider/уведомления не подключены. Политика neutral email signals принята, outbox/support/jobs позже.
@@ -32,4 +32,4 @@
 
 ## Интеграция
 
-03а#16/a061badc,03б#17/db7b327a,03в#18/ff3519dd,03г#19/892999a4,03д#20/1519f63d,03е#21/dcc4f2a3,03ж#22/226b2298. На каждом актуальном head все6jobs success до merge, новая задача от текущей main, без force/reset/delete/openPR mass merge.03з SHA/CI/merge будут дописаны после реального результата. Локальные файлы не имеют `.git`; сравниваются Git blob hashes с connector tree, не выдается утверждение о clean local branch.
+03а#16/a061badc,03б#17/db7b327a,03в#18/ff3519dd,03г#19/892999a4,03д#20/1519f63d,03е#21/dcc4f2a3,03ж#22/226b2298,03з#23/b5c33757. На каждом актуальном head все6jobs success до merge, новая задача от текущей main, без force/reset/delete/openPR mass merge. Локальные файлы не имеют `.git`; сравниваются Git blob hashes с connector tree, не выдается утверждение о clean local branch. Финальная актуализация документов после03з идет отдельным documentation-only PR с тем же required gate.

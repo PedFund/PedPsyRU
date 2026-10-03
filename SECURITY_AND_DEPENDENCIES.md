@@ -1,5 +1,11 @@
 # Зависимости, архитектурные проверки и безопасность
 
+## Фаза3 — подтвержденный текущий результат
+
+03а–03з интегрированы#16–#23, head50ad6c7b/run37140560958 все6jobs success:195base наNode22/24+80actual PG18.6/Chrome,0fail/skip. Нет новых npm пакетов, manifest/lock exact dependencies прежние65. Browser preinstalled official runner, no additional downloads; ephemeral CI profile/downloads не upload artifacts. `--no-sandbox` только ephemeral synthetic Linux Chrome, не server/security setting. Secretscan fullhistory redacted, dependencyaudit high/critical блокируетCI, architectureAST/layer/package/artifact checks и strict TS проходят. Это не independent pentest/sourceaudit или scientific/production proof.
+
+Account security: current server realm/version/user/membership, salted scrypt/admission/durable throttle, password pending≠staff, actualTOTP/replay/fail/expiry/recovery, AES256GCM sealedfactor/externalkey, HttpOnlyStrict/HTTPSHost cookies/same-origin/CSRF/bodylimits/CSP/no-store/no-referrer. Management/export повторяют freshproof/authority underlocks+mandatorymeta audit, rollback failures, immutablediagnostics. Library/processing/sql/signup/resetbypass не включены. Server branch protection тарифно недоступен, ручной currenthead/all6jobs/base/tree/hash/diff gate выполнялся перед каждымmerge. Local4175 UI503; realdata/Selectel/paid/publication не выполнялись. Ограничения/keycustody/release/privacy —PHASE3_ACCEPTANCE.
+
 Дата:2026-10-03. Область: TKI-пилот и завершенная фаза2; подготовительная история сохранена ниже. Фактический результат —PHASE2_ACCEPTANCE/STATUS: финальный head5b42cce7/run37130462614 все6jobs success,179base+38PG18.6,0errors/skip. Это не server branch protection, независимый security аудит или production deployment.
 
 ## Зависимости и обновления
