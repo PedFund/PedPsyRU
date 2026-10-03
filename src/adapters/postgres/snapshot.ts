@@ -7,7 +7,7 @@ import {scoreTki, type TkiResponse} from "../../../core/tki-contract.js";
 export const DOMAIN_TABLES = ["users", "studies", "study_memberships", "research_groups", "research_stages", "instrument_releases", "release_items", "assignments", "participants", "stage_enrollments", "attempts", "responses", "attempt_results", "seed_runs"] as const;
 type Table = typeof DOMAIN_TABLES[number];
 type Row = Record<string, unknown>;
-export interface DemoSnapshot {format: "pedpsy-demo-snapshot-1"; tables: Record<Table, Row[]>; digest: string}
+export interface DemoSnapshot {format: "pedpsy-demo-snapshot-1"|"pedpsy-demo-snapshot-2"; tables: Record<Table, Row[]>; digest: string}
 const jsonFields = new Set(["form_snapshot", "options", "payload", "manifest"]);
 function normalized(rows: Row[]): Row[] {
   return rows.map(row => Object.fromEntries(Object.entries(row).map(([key, value]) => {
@@ -20,9 +20,10 @@ function normalized(rows: Row[]): Row[] {
   }))).sort((a, b) => canonicalJson(a).localeCompare(canonicalJson(b), "en"));
 }
 const digest = (tables: DemoSnapshot["tables"]): string => "sha256:" + createHash("sha256").update(canonicalJson(tables)).digest("hex");
-function verified(tables: DemoSnapshot["tables"]): DemoSnapshot {
+function verified(tables: DemoSnapshot["tables"],format:DemoSnapshot["format"]="pedpsy-demo-snapshot-2"): DemoSnapshot {
   const pkg = releasePackage();
   if (!tables.studies.length || tables.studies.some(s => s.dataset_kind !== "demo")) throw new Error("DEMO_ONLY_SNAPSHOT");
+  if(tables.studies.some(s=>format==="pedpsy-demo-snapshot-1"?s.design_version!==undefined:!Number.isInteger(s.design_version)||Number(s.design_version)<0||Number(s.design_version)>2147483646))throw new Error("SNAPSHOT_DESIGN_VERSION_INVALID");
   // Synthetic provenance is necessary, but is not a substitute for a human's
   // explicit permission when a future source contains actual personal data.
   if (!tables.seed_runs.length || tables.seed_runs.some(r => !(r.manifest as Row)?.synthetic)) throw new Error("SYNTHETIC_PROVENANCE_REQUIRED");
@@ -44,7 +45,7 @@ function verified(tables: DemoSnapshot["tables"]): DemoSnapshot {
       result.id !== attempt.completion_result_id || Number(attempt.revision) !== Number(result.input_revision) + 1 ||
       canonicalJson(result.payload) !== canonicalJson(scored)) throw new Error("SNAPSHOT_RESULT_MISMATCH");
   }
-  return {format: "pedpsy-demo-snapshot-1", tables, digest: digest(tables)};
+  return {format, tables, digest: digest(tables)};
 }
 // Read transaction only. No migrations, seed, auth/session export or source writes.
 export function exportDemoSnapshot(source: DatabaseSync): DemoSnapshot {
@@ -53,6 +54,8 @@ export function exportDemoSnapshot(source: DatabaseSync): DemoSnapshot {
   try {
     if (source.prepare("PRAGMA integrity_check").get()?.integrity_check !== "ok" || source.prepare("PRAGMA foreign_key_check").all().length) throw new Error("SOURCE_INTEGRITY_FAILED");
     const tables = Object.fromEntries(DOMAIN_TABLES.map(table => [table, normalized(source.prepare("SELECT * FROM " + table).all())])) as DemoSnapshot["tables"];
+    // Unchanged SQLite schema predates constructor versions; its designs start at zero.
+    tables.studies=normalized(tables.studies.map(s=>({...s,design_version:0})));
     const result = verified(tables); source.exec("COMMIT"); return result;
   } catch (error) {source.exec("ROLLBACK"); throw error;}
 }
@@ -62,7 +65,7 @@ export async function inspectPostgresSnapshot(client: PoolClient): Promise<DemoS
   return verified(tables);
 }
 export async function importDemoSnapshot(client: PoolClient, snapshot: DemoSnapshot): Promise<void> {
-  if (snapshot.format !== "pedpsy-demo-snapshot-1" || verified(snapshot.tables).digest !== snapshot.digest) throw new Error("SNAPSHOT_DIGEST_MISMATCH");
+  if (!["pedpsy-demo-snapshot-1","pedpsy-demo-snapshot-2"].includes(snapshot.format) || verified(snapshot.tables,snapshot.format).digest !== snapshot.digest) throw new Error("SNAPSHOT_DIGEST_MISMATCH");
   await client.query("BEGIN");
   try {
     await client.query("SELECT pg_advisory_xact_lock(5151980002)");
@@ -83,7 +86,12 @@ export async function importDemoSnapshot(client: PoolClient, snapshot: DemoSnaps
     }
     for (const row of snapshot.tables.attempts.filter(a => a.status === "completed"))
       await client.query("UPDATE pedpsy.attempts SET status='completed',revision=$1,completion_result_id=$2,completed_at=$3,updated_at=$4 WHERE id=$5", [row.revision,row.completion_result_id,row.completed_at,row.updated_at,row.id]);
-    if ((await inspectPostgresSnapshot(client)).digest !== snapshot.digest) throw new Error("IMPORTED_SNAPSHOT_MISMATCH");
+    const imported=await inspectPostgresSnapshot(client);
+    if(snapshot.format==="pedpsy-demo-snapshot-1"){
+      if(imported.tables.studies.some(s=>s.design_version!==0))throw new Error("IMPORTED_SNAPSHOT_MISMATCH");
+      imported.tables.studies=normalized(imported.tables.studies.map(({design_version:ignored,...s})=>s));
+    }
+    if(digest(imported.tables)!==snapshot.digest)throw new Error("IMPORTED_SNAPSHOT_MISMATCH");
     await client.query("COMMIT");
   } catch (error) {await client.query("ROLLBACK"); throw error;}
 }

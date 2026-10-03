@@ -17,6 +17,8 @@ import {MfaVault} from "../adapters/security/mfa-vault.js";
 import {ParticipationError} from "../ports/errors.js";
 import {workspaceAssets} from "./workspace-assets.js";
 import {demoConfig} from "./demo-config.js";
+import {PostgresStudyConstructor} from "../adapters/postgres/studies.js";
+import {createStudyApi} from "../application/study-api.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
@@ -29,7 +31,8 @@ async function main(): Promise<void> {
     const accounts=createAccountApi({access:new PostgresAccountAccess(pool),auth:new PostgresStaffMfa(pool,vault),researchers:new PostgresResearcherGateway(pool),
       researcherManagement:new PostgresResearcherManagement(pool),staffManagement:new PostgresStaffManagement(pool),diagnostics:new PostgresStaffDiagnostics(pool)},
       {forToken:csrfFor,assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets());
+    const studies=createStudyApi(new PostgresStudyConstructor(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
+    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies);
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}

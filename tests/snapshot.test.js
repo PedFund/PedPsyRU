@@ -7,6 +7,7 @@ test("snapshot preserves completed result and excludes all credentials/sessions/
   const f = await completedSnapshotSource(); t.after(()=>f.db.close());
   const total = f.db.prepare("SELECT total_changes() n").get().n;
   const s = exportDemoSnapshot(f.db), again = exportDemoSnapshot(f.db);
+  assert.equal(s.format,"pedpsy-demo-snapshot-2");assert.ok(s.tables.studies.every(x=>x.design_version===0));
   assert.deepEqual(s,again); assert.equal(f.db.prepare("SELECT total_changes() n").get().n,total);
   assert.equal(s.tables.attempt_results.length,1); assert.equal(s.tables.attempt_results[0].id,f.result.id);
   assert.deepEqual(s.tables.attempt_results[0].payload,f.result.payload);
