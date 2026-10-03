@@ -1,0 +1,5 @@
+# Reviewed false positives: SHA-256 digests of diagnostic scoring keys, not credentials.
+# Exact historical findings only; justification in SECURITY_AND_DEPENDENCIES.md.
+c7e2ff28b2b1c0ce2ce7de8b22efd50695c97fca:core/tki-contract.js:generic-api-key:11
+cd8d8f3e2d8df3c77c3f06cdc2ff7832e5697b21:core/tki-contract.js:generic-api-key:14
+cd8d8f3e2d8df3c77c3f06cdc2ff7832e5697b21:core/tki-contract.js:generic-api-key:15
