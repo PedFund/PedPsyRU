@@ -15,4 +15,7 @@ export class PostgresStudyConstructor implements StudyConstructor{
   group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}){
     return this.call(token,"SELECT pedpsy.configure_study_group($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,groupId??randomUUID(),input.name,input.kind,groupId===undefined]);
   }
+  stage(token:string,id:string,stageId:string|undefined,input:{code:string;ordinal:number;expected_version:number}){
+    return this.call(token,"SELECT pedpsy.configure_study_stage($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,stageId??randomUUID(),input.code,input.ordinal,stageId===undefined]);
+  }
 }

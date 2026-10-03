@@ -2,6 +2,8 @@
 
 ## Фаза4 начата —2026-10-03
 
+04б интегрированаPR#26/head67c0681a/run37145236483 all6success:197base+85PG и3Chrome. Group kinds/foreign group+study/duplicate/currentversion/concurrentCAS фактически проверены; snapshot2/legacy1/backup регрессии зеленые.04в отдельный следующий техническийPR —T0/T1/T2/custom/pорядок/scope, готов локально;04г assignments только локальная подготовка, не runtime предыдущегоPR.
+
 04а интегрирована[PR#25](https://github.com/PedFund/PedPsyRU/pull/25), mergefc77aa0df4f5eba4c83b73c7314b77005c5b7492; finale51bfc88/run37144756732 all6success,196base+84PG и3/3 дополнительных Chrome.182blob/preview/actual merge verified. Legacy snapshot1 и новыйsnapshot2/nonzero revision фактически проверены.04б группы подготовлены отдельным блоком поверхfresh main;04в этапы локально подготовлены, не интегрированы. Локальныйscope/strict tests групп/этапов3/3, полный actualCI каждого блока обязателен.
 
 04а PR#25/head3f9bd3e/run37144352030:196base success,80/83PG; три прежних snapshot/restore теста отказали из-за добавленного design_version. Не объединен. Исправление вводит snapshot2 с сохранением версии, принимает прежний snapshot1 с проверкой нулевой версии target; старые миграции/SQLite/наука не переписываются. Новый head проходит полный gate, ошибки не скрываются.

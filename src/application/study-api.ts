@@ -19,5 +19,10 @@ export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
     csrf.assert(token,value);const b=studyObject(input,["name","kind","expected_version"]);
     if(!["control","experimental","other"].includes(String(b.kind)))throw new ParticipationError(400,"INVALID_STUDY_INPUT");
     return studies.group(token,studyId(id),groupId===undefined?undefined:studyId(groupId),{name:studyText(b.name,100),kind:b.kind as GroupDesign["kind"],expected_version:studyVersion(b.expected_version)});
+  },
+  stage:(token:string,id:string,stageId:string|undefined,input:unknown,value:string)=>{
+    csrf.assert(token,value);const b=studyObject(input,["code","ordinal","expected_version"]);
+    if(!Number.isInteger(b.ordinal)||Number(b.ordinal)<0||Number(b.ordinal)>9999)throw new ParticipationError(400,"INVALID_STUDY_INPUT");
+    return studies.stage(token,studyId(id),stageId===undefined?undefined:studyId(stageId),{code:studyText(b.code,40),ordinal:Number(b.ordinal),expected_version:studyVersion(b.expected_version)});
   }
 };}
