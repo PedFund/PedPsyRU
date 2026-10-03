@@ -59,6 +59,8 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         app.post("/api/v2/researcher/studies",async r=>studies.create(token(r,names.researcher),r.body,csrf(r)));
         app.get("/api/v2/researcher/studies/:id",async r=>studies.read(token(r,names.researcher),(r.params as {id:string}).id));
         app.get("/api/v2/staff/studies/:id",async r=>studies.read(token(r,names.staff),(r.params as {id:string}).id));
+        app.post("/api/v2/researcher/studies/:id/groups",async r=>studies.group(token(r,names.researcher),(r.params as {id:string}).id,undefined,r.body,csrf(r)));
+        app.patch("/api/v2/researcher/studies/:id/groups/:group",async r=>{const p=r.params as {id:string;group:string};return studies.group(token(r,names.researcher),p.id,p.group,r.body,csrf(r));});
       }
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }

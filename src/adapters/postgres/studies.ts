@@ -1,6 +1,6 @@
 import {randomUUID} from "node:crypto";
 import type {Pool} from "pg";
-import type {StudyConstructor,StudyDesign} from "../../ports/studies.js";
+import type {StudyConstructor,StudyDesign,GroupDesign} from "../../ports/studies.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {accountTransaction,tokenHash} from "./account-transaction.js";
 export class PostgresStudyConstructor implements StudyConstructor{
@@ -12,4 +12,7 @@ export class PostgresStudyConstructor implements StudyConstructor{
   }
   create(token:string,title:string){return this.call(token,"SELECT pedpsy.create_study($1,$2) data",[randomUUID(),title]);}
   read(token:string,id:string){return this.call(token,"SELECT pedpsy.read_study_design($1) data",[id]);}
+  group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}){
+    return this.call(token,"SELECT pedpsy.configure_study_group($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,groupId??randomUUID(),input.name,input.kind,groupId===undefined]);
+  }
 }

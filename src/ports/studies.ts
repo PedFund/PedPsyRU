@@ -8,4 +8,5 @@ export interface AssignmentDesign {id:string;group_id:string;stage_id:string;rel
 export interface StudyConstructor {
   create(token:string,title:string):Promise<StudyDesign>;
   read(token:string,id:string):Promise<StudyDesign>;
+  group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}):Promise<StudyDesign>;
 }
