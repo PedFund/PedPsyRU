@@ -71,7 +71,7 @@ jobs:
           tar -xzf "$archive" -C "$RUNNER_TEMP/gitleaks-bin" gitleaks
       - name: Scan repository history with redacted output
         shell: bash
-        run: '"$RUNNER_TEMP/gitleaks-bin/gitleaks" git --redact=100 --no-banner .'
+        run: '"$RUNNER_TEMP/gitleaks-bin/gitleaks" git --redact=100 --verbose --no-banner .'
 
   required:
     name: Required checks
