@@ -115,3 +115,11 @@ Seed — два вымышленных исследования, КГ/ЭГ и T0
 ## 2026-10-02 — удалить ошибочный ключ
 
 По прямому указанию владельца удалены старый ключ TKI из перенесенного каталога, маршрут старой версии, связанные экспорты, digest и контрольные примеры ошибочных результатов. В новом проекте остается только исправленный ключ 1.0.0. Старые идентификаторы отклоняются; архивного обработчика нет. Вычислительная формула и исходная локальная программа не изменены. История Git не переписывается.
+# Техническое дополнение фазы2 —2026-10-03
+
+В рамках принятой основы реализованы отдельные runtime/migrator, transaction-local session capability, fixed scope lock order и wall-clock auth после ожидания. Owner bypass ограничен migrator/private fixed functions; runtime ownership/super/BYPASSRLS/membership запрещены и проверяются. Нельзя выдавать SQL или auth material клиенту.
+
+Snapshot/import/backup acceptance использует только synthetic domain data, пустой отдельный target и новый offline restore с возвращением ограниченных ACL; credentials/сессии не переносятся, исходная SQLite сохранена. pg_dump restore —не утверждение production RPO/RTO. Participant APIv2 предъявляет только whitelist DTO, использует прежние salted scrypt primitives, durable throttles, rotation/CSRF/Origin и immutable TKI result. Staff/researcher realm не преобразуется в participant; manager/MFA enrollment и глобальные results UI —следующая фаза.
+
+Эти решения не меняют согласованную матрицу прав, методику, условия публикации или хостинг-бюджет. Проверенный исходный расчет TKI/ключ/формы не переписываются. Фактический CI/merge статус —STATUS/BACKLOG; отчет приемки —PHASE2_ACCEPTANCE.
+
