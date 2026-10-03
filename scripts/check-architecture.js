@@ -96,6 +96,7 @@ function checkArchitecture(files, sources, manifest, approvedPackages = []) {
         if (mathFile(file)) errors.push("Calculation core imports external package: " + file);
         if (/^src\/(ports|application|scoring)\//.test(file)) errors.push("Pure layer imports external package: " + file);
         if (file.startsWith("src/http/") && name !== "fastify") errors.push("HTTP directly imports non-HTTP package: " + file + " -> " + name);
+        if (file.startsWith("src/adapters/") && !(file.startsWith("src/adapters/postgres/") && name === "pg")) errors.push("Adapter imports unsupported package: " + file + " -> " + name);
         continue;
       }
       const target = relativeTarget(file, specifier, available);

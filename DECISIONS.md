@@ -1,5 +1,11 @@
 # Журнал решений
 
+## 2026-10-03 — PG18 и тестовая изоляция 02д
+
+Выбран PostgreSQL18.6 из поддерживаемых PostgreSQL/Selectel; official postgres:18.6-bookworm digest 3725f4e2 закреплен по первичному Docker Hub metadata. На локальном Windows нет Docker/PG, поэтому реальный engine выполняется в отдельном обязательном CI service/job с loopback-only port и новыми synthetic DB/roles. Не установлен системный сервис, не приобретены облачные ресурсы, не развернут Selectel. CI service trust — только одноразовое локальное окружение с synthetic data, не production configuration.
+
+RLS не доверяет app.role или client UUID: private SECURITY DEFINER session lookup проверяет hashed capability, realm/role/version/status/expiry и MFA для staff. Табличный owner — мигратор, runtime не owner/superuser/BYPASSRLS. Owner bypass нужен фиксированным auth lookups, FORCE не используется; это избегает policy recursion и требования BYPASSRLS у managed-provider роли. PUBLIC EXECUTE и schema/table defaults отозваны, search_path фиксирован, dynamic SQL в auth functions нет. Полный PostgreSQL adapter/locking будет отдельной 02е; MFA/product managers не объявляются уже реализованными.
+
 ## 2026-10-03 — async storage contracts 02г
 
 Не оборачиваем синхронную transaction(db) асинхронным callback: прежняя функция сознательно отклоняет Promise и остается неизменной. Для выделенного synthetic SQLite connection создан отдельный UnitOfWork с сериализацией и BEGIN IMMEDIATE/COMMIT/ROLLBACK. Асинхронная интерфейсная форма нужна для общего PG adapter; текущие SQL операции SQLite синхронные. Совместное одновременное использование соединения прежними stores запрещено; последовательная совместимость проверена тестами. Нет внешних операций в callback. Ports закрываются после транзакции; mutation без required audit не commit.

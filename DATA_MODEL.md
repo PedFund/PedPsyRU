@@ -1,5 +1,13 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## Дополнение 02д — PostgreSQL
+
+`storage/postgres/001_domain.sql` и `002_access_rls.sql` — отдельная append-only история с SHA256, не изменение SQLite001–003. UUID сохраняются, временные поля timestamptz, snapshots/results jsonb; revisions/input_revision bigint ограничены безопасными JS integer. Составные FK и deferred result/completed связи соответствуют SQLite; used releases/completed/responses/results заморожены triggers. Основные FK/query prefixes индексированы.
+
+Привилегированный мигратор владеет таблицами и фиксированными SECURITY DEFINER функциями авторизации, runtime — отдельная роль без superuser/BYPASSRLS/ownership/role admin. Runtime не читает credentials/sessions/password hashes напрямую. RLS на diagnostic tables извлекает текущую сессию по opaque session hash, игнорирует role/scope labels клиента. Только participant own active assignment writes; обе staff роли global read при подтвержденной MFA, без participant writes. Owner bypass оставлен только для фиксированных private auth lookups: FORCE RLS не включен, чтобы избежать рекурсивных policy и зависимости от BYPASSRLS на managed PG. Runtime никогда не владелец, этот инвариант проверяется реальным SQL под runtime ролью. Function EXECUTE revoked from PUBLIC, fixed trusted search_path, явные grants. Это secondary barrier, не предоставление клиенту SQL-доступа.
+
+Модель staff_sessions добавляет nullable mfa_verified_at; пока реальная MFA enrollment/login не реализована, новый PG staff-доступ не выдается runtime API. Фикстуры CI создают synthetic proof для теста разрешений, это не готовая MFA-функция. Legacy sessions/credentials при переносе snapshot не копируются; новый целевой контур в фазе2 также demo-only.
+
 Актуализация 01е: сервис результата storage/completion.js использует существующую attempt_results и взаимные FK, без новой миграции. Полный сохраненный снимок → закрепленный scoreTki → один result/completed/revision/audit, повтор без перерасчета; собственный GET результата. 134 теста пилота, COMPLETION_VALIDATION.md. Интегрировано в main через PR #7; приемка — INTEGRATION_VALIDATION.md.
 
 Проект фазы 2 — PHASE2_DESIGN.md: владелец принял PostgreSQL и сохранение проверенных контрактов. Будущие профили/согласия, processing_runs, support_cases, jobs/outbox описаны как проект, не существующие таблицы. SQLite-миграции 001–003 остаются прежними. Контакты/паспорт и связанные диагностические записи проектируются с защитой персональных данных; принадлежность разным исследованиям не объединяется автоматически по email.
