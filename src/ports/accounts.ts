@@ -17,6 +17,7 @@ export interface AccountResource {readonly studyId?: string}
 export interface AccountSession {readonly user_id: string; readonly role: AccountRole; readonly session_version: number; readonly expires_at: number}
 export interface AccountAccess {
   session(token: string): Promise<AccountSession>;
+  denied(token:string,reason:string):Promise<void>;
   // Checks current policy only; not a capability to execute a later mutation.
   // Mutations must recheck identity/policy under their own transaction locks.
   check(token: string, operation: AccountOperation, resource?: AccountResource): Promise<void>;

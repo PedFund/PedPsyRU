@@ -14,7 +14,9 @@ Selectel отложен; текущая задача — платформа, syn
 
 **03д интегрирована через[PR#20](https://github.com/PedFund/PedPsyRU/pull/20)**, merge1519f63d7f8141e96c6b0204825ce855671c090c; headff937d85/run37137562347 все6jobs success,191base+70PG,157blobs/preview сверены. Superadmin-only/fresh/role/version/revoke, researcher promotion без password-only diagnostics, self/last superadmin guards, private owner-only first synthetic bootstrap.
 
-**03е реализуется локально:** обе staff роли глобально читают/скачивают ответы и сохраненные индивидуальные результаты.010 один SQL statement формирует согласованный whitelist snapshot, без mixed revisions/keys/source/password material;500protocols/4MiB, отказ вместо truncation, обязательный meta audit/повтор authority/fresh export proof. Никаких write/process/method API.6PG tests ожидают CI,191base+76PG; далее03ж/03з —кабинеты/сквозная приемка.
+**03е интегрирована через [PR#21](https://github.com/PedFund/PedPsyRU/pull/21)**, merge dcc4f2a39e451b3d3081b37878c9ac8d3e1c2135; head a87b7bb5/run37138514621 все6jobs success,191base+76PG,161blobs/preview сверены. Обе staff роли глобально читают/скачивают ответы и сохраненные результаты;010 один SQL statement/whitelist/500protocols/4MiB/audit/fresh export. Первый прогон обнаружил превышение btree лимита в synthetic fixture; исправлен тестовый размер, production лимиты/SQL не ослаблялись.
+
+**03ж реализована локально, ожидает отдельный PR/CI:** единый Fastify boundary participant+accounts, отдельные pending/staff/researcher HttpOnly Strict cookies, same-origin/CSRF/neutral errors/mandatory denial audit. Кабинеты исследователя и staff, реальный MFA/recovery UI, invite/block/roles/read/export; role/authority проверяются сервером при операции. Методы/обработка не включены. Локально195/195base,0fail/skip;3 новых настоящих PG workspace scenarios ожидают CI (итого79PG). Preview4175 показывает только UI и явно отвечает503 для API; локальной PostgreSQL нет. Старый4173 и SQLite не переключены. Далее03з —полная browser/HTTP/PG приемка.
 
 ## Подготовка следующей фазы
 

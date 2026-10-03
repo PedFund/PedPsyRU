@@ -1,4 +1,4 @@
-import type {FastifyRequest} from "fastify";
+import type {FastifyRequest,FastifyInstance} from "fastify";
 import {createBaseApp} from "./app.js";
 import type {createParticipantApi} from "../application/participant-api.js";
 import {ParticipationError} from "../ports/errors.js";
@@ -16,7 +16,7 @@ const draftDto = (s: AttemptSnapshot) => ({attempt_id:s.id,status:s.status,revis
 const resultDto = (r: StoredResult) => ({result_id:r.id,attempt_id:r.attemptId,input_revision:r.inputRevision,responses_digest:r.responsesDigest,calculated_at:r.calculatedAt,
   status:r.payload.status,contract_version:r.payload.contract_version,method_version_id:r.payload.method_version_id,handler_version:r.payload.handler_version,
   measures:r.payload.measures.map(m=>({code:m.code,label:m.label,value:m.value,representation:m.representation}))});
-export function createParticipantApp(api: Api, origin: string) {
+export function createParticipantApp(api: Api, origin: string,extension?:{register:(app:FastifyInstance)=>void;denied:(request:FastifyRequest,reason:string)=>Promise<void>}) {
   const url=new URL(origin),secure=url.protocol==="https:";
   if (url.origin!==origin || !secure && !(url.protocol==="http:" && ["127.0.0.1","localhost"].includes(url.hostname))) throw new Error("EXPLICIT_SAFE_ORIGIN_REQUIRED");
   const cookieName=secure?"__Host-pedpsy":"pedpsy_v2_demo";
@@ -34,7 +34,7 @@ export function createParticipantApp(api: Api, origin: string) {
     const hinted=error && typeof error==="object" && "statusCode" in error && typeof error.statusCode==="number"?error.statusCode:0;
     const status=error instanceof ParticipationError?error.status:[400,413,415].includes(hinted)?hinted:500;
     const code=error instanceof ParticipationError?error.code:status===413?"BODY_TOO_LARGE":status===415?"UNSUPPORTED_CONTENT_TYPE":status===400?"INVALID_REQUEST":"INTERNAL_ERROR";
-    try {await api.denied(token(request),code);} catch {return reply.code(500).send({error:"INTERNAL_ERROR"});}
+    try {if(extension)await extension.denied(request,code);else await api.denied(token(request),code);} catch {return reply.code(500).send({error:"INTERNAL_ERROR"});}
     return reply.code(status).send({error:code});
   });
   app.post("/api/v2/participant/login",async (request,reply)=>{
@@ -53,6 +53,8 @@ export function createParticipantApp(api: Api, origin: string) {
   app.put("/api/v2/participant/attempts/:id/draft",async request=>draftDto(await api.save(token(request),id(request),request.body,csrf(request))));
   app.post("/api/v2/participant/attempts/:id/complete",async request=>resultDto(await api.complete(token(request),id(request),request.body,csrf(request))));
   app.get("/api/v2/participant/attempts/:id/result",async request=>resultDto(await api.result(token(request),id(request))));
-  // No admin/researcher/export/library/SQL endpoint is enabled by this app.
+  // Standalone participant app has no staff/library/SQL routes; composition may
+  // explicitly register the separately authenticated workspace boundary.
+  extension?.register(app);
   return app;
 }

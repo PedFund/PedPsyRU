@@ -1,5 +1,13 @@
 # Фаза 3 — аккаунты и кабинеты
 
+## 03ж: HTTP и кабинет
+
+Явная composition на4174 сохраняет участнический API и добавляет accounts. Password pending capability только в HttpOnly cookie; JSON содержит CSRF, не bearer. Раздельные staff/researcher cookies очищают другой realm при успешном входе. Same-origin/Host/FetchSite/JSON/body8192/CSRF/no-store/нейтральные errors и mandatory meta denial audit; HTTPS Host-prefix/Secure. Static allowlist/CSP self/no-inline/no-referrer без исходников/key/credentials. Сервер повторно проверяет каждый write/export, не доверяет UI роли.
+
+UI: password→MFA enrollment/verify/recovery, одноразовое отображение секретов/кодов, researcher own study metadata/quota, staff global raw answers/stored result read/JSON export, invite/block, super-only roles и fresh MFA reauth. Нет методик/пересчета/SQL/production signup. DOM textContent, без innerHTML/localStorage; закрытие/выход/потеря сессии очищает индивидуальный протокол и скрытые приватные списки. Выгрузка compact JSON, без раздувания лимита pretty-print. Recovery codes следует сохранять вне платформы самим оператором, UI не обещает их повторную выдачу.
+
+4 локальных HTTP boundary tests входят в195base.3 actual PostgreSQL HTTP scenarios: обе настоящие MFA роли/raw+stored result+export/logout; invite/accept/researcher own scope/no diagnostics/block; super-only role revoke/freshproof/CSRF/Origin/audit rollback.79PG должны подтверждаться отдельным CI. В браузере локально подтвержден только честный preview4175: API503, PostgreSQL отсутствует. Полная браузерная приемка с настоящей synthetic PG остается03з. Никаких реальных credentials/data/Selectel/provider не создается.
+
 ## 03а: контракты и серверная политика
 
 Основа main@964e273d; самостоятельный небольшой блок. `accounts.ts` определяет researcher/staff, версии сессии, named operations и scope. `account-policy.ts` — единая чистая матрица; `PostgresAccountAccess` разрешает только текущую серверную идентичность и членство, записывает обязательный метаданный аудит. Проверка сама по себе не выдает capability для последующей записи: будущая мутация обязана повторить авторизацию под своими transaction locks.

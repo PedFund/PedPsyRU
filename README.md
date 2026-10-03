@@ -1,6 +1,8 @@
 # PedPsyRU
 Информационно-аналитическая платформа организации, проведения и анализа психолого-педагогических исследований
 
+Фаза3: аккаунты/MFA/контроль/диагностика03а–03е в main;03ж —кабинеты и HTTP, актуальное подтверждение —STATUS/BACKLOG. Без PostgreSQL можно посмотреть интерфейс: `npm run build`, `npm run start:platform:ui`, [кабинет4175](http://127.0.0.1:4175/workspace). Это **только UI**, API отвечает503, тестовых успешных входов не подделывает. Полный `start:platform:demo` на4174 дополнительно требует внешний `PEDPSY_MFA_KEY` (canonical base64,32randombytes) и заранее подготовленную synthetic PostgreSQL/аккаунты; bootstrap не создает их сам. Не публикуйте этот локальный контур и не вводите реальные данные. Selectel отложен.
+
 **Текущая точка: фаза2 завершена, 8 из 8 задач в main.** Типизированный backend, PostgreSQL/RLS, проверенный перенос и restore, защищенный участнический API с прежним TKI. Это synthetic техническая основа, не законченная production-платформа. [Приемка](PHASE2_ACCEPTANCE.md), [статус](STATUS.md), [следующие небольшие задачи03а–03з](BACKLOG.md).
 
 Новый APIv2 включается только через явно подготовленный synthetic PostgreSQL loopback профиль: `npm run build`, `npm run start:platform:demo`. Без PEDPSY_PG_DEMO/валидных PGHOST/PGPORT/PGDATABASE/PGUSER/PGPASSWORD изenv он отказывается запускаться; ни миграции, ни seed, ни accounts автоматически не создаются. `start:platform` остается health-only4174; текущий браузер4173 —прежний пилот. Реальное размещение Selectel/данные/MFA менеджеров —отдельные задачи.

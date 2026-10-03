@@ -4,6 +4,7 @@ import type {AccountAccess,AccountOperation,AccountPrincipal,AccountResource,Acc
 import {requireAccountPermission} from "../../ports/account-policy.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {assertRuntimeClient,mapPostgresError} from "./unit-of-work.js";
+import {accountTransaction,tokenHash} from "./account-transaction.js";
 interface ActorRow {credential_id:string;user_id:string;actor_role:AccountRole;credential_version:number;expires_at_ms:string;mfa_verified_at_ms:string|null}
 export class PostgresAccountAccess implements AccountAccess {
   constructor(private readonly pool:Pool) {}
@@ -34,5 +35,9 @@ export class PostgresAccountAccess implements AccountAccess {
     }catch(e){throw mapPostgresError(e);}finally{client.release();}
   }
   session(token:string):Promise<AccountSession>{return this.inspect(token,"account.read",{});}
+  async denied(token:string,reason:string):Promise<void>{await accountTransaction(this.pool,async c=>{
+    await c.query("SELECT set_config('app.session_hash',$1,true)",[/^[A-Za-z0-9_-]{43}$/.test(token)?tokenHash(token):""]);
+    await c.query("SELECT pedpsy.record_account_check('http_denied',false,$1)",[reason]);
+  });}
   async check(token:string,operation:AccountOperation,resource:AccountResource={}):Promise<void>{await this.inspect(token,operation,resource);}
 }
