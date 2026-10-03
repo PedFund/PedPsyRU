@@ -69,7 +69,7 @@ export async function importDemoSnapshot(client: PoolClient, snapshot: DemoSnaps
     const role = await client.query("SELECT current_user=(SELECT nspowner::regrole::text FROM pg_namespace WHERE nspname='pedpsy') AS owner");
     if (!role.rows[0]?.owner) throw new Error("MIGRATOR_REQUIRED");
     // Refuse to overwrite, merge or silently repair any existing target.
-    for (const table of [...DOMAIN_TABLES, "participant_credentials", "participant_sessions", "staff_credentials", "staff_sessions", "staff_login_challenges", "staff_mfa_factors", "staff_recovery_codes", "researcher_credentials", "researcher_sessions", "access_audit_events", "login_throttles"])
+    for (const table of [...DOMAIN_TABLES, "participant_credentials", "participant_sessions", "staff_credentials", "staff_sessions", "staff_login_challenges", "staff_mfa_factors", "staff_recovery_codes", "researcher_credentials", "researcher_sessions", "researcher_invites", "access_audit_events", "login_throttles"])
       if ((await client.query("SELECT 1 FROM pedpsy." + table + " LIMIT 1")).rowCount) throw new Error("EMPTY_TARGET_REQUIRED");
     for (const table of DOMAIN_TABLES) {
       const rows = table === "research_stages" ? [...snapshot.tables[table]].sort((a,b) => Number(a.ordinal)-Number(b.ordinal)) : snapshot.tables[table];
