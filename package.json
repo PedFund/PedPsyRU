@@ -12,6 +12,7 @@
     "build": "node scripts/build.js",
     "typecheck": "tsc --noEmit",
     "start:platform": "node dist/src/bootstrap/server.js",
+    "start:platform:demo": "node dist/src/bootstrap/postgres-server.js",
     "check:architecture": "node scripts/check-architecture.js",
     "check:syntax": "node scripts/check-syntax.js",
     "test:architecture": "node --test tests/architecture.test.js",

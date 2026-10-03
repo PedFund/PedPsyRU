@@ -10,22 +10,27 @@ interface Actor {credential_id: string; study_id: string; participant_id: string
 interface AttemptRow {id: string; study_id: string; release_id: string; status: "draft" | "completed"; revision: string; current_item_id: string}
 interface ResultRow {id: string; attempt_id: string; input_revision: string; responses_digest: string; calculated_at: Date; payload: TkiResult}
 const uuid = (value: string): boolean => /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
-const mapError = (error: unknown): unknown => {
+export const mapPostgresError = (error: unknown): unknown => {
   const code = error && typeof error === "object" && "code" in error ? error.code : undefined;
   if (code === "28000") return new ParticipationError(401, "AUTH_REQUIRED");
   if (code === "P0002") return new ParticipationError(404, "NOT_AVAILABLE");
   if (["55P03", "57014", "40001", "40P01"].includes(String(code))) return new ParticipationError(503, "STORAGE_BUSY");
   return error;
 };
+export async function assertRuntimeClient(client: PoolClient): Promise<void> {
+  const result = await client.query<{unsafe: boolean}>(`SELECT rolsuper OR rolbypassrls OR rolcreatedb OR rolcreaterole OR EXISTS(
+    SELECT 1 FROM pg_class WHERE relowner=(SELECT oid FROM pg_roles WHERE rolname=current_user) AND relnamespace='pedpsy'::regnamespace)
+    OR EXISTS(SELECT 1 FROM pg_namespace WHERE nspname='pedpsy' AND nspowner=(SELECT oid FROM pg_roles WHERE rolname=current_user))
+    OR EXISTS(SELECT 1 FROM pg_database WHERE datname=current_database() AND datdba=(SELECT oid FROM pg_roles WHERE rolname=current_user))
+    OR EXISTS(SELECT 1 FROM pg_auth_members WHERE member=(SELECT oid FROM pg_roles WHERE rolname=current_user)) AS unsafe FROM pg_roles WHERE rolname=current_user`);
+  if (!result.rows[0] || result.rows[0].unsafe) throw new Error("UNSAFE_RUNTIME_ROLE");
+}
 export class PostgresUnitOfWork implements UnitOfWork {
   private readonly contexts = new WeakMap<ParticipantContext, string>();
   private readonly local = new AsyncLocalStorage<boolean>();
   constructor(private readonly pool: Pool) {}
   private async assertRuntime(client: PoolClient): Promise<void> {
-    const result = await client.query<{unsafe: boolean}>(`SELECT rolsuper OR rolbypassrls OR rolcreatedb OR rolcreaterole OR EXISTS(
-      SELECT 1 FROM pg_class WHERE relowner=(SELECT oid FROM pg_roles WHERE rolname=current_user) AND relnamespace='pedpsy'::regnamespace)
-      OR EXISTS(SELECT 1 FROM pg_auth_members WHERE member=(SELECT oid FROM pg_roles WHERE rolname=current_user)) AS unsafe FROM pg_roles WHERE rolname=current_user`);
-    if (!result.rows[0] || result.rows[0].unsafe) throw new Error("UNSAFE_RUNTIME_ROLE");
+    await assertRuntimeClient(client);
   }
   private async actor(client: PoolClient): Promise<Actor> {
     const result = await client.query<Actor>("SELECT * FROM pedpsy.session_actor()");
@@ -135,7 +140,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
           await client.query("SELECT pedpsy.touch_session()"); await client.query("COMMIT"); open = false; return result;
         } finally {live = false;}
       });
-    } catch (error) {if (open) await client.query("ROLLBACK"); throw mapError(error);}
+    } catch (error) {if (open) await client.query("ROLLBACK"); throw mapPostgresError(error);}
     finally {client.release();}
   }
 }

@@ -2,6 +2,8 @@
 
 Дата2026-10-03. Седьмая из восьми задач фазы2; codex/phase2-snapshot-restore от main@597c3cf9 (#12).
 
+Интеграция: [PR#13](https://github.com/PedFund/PedPsyRU/pull/13), merge5bfb5c44. Актуальный head a46c3510/run37128667436: все6jobs success,174base+30/30PG,0errors/skip. Logs подтверждают фактический pg_dump/pg_restore scenario. Проверены115blobs и preview merge tree.
+
 ## Контракт и безопасность
 
 `exportDemoSnapshot` читает фиксированные14domain tables в read transaction, проверяет SQLite integrity/FK, demo/synthetic provenance, canonical snapshot/items/key/version, полные completed/results/digest и расчет неизмененным scoreTki. Формат pedpsy-demo-snapshot-1; canonical JSON SHA256 сохраняет устойчивые UUID, UTC даты, safe revisions и JSON-значения, а не строковое представление PGjsonb. Пароли/credentials/sessions/throttles/audit не переносятся. Demo flag не дает разрешения отправлять произвольные настоящие данные в CI; тесты только вымышленные.

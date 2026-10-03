@@ -2,11 +2,13 @@
 
 Дата: 2026-10-03. Основной репозиторий разработки — `PedFund/PedPsyRU`.
 
-Пилот ниже интегрирован в main через PR #7. Следующая фаза подготовлена в `PHASE2_DESIGN.md`: владелец принял JS/TypeScript + PostgreSQL, сохранение вычислителя, Россию/Selectel и целевые права. Новый сервер/БД и расширенные административные операции еще не реализованы. Автоматические проверки и их границы — `SECURITY_AND_DEPENDENCIES.md`; порядок передачи модели — `PHASE2_HANDOFF.md`. Этот документ продолжает описывать фактический пилот.
+Пилот ниже интегрирован в main через PR #7. Фаза2 развивается по `PHASE2_DESIGN.md`: JS/TypeScript + PostgreSQL, прежний вычислитель, Россия/Selectel и согласованные целевые права. 02а–02ж находятся в main через#8–#13;02з в ветке приемки, ее текущий CI/merge статус —STATUS/BACKLOG. Рабочие participant API/PostgreSQL и manager/MFA/production — разные уровни готовности. Автоматические проверки —SECURITY_AND_DEPENDENCIES.md, приемка —PHASE2_ACCEPTANCE.md.
 
 ## Принятые границы
 
-Каркас 02в: `src/ports` — внутренние async интерфейсы, `src/scoring` — оболочка неизменного JS-core, `src/http` — Fastify без данных, `src/bootstrap` — composition root/loopback 4174. `npm start` по-прежнему запускает прежний пилот 4173. Build в игнорируемый dist копирует ровно необходимые JS/data artifacts побайтово; приложение не исполняет TypeScript напрямую. SQLite/PG адаптеры и перенос HTTP-сценария вводятся следующими задачами. AST guard проверяет типовые/runtime imports и направление зависимостей; не является полным SAST или механизмом проверки научной правильности.
+Фактические слои: `src/ports` —async transaction/identity interfaces; `src/application` —participation/API orchestration; `src/scoring` —оболочка неизменного JS-core; `src/adapters` —SQLite/PG UnitOfWork и PG identity/snapshot/migrator; `src/http` —Fastify health и явно составляемый participant APIv2; `src/bootstrap` —composition roots. HTTP не импортирует pg/storage/adapters, application/ports не выполняют I/O; AST guard проверяет направления/циклы и типовые/runtime imports. Это не полный SAST/научная приемка.
+
+`npm start` сохраняет прежний4173; `start:platform` —health-only4174; `start:platform:demo` —v2 только при явной synthetic loopback PG-конфигурации, без автоматических migrations/seed/password provisioning. Старый UI/SQLite не переключены. Build копирует необходимые исходные JS/data artifacts побайтово, в том числе прежние security primitives; dist игнорируется, никакие базы/секреты туда не копируются. Snapshot переносится offline в пустой target, credentials/sessions создаются заново. Новый API проходит отдельную HTTP/PG приемку; права будущих manager/processing endpoints не считаются реализованными этой основой.
 
 - Текст формы: `methods/tki/form.json`. У каждого пункта устойчивый ID q01–q30; варианты имеют коды A/B и русские подписи а/б.
 - Бланк: `methods/tki/BLANK.md`; порядок и тексты совпадают с JSON.
