@@ -65,3 +65,7 @@
 | Подмена режима на real | Тренировочный контур не переключается клиентом |
 
 В 01д.4 проверены повторный вход/тот же ID, ответы/q08/reopen, две вкладки, потерянный ответ API, отказ записи/очистки completed, чужой ID, отсутствие наследования T0 и клиентского real. Invalid/неполный draft не создает result/completed; SQL/audit сбои откатывают снимок. Двойное/одновременное завершение и прикладная фиксация результата еще не реализованы и не проверены. В Git только вымышленные fixtures, без действующих credentials и реальных данных.
+# Дополнение фазы2 —2026-10-03
+
+Новый async storage contract—src/ports/participation.ts, identity—src/ports/identity.ts; application service один дляSQLite/PGUnitOfWork. Нельзя смешивать client одной transaction сpool.query, сохранять порты послеcommit, десериализовать actorcontext изbody или менять pinned core. CAS/audit/complete-idempotency/scope/revoke одинаково проверяются общимиtests. Participantv2 HTTP сохраняет immutable original result черезPG; offline snapshot исключаетcredentials/sessions/audit и доказывает точноеdomain/result/digest равенство/restore в новойБД. Ниже прежний пилотный контракт сохраняется для4173. Новый backend не переключает исходнуюSQLite/UI. Приемка/актуальныеcounts—PHASE2_ACCEPTANCE/STATUS, технические reports—ASYNC_STORAGE_VALIDATION/POSTGRES_ADAPTER_VALIDATION/SNAPSHOT_RESTORE_VALIDATION.
+

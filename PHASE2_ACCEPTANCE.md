@@ -2,6 +2,8 @@
 
 Дата2026-10-03. Задача02з, восьмая из восьми; codex/phase2-api-acceptance от main@5bfb5c44 после#13. До green CI текущего head не объявляется интегрированной.
 
+**Итог: фаза2 принята технически и интегрирована,8из8.** [PR#14](https://github.com/PedFund/PedPsyRU/pull/14) merged `4a86cb44e5d751018cd10cc7e1538c2bec6990f0`; head5b42cce7/[run37130462614](https://github.com/PedFund/PedPsyRU/actions/runs/37130462614): все6jobs completed/success,179base+38/38PG18.6,0errors/skip. Logs подтверждают8APIscenarios, настоящий HTTP и backup restore.126blobs/preview merge tree сверены, source/math/security primitives preserved. Это техническая приемка synthetic контуров, не независимый security аудит/научное утверждение/production.
+
 ## Новый контур
 
 Fastify → application/ports → PostgreSQL runtime UnitOfWork → неизмененный JS TKI. PostgreSQL18.6/пакеты точные, Node22/24 checks, strict TS/AST dependency guards, npm audit/Gitleaks. SQL migrator отдельно от runtime, составные FK/guarded immutability/RLS и local session capability. В новой004 добавлены только backend-only участнические auth functions; прошлые001–003/checksum/SQLite migrations не переписываются. Никаких новых научных решений/норм/методик.
