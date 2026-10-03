@@ -34,6 +34,8 @@ Atomic save = current authority underlocks + CAS + DML/version + required audit 
 
 ## Регрессии и ограничения
 
+04з head1b39be7b/run37149104463:202base+101/101PG прошли, но первый дополнительный browser run1/2 failed на ожидании invite accepted. Merge остановлен, не hidden/skip. Точная причина без state stage ретроспективно не доказана; code review выявила enabled HTML-before-JS readiness gap. Login/accept теперь disabled до startup completion, auth forms POST, реальный app.js в constructor browser намеренно задержан250ms, safe stage label в timeout без values/secrets. Pagewait10s/все3runs неизменны. Новый head должен пройти полный CI; повторный успех не гарантия отсутствия flakes.
+
 Первый #25/run37144352030:80/83PG,3snapshot regressions из-за design_version; merge остановлен. Исправлен format2/legacy1 zero target check/nonzero7 roundtrip, backup restore снова passed, не ослаблены tests. Scientific core/key/form/processor, PG001–010/SQLite migrations и npm manifest/lock/workflow unchanged.
 
 Полный TKI package научно **draft**, key_verified; technicalallowlist не scientific publication. Успешный код не доказывает валидность методики. Passport/consents/participant invites —фаза5, method library/editor —фаза6; aggregates≥10/anti-differencing/help signals/email/outbox/jobs будущие. Co-ownership/quota override/active revisions не реализованы.
