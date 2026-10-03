@@ -2,6 +2,10 @@
 
 Дата: 2026-10-03. Ветка codex/phase2-typed-foundation от main@36409eb1 после принятого PR #8. Это третья из восьми задач фазы 2, не готовая PostgreSQL-платформа.
 
+## Интеграция
+
+[PR #9](https://github.com/PedFund/PedPsyRU/pull/9) объединен обычным merge caa225a01e46f2aeea85cb8c288f7d8b5a1fe921 после проверки head 7e8d56f6, текущей main/preview tree и всех пяти успешных jobs [run 37124588725](https://github.com/PedFund/PedPsyRU/actions/runs/37124588725). Все 92 локальных blobs совпали с GitHub. Действующее разрешение владельца применено без дополнительного вопроса; force/squash/удаления истории не было.
+
 ## Реализовано
 
 Strict TypeScript build/typecheck, внутренние async UnitOfWork/repository ports, typed оболочка прежнего scoreTki, Fastify health без диагностических/manager endpoints. Новый runtime только loopback 4174 при явном start:platform; pilot start/4173 остаются прежними. Build копирует вычислитель/его data imports побайтово, без БД/credentials. Нет новой методики, научных порогов или новых прав.

@@ -1,4 +1,5 @@
 import type {TkiResponse, TkiResult} from "../../core/tki-contract.js";
+export type {TkiRequest, TkiResponse, TkiResult} from "../../core/tki-contract.js";
 
 // Internal context, created from a verified server session, never a request DTO.
 // Constructors/authentication are added with the adapters, not public HTTP inputs.
@@ -31,6 +32,7 @@ export interface PinnedRelease {
   readonly methodVersionId: "tki_ru_30_pairs@1.0.0";
   readonly handlerVersion: "tki-contract-0.3.0";
   readonly keyDigest: string;
+  readonly itemIds: readonly string[];
 }
 export interface StoredResult {
   readonly id: string;
@@ -43,7 +45,7 @@ export interface StoredResult {
 export interface AttemptRepository {
   getAuthorized(id: string): Promise<AttemptSnapshot | null>;
   compareAndSave(id: string, input: DraftInput): Promise<AttemptSnapshot>;
-  markCompleted(id: string, expectedRevision: number, calculatedAt: string): Promise<void>;
+  markCompleted(id: string, expectedRevision: number, resultId: string, calculatedAt: string): Promise<void>;
 }
 export interface ReleaseRepository { getPinned(releaseId: string): Promise<PinnedRelease> }
 export interface ResultRepository {
@@ -51,7 +53,7 @@ export interface ResultRepository {
   insertOnce(result: StoredResult): Promise<StoredResult>;
 }
 export interface AuditEvent {
-  readonly event: "draft_saved" | "attempt_completed";
+  readonly event: "draft_read" | "result_read" | "draft_saved" | "attempt_completed";
   readonly resourceId: string;
 }
 export interface AuditRepository { appendRequired(event: AuditEvent): Promise<void> }
