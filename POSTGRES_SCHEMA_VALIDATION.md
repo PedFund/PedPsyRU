@@ -2,6 +2,8 @@
 
 Дата: 2026-10-03. Ветка codex/phase2-postgres-schema от main@da6bdbbb после #10. Пятая из восьми задач фазы2.
 
+Интегрировано через [PR #11](https://github.com/PedFund/PedPsyRU/pull/11), merge 687b207d. Актуальный [run 37126725992](https://github.com/PedFund/PedPsyRU/actions/runs/37126725992) на head 7c8310d0 и все 6 jobs завершены success, включая реальный PostgreSQL engine. Проверены все 106 blobs и preview merge tree; локальная база не переключалась.
+
 ## Реализуемая проверка
 
 Отдельные append-only PG migrations/checksum/rollback/idempotency. UUID/timestamptz/jsonb, bigint revisions с JS safe limit, scoped composite FK/deferred completion, value/immutable triggers, FK/query indexes. Existing SQLite migrations unchanged. Точная PG18.6 + official Docker Hub manifest digest; PG18 перечислен Selectel.
