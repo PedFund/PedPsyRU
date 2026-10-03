@@ -63,10 +63,17 @@ test("PostgreSQL API: foreign/cross-study/missing IDs, anonymous and staff stay 
   const ids=[f.seed.studies[0].attempts.find(a=>a.participant_id!==f.participant.id).id,f.seed.studies[1].attempts[0].id,randomUUID(),"not-a-uuid"];
   for(const id of ids)for(const suffix of ["","/form","/result"]){const r=await f.call("/attempts/"+id+suffix,session);assert.equal(r.statusCode,404);assert.deepEqual(r.json(),{error:"NOT_AVAILABLE"});}
   assert.equal((await f.call("/attempts/"+f.attemptId)).statusCode,401);
-  const credential=randomUUID(),raw=randomBytes(32).toString("base64url"),at=Date.now();
-  await f.admin.query("INSERT INTO pedpsy.staff_credentials(id,user_id,login_id,role,scheme,salt,password_hash) VALUES($1,$2,'SYNTHETIC-STAFF','superadministrator','scrypt-N131072-r8-p1-dk64',$3,$4)",[credential,f.seed.user_id,randomBytes(16).toString("hex"),randomBytes(64).toString("hex")]);
-  await f.admin.query("INSERT INTO pedpsy.staff_sessions(token_hash,credential_id,user_id,role,credential_version,created_at_ms,last_seen_at_ms,expires_at_ms,mfa_verified_at) VALUES($1,$2,$3,'superadministrator',1,$4,$4,$5,to_timestamp($4::double precision/1000))",[sha256(raw),credential,f.seed.user_id,at,at+1800000]);
-  assert.equal((await f.call("/session",{cookie:"pedpsy_v2_demo="+raw})).statusCode,401);
+  for(const role of ["administrator","superadministrator"]){
+    const credential=randomUUID(),user=randomUUID(),raw=randomBytes(32).toString("base64url"),at=Date.now();
+    await f.admin.query("INSERT INTO pedpsy.users(id) VALUES($1)",[user]);
+    await f.admin.query("INSERT INTO pedpsy.staff_credentials(id,user_id,login_id,role,scheme,salt,password_hash) VALUES($1,$2,$3,$4,'scrypt-N131072-r8-p1-dk64',$5,$6)",[credential,user,"SYNTHETIC-"+role.toUpperCase(),role,randomBytes(16).toString("hex"),randomBytes(64).toString("hex")]);
+    await f.admin.query("INSERT INTO pedpsy.staff_sessions(token_hash,credential_id,user_id,role,credential_version,created_at_ms,last_seen_at_ms,expires_at_ms,mfa_verified_at) VALUES($1,$2,$3,$4,1,$5::bigint,$5::bigint,$6::bigint,to_timestamp(($5::bigint)::double precision/1000))",[sha256(raw),credential,user,role,at,at+1800000]);
+    await f.withSession(async client=>{
+      assert.equal((await client.query("SELECT * FROM pedpsy.session_actor()")).rows[0].actor_role,role);
+      assert.equal((await client.query("SELECT * FROM pedpsy.attempts")).rowCount,18);
+    },sha256(raw));
+    assert.equal((await f.call("/session",{cookie:"pedpsy_v2_demo="+raw})).statusCode,401);
+  }
   const spoof=await f.app.inject({url:"/api/v2/participant/attempts/"+ids[0],headers:{...headers,cookie:session.cookie,"x-role":"superadministrator","x-study-id":f.seed.studies[1].id}});assert.equal(spoof.statusCode,404);
   for(const url of ["/api/v2/admin/export","/api/v2/researcher/results","/methods/tki/keys/1.0.0.json"])assert.equal((await f.app.inject({url,headers:{...headers,cookie:session.cookie}})).statusCode,404);
 });

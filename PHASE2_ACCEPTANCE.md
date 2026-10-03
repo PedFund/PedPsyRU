@@ -18,6 +18,8 @@ Exact origin/Host, Fetch-Site, mutation CSRF; bounded JSON, отказ extrafiel
 
 ## Проверки и границы
 
+Первый run37130025396:179base успешно,37/38PG успешно; один scope test не дошел до HTTP assertion из-за bigint/double precision вывода типа в synthetic staff session INSERT. Фикстура исправлена explicit bigint casts; scenario также подтверждает обе действующие MFA staff роли/global SQL read прежде чем проверять их отказ в participant API. Production code/policy по этой находке не ослаблялись; полный CI нового head обязателен.
+
 5HTTP/config tests + прежние174 →179base. 8новых PG API scenarios + прежние30 →38PG tests: partial/full TKI/rawprofile, CAS/complete/retry/recreate/relogin без перерасчета; own/foreign/cross/missing/anonymous/staff; Origin/CSRF/DTO; uniform login +durable throttle; revoke во время hashing; audit rollback complete/login rotation; idle/absolute expiry/pool isolation; реальный HTTP loopback login/save/complete/result.
 
 Новый synthetic bootstrap `npm run start:platform:demo` требует явный PEDPSY_PG_DEMO=1, loopback PGHOST, validated pedpsy_demo_<16hex> и не-owner runtime имя/секрет изenv. Пул4 — ограничение учебного профиля, не обещание оптимальной production емкости. Нет startup migrations/seed/auth issuance; database schema/data/credentials готовятся offline в отдельно разрешенном synthetic контуре. Production/Selectel/remote DB отвергается этой конфигурацией. Health-only `start:platform` и обычный4173 не переключаются.
