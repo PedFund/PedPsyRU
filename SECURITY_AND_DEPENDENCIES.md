@@ -1,5 +1,13 @@
 # Зависимости, архитектурные проверки и безопасность
 
+## Фаза 4 — конструктор и контроль приёмки
+
+04а–04ж в main #25–#31. Head f8122a15/[run37147500255](https://github.com/PedFund/PedPsyRU/actions/runs/37147500255): all6jobs success,202base Node22/24+95actual PG18.6, три дополнительные независимые Chrome runs по2scenarios,0fail/skip.04з усиливает revocation while waiting/limits/fake release/lifecycle rollback/frozen routes, статус —PHASE4_ACCEPTANCE/STATUS; до актуального CI не принято.
+
+Current server principal/own active membership/draft/no attempts/CAS; обе staff verified MFA/global read-only. Fixed SQL locks и named policy commit gate независимы от UI. Direct DML/private helpers runtime denied, foreign/absent одинаково404. Required audit содержит IDs/actions/status, не ответы/баллы/названия/секреты. Audit/size/version/quota failure откатывает mutation целиком. CSRF/origin/HttpOnlyStrict/no-store/CSP/bodylimit сохранены; textContent/logout cleanup/no diagnostic localStorage, explicit reread после uncertain save.
+
+Manifest/lock/workflow/core/form/key unchanged, новые migration011–017. PostgreSQL skill повлиял на least privilege/lock order/атомарность, Supabase не подключён. Technical caps/active frozen явно описаны; CI не pentest/scientific/legal/production proof. Branch protection тарифно недоступен: ordinary merge после currenthead/all6/base/tree/fullmanifest/parents gate. Без paid/cloud/Selectel/realdata/publication.
+
 ## Фаза3 — подтвержденный текущий результат
 
 03а–03з интегрированы#16–#23, head50ad6c7b/run37140560958 все6jobs success:195base наNode22/24+80actual PG18.6/Chrome,0fail/skip. Нет новых npm пакетов, manifest/lock exact dependencies прежние65. Browser preinstalled official runner, no additional downloads; ephemeral CI profile/downloads не upload artifacts. `--no-sandbox` только ephemeral synthetic Linux Chrome, не server/security setting. Secretscan fullhistory redacted, dependencyaudit high/critical блокируетCI, architectureAST/layer/package/artifact checks и strict TS проходят. Это не independent pentest/sourceaudit или scientific/production proof.

@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## Текущая приёмка фазы 4 — 2026-10-03
+
+04а–04ж (7из8) в main #25–#31. Последний merge #31 —221efd6fd8dba171f9834834496bb894f2e6938b. Head f8122a15/[run37147500255](https://github.com/PedFund/PedPsyRU/actions/runs/37147500255): all6jobs completed/success,202/202base Node22/24+95/95actual PG18.6, три дополнительные независимые browser runs по2/2scenarios,0fail/cancel/skip.190blobs/preview/actualtree/parents/core hashes сверены.
+
+04з локально:6 независимых PG-сценариев revocation under lock wait/membership under wait/limits+version saturation/fake release/lifecycle audit rollback/frozen routes/private helpers. Actual PostgreSQL CI ещё не выполнен; ожидается101PG, не заявленный успех. Полный202/202base/build/typecheck/architecture/dependencies/syntax локально success. Итог —PHASE4_ACCEPTANCE. Документы актуализируются, затем current-head gate и ordinary merge; без force/reset/удаления результатов/массового merge PR.
+
+Local UI-only4175 перезапущен на новой сборке: browser подтвердил «Фаза4 · конструктор исследований» и «PostgreSQL ещё не подключён». Это не локальный CRUD smoke test; реальные сохранения проверены CI PG/Chrome. Старый4173/SQLite не переключён. Новых dependencies/науки/прав/облака/реальных данных нет. Фаза5 не начата. Ниже хронологическая история, не текущие незавершённые задачи.
+
 ## Фаза4 начата —2026-10-03
 
 04е интегрированаPR#30/headc64c8115/run37147127875 all6success:201base+90PG/3Chrome. Activation/incomplete/onequota/concurrent winner/close freesquota/frozenactive/reopen denied + participant writer lock vs close фактически проверены.04ж UI/current policy/directory/caps/real browser integration следующийPR;04з итоговаярасширеннаяприемка+документация еще впереди.

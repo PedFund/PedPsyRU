@@ -1,5 +1,13 @@
 # Журнал решений
 
+## 2026-10-03 — конструктор фазы 4
+
+Поручен весь04а–04з без автоматического перехода к фазе5. Researcher меняет только свой draft/no attempts/CAS; обе staff global read-only дизайн. Default active quota1 проверяется атомарно при activation, не create draft; closed освобождает квоту, сохраняет ответы, не reopen. Quota override/co-ownership/active revisions — отдельный будущий workflow, не скрытое расширение прав.
+
+Все этапы планируются до activation. Copy independent per-group, без автоматического распространения изменений источника/диагностики. Участники последующих этапов — фаза5; обязательный T0/подстановка нулей не вводятся. Только существующий synthetic TKI package key_verified/full publication draft; технический allowlist не scientific approved release. Новых методик/норм/editor/processing нет.
+
+Append-only011–017, новый design_version потребовал snapshot2/legacy1 zero check. ПервыйCI#25 выявил3snapshot regressions, исправлен перенос, не ослаблены tests. Нет npm dependency changes. PostgreSQL-практики: least privilege/fixed search_path/короткие transactions/lock order/recheck после ожидания; Supabase не подключён. Приёмка —PHASE4_ACCEPTANCE. Selectel/production/realdata отложены.
+
 ## 2026-10-03 — фаза3: аккаунты, MFA, кабинеты и честная приёмка
 
 Согласованные права не расширены: обе staff global read/download raw+stored results и researcher invite/block; только super назначает staff roles. Researcher —own metadata, без individual diagnostics; methods/processing/aggregate names вpolicy не превращаются в готовые endpoints. TOTP RFC4226/6238 + стандартный Node AES256GCM, externalkey/defaultnone, recovery одноразовые digests; password pending не staff capability. Внешний productionkey lifecycle пока не принят, scientific TKI/core/form/key9blobs неизменны.

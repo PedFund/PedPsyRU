@@ -1,19 +1,45 @@
-# Фаза4 — конструктор исследований
+# Конструктор исследований — контракт и проверка
 
-04ж локальный UI: server-confirmed metadata matrix, create/rename/group/stage/pinned set/copy/activate/close, explicit CAS/error lock+reload безauto merge/retry. Verified realm only, staff global directory/read-only no editing; metadata500/4MiB hard refusal, no truncation. Central `studies.read/configure` policy также проверяется внутриtransaction доcommit послеfixedSQL identity/scope locks; denial откатываетmutation/audit. Нет raw responses/results вconstructor DTO/DOM/localStorage. HTMLtextContent/CSP/read/logout cleanup, Russianstatus/sciencewarning, mobile matrix localoverflow. ActualChrome требует realMFA/invite/researcher/CRUD/T0–T2/two-tab CAS/PG quota/reload/390px/staffreadonly; harness только ephemeral LinuxCI/strictloopback, one expected dialog per synthetic action, no desktop/CDP bypass. Пока local201base+strict/architecture/syntax green; actualPG/browser/UI CI еще не принят.
+Дата2026-10-03, только synthetic development, не научная/production-приёмка. 04а–04ж в main #25–#31,04з расширяется. CI/merge — PHASE4_ACCEPTANCE/STATUS; прежние локальные «pending» заметки заменены проверяемой спецификацией.
 
-04е локальная подготовка: draft→active→closed (такжеdraft→closed), closed не reopen; activation требуетgroup/stage и непустой active set каждойячейки, существующийallowlistedrelease, одногоowner/noattempts. Defaultactivequota1 проверяется подcredentialUPDATElock, concurrent activation не обходит счетчик. Draft/closed не расходуют activequota. Active design/title/groups/stages/assignments frozen; все этапы планируются перед activation, будущий revision workflow отдельно. Closing не удаляет diagnostics и конфликтует соstudySHARE participant writer; послеclose новыеwrites denied. Title редактируетсятолькоdraft сCAS/audit. Append-only016, staff globalread не staffconfigure/quotaoverride. CI/merge еще не принят.
+## Кто что делает
 
-04д локальная подготовка: copy создает **новый** stage UUID/code/ordinal и independent assignment UUIDs по active source groups; based_on source того же study, parent-before-child/no overwrite. Не читает/создаетparticipants/enrollments/attempts/responses/results, не угадывает missing T0. Source потом может быть изменен вdraft без изменения копии; audit failure откатываетstage+assignments+version. Append-only015, пока без CI/merge.
+|Роль|Конструктор|Диагностика|
+|---|---|---|
+|Исследователь|Свой draft/title/groups/stages/sets/copy/activate/close|Нет индивидуальных ответов/баллов|
+|Администратор|Глобальный список/read-only дизайн|Прежние глобальные read/download raw+stored individual result|
+|Суперадминистратор|Тот же read-only дизайн, не подмена researcher|Прежние read/download; processing/help/editor ещё будущие|
+|Participant/pending/anonymous|Нет доступа|Только свой прежний participant flow по действующей сессии|
 
-04г локально подготовлен: exact существующий synthetic TKI release allowlist(form/key digests, versions,30items, key_verified+publication draft); catalog metadata без формы/ключа/ответов. Draft group×stage заменяет свой set UUID с сохранением неизменившихсяassignment IDs, без новыхattempts/results. Пустой set допустим вdraft; полная готовность проверяется при activation04е. Назвать этот release научно published/approved было бы ошибкой: UI показывает ограничение. Максимум10 release IDs/input, неизвестный/чужойID404. Append-only014, audit/CAS/authority прежние.
+UI не авторизует. Current credential/session/user/MFA/membership повторяются под locks; named policy до COMMIT — дополнительный барьер. Direct DML/private helpers runtime запрещены. Researcher realm не diagnostic RLS.
 
-04а принята#25/fc77aa0d, finalheade51bfc88/run37144756732 all6success:196base+84PG/3Chrome. Первыйrun37144352030:80/83PG, три snapshot tests отказали из-за нового столбца. Исправлен перенос, а не ослаблена приемка: snapshot2 сохраняетdesign_version, legacy1 импортируется только с проверкойzero target. ActualPG отдельно проверяет старый формат и ненулевую версию7. Snapshot provenance/synthetic/пустойtarget/исходнаяSQLite/credentials exclusion прежние; научная математика не менялась.
+## Данные и API
 
-04в подготовлен: T0/T1/T2/custom, независимый server UUID/порядок0–9999/unique code+ordinal и CAS; обычное создание не выдает ложную based_on связь. Изменение порядка сохраняет parent-before-child для будущего копирования. Максимум50 этапов, scope study/stage повторяется сервером. Append-only013, не изменение научных/диагностических данных. CI/merge пока не принят.
+StudyDesign: server UUID/title/status/version/demo; groups(id/name/kind/status), stages(id/code/ordinal/status/based_on_stage_id), assignments(id/group_id/stage_id/release_id/status), catalog metadata. Нет answers/results/keys/form/source/credentials.
 
-04б подготовлен поверх04а: произвольные КГ/ЭГ/other, create/update только draft без attempts; scope пары study/group, уникальный нормализованный name, общий design_version CAS под study lock, лимит50 групп. Пользователь не задает owner/role/status; все версии увеличиваются с audit в одной транзакции. Миграция012 добавлена отдельно,011 не переписана. ActualPG race/foreign/role tests пока ожидаютCI.
+- POST `/api/v2/researcher/studies`: title; сервер UUID/own membership/draft/version0.
+- GET researcher study/:id — own membership; GET staff studies и /:id —global read-only.
+- PATCH study: title/expected_version; POST/PATCH groups: name/kind/expected_version; stages: code/ordinal/expected_version.
+- POST assignments: group_id/stage_id/release_ids/expected_version, replace только одной ячейки, keep IDs неизменившихся assignments.
+- POST stages/copy: source_stage_id/code/ordinal/expected_version; новые stage/assignment UUID per-group, independent copy.
+- POST lifecycle: status active|closed/expected_version. Draft→active→closed или draft→closed; closed не reopen. Повтор текущего статуса/currentversion идемпотентен и audited; staleversion conflict.
 
-04а в разработке: fixed server UUID/draft/demo, собственное membership и design_version0; metadata-only snapshot. Append-only011, приватные helpers/PUBLIC revoke, ограниченный runtime получает только create/read. Staff обеих ролей глобально читает дизайн, не меняет его; researcher читает только active own membership. Квота1 относится к **активным**, не черновым исследованиям; активация/enforcement —04е. Технический предел500 исследований на researcher предотвращает неограниченный список, не дает увеличения active quota.
+Точные входные поля/типы, CSRF до тела; client owner/role/status/release contents/calculated scores не authority. Foreign/absent одинаково404. Draft/no attempts — единственный mutable design. Все настройки до activation; active/closed/attempt-bearing frozen. Close сохраняет данные, сериализуется со study SHARE participant writer; после закрытия write denied.
 
-Credential UPDATE →user/session locks →study →membership; повторная wall-clock identity после ожидания и перед mandatory metadata audit. Никаких raw answers/results, participant creation, методического редактора, новых прав или Selectel. Scientific core/form/key и прежние migrations001–010 не меняются. Проверки фактического PostgreSQL —CI, не локальная имитация. Пока нет приемки/merge и UI конструктора; текущий статус —STATUS.
+Default active quota1 под credential UPDATE lock. Draft/closed не расходуют. Activation требует одного active researcher owner/no attempts, group/stage, непустого allowlisted set каждой active group×stage ячейки. Shared ownership/quota override/active revisions/deletion не реализованы.
+
+Пределы: title200/group name100/stage code40; ordinal0–9999;50groups/50stages;10distinct release IDs/input;500owned studies/500global directory;4MiB metadata. Явный отказ, не truncation. Existing group edit возможен при cap. Version0–2147483646, saturation откатывает mutation.
+
+## Выпуск, copy, перенос
+
+Только exact existing synthetic TKI package (версии/digests/30items). Key_verified, **полная методика publication draft**, не научно approved. Draft empty set допустим, activation отказывает. Copy не читает/создаёт participants/enrollments/attempts/responses/results, не угадывает missing T0. Участники последующих этапов —фаза5.
+
+Append-only PG011–017, original001–010/SQLite unchanged. Snapshot2 сохраняет design_version, legacy1 zero target check. Auth/MFA/invites/audit не экспортируются, empty target/synthetic provenance обязательны; actual PG nonzero7 roundtrip/backup restore passed. Core/key/form/processor побайтово прежние.
+
+## Проверки и ограничения
+
+Pure/HTTP плюс real PG: own/foreign/roles/CSRF/CAS/unique/per-cell assignments/copy/no diagnostics/quota race/frozen/participant lock/audit rollback/size caps. Real Chrome: invite/researcher login/create/КГ/ЭГ/T0/assign/copyT1/T2/reload/shared-cookie two-tab CAS/quota/close/staff readonly/text escaping/390px/logout/HttpOnly/no storage. Три дополнительные независимые browser runs обязательны, не retry-to-success.04з добавляет lock-wait revocations/caps/fake release/lifecycle rollback/private helpers; до актуального CI не принято.
+
+Первый#25 head3f9bd3e/run37144352030:80/83PG,3snapshot regressions после design_version; merge остановлен. Исправлен перенос format2/legacy1/nonzero7, tests не ослаблены. Final e51bfc88/run37144756732:84/84PG/all6success. История сбоя сохранена.
+
+UI server-confirmed save, conflict/uncertain outcome блокирует writes до explicit reload, без blind retry/auto merge. Logout очищает private DOM, localStorage diagnostic data отсутствуют. Local4175 UI/API503 без PG; full4174 realengine/browser —disposable CI. Старый4173/SQLite не переключены. No new npmdependencies/Selectel/paid/realaccounts/data/publication. CI не scientific validity/pentest/legal/production acceptance.
