@@ -1,11 +1,21 @@
 import {Pool} from "pg";
 import {randomUUID} from "node:crypto";
+import {csrfFor,equalText,validToken} from "../../storage/access.js";
 import {responsesDigest} from "../../storage/releases.js";
 import {PostgresUnitOfWork} from "../adapters/postgres/unit-of-work.js";
 import {PostgresParticipantGateway} from "../adapters/postgres/identity.js";
 import {createParticipationService} from "../application/participation.js";
 import {createParticipantApi} from "../application/participant-api.js";
-import {createParticipantApp} from "../http/participant-app.js";
+import {createWorkspaceApp} from "../http/workspace-app.js";
+import {createAccountApi} from "../application/account-api.js";
+import {PostgresAccountAccess} from "../adapters/postgres/account-access.js";
+import {PostgresStaffMfa} from "../adapters/postgres/staff-mfa.js";
+import {PostgresResearcherGateway,PostgresResearcherManagement} from "../adapters/postgres/researchers.js";
+import {PostgresStaffManagement} from "../adapters/postgres/staff-management.js";
+import {PostgresStaffDiagnostics} from "../adapters/postgres/staff-diagnostics.js";
+import {MfaVault} from "../adapters/security/mfa-vault.js";
+import {ParticipationError} from "../ports/errors.js";
+import {workspaceAssets} from "./workspace-assets.js";
 import {demoConfig} from "./demo-config.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
@@ -13,7 +23,13 @@ async function main(): Promise<void> {
     pool=new Pool(demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
     const api=createParticipantApi(new PostgresParticipantGateway(pool,uow),createParticipationService(uow,
       {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>responsesDigest(ids.map(item_id=>({item_id})),values)}));
-    const app=createParticipantApp(api,"http://127.0.0.1:4174");
+    const encoded=process.env.PEDPSY_MFA_KEY;
+    if(!encoded||Buffer.from(encoded,"base64").length!==32||Buffer.from(encoded,"base64").toString("base64")!==encoded)throw new Error("EXPLICIT_MFA_KEY_REQUIRED");
+    const key=Buffer.from(encoded,"base64");const vault=new MfaVault(key);key.fill(0);
+    const accounts=createAccountApi({access:new PostgresAccountAccess(pool),auth:new PostgresStaffMfa(pool,vault),researchers:new PostgresResearcherGateway(pool),
+      researcherManagement:new PostgresResearcherManagement(pool),staffManagement:new PostgresStaffManagement(pool),diagnostics:new PostgresStaffDiagnostics(pool)},
+      {forToken:csrfFor,assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
+    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets());
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}

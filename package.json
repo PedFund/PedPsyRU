@@ -13,6 +13,7 @@
     "typecheck": "tsc --noEmit",
     "start:platform": "node dist/src/bootstrap/server.js",
     "start:platform:demo": "node dist/src/bootstrap/postgres-server.js",
+    "start:platform:ui": "node dist/src/bootstrap/workspace-preview.js",
     "check:architecture": "node scripts/check-architecture.js",
     "check:syntax": "node scripts/check-syntax.js",
     "test:architecture": "node --test tests/architecture.test.js",
