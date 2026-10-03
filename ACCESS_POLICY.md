@@ -1,5 +1,18 @@
 # Политика доступа: учебный контур
 
+## Фактическая реализация после фазы3 —2026-10-03
+
+03а–03з интегрированы#16–#23,195base+80PG/actualChrome/all6CI, PHASE3_ACCEPTANCE. Новый PostgreSQL account API не совпадает с прежними storage/roles.js пилота; старые разделы ниже —история, а не отсутствие уже реализованных операций.
+
+| Роль | Работающий новый контур | Не включено |
+|---|---|---|
+|Участник|Собственные активные попытки/ответы/завершение/сохраненный результат participant API|Staff/researcher controls/чужие записи|
+|Исследователь|Отдельный login/logout, свои study metadata/current membership, quota1|Individual answers/results; constructor и aggregates пока нет|
+|Администратор|Password+MFA; все raw/stored results read/download, researchers invite/block/list|Staff role assignment/method editor/processing|
+|Суперадминистратор|То же +fresh MFA staff role assignment/list|Method editor/processing/support/jobs пока не реализованы, несмотря на целевые права|
+
+Чтение/скачивание обоими staff глобальное, не ограничивается assigned studies. Control/export требуют fresh MFA<5min; новые операции повторяют current authority underlocks+mandatory audit, не доверяют клиентским role/IDs/UI. Self role change/удаление последнего active super запрещены. Participant/researcher/pending cookies не staff capability. Aggregate N>=10/anti-differencing целевые, не API. Realdata/Selectel/публикация не выполнялись.
+
 Дата: 2026-10-02. Основание: мастер-задание владельца, разделы III, VII, VIII, XV, XVIII, сценарии 12–14.
 
 **Уточнение владельца 2026-10-03 (целевая политика следующей реализации):** обе административные роли также видят/скачивают индивидуальные рассчитанные результаты всех исследований. Администратор только просматривает/скачивает; суперадминистратор помогает обработке, получает сигналы и управляет ручными процессами, сохраняя исходные ответы и историю расчетов. Обе роли приглашают/блокируют исследователей; только суперадмин назначает административные роли; административная MFA обязательна. Исследовательские агрегаты — минимум 10 участников. Полная целевая матрица, ограничения и инциденты — PHASE2_DESIGN.md. **Эти API/операции еще не реализованы:** текущие `POLICY`/`IMPLEMENTED` в storage/roles.js и ответы существующих endpoints данной подготовкой не изменены.
