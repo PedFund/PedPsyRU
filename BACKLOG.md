@@ -28,11 +28,11 @@
 
 ## Фаза3: следующие небольшие задачи
 
-Целевые права уже согласованы, реализация еще не начата. Технические детали/библиотеки выбираются самостоятельно с прежним dependency review, UI/control не заменяет server authorization. Реальные accounts/mail/production не выдаются автоматически. Не перескакивать через staff MFA dependency ради удобства кабинета.
+Целевые права уже согласованы; владелец разрешил начать фазу3, Selectel отложен. Технические детали/библиотеки выбираются самостоятельно с прежним dependency review, UI/control не заменяет server authorization. Реальные accounts/mail/production не выдаются автоматически. Не перескакивать через staff MFA dependency ради удобства кабинета.
 
 | Задача | Зависимость | Проверяемый результат | Состояние |
 |---|---|---|---|
-| 03а. Контракты researcher/staff и централизованные permissions | Фаза2 | Идентичность/роль/session version, named operations и scope; таблицы/ports/положительные и отрицательные tests без выдачи новых прав | Следующий шаг; synthetic only |
+| 03а. Контракты researcher/staff и централизованные permissions | Фаза2 | Идентичность/роль/session version, named operations и scope; таблицы/ports/положительные и отрицательные tests без выдачи новых прав | Реализована локально; проверки и интеграция ожидаются; synthetic only |
 | 03б. Administrative login pending MFA и отзыв | 03а | Один пароль не открывает staff API; pending challenge не participant/staff capability; reset/block отзывают сессии, anti-enumeration/throttle/audit | Запланировано |
 | 03в. Второй фактор и recovery | 03б | Реальный второй фактор, replay/expiry/attempt limits, безопасное хранение секрета и одноразовое recovery; только после обоих факторов staff session; sensitive operations требуют актуального MFA proof | Запланировано; без платного SMS/email сервиса |
 | 03г. Приглашение/блокировка исследователя | 03в | Обе staff роли приглашают/блокируют, researchers проходят свой login; invite одноразовый/срок, квота/status/audit/revoke, чужой researcher denied | Запланировано; доставка пока synthetic preview, реальный email provider отдельно |
