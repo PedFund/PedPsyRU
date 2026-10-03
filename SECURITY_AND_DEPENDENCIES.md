@@ -4,6 +4,22 @@
 
 ## Зависимости и обновления
 
+### Реестр 02в (2026-10-03)
+
+| Пакет | Точная версия / лицензия | Назначение и альтернатива |
+|---|---|---|
+| fastify | 5.12.5 / MIT | HTTP + schema/serialization/inject tests; вместо собственного расширения node:http |
+| pg | 8.23.1 / MIT | Следующий PG adapter, явные параметризованные транзакции; вместо ORM/нативного драйвера |
+| typescript | 6.0.3 / Apache-2.0, dev | Strict build/typecheck и JS/TS compiler AST; вместо дополнительного parser/runtime loader |
+| @types/node | 22.20.5 / MIT, dev | Типы нижней поддержанной CI-линии |
+| @types/pg | 8.23.1 / MIT, dev | Типы драйвера, не runtime package |
+
+Прямые версии/лицензии получены из первичного npm registry; дерево lockfile содержит 65 пакетов, MIT/BSD-3-Clause/ISC/Apache-2.0, все resolved registry.npmjs.org, SHA-512 integrity, install scripts отсутствуют. `check:dependencies` автоматически проверяет эти условия, точные версии и manifest/lock consistency; high/critical audit по-прежнему блокирует CI. Локально npm audit дал 0 известных advisories для этого дерева. Это не полная проверка исходников зависимостей. TypeScript 6 выбран для compiler API, не вслепую latest 7 native compiler. `pg` пока не открывает соединений.
+
+Поддержка/основания: [Fastify LTS](https://fastify.dev/docs/latest/Reference/LTS/), [транзакции pg](https://node-postgres.com/features/transactions), [TypeScript options](https://www.typescriptlang.org/docs/handbook/compiler-options.html), [registry Fastify](https://registry.npmjs.org/fastify/5.12.5), [registry pg](https://registry.npmjs.org/pg/8.23.1), [registry TS6](https://registry.npmjs.org/typescript/6.0.3). Перед real deployment повторить проверку текущих Node patches и всего дерева. Историческая таблица ниже описывает подготовку, не текущий пакетный состав.
+
+В 02в прежнее regex-извлечение заменено compiler AST: literal CommonJS/ESM imports, exports/import types, TS `.js` resolution, циклы и границы src. Computed loaders/require aliases блокируются. CI добавляет strict typecheck и build внутри npm test; игнорируемый dist запрещен в Git. Guard не доказывает отсутствие всех вариантов исполнения динамического кода или скрытого сетевого I/O, не заменяет SAST/ручное review; реальные DTO/auth/DB проверяются следующими задачами. Health не раскрывает конфигурацию/данные, logger отключен, каркас только loopback, 4173 не переключается.
+
 | Компонент | Зафиксировано сейчас | Контроль |
 |---|---|---|
 | npm runtime/dev packages | 0 внешних пакетов, package-lock.json | npm ci с отключенными lifecycle scripts, npm audit, dependency-policy.json |

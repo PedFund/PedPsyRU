@@ -35,7 +35,9 @@ jobs:
           package-manager-cache: false
       - run: npm ci --ignore-scripts --no-audit --no-fund
       - run: npm run check:architecture
+      - run: npm run check:dependencies
       - run: npm run check:syntax
+      - run: npm run typecheck
       - run: npm test
 
   dependencies:
