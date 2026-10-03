@@ -54,3 +54,19 @@ scenario("each group/stage has its own pinned synthetic method set, not science 
   d=await x.studies.assign(x.session.token,d.id,{...cell,release_ids:[],expected_version:d.version});assert.equal(d.assignments.length,0);
   for(const privateName of ["source_text","key_digest","form_snapshot","scales","responses"])assert.ok(!JSON.stringify(d).includes(privateName));
 });
+scenario("copy settings per group only, independent IDs and no participants/answers/results",async(f,x)=>{
+  const {participantService}=require("./participation-fixture.js"),p=await participantService(f);await p.complete();
+  const counts=async()=>{const out={};for(const table of ["participants","stage_enrollments","attempts","responses","attempt_results"])out[table]=(await f.admin.query("SELECT count(*)::integer n FROM pedpsy."+table)).rows[0].n;return out;},before=await counts();
+  let d=await x.studies.create(x.session.token,"Copy");for(const name of ["КГ","ЭГ"])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind:"other",expected_version:d.version});
+  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});const source=d.stages[0].id;
+  d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:source,release_ids:[f.seed.release_id],expected_version:d.version});const sourceAssignment=d.assignments[0].id;
+  d=await x.studies.copy(x.session.token,d.id,{source_stage_id:source,code:"T1",ordinal:1,expected_version:d.version});const copied=d.stages[1].id;assert.equal(d.stages[1].based_on_stage_id,source);
+  assert.equal(d.assignments.filter(a=>a.stage_id===copied).length,1);assert.notEqual(d.assignments.find(a=>a.stage_id===copied).id,sourceAssignment);assert.equal(d.assignments.find(a=>a.stage_id===copied).group_id,d.groups[0].id);assert.deepEqual(await counts(),before);
+  d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:source,release_ids:[],expected_version:d.version});assert.equal(d.assignments.filter(a=>a.stage_id===copied).length,1);
+  await assert.rejects(x.studies.copy(x.session.token,d.id,{source_stage_id:randomUUID(),code:"T2",ordinal:2,expected_version:d.version}),e=>e.status===404);
+  await assert.rejects(x.studies.copy(x.session.token,d.id,{source_stage_id:f.seed.studies[1].stages[0].id,code:"T2",ordinal:2,expected_version:d.version}),e=>e.status===404);
+  await assert.rejects(x.studies.stage(x.session.token,d.id,source,{code:"T0",ordinal:3,expected_version:d.version}),e=>e.status===400);
+  await f.admin.query("CREATE FUNCTION pedpsy.synthetic_copy_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic copy audit failure'; END $$;CREATE TRIGGER synthetic_copy_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_copy_audit_fail()");
+  await assert.rejects(x.studies.copy(x.session.token,d.id,{source_stage_id:copied,code:"T2",ordinal:2,expected_version:d.version}),/synthetic copy audit failure/);
+  assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,d.version);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_stages WHERE study_id=$1",[d.id])).rows[0].n,2);assert.deepEqual(await counts(),before);
+});

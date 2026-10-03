@@ -21,4 +21,7 @@ export class PostgresStudyConstructor implements StudyConstructor{
   assign(token:string,id:string,input:{group_id:string;stage_id:string;release_ids:string[];expected_version:number}){
     return this.call(token,"SELECT pedpsy.configure_study_assignments($1,$2,$3,$4,$5::uuid[]) data",[id,input.expected_version,input.group_id,input.stage_id,input.release_ids]);
   }
+  copy(token:string,id:string,input:{source_stage_id:string;code:string;ordinal:number;expected_version:number}){
+    return this.call(token,"SELECT pedpsy.copy_study_stage($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,input.source_stage_id,randomUUID(),input.code,input.ordinal]);
+  }
 }

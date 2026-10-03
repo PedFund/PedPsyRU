@@ -22,3 +22,8 @@ test("assignment is a strict bounded set of IDs, not client method content or sc
   for(const bad of [{...good,release_ids:[id,id]},{...good,release_ids:null},{...good,release_ids:Array(11).fill(id)},{...good,key:"client"},{...good,scores:[12]}])assert.throws(()=>api.assign("token",id,bad,"csrf"),e=>e.status===400);
   await api.assign("token",id,good,"csrf");assert.deepEqual(calls[0],["token",id,good]);
 });
+test("copy cannot carry participants, responses or inferred source",async()=>{
+  const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({copy:async(...x)=>calls.push(x)},{assert:()=>{}}),good={source_stage_id:id,code:"T1",ordinal:1,expected_version:0};
+  for(const bad of [{...good,responses:[]},{...good,participants:[]},{...good,source_stage_id:"T0"},{...good,ordinal:1.5}])assert.throws(()=>api.copy("token",id,bad,"csrf"),e=>[400,404].includes(e.status));
+  await api.copy("token",id,good,"csrf");assert.deepEqual(calls[0],["token",id,good]);
+});
