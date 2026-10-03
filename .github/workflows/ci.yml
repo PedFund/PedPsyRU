@@ -127,3 +127,4 @@ jobs:
           PEDPSY_PG_TEST: '1'
           PGTEST_HOST: 127.0.0.1
           PGTEST_PORT: '5432'
+          PGTEST_CONTAINER: ${{ job.services.postgres.id }}
