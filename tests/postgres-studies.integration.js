@@ -24,3 +24,14 @@ scenario("mandatory audit failure rolls back creation and membership",async(f,x)
   await assert.rejects(x.studies.create(x.session.token,"Rollback"),/synthetic constructor audit failure/);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.studies")).rows[0].n,before);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.study_memberships WHERE user_id=$1",[x.row.user_id])).rows[0].n,0);
 });
+scenario("group kinds, uniqueness, scope and concurrent compare-and-swap",async(f,x,s)=>{
+  let d=await x.studies.create(x.session.token,"Groups");
+  for(const [name,kind] of [["КГ","control"],["ЭГ","experimental"],["Другая","other"]])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind,expected_version:d.version});
+  assert.equal(d.groups.length,3);assert.equal(d.version,3);
+  const result=await Promise.allSettled(["Первое","Второе"].map(name=>x.studies.group(x.session.token,d.id,d.groups[0].id,{name,kind:"control",expected_version:3})));
+  assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"DESIGN_CONFLICT");
+  d=await x.studies.read(x.session.token,d.id);await assert.rejects(x.studies.group(x.session.token,d.id,undefined,{name:"ЭГ",kind:"other",expected_version:d.version}),e=>e.code==="DESIGN_DUPLICATE");
+  const foreign=f.seed.studies[0].groups[0].id;await assert.rejects(x.studies.group(x.session.token,d.id,foreign,{name:"Foreign",kind:"control",expected_version:d.version}),e=>e.status===404);
+  await assert.rejects(x.studies.group(s.session.token,d.id,undefined,{name:"Staff",kind:"other",expected_version:d.version}),e=>e.status===403);
+  const y=await studyResearcher(f,s);await assert.rejects(y.studies.group(y.session.token,d.id,undefined,{name:"Foreign",kind:"other",expected_version:d.version}),e=>e.status===404);
+});

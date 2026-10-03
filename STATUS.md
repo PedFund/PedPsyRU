@@ -2,6 +2,8 @@
 
 ## Фаза4 начата —2026-10-03
 
+04а интегрирована[PR#25](https://github.com/PedFund/PedPsyRU/pull/25), mergefc77aa0df4f5eba4c83b73c7314b77005c5b7492; finale51bfc88/run37144756732 all6success,196base+84PG и3/3 дополнительных Chrome.182blob/preview/actual merge verified. Legacy snapshot1 и новыйsnapshot2/nonzero revision фактически проверены.04б группы подготовлены отдельным блоком поверхfresh main;04в этапы локально подготовлены, не интегрированы. Локальныйscope/strict tests групп/этапов3/3, полный actualCI каждого блока обязателен.
+
 04а PR#25/head3f9bd3e/run37144352030:196base success,80/83PG; три прежних snapshot/restore теста отказали из-за добавленного design_version. Не объединен. Исправление вводит snapshot2 с сохранением версии, принимает прежний snapshot1 с проверкой нулевой версии target; старые миграции/SQLite/наука не переписываются. Новый head проходит полный gate, ошибки не скрываются.
 
 Владелец разрешил конструктор04а–04з. Baseline main ba433f4d, локальные174blob SHA совпали, открытыхPR0. Локальный каталог не Git checkout; ветка/чистота подтверждаются не git status, а connector refs +manifest, существующие файлы сохранены.04а create/read own draft/membership/version/required audit реализованы; локально typecheck/architecture и196/196 base tests success, PostgreSQL/CI/merge еще не приняты. Selectel, реальные данные, научный статус и права не меняются. Дальнейшие04б–04з выполняются последовательно; фаза5 не начинается автоматически.
