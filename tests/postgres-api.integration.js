@@ -27,7 +27,7 @@ async function fixture(t,derivePassword) {
     assert.equal(r.statusCode,200);assert.match(r.headers["set-cookie"],/HttpOnly; SameSite=Strict/);
     return {cookie:r.headers["set-cookie"].split(";")[0],csrf:r.json().csrf,body:r.json()};
   };
-  const call=(path,session,method="GET",payload)=>app.inject({method,url:"/api/v2/participant"+path,headers:{...headers,...(session?{cookie:session.cookie,"x-pedpsy-csrf":session.csrf}:{})},...(payload===undefined?{}:{payload})});
+  const call=(path,session,method="GET",payload)=>app.inject({method,url:"/api/v2/participant"+path,headers:{...headers,...(session?{cookie:session.cookie,...(typeof session.csrf==="string"?{"x-pedpsy-csrf":session.csrf}:{})}:{})},...(payload===undefined?{}:{payload})});
   return {...f,password,uow,identity,api,app,attemptId,login,call,calculations:()=>calculations};
 }
 test("PostgreSQL API: partial/full TKI, reload/relogin and idempotent result keep original calculation",async t=>{
