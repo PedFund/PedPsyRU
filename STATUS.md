@@ -6,6 +6,10 @@
 
 ### Продолжение после смены модели
 
+**02д интегрирована через PR #11**, обычный merge `687b207d9d366075409dbd97dbc5ea6f7ef391f2`. На head 7c8310d0 [run 37126725992](https://github.com/PedFund/PedPsyRU/actions/runs/37126725992) и все шесть jobs completed/success, включая фактический PostgreSQL 18.6 engine job. Все 106 blobs и preview tree сверены. **Пять из восьми задач фазы 2 завершены.**
+
+**02е реализуется в codex/phase2-postgres-adapter** от этого main: один PoolClient/transaction, transaction-local session capability, runtime privilege check, одинаковый lock order, повторная проверка отзыва/закрытия, CAS и immutable/idempotent completion, обязательный audit/rollback. 12 общих контрактных и 8 специальных сценариев адаптера вместе с 7 SQL/RLS сценариями — 27 PostgreSQL тестов; результат реального движка подтверждается CI, локальный TypeScript успех его не заменяет. В гонках проверяется реальное ожидание Lock в pg_stat_activity. Исходный core, ключ, формы, прежние миграции и учебная база не изменены. Подробнее — POSTGRES_ADAPTER_VALIDATION.md. История предшествующих блоков ниже.
+
 **02г интегрирована через PR #10**, обычный merge `da6bdbbb10ab3dc13002739df266a5bf53196a15`. На head 43553ba1 [run 37125396812](https://github.com/PedFund/PedPsyRU/actions/runs/37125396812) completed/success; все пять jobs подтверждены completed/success по endpoint attempts/1/jobs (общий jobs endpoint временно отдавал устаревший in_progress). 100 blobs и preview tree сверены. **Четыре из восьми задач фазы завершены.**
 
 02д выполняется в `codex/phase2-postgres-schema` от этого main: независимые PG миграции UUID/timestamptz/jsonb, составные FK/checks/indexes/immutable triggers, минимальные grants runtime роли, session-derived RLS. PostgreSQL 18.6, official image SHA256 закреплен; Selectel перечисляет PG18 как поддержанную версию. Временная synthetic БД проверяется отдельным обязательным CI job; на этой машине PG/Docker отсутствует, локальная проверка TypeScript/syntax/architecture не объявляется исполнением SQL. Подробности — POSTGRES_SCHEMA_VALIDATION.md.

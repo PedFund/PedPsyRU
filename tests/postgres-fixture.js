@@ -8,7 +8,7 @@ const {seedTraining} = require("../storage/seed.js");
 const {migratePostgres, grantRuntime} = require("../dist/src/adapters/postgres/migrate.js");
 const {sha256} = require("../storage/database.js");
 // Test-only provisioning, never a server startup migration or production seed.
-async function postgresFixture() {
+async function postgresFixture({runtimePoolSize = 1} = {}) {
   if (process.env.PEDPSY_PG_TEST !== "1" || !["127.0.0.1", "localhost"].includes(process.env.PGTEST_HOST)) throw new Error("EXPLICIT_LOCAL_PG_TEST_REQUIRED");
   const port = Number(process.env.PGTEST_PORT); if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error("INVALID_PG_TEST_PORT");
   const suffix = randomBytes(8).toString("hex"), database = "pedpsy_ci_" + suffix, runtimeRole = "pedpsy_runtime_" + suffix;
@@ -24,7 +24,7 @@ async function postgresFixture() {
     admin = new Pool({...config, database});
     const client = await admin.connect();
     try {await migratePostgres(client, path.join(__dirname, "../storage/postgres")); await grantRuntime(client, runtimeRole);} finally {client.release();}
-    runtime = new Pool({...config, database, user: runtimeRole, password: secret, max: 1});
+    runtime = new Pool({...config, database, user: runtimeRole, password: secret, max: runtimePoolSize});
     const sqlite = openDatabase(); let seed;
     try {
       migrate(sqlite); const release = importTkiRelease(sqlite); seed = seedTraining(sqlite, release);
