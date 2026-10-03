@@ -6,6 +6,10 @@
 
 ### Продолжение после смены модели
 
+**02в интегрирована через PR #9**, обычный merge `caa225a01e46f2aeea85cb8c288f7d8b5a1fe921`. На head 7e8d56f6 все jobs [run 37124588725](https://github.com/PedFund/PedPsyRU/actions/runs/37124588725) завершены success; все 92 blobs и preview merge tree сверены с локальной копией. Три из восьми задач фазы 2 завершены.
+
+**02г реализуется в codex/phase2-storage-contracts** от этого main: общий async participation service/ports, отдельный SQLite UnitOfWork с очередью одного соединения, короткой транзакцией, повторной проверкой сессии и CAS; обязательный audit/fail-closed commit. 12 общих storage scenarios + 5 SQLite-specific, весь локальный прогон **171 тест успешно**, strict build/typecheck/architecture/syntax/lock policy проходят. Оба направления совместимости с прежними draft/completion stores проверены. Outbox явно не реализован и выбрасывает ошибку; основной 4173 и исходная база не переключены. Подробности — ASYNC_STORAGE_VALIDATION.md; удаленный CI и интеграция проверяются отдельно.
+
 PR #8 интегрирован в main обычным merge **36409eb1229b2023fd63a40668678818d7624cdc**. Перед merge проверены текущие main/head, совместимость и все пять jobs run 37112811079: success. Дерево merge точно совпадает с подготовленным b47bf195. Задачи **02а–02б завершены**; расписание CI/Dependabot присутствует в main (фактические будущие запуски не объявляются состоявшимися).
 
 В новой ветке `codex/phase2-typed-foundation` от актуальной main реализуется **02в — третья из восьми задач фазы 2**: строгий TS-каркас, Fastify health без диагностических endpoints, типизированные async ports/оболочка TKI, AST-контроль границ и lockfile policy. Fastify 5.12.5, pg 8.23.1, TypeScript 6.0.3, @types/node 22.20.5, @types/pg 8.23.1; 65 зависимостей, только npm registry/integrity, нет install scripts, MIT/BSD-3-Clause/ISC/Apache-2.0. Проверки и текущий PR/CI будут фиксироваться в TYPED_FOUNDATION_VALIDATION.md. До удаленного green CI блок не объявляется интегрированным. Runtime пилота, формулы, ключ, формы, SQLite миграции и исходная база не изменены. Ниже история подготовительной сессии, ее остановка уже выполнена.
