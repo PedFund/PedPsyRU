@@ -1,4 +1,26 @@
 SET LOCAL search_path=pedpsy,pg_catalog;
+-- Wall-clock checks remain valid after waiting on a lock. A preceding writer
+-- may have touched last_seen after this statement originally started.
+CREATE OR REPLACE FUNCTION session_actor() RETURNS TABLE(credential_id uuid, study_id uuid, participant_id uuid, actor_role text, credential_version integer, expires_at_ms bigint)
+LANGUAGE sql VOLATILE SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
+  SELECT c.id,c.study_id,c.participant_id,'participant'::text,c.version,s.expires_at_ms
+  FROM pedpsy.participant_sessions s JOIN pedpsy.participant_credentials c ON (c.id,c.study_id,c.participant_id)=(s.credential_id,s.study_id,s.participant_id)
+  JOIN pedpsy.participants p ON (p.study_id,p.id)=(c.study_id,c.participant_id) JOIN pedpsy.studies r ON r.id=c.study_id
+  WHERE s.token_hash=current_setting('app.session_hash',true) AND s.revoked_at_ms IS NULL AND s.credential_version=c.version
+    AND c.status='active' AND p.status='active' AND r.status='active' AND r.dataset_kind='demo'
+    AND extract(epoch FROM clock_timestamp())*1000>=s.last_seen_at_ms
+    AND extract(epoch FROM clock_timestamp())*1000<s.expires_at_ms
+    AND extract(epoch FROM clock_timestamp())*1000-s.last_seen_at_ms<600000
+  UNION ALL
+  SELECT c.id,NULL::uuid,NULL::uuid,c.role,c.version,s.expires_at_ms
+  FROM pedpsy.staff_sessions s JOIN pedpsy.staff_credentials c ON (c.id,c.user_id,c.role)=(s.credential_id,s.user_id,s.role) JOIN pedpsy.users u ON u.id=c.user_id
+  WHERE s.token_hash=current_setting('app.session_hash',true) AND s.revoked_at_ms IS NULL AND s.credential_version=c.version
+    AND c.status='active' AND u.status='active' AND s.mfa_verified_at IS NOT NULL AND s.mfa_verified_at<=clock_timestamp()
+    AND extract(epoch FROM clock_timestamp())*1000>=s.last_seen_at_ms
+    AND extract(epoch FROM clock_timestamp())*1000<s.expires_at_ms
+    AND extract(epoch FROM clock_timestamp())*1000-s.last_seen_at_ms<600000
+$$;
+
 -- All participant writers use the same lock order; close/revoke operations
 -- conflict with these SHARE/UPDATE locks, never bypass a checked snapshot.
 CREATE FUNCTION lock_participant_scope(attempt uuid) RETURNS void LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$

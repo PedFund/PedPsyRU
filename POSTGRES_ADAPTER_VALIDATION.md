@@ -12,6 +12,8 @@ CAS snapshot/revision, полный pinned TKI, atomic result/completed и об�
 
 ## Приемка
 
+Первый реальный CI run37127883560: 24/27 PG tests успешны, три конкурентных теста обнаружили ошибочный AUTH_REQUIRED. Причина — statement_timestamp до ожидания блокировки сравнивался с обновленным last_seen предыдущего writer. Исправление добавлено только в новую migration003: session_actor проверяет реальное clock_timestamp, VOLATILE; migration002 не переписывается. Падающая проверка не обходится, новый head проходит полный повтор.
+
 12 общих storage contract scenarios запускаются и на SQLite, и на PostgreSQL. Еще 8 PG-adapter scenarios проверяют жизненный цикл/вложенность, mandatory audit, запрет owner pool, revoke/save, close/complete, save/complete, scorer rollback и очистку контекста обоих соединений пула. В трех гонках owner-тест наблюдает реальное ожидание Lock через pg_stat_activity перед снятием блокировки — не произвольный sleep и не последовательная имитация.
 
 С семью schema/RLS scenarios всего 27 PG engine tests. Локальные build/typecheck, AST architecture и syntax проходят; локальный Windows не имеет PostgreSQL/Docker. Обязательный GitHub job выполняет настоящие SQL/транзакции на закрепленном PG18.6; успех/ошибка текущего head фиксируются перед merge, проверки не отключаются. Основной стенд4173 и исходная учебная база остаются прежними.
