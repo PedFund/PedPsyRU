@@ -1,5 +1,9 @@
 # Состояние ПедПси
 
+## Фаза4 начата —2026-10-03
+
+Владелец разрешил конструктор04а–04з. Baseline main ba433f4d, локальные174blob SHA совпали, открытыхPR0. Локальный каталог не Git checkout; ветка/чистота подтверждаются не git status, а connector refs +manifest, существующие файлы сохранены.04а create/read own draft/membership/version/required audit реализованы; локально typecheck/architecture и196/196 base tests success, PostgreSQL/CI/merge еще не приняты. Selectel, реальные данные, научный статус и права не меняются. Дальнейшие04б–04з выполняются последовательно; фаза5 не начинается автоматически.
+
 ## Итог фазы3 —2026-10-03
 
 **Дополнительная усиленная приемка PR#24:** headfb130b1d/[run37141998305](https://github.com/PedFund/PedPsyRU/actions/runs/37141998305) все6jobs completed/success:195base(Node22/24)+80/80PG и**3/3 независимых дополнительных browser runs**,0fail/cancel/skip. Один Chrome входит в80PG, три повторных сценария не прибавляются к числу различных тестов. Старый timeout ff98b5b8/run37141248193 (79/80) не скрыт; после safe labels aa784f05/run37141651158 также80/80, но его точная причина ретроспективно неизвестна. Harness теперь отдельно проверяет bounded30s Browser.getVersion startup, остальныеcommands10s, все3 обязательных runs должны пройти, не retry-to-success/skip. Runtime/core/permissions не менялись. Финальный commit фиксирует эти уже полученные результаты и проходит тот же required gate перед merge, не заявляет устранение любых flakes навсегда.
