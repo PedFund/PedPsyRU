@@ -2,6 +2,8 @@
 
 ## Фаза4 начата —2026-10-03
 
+04г интегрированаPR#28/headb9a81b70/run37146059055 all6success:199base+87PG/3Chrome. Per-cell release set/keep-ID/remove/foreign+unknown UUID/pinned catalog verified, полныйTKIrelease по-прежнемуdraft.04д copy следующий отдельныйPR; lifecycle/UI подготовлены локально, еще не интегрированы/приняты.
+
 04в интегрированаPR#27/headdc7cb07e/run37145591825 all6success:198base+86PG/3Chrome. Custom stage/order/duplicate/cross-study/CAS подтверждены.04г method assignments следующий отдельныйPR;04д copy и04е lifecycle/quota локально подготовлены, не входят в#27. ВыпускTKI остаетсяscientific draft/key_verified, не опубликован/переутвержден.
 
 04б интегрированаPR#26/head67c0681a/run37145236483 all6success:197base+85PG и3Chrome. Group kinds/foreign group+study/duplicate/currentversion/concurrentCAS фактически проверены; snapshot2/legacy1/backup регрессии зеленые.04в отдельный следующий техническийPR —T0/T1/T2/custom/pорядок/scope, готов локально;04г assignments только локальная подготовка, не runtime предыдущегоPR.

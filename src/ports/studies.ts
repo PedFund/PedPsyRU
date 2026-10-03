@@ -13,4 +13,5 @@ export interface StudyConstructor {
   group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}):Promise<StudyDesign>;
   stage(token:string,id:string,stageId:string|undefined,input:{code:string;ordinal:number;expected_version:number}):Promise<StudyDesign>;
   assign(token:string,id:string,input:{group_id:string;stage_id:string;release_ids:string[];expected_version:number}):Promise<StudyDesign>;
+  copy(token:string,id:string,input:{source_stage_id:string;code:string;ordinal:number;expected_version:number}):Promise<StudyDesign>;
 }
