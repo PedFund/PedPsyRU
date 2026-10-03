@@ -47,4 +47,5 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.lock_participant_scope(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.participant_login_material(text),pedpsy.finish_participant_login(uuid,integer,text,text),pedpsy.lock_participant_identity(),pedpsy.logout_participant(),pedpsy.record_participant_denial(text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.account_actor(),pedpsy.account_owns_study(uuid),pedpsy.record_account_check(text,boolean,text) TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.staff_login_material(text),pedpsy.finish_staff_password(uuid,integer,text,text),pedpsy.lock_staff_challenge(text) TO "${role}"`);
 }
