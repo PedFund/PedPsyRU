@@ -40,9 +40,10 @@ scenario("mandatory audit failure prevents any successful diagnostic/export resp
 });
 scenario("export cardinality and byte limits refuse whole response, never truncate",async(f,d)=>{
   const s=await verifiedStaff(f),base=(await f.admin.query("SELECT * FROM pedpsy.attempts LIMIT 1")).rows[0];
-  // Inflate allowed display metadata on synthetic participants to exercise byte cap.
-  await f.admin.query("UPDATE pedpsy.participants SET display_code=repeat('x',250000)||id::text");await assert.rejects(d.download(s.session.token),e=>e.code==="EXPORT_LIMIT");
-  await f.admin.query("UPDATE pedpsy.participants SET display_code=id::text");
-  await f.admin.query("WITH p AS (INSERT INTO pedpsy.participants(id,study_id,display_code) SELECT gen_random_uuid(),$1,gen_random_uuid()::text FROM generate_series(1,483) RETURNING id),e AS (INSERT INTO pedpsy.stage_enrollments(id,study_id,participant_id,group_id,stage_id) SELECT gen_random_uuid(),$1,p.id,$2,$3 FROM p RETURNING id) INSERT INTO pedpsy.attempts(id,study_id,enrollment_id,assignment_id,release_id,group_id,stage_id,current_item_id) SELECT gen_random_uuid(),$1,e.id,$4,$5,$2,$3,'q01' FROM e",[base.study_id,base.group_id,base.stage_id,base.assignment_id,base.release_id]);
+  const add=n=>f.admin.query("WITH p AS (INSERT INTO pedpsy.participants(id,study_id,display_code) SELECT gen_random_uuid(),$1,gen_random_uuid()::text FROM generate_series(1,$6::integer) RETURNING id),e AS (INSERT INTO pedpsy.stage_enrollments(id,study_id,participant_id,group_id,stage_id) SELECT gen_random_uuid(),$1,p.id,$2,$3 FROM p RETURNING id) INSERT INTO pedpsy.attempts(id,study_id,enrollment_id,assignment_id,release_id,group_id,stage_id,current_item_id) SELECT gen_random_uuid(),$1,e.id,$4,$5,$2,$3,'q01' FROM e",[base.study_id,base.group_id,base.stage_id,base.assignment_id,base.release_id,n]);
+  await add(482); // Exactly 500; byte cap is exercised independently of count.
+  await f.admin.query("UPDATE pedpsy.participants SET display_code=repeat('x',10000)||id::text");await assert.rejects(d.download(s.session.token),e=>e.code==="EXPORT_LIMIT");
+  await f.admin.query("UPDATE pedpsy.participants SET display_code=id::text");assert.equal((await d.download(s.session.token)).record_count,500);
+  await add(1);
   await assert.rejects(d.download(s.session.token),e=>e.code==="EXPORT_LIMIT");await assert.rejects(d.list(s.session.token),e=>e.code==="EXPORT_LIMIT");assert.equal((await d.download(s.session.token,base.id)).record_count,1);
 });
