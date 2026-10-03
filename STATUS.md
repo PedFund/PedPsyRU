@@ -6,7 +6,9 @@
 
 Selectel отложен; текущая задача — платформа, synthetic development. **03а интегрирована через[PR#16](https://github.com/PedFund/PedPsyRU/pull/16)**, merge a061badc9be1036efad369e16efd36b83c097ae8; head b5a2640e/run37135187573 все6jobs completed/success.186base+43PG,133blobs/preview/parents сверены. Separate researcher/staff contracts, named policy/own scope, PostgreSQL resolver/audit/005 version guard. Check не заменяет transaction authorization будущей мутации. Staff export/control требует fresh MFA. TKI/форма/ключ/SQLite сохранены.
 
-**03б реализуется локально от этого main:** пароль выдает только hashed пяти-минутный MFA challenge, не staff session; throttles/dummy scrypt/repeat version/hash/status под lock, rotation/audit.006 требует version bump для смены staff password/status и автоматически отзывает sessions/challenges. 6 новых actual PG scenarios ожидают CI. Данные/Selectel не подключены. Далее03в–03з; вся фаза не завершена. Подробнее —ACCOUNT_ACCESS_VALIDATION.
+**03б интегрирована через[PR#17](https://github.com/PedFund/PedPsyRU/pull/17)**, merge db7b327a107362820951070820cb6aa7b103c06d; head4df3262c/run37135880184 все6jobs success,187base+49PG,140blobs/preview сверены. Пароль выдает только hashed пяти-минутный MFA challenge, не staff session; throttle/scrypt/repeat version/hash/status/lock/audit.006 version guard отзывает sessions/challenges.
+
+**03в реализуется локально от этого main:** настоящий TOTP, AES256GCM envelope с внешним32-byte key, enrollment только после password challenge, confirmation/replay/5fail/expiry/recovery/session/audit атомарны; одноразовые recovery codes показываются только при confirmation. Pending не получает diagnostic capability.4 RFC/encryption base tests+8 actual PG scenarios ожидают CI. Ключ не хранится в DB/repository, новые реальные accounts/Selectel/email не выдаются. Далее03г–03з; фаза не завершена. Подробнее —ACCOUNT_ACCESS_VALIDATION.
 
 ## Подготовка следующей фазы
 
