@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ПедПси · Томас—Килманн</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/form-model.js" defer></script>
+  <script src="/app.js" defer></script>
+  <script src="/draft-model.js" defer></script>
+  <script src="/draft.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#questionnaire">Перейти к вопросам</a>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="ПедПси — начало"><span class="brand-mark" aria-hidden="true">П</span>ПедПси</a>
+    <nav><a href="/access" class="demo-badge">Вход участника</a> <a href="/admin" class="demo-badge">Администратор</a></nav>
+  </header>
+  <main class="layout">
+    <aside class="sidebar" aria-label="Информация о прохождении">
+      <p class="eyebrow">Библиотека методик / TKI</p>
+      <h1>Поведение в конфликте</h1>
+      <p class="intro">Тест Томаса—Килманна</p>
+      <section class="progress-panel" aria-labelledby="progress-heading">
+        <h2 id="progress-heading">Ваш прогресс</h2>
+        <p id="progress-text" aria-live="polite">Заполнено 0 из 30</p>
+        <progress id="progress" max="30" value="0" aria-label="Заполненные пары"></progress>
+        <p id="remaining">Осталось 30 пар</p>
+      </section>
+      <div class="notice"><strong id="mode-heading">Только для проверки интерфейса</strong><p id="mode-note">Используйте вымышленные ответы. Данные не сохраняются: после обновления страницы прохождение начнётся заново.</p></div>
+      <p class="version-note" id="versions">Загрузка версии формы…</p>
+    </aside>
+    <div class="content">
+      <section class="instruction-card" aria-labelledby="instruction-heading">
+        <p class="eyebrow">30 пар · один вариант в каждой</p>
+        <h2 id="instruction-heading">Выберите то, что ближе вам</h2>
+        <p id="instruction">В каждой паре отметьте один вариант — а или б.</p>
+        <p class="muted">Выбор можно изменить до отправки. Это техническая инструкция заполнения; полная методическая инструкция ещё проверяется.</p>
+      </section>
+      <p id="load-status" role="status">Загружаем бланк…</p>
+      <section id="save-panel" class="instruction-card" hidden><h2>Сохранение черновика</h2><p id="save-status" role="status"></p>
+        <p id="draft-context" class="muted"></p><p><a href="/access">Вернуться к назначениям</a></p>
+        <button id="reload-draft" class="secondary" type="button" hidden>Загрузить сохранённый черновик</button>
+        <p id="draft-login" hidden><a href="/access">Войти повторно</a>, затем открыть это назначение. Восстановятся только подтверждённые ответы.</p>
+      </section>
+      <noscript><p class="error-box">Для заполнения формы включите JavaScript. Этот стенд не сохраняет данные.</p></noscript>
+      <form id="questionnaire" novalidate autocomplete="off" aria-label="Бланк Томаса—Килманна">
+        <section id="errors" class="error-box" tabindex="-1" aria-labelledby="errors-heading" hidden>
+          <h2 id="errors-heading">Заполните пропущенные пары</h2>
+          <p id="error-text"></p><div id="missing-links"></div>
+        </section>
+        <div id="questions"></div>
+        <div class="actions">
+          <p id="slide-counter" class="slide-counter" aria-live="polite">Вопрос 1 из 30</p>
+          <p id="submit-hint">Для проверки нужны ответы на все 30 пар.</p>
+          <div class="action-buttons slide-navigation" aria-label="Переход между вопросами">
+            <button id="previous" type="button" class="secondary" disabled>Назад</button>
+            <button id="next" type="button" disabled>Далее</button>
+            <button id="submit" type="submit" disabled hidden>Проверить ответы</button>
+          </div>
+          <button id="reset" type="button" class="restart-button secondary" disabled>Начать заново</button>
+        </div>
+      </form>
+      <section id="result" class="result-card" tabindex="-1" aria-labelledby="result-heading" hidden>
+        <p class="eyebrow" id="result-kind">Проверка передачи ответов</p>
+        <h2 id="result-heading">Ответы обработаны</h2>
+        <p id="result-note">Все 30 ответов переданы проверенному обработчику. Ни ответы, ни результат не сохранены.</p>
+        <div id="measures" class="measures"></div>
+        <p class="muted">Технический просмотр сырых баллов, не психологическое заключение. Нормы, уровни и интерпретации не применяются.</p>
+      </section>
+      <p class="footer-note" id="mode-footer">ПедПси · демонстрационный бланк · сохранение ответов пока не подключено</p>
+    </div>
+  </main>
+  <dialog id="reset-dialog" aria-labelledby="reset-heading">
+    <h2 id="reset-heading">Начать заново?</h2><p id="reset-note">Выбранные ответы будут очищены. Сохранённой копии нет.</p>
+    <div class="action-buttons"><button id="cancel-reset" type="button" class="secondary">Продолжить заполнение</button><button id="confirm-reset" type="button">Очистить ответы</button></div>
+  </dialog>
+  <dialog id="reload-dialog" aria-labelledby="reload-heading"><h2 id="reload-heading">Загрузить сохранённый черновик?</h2>
+    <p>Локальные изменения, которые сервер не подтвердил, будут заменены сохранённым состоянием. Другая вкладка не будет перезаписана.</p>
+    <div class="action-buttons"><button id="cancel-reload" class="secondary" type="button">Остаться здесь</button><button id="confirm-reload" type="button">Загрузить с сервера</button></div>
+  </dialog>
+  <dialog id="complete-dialog" aria-labelledby="complete-heading"><h2 id="complete-heading">Завершить прохождение?</h2>
+    <p>Будут обработаны только подтверждённые сервером ответы. После завершения ответы нельзя изменить или очистить. Вы увидите пять сырых баллов, без норм и психологического заключения.</p>
+    <div class="action-buttons"><button id="cancel-complete" class="secondary" type="button">Продолжить заполнение</button><button id="confirm-complete" type="button">Завершить и получить результат</button></div>
+  </dialog>
+</body>
+</html>

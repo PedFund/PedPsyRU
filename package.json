@@ -1,0 +1,28 @@
+{
+  "name": "pedpsyru-core-pilot",
+  "version": "0.9.0",
+  "private": true,
+  "description": "ПедПси: пилот контракта и бланка Томаса—Килманна",
+  "engines": {"node": ">=22.17.1"},
+  "scripts": {
+    "start": "node web/server.js",
+    "test": "node --test tests/*.test.js",
+    "test:web": "node --test tests/web-model.test.js tests/web-server.test.js",
+    "test:tki": "node --test tests/tki-contract.test.js",
+    "test:form": "node --test tests/tki-form.test.js",
+    "test:storage": "node --test tests/storage.test.js",
+    "db:migrate": "node storage/cli.js migrate",
+    "db:seed": "node storage/cli.js seed",
+    "db:check": "node storage/cli.js check",
+    "test:access": "node --test tests/access.test.js",
+    "auth:issue": "node storage/access-cli.js issue",
+    "auth:reset": "node storage/access-cli.js reset",
+    "auth:revoke": "node storage/access-cli.js revoke",
+    "test:admin": "node --test tests/admin-access.test.js",
+    "test:draft": "node --test tests/drafts.test.js tests/draft-model.test.js",
+    "test:completion": "node --test tests/completion.test.js",
+    "staff:issue": "node storage/staff-cli.js issue",
+    "staff:reset": "node storage/staff-cli.js reset",
+    "staff:revoke": "node storage/staff-cli.js revoke"
+  }
+}

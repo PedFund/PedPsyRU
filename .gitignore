@@ -1,0 +1,17 @@
+node_modules/
+Data/
+data/raw/
+output/
+outputs/
+tmp/
+*.xlsx
+*.xls
+*.zip
+.env
+.env.*
+!.env.example
+*.log
+.idea/
+.local/
+*.sqlite
+*.sqlite-*
