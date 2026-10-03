@@ -4,10 +4,12 @@ export interface StudyDesign {
   catalog:ConstructorRelease[];
 }
 export interface ConstructorRelease {id:string;method_id:string;form_version:string;method_version_id:string;handler_version:string;verification_state:"key_verified";publication_state:"draft"}
+export interface StudySummary {id:string;title:string;status:"draft"|"active"|"closed";version:number}
 export interface GroupDesign {id:string;name:string;kind:"control"|"experimental"|"other";status:"active"|"closed"}
 export interface StageDesign {id:string;code:string;ordinal:number;status:"active"|"closed";based_on_stage_id:string|null}
 export interface AssignmentDesign {id:string;group_id:string;stage_id:string;release_id:string;status:"active"|"closed"}
 export interface StudyConstructor {
+  listStaff(token:string):Promise<StudySummary[]>;
   create(token:string,title:string):Promise<StudyDesign>;
   read(token:string,id:string):Promise<StudyDesign>;
   group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}):Promise<StudyDesign>;

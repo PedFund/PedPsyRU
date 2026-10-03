@@ -52,7 +52,7 @@
 |04в. Этапы|04а|Интегрировано#27/headdc7cb07e: T0/T1/T2/custom/order/scope/CAS;198base+86PG/3Chrome, all6run37145591825|
 |04г. Назначения методик|04б+04в|Интегрировано#28/headb9a81b70: own group×stage set/allowlist существующего synthetic TKI (key_verified, полнаяметодикаdraft);199base+87PG/3Chrome, all6run37146059055. Научного publication нет|
 |04д. Копирование настроек этапа|04г|Интегрировано#29/head0f07984e: independent per-group/no diagnostics/missing source/audit rollback;200base+88PG/3Chrome, all6run37146675781|
-|04е. Жизненный цикл|04а–04д|Draft/active/closed и квота проверены в transaction, активные pinned назначения не изменяются задним числом; новые manager права отдельно согласуются|
+|04е. Жизненный цикл|04а–04д|Интегрировано#30/headc64c8115:activation/quota race/closed freesquota/frozen/no reopen/participant lock;201base+90PG/3Chrome, all6run37147127875. Manager quotaoverride не добавлен|
 |04ж. UI конструктора|04а–04е|Исследователь выполняет разрешенные операции в браузере, видит подтвержденное сохранение/конфликт/ошибку без raw diagnostics|
 |04з. Интеграционная приемка|04а–04ж|HTTP/PG/browser positive+negative scope/quota/CAS/copy/rollback tests, all6CI и main/documentation; без Selectel/real data|
 
