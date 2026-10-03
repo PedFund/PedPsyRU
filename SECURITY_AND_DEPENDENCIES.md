@@ -1,5 +1,13 @@
 # Зависимости, архитектурные проверки и безопасность
 
+## Фаза 4 — конструктор и контроль приёмки
+
+Фаза4/04а–04з реализована/проверена:8из8.04а–04ж main#25–#31,04з#32 проходит final documentary current-head gate. Runtimee5b4a8b/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):all6success,202baseNode22/24+101actualPG18.6,3/3независимых дополнительных Chrome runs по2/2,0fail/cancel/skip. Revocation while waiting/limits/fake release/lifecycle rollback/frozen routes и finalstrictkind/018/readiness фактически проверены; PHASE4_ACCEPTANCE/STATUS сохраняют неудачный предыдущийrun.
+
+Current server principal/own active membership/draft/no attempts/CAS; обе staff verified MFA/global read-only. Fixed SQL locks и named policy commit gate независимы от UI. Direct DML/private helpers runtime denied, foreign/absent одинаково404. Required audit содержит IDs/actions/status, не ответы/баллы/названия/секреты. Audit/size/version/quota failure откатывает mutation целиком. CSRF/origin/HttpOnlyStrict/no-store/CSP/bodylimit сохранены; textContent/logout cleanup/no diagnostic localStorage, explicit reread после uncertain save.
+
+Manifest/lock/workflow/core/form/key unchanged; append-only migrations011–018. PostgreSQL skill повлиял на least privilege/lock order/атомарность/один MVCC snapshot списка, Supabase не подключён. Technical caps/active frozen явно описаны; CI не independent pentest/scientific/legal/production proof. Branch protection тарифно недоступен: ordinary merge после current-head/all6/base/tree/fullmanifest/parents gate. Без paid/cloud/Selectel/realdata/publication.
+
 ## Фаза3 — подтвержденный текущий результат
 
 03а–03з интегрированы#16–#23, head50ad6c7b/run37140560958 все6jobs success:195base наNode22/24+80actual PG18.6/Chrome,0fail/skip. Нет новых npm пакетов, manifest/lock exact dependencies прежние65. Browser preinstalled official runner, no additional downloads; ephemeral CI profile/downloads не upload artifacts. `--no-sandbox` только ephemeral synthetic Linux Chrome, не server/security setting. Secretscan fullhistory redacted, dependencyaudit high/critical блокируетCI, architectureAST/layer/package/artifact checks и strict TS проходят. Это не independent pentest/sourceaudit или scientific/production proof.

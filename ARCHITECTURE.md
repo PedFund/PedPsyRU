@@ -2,7 +2,15 @@
 
 Дата: 2026-10-03. Основной репозиторий разработки — `PedFund/PedPsyRU`.
 
-Пилот через#7, фаза2/02а–02з через#8–#14 и фаза3/03а–03з через#16–#23 в main. JS/TypeScript modular monolith/PostgreSQL/неизменный вычислитель, agreed roles. Работают participant API и отдельные verified researcher/staff accounts/MFA/management/global raw+stored result read/export/кабинеты. Не работают editor/processing/analytics/email/production; policy names не заменяют эти сервисы.195base+80PG/actual Chrome, all6CI —PHASE3_ACCEPTANCE/STATUS. Selectel отложен владельцем; следующая фаза4 не начата.
+Пилот и фазы2–3 интегрированы. Конструктор04а–04з реализован/технически принят:8из8,04а–04ж main#25–#31,04з#32 с current-head gate. Runtimee5b4a8b/run37149537791:202base+101actual PG/all6success и3/3дополнительных Chrome runs. JS/TypeScript monolith/PostgreSQL/неизменный TKI; participant API/researcher+staff accounts/MFA/management/global raw+stored result read/export/конструктор работают. Editor/processing/analytics/email/production не реализованы. Приёмка —PHASE4_ACCEPTANCE/STATUS; Selectel отложен, фаза5 не начата. Ниже история пилота.
+
+## Конструктор фазы 4
+
+`src/ports/studies.ts` описывает metadata-only дизайн; `src/application/study-api.ts` проверяет точные поля/типы/UUID/версии/CSRF; `src/http/workspace-app.ts` маршрутизирует, bootstrap явно подключает `PostgresStudyConstructor`. Нет SQL/DB imports в UI/HTTP; DTO не содержит ответов/баллов/формы/ключа/credentials.
+
+Fixed SQL повторяет current authority под locks: researcher credential UPDATE →user/session→study UPDATE→membership SHARE, затем draft/no attempts/CAS. Изменение, version, mandatory metadata audit и проверка размера в одном transaction. Named `studies.read/configure` policy повторяется до COMMIT по текущей DB-личности; отказ откатывает mutation/audit. Staff verified MFA/session глобально читает дизайн, не меняет. Runtime не получает прямой DML или private snapshot/lock helpers.
+
+UI отображает только server-confirmed save; конфликт/неопределённый исход блокирует запись до explicit reload без blind retry/merge. Две реальные вкладки с shared cookies проверены Chrome. Copy только independent настройки каждой группы в новый stage/assignment UUID, не люди/попытки/ответы/результаты. Active дизайн заморожен, closed не удаляет данные и не reopen. Пределы50groups/50stages/500studies/4MiB явно отказывают, не усекают. Подробности —CONSTRUCTOR_VALIDATION.
 
 ## Принятые границы
 

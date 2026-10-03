@@ -24,6 +24,7 @@ scenario("scope/role/CSRF/origin/input/CAS failures are neutral and never partia
   const x=await researcherHttp(f,w,s),y=await researcherHttp(f,w,s),d=(await send(w,x,"",{title:"Own"})).json();
   for(const id of [d.id,randomUUID()]){const denied=await w.app.inject({url:"/api/v2/researcher/studies/"+id,headers:y.headers});assert.equal(denied.statusCode,404);assert.deepEqual(denied.json(),{error:"NOT_AVAILABLE"});}
   for(const extra of [{user_id:randomUUID()},{role:"administrator"},{dataset_kind:"real"}])assert.equal((await send(w,x,"",{title:"Wrong",...extra})).statusCode,400);
+  for(const kind of [["control"],null,{}])assert.equal((await send(w,x,"/"+d.id+"/groups",{name:"Wrong kind",kind,expected_version:0})).statusCode,400);
   for(const h of [{...x.headers,origin:"https://foreign.test"},{...x.headers,"x-pedpsy-csrf":"bad"}])assert.equal((await send(w,{headers:h},"/"+d.id+"/groups",{name:"КГ",kind:"control",expected_version:0})).statusCode,403);
   const results=await Promise.all(["One","Two"].map(title=>send(w,x,"/"+d.id,{title,expected_version:0},"PATCH")));assert.deepEqual(results.map(r=>r.statusCode).sort(),[200,409]);assert.equal(results.find(r=>r.statusCode===409).json().error,"DESIGN_CONFLICT");
   assert.equal((await send(w,{headers:{...s.headers,cookie:s.headers.cookie.replace("staff","researcher")}},"",{title:"Staff"})).statusCode,401);
@@ -37,5 +38,7 @@ scenario("mandatory audit failure rolls back groups, version and UI sees only a 
 });
 scenario("global directory and metadata size caps refuse instead of truncating",async(f,w,s)=>{
   const id=f.studyId;await f.admin.query("UPDATE pedpsy.studies SET title=repeat('x',4194305) WHERE id=$1",[id]);for(const path of ["staff/studies","staff/studies/"+id])assert.equal((await w.app.inject({url:"/api/v2/"+path,headers:s.headers})).statusCode,413);
-  await f.admin.query("UPDATE pedpsy.studies SET title='Synthetic' WHERE id=$1",[id]);await f.admin.query("INSERT INTO pedpsy.studies(id,title) SELECT gen_random_uuid(),'Synthetic cap fixture' FROM generate_series(1,500)");const list=await w.app.inject({url:"/api/v2/staff/studies",headers:s.headers});assert.equal(list.statusCode,413);assert.deepEqual(list.json(),{error:"DESIGN_LIMIT"});
+  await f.admin.query("UPDATE pedpsy.studies SET title='Synthetic' WHERE id=$1",[id]);await f.admin.query("INSERT INTO pedpsy.studies(id,title) SELECT gen_random_uuid(),'Synthetic cap fixture' FROM generate_series(1,500-(SELECT count(*)::integer FROM pedpsy.studies))");
+  const full=await w.app.inject({url:"/api/v2/staff/studies",headers:s.headers});assert.equal(full.statusCode,200);assert.equal(full.json().length,500);
+  await f.admin.query("INSERT INTO pedpsy.studies(id,title) VALUES(gen_random_uuid(),'Synthetic 501')");const list=await w.app.inject({url:"/api/v2/staff/studies",headers:s.headers});assert.equal(list.statusCode,413);assert.deepEqual(list.json(),{error:"DESIGN_LIMIT"});
 });

@@ -1,5 +1,17 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## Актуальное дополнение фазы 4
+
+Техническая приёмка011–018/currentruntime e5b4a8b/run37149537791:all6success,202base+101actualPG18.6 и3/3дополнительных Chrome runs. Финальные документы/интеграция#32 проходят отдельный current-head gate, без изменения schema/runtime; PHASE4_ACCEPTANCE/STATUS. Фаза4:8из8, фаза5 не начата.
+
+Append-only `storage/postgres/011_study_constructor.sql`–`017_study_design_directory.sql`; PG001–010 и SQLite migrations unchanged. Новых диагностических таблиц нет. `studies.design_version` integer0–2147483646 — общий CAS title/groups/stages/assignments/copy/lifecycle. Сервер создаёт UUID/own membership/draft/demo/version0; client owner/role/status не authority.
+
+012: нормализованная уникальность group name внутри study, fixed create/update control/experimental/other.013: unique normalized code/ordinal, same-study parent FK/parent-before-child.014: immutable release IDs для group×stage, keep ID неизменившихся assignments.015: independent copy/based_on_stage_id без диагностических строк.016: title/lifecycle/default active quota1 под credential lock; drafts/closed не активны, закрытие не удаляет данные.017: bounded snapshot/global staff directory без individual diagnostics.
+
+Existing synthetic TKI key_verified/publication draft — технический allowlist, не научная публикация. Snapshot **format2** сохраняет design_version; legacy1 принимается с проверкой zero target. Domain snapshot исключает credentials/sessions/MFA/invites/audit, target пустой/provenance synthetic; nonzero7 roundtrip и реальный pg_dump restore проверены. Passport/consents/participant invitations — фаза5, не добавлены. Ниже история, включая прежний format1 и ещё будущую тогда квоту.
+
+018 — append-only correction глобального directory: count и metadata aggregate из одной ограниченной501-row SQL snapshot, затем refusal при >500. Устраняет MVCC gap двух statements без переписывания017/нового grant. Приёмка этой последней миграции — PHASE4_ACCEPTANCE/STATUS.
+
 ## Актуальное дополнение фазы3 (03а–03з)
 
 Append-only PostgreSQL005–010 интегрированы#16–#23, не переписывают старые миграции/SQLite.005 researcher credentials/sessions/default active_study_quota1 и current membership resolver.006 hashed staff password challenges<=5min/attempts<=5, version invalidation.007 AES256GCM sealed MFA factors/confirmed/last_step, recovery **digests**, current staff locks/logout; externalkey не в DB.008 hashed24h researcher invites/used/revoked/createdby и private management/login/home.009 super-only role assignment/current-version revoke, session FK ON UPDATE CASCADE сохраняет revoked history; owner-only first synthetic staffbootstrap, не PUBLIC/runtimegrant.010 fixed global staff diagnostic read/export whitelist/single statement/MVCC/caps/audit, никаких новых диагностических таблиц/пересчета.

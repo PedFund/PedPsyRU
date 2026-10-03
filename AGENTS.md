@@ -4,7 +4,13 @@
 
 Эти инструкции автономной разработки действуют во всем проекте PedPsyRU.
 
-## Контрольная точка после фазы3 —2026-10-03
+## Текущая контрольная точка фазы 4 — 2026-10-03
+
+Порученная фаза4/04а–04з реализована и технически принята:8из8.04а–04ж в main #25–#31;04з —PR#32, runtimeheade5b4a8b/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):all6jobs success,202base+101PG18.6,3дополнительные независимые Chrome runs по2/2,0fail/cancel/skip. Финальные документы проходят тот же current-head CI/base/tree gate перед ordinary merge#32; не включать runtime правки в documentary head. После интеграции остановиться, фазу5 только по новому поручению. Факты/ограничения/история отказов —PHASE4_ACCEPTANCE/CONSTRUCTOR_VALIDATION/STATUS/BACKLOG; старые «фаза4 не начата» ниже исторические.
+
+Конструктор: только researcher/свой draft/CAS, один владелец; обе staff-роли глобально читают дизайн, не редактируют. Default active quota1 атомарно проверяется при активации; draft/closed не расходуют её. Все группы/этапы/назначения планируются до activation, active/closed/attempt-bearing design заморожен. Quota override/co-ownership/active revisions — отдельные будущие workflows, не новое право. Точный existing synthetic TKI release: key_verified, полная методика publication draft, не scientific approved. Selectel/real data/publication отложены. Local4175 только UI без БД, настоящий PG/Chrome — disposable CI. После приёмки остановиться на границе фазы5.
+
+## Историческая контрольная точка после фазы3 —2026-10-03
 
 Порученная владельцем фаза3/03а–03з завершена,8из8 в main через#16–#23. Финальный03з merge b5c337572e7b108bf2bb9681133cf849a8126ae5, head50ad6c7b/run37140560958 все6jobs success:195base(Node22/24)+80PG18.6, включая настоящий Chrome/MFA/кабинеты/JSON download,0fail/skip. Приемка/ограничения —PHASE3_ACCEPTANCE/STATUS; следующая фаза4 разбита вBACKLOG и **не начата**. Не выполнять повторный аудит/прежнюю подготовку/историческую остановку для смены модели. Selectel **отложен владельцем**: пока только создание платформы, без оплаты/облака/publication/real accounts/data. UI-only4175/API503 отдельно от verified synthetic PG4174 вCI; старые4173/SQLite не переключены. Редактор методик/обработка/analytics/outbox остаются будущими фазами, не выдавать permission name за endpoint. Технические merge разрешены при current-head all6success/base/tree/diff; новых прав/методик/платных сервисов/публикации не добавлять самостоятельно.
 

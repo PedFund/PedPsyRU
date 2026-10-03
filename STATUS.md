@@ -1,5 +1,29 @@
 # Состояние ПедПси
 
+## Итог фазы 4 — 8 из 8 задач
+
+Конструктор04а–04з реализован и прошёл техническую приёмку.04а–04ж в main через#25–#31; финальный04з —[PR#32](https://github.com/PedFund/PedPsyRU/pull/32). Runtimehead e5b4a8b90ed64b6fbe56d187737cf58075802ddb/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):все6jobs completed/success,202/202baseNode22/24+101/101actualPG18.6,3/3дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Strictkind/018 single-snapshot/exact500/501/readiness с намеренно delayed app.js фактически проверены. Предыдущий browser failure не скрыт —история ниже.
+
+Локально202/202base/build/typecheck/architecture/dependencies/syntax passed;192blobs совпали с опубликованным runtime tree.9scientific blobs+контрольныйfixture, originalPG001–010/SQLite migrations/package/lock/workflow неизменны. Final commit только актуализирует документы; перед ordinary merge#32 заново обязательны all6current-head CI/freshmain/base/preview/fullmanifest/parents, после —actualmain tree/parents. Без force/reset/delete/massmerge. Итоговая приемка и ограничения —PHASE4_ACCEPTANCE/CONSTRUCTOR_VALIDATION.
+
+Local4175 всё ещё UI-only/API503 без PG: browser проверил правильные подписи/ограничение, не локальный CRUD. Full4174 flow —настоящие disposable PG/Chrome вGitHubCI. Старый4173/SQLite не переключён. Нет новых методов/научных норм/прав/dependencies/облака/реальных данных. Фаза5 —участнические приглашения/паспорт/согласия —не начата автоматически. Остановиться после интеграции этой фазы.
+
+## История приёмки фазы 4 — промежуточные состояния 2026-10-03
+
+Расширенный 04з PR#32/head2c3c9595/[run37148721269](https://github.com/PedFund/PedPsyRU/actions/runs/37148721269) фактически прошёл all6jobs:202base+101/101actual PG18.6, три дополнительные независимые browser runs по2/2,0fail/cancel/skip. Все6новых отрицательных сценариев приняты. После этого локальные code-review исправления strict kind/append-only018/exact500/501 tests требуют нового head и всего CI; этот успех не переносится автоматически на новый код. Final merge ещё не выполнялся.
+
+Head1b39be7b/run37149104463:202base+101/101PG success, но первый дополнительный Chrome run получил1/2 — constructor invitation acceptance state timeout; Required checks failure, merge остановлен. Точная ретроспективная причина не доказана: state timeout ещё не имел stage label. Code inspection выявила реальное readiness gap: HTML submit enabled до deferred JS/startup, test wait мог принять это за готовность. Login/accept теперь disabled в HTML до JS startup finally, auth forms POST; browser test намеренно задерживает app.js250ms для проверки этой границы, safe wait stage label добавлен без params/secrets. Page wait10s/3mandatory runs не увеличены/не skipped. Новый current-head CI обязателен; успех не доказывает отсутствие будущих flakes.
+
+04а–04ж (7из8) в main #25–#31. Последний merge #31 —221efd6fd8dba171f9834834496bb894f2e6938b. Head f8122a15/[run37147500255](https://github.com/PedFund/PedPsyRU/actions/runs/37147500255): all6jobs completed/success,202/202base Node22/24+95/95actual PG18.6, три дополнительные независимые browser runs по2/2scenarios,0fail/cancel/skip.190blobs/preview/actualtree/parents/core hashes сверены.
+
+04з локально:6 независимых PG-сценариев revocation under lock wait/membership under wait/limits+version saturation/fake release/lifecycle audit rollback/frozen routes/private helpers. Actual PostgreSQL CI ещё не выполнен; ожидается101PG, не заявленный успех. Полный202/202base/build/typecheck/architecture/dependencies/syntax локально success. Итог —PHASE4_ACCEPTANCE. Документы актуализируются, затем current-head gate и ordinary merge; без force/reset/удаления результатов/массового merge PR.
+
+Дополнительная code review выявила coercion `String(kind)` в application boundary: JSON array `["control"]` мог дойти до adapter вместо раннего отказа. SQL всё равно проверял enum, но строгий контракт теперь требует string; pure и actual HTTP negative cases добавлены в существующие scenarios, без новых permissions/science. Изменение требует нового current-head CI перед merge.
+
+Code review также выявила count→list MVCC race глобального directory: другой researcher мог создать study между двумя SQL statements. Append-only018 заменяет эту функцию одним bounded LIMIT501/count/aggregate snapshot;500metadata допустимы,501явно413, без truncation.017 не переписана. HTTP cap test теперь проверяет точные500/501. Это техническое усиление, не новые права; требует собственного current-head CI.
+
+Local UI-only4175 перезапущен на новой сборке: browser подтвердил «Фаза4 · конструктор исследований» и «PostgreSQL ещё не подключён». Это не локальный CRUD smoke test; реальные сохранения проверены CI PG/Chrome. Старый4173/SQLite не переключён. Новых dependencies/науки/прав/облака/реальных данных нет. Фаза5 не начата. Ниже хронологическая история, не текущие незавершённые задачи.
+
 ## Фаза4 начата —2026-10-03
 
 04е интегрированаPR#30/headc64c8115/run37147127875 all6success:201base+90PG/3Chrome. Activation/incomplete/onequota/concurrent winner/close freesquota/frozenactive/reopen denied + participant writer lock vs close фактически проверены.04ж UI/current policy/directory/caps/real browser integration следующийPR;04з итоговаярасширеннаяприемка+документация еще впереди.

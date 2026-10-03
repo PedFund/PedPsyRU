@@ -40,10 +40,13 @@ test("PostgreSQL browser acceptance: actual MFA, both staff workspaces/download,
 });
 test("PostgreSQL constructor browser: real CRUD/copy, two-tab conflict, quota, readonly staff and reload",{timeout:60000},async t=>{
   const f=await postgresFixture({runtimePoolSize:2}),w=workspaceFixture(f);let browser;t.after(async()=>{await browser?.close();await w.app.close();await f.close();});
+  // Exercise the real HTML-before-deferred-JS readiness window, not a mock DOM.
+  w.app.addHook("onSend",async(request,reply,payload)=>{if(request.url==="/workspace/app.js")await new Promise(resolve=>setTimeout(resolve,250));return payload;});
   const {staffHttp,headers}=require("./workspace-fixture.js"),staff=await staffHttp(f,w,"administrator"),invite=(await w.app.inject({method:"POST",url:"/api/v2/staff/researchers/invite",headers:staff.headers,payload:{}})).json(),password=randomBytes(24).toString("base64url");
   await w.app.listen({host:"127.0.0.1",port:4174});browser=await chromeFixture("http://127.0.0.1:4174/workspace");
   const enabled="!document.getElementById('refresh').disabled",visible=id=>`!document.getElementById(${JSON.stringify(id)}).hidden`,saved=version=>`document.getElementById('design-meta').textContent.includes('Версия дизайна: ${version} ·') && ${enabled}`;
   browser.setStage("constructor researcher login");await browser.wait(visible("login-screen")+" && !document.querySelector('#login-form button').disabled");
+  browser.setStage("constructor invitation acceptance");
   await browser.evaluate(`document.querySelector('#login-screen details').open=true;document.getElementById('invite-code').value=${JSON.stringify(invite.invite_code)};document.getElementById('invite-password').value=${JSON.stringify(password)};document.getElementById('accept-form').requestSubmit();`);await browser.wait("document.getElementById('message').textContent.includes('Приглашение принято')");
   await browser.evaluate(`document.getElementById('login-id').value=${JSON.stringify(invite.login_id)};document.getElementById('password').value=${JSON.stringify(password)};document.getElementById('login-form').requestSubmit();`);await browser.wait(visible("researcher-home")+" && "+enabled);
   const title="СИНТЕТИЧЕСКОЕ <img src=x onerror=alert(1)>";
