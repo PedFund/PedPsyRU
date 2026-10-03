@@ -8,7 +8,9 @@ Selectel отложен; текущая задача — платформа, syn
 
 **03б интегрирована через[PR#17](https://github.com/PedFund/PedPsyRU/pull/17)**, merge db7b327a107362820951070820cb6aa7b103c06d; head4df3262c/run37135880184 все6jobs success,187base+49PG,140blobs/preview сверены. Пароль выдает только hashed пяти-минутный MFA challenge, не staff session; throttle/scrypt/repeat version/hash/status/lock/audit.006 version guard отзывает sessions/challenges.
 
-**03в реализуется локально от этого main:** настоящий TOTP, AES256GCM envelope с внешним32-byte key, enrollment только после password challenge, confirmation/replay/5fail/expiry/recovery/session/audit атомарны; одноразовые recovery codes показываются только при confirmation. Pending не получает diagnostic capability.4 RFC/encryption base tests+8 actual PG scenarios ожидают CI. Ключ не хранится в DB/repository, новые реальные accounts/Selectel/email не выдаются. Далее03г–03з; фаза не завершена. Подробнее —ACCOUNT_ACCESS_VALIDATION.
+**03в интегрирована через[PR#18](https://github.com/PedFund/PedPsyRU/pull/18)**, merge ff3519ddc64be12b7b1adb1c7fd0c4d5fbb6beb6; head0a906bb5/run37136396001 все6jobs success,191base+57PG,146blobs/preview сверены. Настоящий TOTP, AES256GCM с внешним key, confirmation/replay/recovery/version/session/audit. Ключ/реальные accounts/Selectel/email не созданы.
+
+**03г реализуется локально:** обе MFA staff роли приглашают/блокируют исследователей; synthetic one-time preview без email/URL, срок24h, quota1, admission limits. Принятие после salted scrypt/password вне transaction, расход invite/current user повторно под locks; отдельный researcher login/home/CSRF logout, current own memberships/no individual diagnostics. Block/session revocation атомарны без удаления исследований.7 новых actual PG scenarios ожидают CI, всего64PG; base191 неизменны. Далее03д–03з; фаза не завершена. Подробнее —ACCOUNT_ACCESS_VALIDATION.
 
 ## Подготовка следующей фазы
 
