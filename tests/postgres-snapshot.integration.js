@@ -52,6 +52,16 @@ function dockerTool(args,input) {
     p.stdin.end(input);
   });
 }
+test("PostgreSQL snapshot: legacy v1 imports at zero and v2 preserves nonzero design revisions",async t=>{
+  const source=await completedSnapshotSource();t.after(()=>source.db.close());const legacy=exportDemoSnapshot(source.db);
+  legacy.format="pedpsy-demo-snapshot-1";legacy.tables.studies=legacy.tables.studies.map(({design_version,...s})=>s);
+  const {sha256}=require("../storage/database.js"),{canonicalJson}=require("../storage/releases.js");legacy.digest=sha256(canonicalJson(legacy.tables));
+  const f=await target(t),client=await f.admin.connect();let modern;
+  try{await importDemoSnapshot(client,legacy);assert.ok((await inspectPostgresSnapshot(client)).tables.studies.every(s=>s.design_version===0));
+    await client.query("UPDATE pedpsy.studies SET design_version=7");modern=await inspectPostgresSnapshot(client);
+  }finally{client.release();}
+  const g=await target(t),restored=await g.admin.connect();try{await importDemoSnapshot(restored,modern);assert.deepEqual(await inspectPostgresSnapshot(restored),modern);assert.ok(modern.tables.studies.every(s=>s.design_version===7));}finally{restored.release();}
+});
 test("PostgreSQL backup: pg_dump custom archive restores data/schema/RLS to independent empty DB",async t=>{
   const f=await imported(t), restored=await target(t,false);
   for(const name of [f.database,restored.database])assert.match(name,/^pedpsy_ci_[a-f0-9]{16}$/);
