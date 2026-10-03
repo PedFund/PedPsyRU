@@ -24,4 +24,10 @@ export class PostgresStudyConstructor implements StudyConstructor{
   copy(token:string,id:string,input:{source_stage_id:string;code:string;ordinal:number;expected_version:number}){
     return this.call(token,"SELECT pedpsy.copy_study_stage($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,input.source_stage_id,randomUUID(),input.code,input.ordinal]);
   }
+  lifecycle(token:string,id:string,input:{status:"active"|"closed";expected_version:number}){
+    return this.call(token,"SELECT pedpsy.change_study_lifecycle($1,$2,$3) data",[id,input.expected_version,input.status]);
+  }
+  title(token:string,id:string,input:{title:string;expected_version:number}){
+    return this.call(token,"SELECT pedpsy.rename_study($1,$2,$3) data",[id,input.expected_version,input.title]);
+  }
 }

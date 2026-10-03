@@ -65,6 +65,8 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         app.patch("/api/v2/researcher/studies/:id/stages/:stage",async r=>{const p=r.params as {id:string;stage:string};return studies.stage(token(r,names.researcher),p.id,p.stage,r.body,csrf(r));});
         app.post("/api/v2/researcher/studies/:id/assignments",async r=>studies.assign(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
         app.post("/api/v2/researcher/studies/:id/stages/copy",async r=>studies.copy(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
+        app.post("/api/v2/researcher/studies/:id/lifecycle",async r=>studies.lifecycle(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
+        app.patch("/api/v2/researcher/studies/:id",async r=>studies.title(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
       }
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }

@@ -70,3 +70,24 @@ scenario("copy settings per group only, independent IDs and no participants/answ
   await assert.rejects(x.studies.copy(x.session.token,d.id,{source_stage_id:copied,code:"T2",ordinal:2,expected_version:d.version}),/synthetic copy audit failure/);
   assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,d.version);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_stages WHERE study_id=$1",[d.id])).rows[0].n,2);assert.deepEqual(await counts(),before);
 });
+async function readyStudy(x,f,title){let d=await x.studies.create(x.session.token,title);d=await x.studies.group(x.session.token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});return x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});}
+scenario("activation completeness, atomic active quota race, closed frees quota but never rewrites design",async(f,x,s)=>{
+  const incomplete=await x.studies.create(x.session.token,"Incomplete");await assert.rejects(x.studies.lifecycle(x.session.token,incomplete.id,{status:"active",expected_version:0}),e=>e.code==="DESIGN_INCOMPLETE");
+  const drafts=await Promise.all(["One","Two"].map(title=>readyStudy(x,f,title)));const result=await Promise.allSettled(drafts.map(d=>x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version})));
+  assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"STUDY_QUOTA");
+  let active=result.find(r=>r.status==="fulfilled").value;await assert.rejects(x.studies.title(x.session.token,active.id,{title:"Changed",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
+  await assert.rejects(x.studies.assign(x.session.token,active.id,{group_id:active.groups[0].id,stage_id:active.stages[0].id,release_ids:[],expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
+  await assert.rejects(x.studies.lifecycle(s.session.token,active.id,{status:"closed",expected_version:active.version}),e=>e.status===401);
+  active=await x.studies.lifecycle(x.session.token,active.id,{status:"closed",expected_version:active.version});assert.equal(active.status,"closed");await assert.rejects(x.studies.lifecycle(x.session.token,active.id,{status:"active",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
+  const other=drafts.find(d=>d.id!==active.id),second=await x.studies.lifecycle(x.session.token,other.id,{status:"active",expected_version:other.version});assert.equal(second.status,"active");
+  const renamed=await x.studies.title(x.session.token,incomplete.id,{title:"Новое название",expected_version:0});assert.equal(renamed.title,"Новое название");assert.equal(renamed.version,1);
+});
+scenario("close waits for participant scope writer; afterwards participant save is denied",async(f,x)=>{
+  const {participantService}=require("./participation-fixture.js"),p=await participantService(f);await f.admin.query("INSERT INTO pedpsy.study_memberships(study_id,user_id,role) VALUES($1,$2,'researcher')",[f.studyId,x.row.user_id]);
+  const c=await f.runtime.connect();let closing;try{await c.query("BEGIN");await c.query("SELECT set_config('app.session_hash',$1,true)",[f.hash]);await c.query("SELECT pedpsy.lock_participant_scope($1)",[p.id]);
+    let settled=false;closing=x.studies.lifecycle(x.session.token,f.studyId,{status:"closed",expected_version:0});closing.then(()=>settled=true,()=>settled=true);
+    const deadline=Date.now()+2000;let waiting=false;while(Date.now()<deadline){waiting=(await f.admin.query("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=$1 AND wait_event_type='Lock') waiting",[f.database])).rows[0].waiting;if(waiting)break;await new Promise(r=>setTimeout(r,10));}
+    assert.equal(waiting,true);assert.equal(settled,false);await c.query("COMMIT");assert.equal((await closing).status,"closed");
+  }finally{await c.query("ROLLBACK");c.release();if(closing)await closing.catch(()=>{});}
+  await assert.rejects(p.service.read(p.context,p.id),e=>e.status===401);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.responses WHERE attempt_id=$1",[p.id])).rows[0].n,2);
+});
