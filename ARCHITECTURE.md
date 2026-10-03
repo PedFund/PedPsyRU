@@ -6,6 +6,10 @@
 
 ## Конструктор фазы 4
 
+### Локальный запуск после фазы4
+
+Отдельно разрешённый portablePG18.6 находится только вignored `.local`; local fullAPI4174 не равен UI-only4175. `scripts/local-demo.ps1/js` —offline developer tooling: owner-only directory/SCRAM/nonsuperowner/runtime, existingmigrator/verifiedfreshsyntheticseed; не новыйHTTPmodule/authroute/DBgrant. Первыйownerbootstrap существующей009 только поhumanmaskedstdin, не startup/API; обязательныйMFA flow неизменен. Secretconfig/logs не вsource/dist/GitHub, runtimechildне получаетcontrol/owner. Старая4173/SQLite не изменена. Личныйaccount ещё humanhandoff; LOCAL_DEMO объясняет ограничения/перезапуск. Фаза5 покаплан, не готовыеregistration/passport endpoints.
+
 `src/ports/studies.ts` описывает metadata-only дизайн; `src/application/study-api.ts` проверяет точные поля/типы/UUID/версии/CSRF; `src/http/workspace-app.ts` маршрутизирует, bootstrap явно подключает `PostgresStudyConstructor`. Нет SQL/DB imports в UI/HTTP; DTO не содержит ответов/баллов/формы/ключа/credentials.
 
 Fixed SQL повторяет current authority под locks: researcher credential UPDATE →user/session→study UPDATE→membership SHARE, затем draft/no attempts/CAS. Изменение, version, mandatory metadata audit и проверка размера в одном transaction. Named `studies.read/configure` policy повторяется до COMMIT по текущей DB-личности; отказ откатывает mutation/audit. Staff verified MFA/session глобально читает дизайн, не меняет. Runtime не получает прямой DML или private snapshot/lock helpers.

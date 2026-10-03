@@ -1,5 +1,11 @@
 # Журнал решений
 
+## 2026-10-03 — локальный стенд и первый суперадминистратор
+
+После завершённойфазы4 владелец отдельно разрешил localPostgreSQL и личныйsuperadmin entry, не Selectel/production. Portable18.6 без системнойслужбы, loopback55432/4174, WindowsOSuser-only ACL, SCRAM, отдельные control/offlineowner/runtime, внешний для БД локальныйMFAkey. Только новыйfreshsyntheticseed через существующий snapshot verifier, не исходныефайлы/SQLite/realdata. OfficialEDB HTTPS chain/hash/unsignedbinary limitation —LOCAL_DEMO. Новых npmdependencies/core/form/key/migrations не добавлено.
+
+Первый аккаунт только humanmaskedpassword→existingowner-only one-use bootstrap→обычный passwordpending/MFAUI. Нет auto/defaultpassword/reset/HTTPbootstrap/передачиcredentialвчат. User ещё не ввёл пароль: account/session не объявляются созданными. Фаза5 декомпозирована вBACKLOG; всеlegal/realdata/новыеpermissions/science/cloud отдельно. PostgreSQL skill повлиял наleastprivilege/pool/shorttransactions, не подключилSupabase.
+
 ## 2026-10-03 — конструктор фазы 4
 
 Порученные04а–04з реализованы/технически приняты:8из8. Runtimee5b4a8b/run37149537791 all6success,202base+101actualPG и3/3дополнительных Chrome runs; finaldocumentation-onlyhead#32 проходит такой же CI/tree gate перед merge. На границе фазы5 остановиться, не начинать её автоматически. Неудачный промежуточный browser run и честная диагностика —PHASE4_ACCEPTANCE/STATUS; повторный success не доказательство отсутствия flakes.

@@ -1,5 +1,15 @@
 # Состояние ПедПси
 
+## Локальный стенд и личный первый вход — 2026-10-03
+
+Блок —[PR#33](https://github.com/PedFund/PedPsyRU/pull/33). Runtimehead5464b76098e610e5cc442fd72a7a5a04dfa777d5/[run37152592115](https://github.com/PedFund/PedPsyRU/actions/runs/37152592115):все6jobs completed/success,205/205baseNode22/24+103/103actualPG18.6,3дополнительных независимыхChrome runs по2/2,0fail/cancel/skip.197sourceblobs совпали local/published,9scientificblobs/fixture/всеexistingmigrations/package/lock/workflow unchanged. Финальное documentation-only обновление проходит тот же current-head all6/base/tree/parents/fullmanifest gate перед ordinary merge; никаких force/reset/удалений/массовогоmerge. Actual merge/CI evidence фиксируются также вPR.
+
+По прямому «да» владельца подготовлен отдельный portablePG18.6:127.0.0.1:55432/SCRAM, owner-only Windows directory, отдельные nonsuperowner/runtime,18existing migrations и verified fresh in-memory synthetic snapshot. FullAPI4174 запущен; browser открыл административный login с несекретным PEDPSY-OWNER. Старые4173/SQLite не изменены,4175preview отдельно. Selectel/публикация/реальные данные/email не подключены. Подробности/provenance/hash/границы —LOCAL_DEMO.
+
+**Личный staff account пока не создан.** Masked интерактивная Account-команда ждёт пароль владельца; MFA/recovery он настраивает лично. Нет default password/автоаккаунта/HTTPbootstrap/обходаMFA. Два новых actual localPGtests прошли2/2: freshseed/noauth/repeatguard и one-use audited bootstrap/runtime denied/passwordpending.205/205base/build, architecture/dependencies/typecheck/JS+PowerShell syntax success. Runtime current-headGitHubCI принят выше; финальные documents требуют нового CI/merge gate, прежние success не доказательство нового head. Фаза5 разбита на05а–05з, не выдана за завершённую.
+
+Локальный97-testactualPGнабор (без Linux/Docker snapshot и Chromefiles) первоначально96/97: loopbackHTTPtest получил подтверждённый EADDRINUSE4174 из-за уже запущенного нашего кабинета; focusedrun7/8 подтвердилтотжекод. Остановлен только verifiedPID приложения, PG/данные сохранены. После освобожденияпорта97/97,0fail/cancel/skip. Tests не ослаблены/порогивремени не изменены. Linux-only backup/Chrome не объявляются локальнопроверенными; весь103-testPGнабор и3Chrome runs обязательны вGitHubCI. Listener metadata127.0.0.1:55432/4174, privateACLprotected/1allowedprincipal подтверждены локально; API после тестов запускается снова.
+
 ## Итог фазы 4 — 8 из 8 задач
 
 Конструктор04а–04з реализован и прошёл техническую приёмку.04а–04ж в main через#25–#31; финальный04з —[PR#32](https://github.com/PedFund/PedPsyRU/pull/32). Runtimehead e5b4a8b90ed64b6fbe56d187737cf58075802ddb/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):все6jobs completed/success,202/202baseNode22/24+101/101actualPG18.6,3/3дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Strictkind/018 single-snapshot/exact500/501/readiness с намеренно delayed app.js фактически проверены. Предыдущий browser failure не скрыт —история ниже.

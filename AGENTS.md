@@ -4,6 +4,10 @@
 
 Эти инструкции автономной разработки действуют во всем проекте PedPsyRU.
 
+## Продолжение после фазы4 — локальный стенд 2026-10-03
+
+Фаза4#32 интегрированаmain eb6af680. Владелец новым «да» разрешилlocalPG18.6synthetic stand и собственныйsuperadmin entry, затем продолжениефазы5; прежняя остановкапослефазы4 уже состоялась. LOCAL_DEMO/STATUS/BACKLOG описывают отдельныйloopbackstand/подзадачи05а–05з. Не использовать Selectel/publication/realdata/email, не менятьscience/права. Первыйличныйпароль/MFA/recovery вводитсамвладелец; до этого не заявлятьготовыйaccount/session. НеобходитьMFA/создаватьdefaultpassword/HTTPbootstrap, не публиковать.local/config/secrets. Старые4173/SQLiteсохранены. TechnicalPRmergeтолько прежнийall6current-head/base/tree/parents/manifestgate. Послеhumanhandoff продолжать05а, legal/scientificновыерешения отдельно.
+
 ## Текущая контрольная точка фазы 4 — 2026-10-03
 
 Порученная фаза4/04а–04з реализована и технически принята:8из8.04а–04ж в main #25–#31;04з —PR#32, runtimeheade5b4a8b/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):all6jobs success,202base+101PG18.6,3дополнительные независимые Chrome runs по2/2,0fail/cancel/skip. Финальные документы проходят тот же current-head CI/base/tree gate перед ordinary merge#32; не включать runtime правки в documentary head. После интеграции остановиться, фазу5 только по новому поручению. Факты/ограничения/история отказов —PHASE4_ACCEPTANCE/CONSTRUCTOR_VALIDATION/STATUS/BACKLOG; старые «фаза4 не начата» ниже исторические.
