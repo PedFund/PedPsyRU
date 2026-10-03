@@ -129,3 +129,15 @@ jobs:
           PGTEST_PORT: '5432'
           PGTEST_CONTAINER: ${{ job.services.postgres.id }}
           PGTEST_BROWSER: google-chrome # Preinstalled official runner; mandatory real browser, no downloads.
+      - name: Browser stability (all three independent runs must pass)
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in 1 2 3; do
+            node --test tests/postgres-workspace-browser.integration.js
+          done
+        env:
+          PEDPSY_PG_TEST: '1'
+          PGTEST_HOST: 127.0.0.1
+          PGTEST_PORT: '5432'
+          PGTEST_BROWSER: google-chrome
