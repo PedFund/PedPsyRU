@@ -27,3 +27,8 @@ test("copy cannot carry participants, responses or inferred source",async()=>{
   for(const bad of [{...good,responses:[]},{...good,participants:[]},{...good,source_stage_id:"T0"},{...good,ordinal:1.5}])assert.throws(()=>api.copy("token",id,bad,"csrf"),e=>[400,404].includes(e.status));
   await api.copy("token",id,good,"csrf");assert.deepEqual(calls[0],["token",id,good]);
 });
+test("lifecycle does not accept client quotas or reopen/draft states",async()=>{
+  const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({lifecycle:async(...x)=>calls.push(x),title:async(...x)=>calls.push(x)},{assert:()=>{}}),good={status:"active",expected_version:0};
+  for(const bad of [{...good,active_study_quota:100},{...good,status:"draft"},{...good,status:"published"}])assert.throws(()=>api.lifecycle("token",id,bad,"csrf"),e=>e.status===400);
+  await api.lifecycle("token",id,good,"csrf");await api.title("token",id,{title:"Name",expected_version:0},"csrf");assert.equal(calls.length,2);
+});

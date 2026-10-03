@@ -14,4 +14,6 @@ export interface StudyConstructor {
   stage(token:string,id:string,stageId:string|undefined,input:{code:string;ordinal:number;expected_version:number}):Promise<StudyDesign>;
   assign(token:string,id:string,input:{group_id:string;stage_id:string;release_ids:string[];expected_version:number}):Promise<StudyDesign>;
   copy(token:string,id:string,input:{source_stage_id:string;code:string;ordinal:number;expected_version:number}):Promise<StudyDesign>;
+  lifecycle(token:string,id:string,input:{status:"active"|"closed";expected_version:number}):Promise<StudyDesign>;
+  title(token:string,id:string,input:{title:string;expected_version:number}):Promise<StudyDesign>;
 }
