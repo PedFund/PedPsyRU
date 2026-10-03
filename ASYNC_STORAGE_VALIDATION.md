@@ -2,6 +2,10 @@
 
 Дата: 2026-10-03. Ветка codex/phase2-storage-contracts от main@caa225a0 после интегрированной 02в (#9). Четвертая из восьми задач фазы 2; PostgreSQL и новый HTTP-сценарий еще не объявляются реализованными.
 
+## Интеграция
+
+[PR #10](https://github.com/PedFund/PedPsyRU/pull/10) интегрирован обычным merge da6bdbbb10ab3dc13002739df266a5bf53196a15. Run 37125396812 на текущем head 43553ba1 завершен success, все пять jobs completed/success подтверждены endpoint attempts/1/jobs; список latest jobs некоторое время отражал устаревший промежуточный статус, он не использован как допуск. Перед merge проверены current main/head/preview tree и 100 blobs. Результаты сохранены без force/squash/удалений.
+
 ## Сделано и проверено локально
 
 Общий async read/save/complete/result application service, runtime-validation входов, типовые repository ports; SQL вынесен в отдельный SQLite UnitOfWork прежней схемы. Выделенное соединение, serialized callbacks, BEGIN IMMEDIATE, проверка текущей session/scope, закрытие ports после транзакции, запрет nested, fail-closed mandatory audit. Не меняются прежние storage/*.js/миграции, core/ключ/форма и рабочий 4173.

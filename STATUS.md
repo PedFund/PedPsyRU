@@ -6,6 +6,10 @@
 
 ### Продолжение после смены модели
 
+**02г интегрирована через PR #10**, обычный merge `da6bdbbb10ab3dc13002739df266a5bf53196a15`. На head 43553ba1 [run 37125396812](https://github.com/PedFund/PedPsyRU/actions/runs/37125396812) completed/success; все пять jobs подтверждены completed/success по endpoint attempts/1/jobs (общий jobs endpoint временно отдавал устаревший in_progress). 100 blobs и preview tree сверены. **Четыре из восьми задач фазы завершены.**
+
+02д выполняется в `codex/phase2-postgres-schema` от этого main: независимые PG миграции UUID/timestamptz/jsonb, составные FK/checks/indexes/immutable triggers, минимальные grants runtime роли, session-derived RLS. PostgreSQL 18.6, official image SHA256 закреплен; Selectel перечисляет PG18 как поддержанную версию. Временная synthetic БД проверяется отдельным обязательным CI job; на этой машине PG/Docker отсутствует, локальная проверка TypeScript/syntax/architecture не объявляется исполнением SQL. Подробности — POSTGRES_SCHEMA_VALIDATION.md.
+
 **02в интегрирована через PR #9**, обычный merge `caa225a01e46f2aeea85cb8c288f7d8b5a1fe921`. На head 7e8d56f6 все jobs [run 37124588725](https://github.com/PedFund/PedPsyRU/actions/runs/37124588725) завершены success; все 92 blobs и preview merge tree сверены с локальной копией. Три из восьми задач фазы 2 завершены.
 
 **02г реализуется в codex/phase2-storage-contracts** от этого main: общий async participation service/ports, отдельный SQLite UnitOfWork с очередью одного соединения, короткой транзакцией, повторной проверкой сессии и CAS; обязательный audit/fail-closed commit. 12 общих storage scenarios + 5 SQLite-specific, весь локальный прогон **171 тест успешно**, strict build/typecheck/architecture/syntax/lock policy проходят. Оба направления совместимости с прежними draft/completion stores проверены. Outbox явно не реализован и выбрасывает ошибку; основной 4173 и исходная база не переключены. Подробности — ASYNC_STORAGE_VALIDATION.md; удаленный CI и интеграция проверяются отдельно.

@@ -35,6 +35,10 @@ Dependabot предлагает отдельные небольшие PR для 
 
 ## Автоматические проверки
 
+В 02д добавлен обязательный job `PostgreSQL 18 isolation`: postgres18.6-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650, Node24, fresh synthetic DB/runtime roles. Required checks также требует его success, не skipped. Docker Hub digest и [поддержка Selectel](https://docs.selectel.ru/managed-databases/postgresql/configurations/) сверены 2026-10-03; текущая [PG версия](https://www.postgresql.org/support/versioning/)18.6. Credentials/runtime passwords генерируются в памяти, нет deployment secrets/artifact dumps. Container trust ограничен одноразовым loopback CI job; deployment эту настройку не получает. Локально PG тесты не пропускаются со статусом success: `test:pg` требует явного PEDPSY_PG_TEST и локального host/port, иначе fail.
+
+Runtime PG role: точечные SELECT/INSERT/column UPDATE grants, нет DDL/ownership/BYPASSRLS/role creation или прямого SELECT auth. Fixed SECURITY DEFINER functions owned by separate migrator используют owner bypass для auth metadata; FORCE RLS не включен во избежание рекурсии, но runtime никогда не owner. Actor выводится из действующей hashed session и серверной MFA proof, не role GUC. Прямые SQL/RLS tests проверяют own/global staff read/no staff write/unknown role/empty context/pooled context/revoke. Общая инструкция postgres-best-practices использована для минимальных grants, FK indexes, транзакционного контекста и разделения ролей; Supabase service не подключен.
+
 `.github/workflows/ci.yml`: pull_request в main, push в main, еженедельная проверка main по понедельникам 04:17 UTC и ручной запуск после появления workflow в main. Расписание и Dependabot version updates начнут действовать после включения конфигурации в main; проверки PR уже реально выполнены. Нет фильтра путей, пропускающего проверки документационных PR; тестируется общий checkout PR, а не только head в отрыве от main.
 
 | Job / команда | Что проверяется | Что этим не доказано |
