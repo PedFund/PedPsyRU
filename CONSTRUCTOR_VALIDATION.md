@@ -1,6 +1,6 @@
 # Конструктор исследований — контракт и проверка
 
-Дата2026-10-03, только synthetic development, не научная/production-приёмка. 04а–04ж в main #25–#31,04з расширяется. CI/merge — PHASE4_ACCEPTANCE/STATUS; прежние локальные «pending» заметки заменены проверяемой спецификацией.
+Дата2026-10-03, только synthetic development, не scientific/production acceptance.04а–04з реализованы/проверены:8из8,04а–04ж main#25–#31,04з#32/final current-head gate. Runtimee5b4a8b/run37149537791 all6success:202base+101actual PG18.6,3/3дополнительных Chrome runs по2/2,0fail/skip. Факты/отказы —PHASE4_ACCEPTANCE/STATUS; прежние pending заметки исторические.
 
 ## Кто что делает
 
@@ -36,11 +36,11 @@ Default active quota1 под credential UPDATE lock. Draft/closed не расх�
 
 Append-only PG011–017, original001–010/SQLite unchanged. Snapshot2 сохраняет design_version, legacy1 zero target check. Auth/MFA/invites/audit не экспортируются, empty target/synthetic provenance обязательны; actual PG nonzero7 roundtrip/backup restore passed. Core/key/form/processor побайтово прежние.
 
-Финальная append-only018: directory count+bounded LIMIT501 aggregate в одной MVCC snapshot, отказ>500;017 preserved. Application group kind только string, без array coercion. Exact500/501 и malformed enum HTTP cases требуют актуального CI.
+Финальная append-only018: directory count+bounded LIMIT501 aggregate в одной MVCC snapshot, refusal>500;017 preserved. Group kind только string, без coercion. Exact500/501 и malformed enums прошли actual HTTP CI. Login/accept disabled вHTML до JS readiness, auth forms POST; real Chrome намеренно задерживает app.js250ms, не принимает enabled HTML за готовность.
 
 ## Проверки и ограничения
 
-Pure/HTTP плюс real PG: own/foreign/roles/CSRF/CAS/unique/per-cell assignments/copy/no diagnostics/quota race/frozen/participant lock/audit rollback/size caps. Real Chrome: invite/researcher login/create/КГ/ЭГ/T0/assign/copyT1/T2/reload/shared-cookie two-tab CAS/quota/close/staff readonly/text escaping/390px/logout/HttpOnly/no storage. Три дополнительные независимые browser runs обязательны, не retry-to-success.04з добавляет lock-wait revocations/caps/fake release/lifecycle rollback/private helpers; до актуального CI не принято.
+Pure/HTTP плюс real PG: own/foreign/roles/CSRF/CAS/unique/per-cell assignments/copy/no diagnostics/quota race/frozen/participant lock/audit rollback/size caps. Real Chrome: invite/researcher login/create/КГ/ЭГ/T0/assign/copyT1/T2/reload/shared-cookie two-tab CAS/quota/close/staff readonly/text escaping/390px/logout/HttpOnly/no storage. Три дополнительные независимые browser runs обязательны, не retry-to-success.04з lock-wait revocations/caps/fake release/lifecycle rollback/private helpers фактически прошли101PG, не только mocks.
 
 Первый#25 head3f9bd3e/run37144352030:80/83PG,3snapshot regressions после design_version; merge остановлен. Исправлен перенос format2/legacy1/nonzero7, tests не ослаблены. Final e51bfc88/run37144756732:84/84PG/all6success. История сбоя сохранена.
 

@@ -2,7 +2,7 @@
 
 Дата: 2026-10-03. Основной репозиторий разработки — `PedFund/PedPsyRU`.
 
-Пилот, фазы2–3 интегрированы. Конструктор04а–04ж в main (#25–#31),04з проходит расширенную приёмку. JS/TypeScript modular monolith/PostgreSQL/неизменный TKI. Работают participant API, отдельные researcher/staff accounts/MFA/management/global raw+stored result read/export и конструктор. Editor/processing/analytics/email/production не реализованы. Текущая приёмка —PHASE4_ACCEPTANCE/STATUS. Selectel отложен, фаза5 не начата. Описания пилота ниже исторические.
+Пилот и фазы2–3 интегрированы. Конструктор04а–04з реализован/технически принят:8из8,04а–04ж main#25–#31,04з#32 с current-head gate. Runtimee5b4a8b/run37149537791:202base+101actual PG/all6success и3/3дополнительных Chrome runs. JS/TypeScript monolith/PostgreSQL/неизменный TKI; participant API/researcher+staff accounts/MFA/management/global raw+stored result read/export/конструктор работают. Editor/processing/analytics/email/production не реализованы. Приёмка —PHASE4_ACCEPTANCE/STATUS; Selectel отложен, фаза5 не начата. Ниже история пилота.
 
 ## Конструктор фазы 4
 

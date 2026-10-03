@@ -2,11 +2,11 @@
 
 ## Фаза 4 — конструктор и контроль приёмки
 
-04а–04ж в main #25–#31. Head f8122a15/[run37147500255](https://github.com/PedFund/PedPsyRU/actions/runs/37147500255): all6jobs success,202base Node22/24+95actual PG18.6, три дополнительные независимые Chrome runs по2scenarios,0fail/skip.04з усиливает revocation while waiting/limits/fake release/lifecycle rollback/frozen routes, статус —PHASE4_ACCEPTANCE/STATUS; до актуального CI не принято.
+Фаза4/04а–04з реализована/проверена:8из8.04а–04ж main#25–#31,04з#32 проходит final documentary current-head gate. Runtimee5b4a8b/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):all6success,202baseNode22/24+101actualPG18.6,3/3независимых дополнительных Chrome runs по2/2,0fail/cancel/skip. Revocation while waiting/limits/fake release/lifecycle rollback/frozen routes и finalstrictkind/018/readiness фактически проверены; PHASE4_ACCEPTANCE/STATUS сохраняют неудачный предыдущийrun.
 
 Current server principal/own active membership/draft/no attempts/CAS; обе staff verified MFA/global read-only. Fixed SQL locks и named policy commit gate независимы от UI. Direct DML/private helpers runtime denied, foreign/absent одинаково404. Required audit содержит IDs/actions/status, не ответы/баллы/названия/секреты. Audit/size/version/quota failure откатывает mutation целиком. CSRF/origin/HttpOnlyStrict/no-store/CSP/bodylimit сохранены; textContent/logout cleanup/no diagnostic localStorage, explicit reread после uncertain save.
 
-Manifest/lock/workflow/core/form/key unchanged, новые migration011–017. PostgreSQL skill повлиял на least privilege/lock order/атомарность, Supabase не подключён. Technical caps/active frozen явно описаны; CI не pentest/scientific/legal/production proof. Branch protection тарифно недоступен: ordinary merge после currenthead/all6/base/tree/fullmanifest/parents gate. Без paid/cloud/Selectel/realdata/publication.
+Manifest/lock/workflow/core/form/key unchanged; append-only migrations011–018. PostgreSQL skill повлиял на least privilege/lock order/атомарность/один MVCC snapshot списка, Supabase не подключён. Technical caps/active frozen явно описаны; CI не independent pentest/scientific/legal/production proof. Branch protection тарифно недоступен: ordinary merge после current-head/all6/base/tree/fullmanifest/parents gate. Без paid/cloud/Selectel/realdata/publication.
 
 ## Фаза3 — подтвержденный текущий результат
 

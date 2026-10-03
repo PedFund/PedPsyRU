@@ -2,6 +2,8 @@
 
 ## Актуальное дополнение фазы 4
 
+Техническая приёмка011–018/currentruntime e5b4a8b/run37149537791:all6success,202base+101actualPG18.6 и3/3дополнительных Chrome runs. Финальные документы/интеграция#32 проходят отдельный current-head gate, без изменения schema/runtime; PHASE4_ACCEPTANCE/STATUS. Фаза4:8из8, фаза5 не начата.
+
 Append-only `storage/postgres/011_study_constructor.sql`–`017_study_design_directory.sql`; PG001–010 и SQLite migrations unchanged. Новых диагностических таблиц нет. `studies.design_version` integer0–2147483646 — общий CAS title/groups/stages/assignments/copy/lifecycle. Сервер создаёт UUID/own membership/draft/demo/version0; client owner/role/status не authority.
 
 012: нормализованная уникальность group name внутри study, fixed create/update control/experimental/other.013: unique normalized code/ordinal, same-study parent FK/parent-before-child.014: immutable release IDs для group×stage, keep ID неизменившихся assignments.015: independent copy/based_on_stage_id без диагностических строк.016: title/lifecycle/default active quota1 под credential lock; drafts/closed не активны, закрытие не удаляет данные.017: bounded snapshot/global staff directory без individual diagnostics.

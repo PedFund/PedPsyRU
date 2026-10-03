@@ -1,6 +1,14 @@
 # Состояние ПедПси
 
-## Текущая приёмка фазы 4 — 2026-10-03
+## Итог фазы 4 — 8 из 8 задач
+
+Конструктор04а–04з реализован и прошёл техническую приёмку.04а–04ж в main через#25–#31; финальный04з —[PR#32](https://github.com/PedFund/PedPsyRU/pull/32). Runtimehead e5b4a8b90ed64b6fbe56d187737cf58075802ddb/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):все6jobs completed/success,202/202baseNode22/24+101/101actualPG18.6,3/3дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Strictkind/018 single-snapshot/exact500/501/readiness с намеренно delayed app.js фактически проверены. Предыдущий browser failure не скрыт —история ниже.
+
+Локально202/202base/build/typecheck/architecture/dependencies/syntax passed;192blobs совпали с опубликованным runtime tree.9scientific blobs+контрольныйfixture, originalPG001–010/SQLite migrations/package/lock/workflow неизменны. Final commit только актуализирует документы; перед ordinary merge#32 заново обязательны all6current-head CI/freshmain/base/preview/fullmanifest/parents, после —actualmain tree/parents. Без force/reset/delete/massmerge. Итоговая приемка и ограничения —PHASE4_ACCEPTANCE/CONSTRUCTOR_VALIDATION.
+
+Local4175 всё ещё UI-only/API503 без PG: browser проверил правильные подписи/ограничение, не локальный CRUD. Full4174 flow —настоящие disposable PG/Chrome вGitHubCI. Старый4173/SQLite не переключён. Нет новых методов/научных норм/прав/dependencies/облака/реальных данных. Фаза5 —участнические приглашения/паспорт/согласия —не начата автоматически. Остановиться после интеграции этой фазы.
+
+## История приёмки фазы 4 — промежуточные состояния 2026-10-03
 
 Расширенный 04з PR#32/head2c3c9595/[run37148721269](https://github.com/PedFund/PedPsyRU/actions/runs/37148721269) фактически прошёл all6jobs:202base+101/101actual PG18.6, три дополнительные независимые browser runs по2/2,0fail/cancel/skip. Все6новых отрицательных сценариев приняты. После этого локальные code-review исправления strict kind/append-only018/exact500/501 tests требуют нового head и всего CI; этот успех не переносится автоматически на новый код. Final merge ещё не выполнялся.
 
