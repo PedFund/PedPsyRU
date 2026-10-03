@@ -18,7 +18,13 @@
 
 ## Кандидат 04з
 
+Первый currenthead #32/2c3c9595/[run37148721269](https://github.com/PedFund/PedPsyRU/actions/runs/37148721269): все6jobs completed/success,202base+101/101PG18.6, три дополнительные browser runs по2/2,0fail/cancel/skip. Шесть новых negative scenarios фактически приняты. Следующие strictkind/018 code-review изменения проходят новый полный gate; прежний success не доказывает их готовности.
+
 Локально202/202base, strict build/typecheck/architecture/dependency/syntax success. Добавлены6actual PG-сценариев, ожидается101PG, **пока не подтверждено CI**: credential/membership revoke во время ожидания locks; caps50/50/500 и version saturation rollback; fake release/malformed sets; lifecycle audit rollback/quota/idempotency; все frozen configuration routes/private helpers. Завершение только после актуального all6CI и ordinary merge.
+
+Code review отдельно устранила application `String(kind)` coercion: array/null/object отвергаются как400 до adapter; прежний SQL enum gate оставлен. Pure/actual HTTP tests усилены в существующих scenarios, числа tests не увеличиваются. Это строгость входа, не изменение прав/методики.
+
+Append-only018 также закрывает directory count→list race: LIMIT501/count/aggregate в одном SQL/MVCC snapshot, exact500success/501refusal проверяются HTTP.017 сохранена, fixed authority/audit прежние. Это code-review исправление, а не заявление о воспроизведённой утечке или ослабление тестов.
 
 ## Действия и границы
 

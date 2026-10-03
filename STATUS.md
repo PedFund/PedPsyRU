@@ -2,9 +2,15 @@
 
 ## Текущая приёмка фазы 4 — 2026-10-03
 
+Расширенный 04з PR#32/head2c3c9595/[run37148721269](https://github.com/PedFund/PedPsyRU/actions/runs/37148721269) фактически прошёл all6jobs:202base+101/101actual PG18.6, три дополнительные независимые browser runs по2/2,0fail/cancel/skip. Все6новых отрицательных сценариев приняты. После этого локальные code-review исправления strict kind/append-only018/exact500/501 tests требуют нового head и всего CI; этот успех не переносится автоматически на новый код. Final merge ещё не выполнялся.
+
 04а–04ж (7из8) в main #25–#31. Последний merge #31 —221efd6fd8dba171f9834834496bb894f2e6938b. Head f8122a15/[run37147500255](https://github.com/PedFund/PedPsyRU/actions/runs/37147500255): all6jobs completed/success,202/202base Node22/24+95/95actual PG18.6, три дополнительные независимые browser runs по2/2scenarios,0fail/cancel/skip.190blobs/preview/actualtree/parents/core hashes сверены.
 
 04з локально:6 независимых PG-сценариев revocation under lock wait/membership under wait/limits+version saturation/fake release/lifecycle audit rollback/frozen routes/private helpers. Actual PostgreSQL CI ещё не выполнен; ожидается101PG, не заявленный успех. Полный202/202base/build/typecheck/architecture/dependencies/syntax локально success. Итог —PHASE4_ACCEPTANCE. Документы актуализируются, затем current-head gate и ordinary merge; без force/reset/удаления результатов/массового merge PR.
+
+Дополнительная code review выявила coercion `String(kind)` в application boundary: JSON array `["control"]` мог дойти до adapter вместо раннего отказа. SQL всё равно проверял enum, но строгий контракт теперь требует string; pure и actual HTTP negative cases добавлены в существующие scenarios, без новых permissions/science. Изменение требует нового current-head CI перед merge.
+
+Code review также выявила count→list MVCC race глобального directory: другой researcher мог создать study между двумя SQL statements. Append-only018 заменяет эту функцию одним bounded LIMIT501/count/aggregate snapshot;500metadata допустимы,501явно413, без truncation.017 не переписана. HTTP cap test теперь проверяет точные500/501. Это техническое усиление, не новые права; требует собственного current-head CI.
 
 Local UI-only4175 перезапущен на новой сборке: browser подтвердил «Фаза4 · конструктор исследований» и «PostgreSQL ещё не подключён». Это не локальный CRUD smoke test; реальные сохранения проверены CI PG/Chrome. Старый4173/SQLite не переключён. Новых dependencies/науки/прав/облака/реальных данных нет. Фаза5 не начата. Ниже хронологическая история, не текущие незавершённые задачи.
 

@@ -8,6 +8,8 @@ Append-only `storage/postgres/011_study_constructor.sql`–`017_study_design_dir
 
 Existing synthetic TKI key_verified/publication draft — технический allowlist, не научная публикация. Snapshot **format2** сохраняет design_version; legacy1 принимается с проверкой zero target. Domain snapshot исключает credentials/sessions/MFA/invites/audit, target пустой/provenance synthetic; nonzero7 roundtrip и реальный pg_dump restore проверены. Passport/consents/participant invitations — фаза5, не добавлены. Ниже история, включая прежний format1 и ещё будущую тогда квоту.
 
+018 — append-only correction глобального directory: count и metadata aggregate из одной ограниченной501-row SQL snapshot, затем refusal при >500. Устраняет MVCC gap двух statements без переписывания017/нового grant. Приёмка этой последней миграции — PHASE4_ACCEPTANCE/STATUS.
+
 ## Актуальное дополнение фазы3 (03а–03з)
 
 Append-only PostgreSQL005–010 интегрированы#16–#23, не переписывают старые миграции/SQLite.005 researcher credentials/sessions/default active_study_quota1 и current membership resolver.006 hashed staff password challenges<=5min/attempts<=5, version invalidation.007 AES256GCM sealed MFA factors/confirmed/last_step, recovery **digests**, current staff locks/logout; externalkey не в DB.008 hashed24h researcher invites/used/revoked/createdby и private management/login/home.009 super-only role assignment/current-version revoke, session FK ON UPDATE CASCADE сохраняет revoked history; owner-only first synthetic staffbootstrap, не PUBLIC/runtimegrant.010 fixed global staff diagnostic read/export whitelist/single statement/MVCC/caps/audit, никаких новых диагностических таблиц/пересчета.

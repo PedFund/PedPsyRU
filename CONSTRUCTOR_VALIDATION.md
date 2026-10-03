@@ -36,6 +36,8 @@ Default active quota1 под credential UPDATE lock. Draft/closed не расх�
 
 Append-only PG011–017, original001–010/SQLite unchanged. Snapshot2 сохраняет design_version, legacy1 zero target check. Auth/MFA/invites/audit не экспортируются, empty target/synthetic provenance обязательны; actual PG nonzero7 roundtrip/backup restore passed. Core/key/form/processor побайтово прежние.
 
+Финальная append-only018: directory count+bounded LIMIT501 aggregate в одной MVCC snapshot, отказ>500;017 preserved. Application group kind только string, без array coercion. Exact500/501 и malformed enum HTTP cases требуют актуального CI.
+
 ## Проверки и ограничения
 
 Pure/HTTP плюс real PG: own/foreign/roles/CSRF/CAS/unique/per-cell assignments/copy/no diagnostics/quota race/frozen/participant lock/audit rollback/size caps. Real Chrome: invite/researcher login/create/КГ/ЭГ/T0/assign/copyT1/T2/reload/shared-cookie two-tab CAS/quota/close/staff readonly/text escaping/390px/logout/HttpOnly/no storage. Три дополнительные независимые browser runs обязательны, не retry-to-success.04з добавляет lock-wait revocations/caps/fake release/lifecycle rollback/private helpers; до актуального CI не принято.

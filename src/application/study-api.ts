@@ -18,7 +18,7 @@ export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
   read:(token:string,id:string)=>studies.read(token,studyId(id)),
   group:(token:string,id:string,groupId:string|undefined,input:unknown,value:string)=>{
     csrf.assert(token,value);const b=studyObject(input,["name","kind","expected_version"]);
-    if(!["control","experimental","other"].includes(String(b.kind)))throw new ParticipationError(400,"INVALID_STUDY_INPUT");
+    if(typeof b.kind!=="string"||!["control","experimental","other"].includes(b.kind))throw new ParticipationError(400,"INVALID_STUDY_INPUT");
     return studies.group(token,studyId(id),groupId===undefined?undefined:studyId(groupId),{name:studyText(b.name,100),kind:b.kind as GroupDesign["kind"],expected_version:studyVersion(b.expected_version)});
   },
   stage:(token:string,id:string,stageId:string|undefined,input:unknown,value:string)=>{
