@@ -2,6 +2,8 @@
 
 ## Фаза4 начата —2026-10-03
 
+04е интегрированаPR#30/headc64c8115/run37147127875 all6success:201base+90PG/3Chrome. Activation/incomplete/onequota/concurrent winner/close freesquota/frozenactive/reopen denied + participant writer lock vs close фактически проверены.04ж UI/current policy/directory/caps/real browser integration следующийPR;04з итоговаярасширеннаяприемка+документация еще впереди.
+
 04д интегрированаPR#29/head0f07984e/run37146675781 all6success:200base+88PG/3Chrome. Copy independent/per-group/no diagnostic counters changed/missing+foreign source denied/audit rollback фактически проверены.04е lifecycle/quota следующийPR;04ж UI+directory+metadata caps+central policy commit gate локально подготовлены, не вruntime#29.
 
 04г интегрированаPR#28/headb9a81b70/run37146059055 all6success:199base+87PG/3Chrome. Per-cell release set/keep-ID/remove/foreign+unknown UUID/pinned catalog verified, полныйTKIrelease по-прежнемуdraft.04д copy следующий отдельныйPR; lifecycle/UI подготовлены локально, еще не интегрированы/приняты.

@@ -13,6 +13,7 @@ export function studyId(id:unknown):string{
 }
 export function studyVersion(version:unknown):number{if(!Number.isInteger(version)||Number(version)<0||Number(version)>2147483646)throw new ParticipationError(400,"INVALID_STUDY_INPUT");return Number(version);}
 export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
+  listStaff:(token:string)=>studies.listStaff(token),
   create:(token:string,input:unknown,value:string)=>{csrf.assert(token,value);return studies.create(token,studyText(studyObject(input,["title"]).title));},
   read:(token:string,id:string)=>studies.read(token,studyId(id)),
   group:(token:string,id:string,groupId:string|undefined,input:unknown,value:string)=>{
