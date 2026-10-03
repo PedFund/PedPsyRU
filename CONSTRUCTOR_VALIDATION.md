@@ -1,5 +1,7 @@
 # Фаза4 — конструктор исследований
 
+04г локально подготовлен: exact существующий synthetic TKI release allowlist(form/key digests, versions,30items, key_verified+publication draft); catalog metadata без формы/ключа/ответов. Draft group×stage заменяет свой set UUID с сохранением неизменившихсяassignment IDs, без новыхattempts/results. Пустой set допустим вdraft; полная готовность проверяется при activation04е. Назвать этот release научно published/approved было бы ошибкой: UI показывает ограничение. Максимум10 release IDs/input, неизвестный/чужойID404. Append-only014, audit/CAS/authority прежние.
+
 04а принята#25/fc77aa0d, finalheade51bfc88/run37144756732 all6success:196base+84PG/3Chrome. Первыйrun37144352030:80/83PG, три snapshot tests отказали из-за нового столбца. Исправлен перенос, а не ослаблена приемка: snapshot2 сохраняетdesign_version, legacy1 импортируется только с проверкойzero target. ActualPG отдельно проверяет старый формат и ненулевую версию7. Snapshot provenance/synthetic/пустойtarget/исходнаяSQLite/credentials exclusion прежние; научная математика не менялась.
 
 04в подготовлен: T0/T1/T2/custom, независимый server UUID/порядок0–9999/unique code+ordinal и CAS; обычное создание не выдает ложную based_on связь. Изменение порядка сохраняет parent-before-child для будущего копирования. Максимум50 этапов, scope study/stage повторяется сервером. Append-only013, не изменение научных/диагностических данных. CI/merge пока не принят.
