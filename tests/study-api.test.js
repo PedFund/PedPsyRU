@@ -17,3 +17,8 @@ test("stage input is strict and accepts custom names without an implicit parent"
   for(const bad of [{...good,based_on_stage_id:id},{...good,ordinal:-1},{...good,ordinal:10000},{...good,ordinal:"0"},{...good,code:"x".repeat(41)}])assert.throws(()=>api.stage("token",id,undefined,bad,"csrf"),e=>e.status===400);
   await api.stage("token",id,undefined,good,"csrf");assert.deepEqual(calls[0],["token",id,undefined,good]);
 });
+test("assignment is a strict bounded set of IDs, not client method content or scores",async()=>{
+  const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({assign:async(...x)=>calls.push(x)},{assert:()=>{}}),good={group_id:id,stage_id:id,release_ids:[id],expected_version:0};
+  for(const bad of [{...good,release_ids:[id,id]},{...good,release_ids:null},{...good,release_ids:Array(11).fill(id)},{...good,key:"client"},{...good,scores:[12]}])assert.throws(()=>api.assign("token",id,bad,"csrf"),e=>e.status===400);
+  await api.assign("token",id,good,"csrf");assert.deepEqual(calls[0],["token",id,good]);
+});

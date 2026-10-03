@@ -43,3 +43,14 @@ scenario("T0/T1/T2/custom stage ordering and duplicate/cross-study/version denia
   d=await x.studies.stage(x.session.token,d.id,d.stages[3].id,{code:"Отсроченный",ordinal:8,expected_version:d.version});assert.equal(d.stages.at(-1).ordinal,8);
   await assert.rejects(x.studies.stage(x.session.token,d.id,undefined,{code:"Stale",ordinal:9,expected_version:d.version-1}),e=>e.code==="DESIGN_CONFLICT");
 });
+scenario("each group/stage has its own pinned synthetic method set, not science approval",async(f,x)=>{
+  let d=await x.studies.create(x.session.token,"Methods");assert.equal(d.catalog.length,1);assert.equal(d.catalog[0].publication_state,"draft");assert.equal(d.catalog[0].verification_state,"key_verified");
+  for(const name of ["КГ","ЭГ"])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind:name==="КГ"?"control":"experimental",expected_version:d.version});
+  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
+  const cell={group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id]};
+  d=await x.studies.assign(x.session.token,d.id,{...cell,expected_version:d.version});assert.equal(d.assignments.length,1);assert.equal(d.assignments[0].group_id,cell.group_id);assert.equal(d.assignments[0].release_id,f.seed.release_id);
+  const preserved=d.assignments[0].id;d=await x.studies.assign(x.session.token,d.id,{...cell,expected_version:d.version});assert.equal(d.assignments[0].id,preserved);
+  for(const bad of [{...cell,release_ids:[randomUUID()]},{...cell,group_id:f.seed.studies[1].groups[0].id},{...cell,stage_id:f.seed.studies[1].stages[0].id}])await assert.rejects(x.studies.assign(x.session.token,d.id,{...bad,expected_version:d.version}),e=>e.status===404);
+  d=await x.studies.assign(x.session.token,d.id,{...cell,release_ids:[],expected_version:d.version});assert.equal(d.assignments.length,0);
+  for(const privateName of ["source_text","key_digest","form_snapshot","scales","responses"])assert.ok(!JSON.stringify(d).includes(privateName));
+});
