@@ -39,3 +39,15 @@ TOTP SHA1/6digits/30sec/окно±1 реализован на Node HMAC по [RF
 Accept сохраняет salted scrypt только после актуального unconsumed/unrevoked invite/current user под locks; конкурентный accept дает одного победителя, reset guard/revoke/version. Researcher login отдельный (TTL30min/idle10min, durable throttle/dummy hashing/rotation), own home содержит только study id/title/status и quota1; неизвестные/чужие membership не выдают данные. Эта quota —параметр аккаунта; enforcement создания активных исследований будет конструктором фазы4. Block отключает user/credential/invites/sessions без удаления studies/answers. Read/control/audit atomic; actor/time от сервера, не запроса. Предельный list500 без truncation. Invite lost response не означает успех UI: нужно перечитать список и при необходимости выдать новое приглашение; code из DB обратно не восстанавливается.
 
 7 новых PG scenarios: обе staff роли/full invite/login/block, own scope/no diagnostic, expiry/unknown/block/strict role DTO, fresh MFA/limits, concurrent accept/relogin/CSRF, mandatory audit rollback и block во время hash. Полная191base+64PG приемка ожидает CI; HTTP/cabinets следующими03д–03ж.
+
+03г интегрирована#19/892999a4 после всех6jobs run37137129375 success,191base+64PG;153blobs/preview совпали.
+
+## 03д: назначение административных ролей
+
+009: только current fresh superadmin может назначить administrator/superadministrator активному researcher либо сменить роль другого staff. Свою роль нельзя менять. Promotion копирует существующий salted password hash в отдельный staff credential и атомарно отзывает researcher realm; пароль известен только владельцу аккаунта, plain password не читается. Новый staff до real MFA не видит диагностику. При role change version bump отзывает prior sessions/challenges, cascade меняет scope FK только у уже revoked session rows, сами rows сохраняются; исторический actor_role остается в immutable audit. Factor secret привязан к неизменному credential ID; новый password+MFA/recovery обязателен для новой версии/роли.
+
+Глобальный management lock защищает конкурентные role changes. Self-change и last-active-superadmin guard не дают лишить платформу последнего действующего суперадмина. Будущий staff block/remove тоже должен применять этот invariant; такого public API пока нет. Directory доступен только superadmin с fresh proof; runtime direct credential SELECT/UPDATE по-прежнему отсутствует.
+
+Первый synthetic superadmin создается отдельно `bootstrap_first_superadmin` под schema owner (SECURITY INVOKER, PUBLIC/runtime EXECUTE отсутствует, controlled demo/ci database name, guard first-only/advisory lock/audit). Не startup/migration/HTTP signup. В development реального bootstrap/паролей не выдавалось. Production bootstrap/восстановление ключей/доверенный оператор отдельно, не основание для размещения.
+
+6 actual PG tests: admin/participant/self/strict DTO/fresh denied; role bump/relogin/recovery/history; explicit researcher promotion/no password-only capability; reciprocal concurrent demotions оставляют1superadmin; audit rollback; actual private owner-only first bootstrap/second denial.191base+70PG ожидают текущий CI.
