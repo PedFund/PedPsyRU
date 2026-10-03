@@ -4,7 +4,9 @@
 
 ## Фаза3 — начата по указанию владельца
 
-Selectel отложен; текущая задача — платформа, synthetic development. **03а реализована локально**, пока не объявляется интегрированной: отдельные researcher/staff contracts, named policy/own scope, текущий PostgreSQL resolver и обязательный аудит, 005 researcher auth tables/version guard. Проверка разрешения не заменяет transaction authorization будущей мутации. Staff export/control требует fresh MFA. Исходный TKI/форма/ключ/SQLite сохранены. Проверки/PR будут добавлены после фактической приемки; подробности —ACCOUNT_ACCESS_VALIDATION. Следом03б/03в, затем03г–03з; вся фаза еще не завершена.
+Selectel отложен; текущая задача — платформа, synthetic development. **03а интегрирована через[PR#16](https://github.com/PedFund/PedPsyRU/pull/16)**, merge a061badc9be1036efad369e16efd36b83c097ae8; head b5a2640e/run37135187573 все6jobs completed/success.186base+43PG,133blobs/preview/parents сверены. Separate researcher/staff contracts, named policy/own scope, PostgreSQL resolver/audit/005 version guard. Check не заменяет transaction authorization будущей мутации. Staff export/control требует fresh MFA. TKI/форма/ключ/SQLite сохранены.
+
+**03б реализуется локально от этого main:** пароль выдает только hashed пяти-минутный MFA challenge, не staff session; throttles/dummy scrypt/repeat version/hash/status под lock, rotation/audit.006 требует version bump для смены staff password/status и автоматически отзывает sessions/challenges. 6 новых actual PG scenarios ожидают CI. Данные/Selectel не подключены. Далее03в–03з; вся фаза не завершена. Подробнее —ACCOUNT_ACCESS_VALIDATION.
 
 ## Подготовка следующей фазы
 
