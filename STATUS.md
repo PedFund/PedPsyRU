@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## 2026-10-04: 05в.3а в main; 05в.3б локально проверен
+
+PR #40 интегрирован обычным merge `09e0d63a4f85a4362c5937ded0fe2a3a01692f16`; tree `935c4156094284b9147a7bb58e3154ef7abb214c`, parents — прежний main `0ce94971` и final head `e90adce1`. [Финальный run 37221394432](https://github.com/PedFund/PedPsyRU/actions/runs/37221394432): все шесть jobs success, 233 base (Node 22/24), 191 actual PostgreSQL 18.6, три дополнительных Chrome runs по 2/2, ноль fail/cancel/skip. Все 242 blobs и 38 защищённых путей проверены до merge и в actual main; открытых PR после merge не было.
+
+Следующий малый блок 05в.3б: HTTP preflight/context/start/receipt/confirm/login, отдельный подписанный регистрационный cookie/CSRF, явный contact key, обезличенный обязательный denial audit (025). Локально 244/244 base, в том числе 11 новых unit/HTTP tests, сборка/типы/синтаксис/архитектура/dependency policy пройдены. Восемь новых actual PG HTTP tests написаны, но ещё не исполнены (ожидается 199 total). Не выдавать этот локальный результат за CI/готовый интерфейс. Начальный 10/11 failure был ошибкой тестового запроса: undefined Origin header отклонялся библиотекой инъекции; отсутствие заголовка теперь задано его удалением, HTTP guard не изменён; повтор 11/11 и полный 244/244 прошли.
+
+Owner stand и его ключи не изменены и не мигрированы; новый feature выключен без отдельного валидного contact key. Нет real mail/provider/новых прав/enrollment/passport/consent/UI в этом блоке. Далее 05г → 05д → 05е → отдельный 05в.4 enrollment → 05ж → 05з. Открытый вопрос withdrawal return относится к 05е, не мешает независимому паспорту. В локальной копии нет `.git`: сохранность определяется полным raw Git blob manifest, а не заявлением о чистом локальном index.
+
 ## 05в.3а — техническая проверка исполнена
 
 [PR #40](https://github.com/PedFund/PedPsyRU/pull/40), runtime head `8564527b7d3d48b3f92cd7f1864f2581969619e4`, tree `4595faf23adc6821a7ae5652cc4314167fd4aeb3`, [run 37220579686](https://github.com/PedFund/PedPsyRU/actions/runs/37220579686): все шесть jobs completed/success, 233base на Node22/24,191/191actualPG18.6, три дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Все16 новых receipt cases выполнились: current read→ACK races/SQL lock-wait expiry, AEAD/key/digest failure, idempotence/concurrency, mandatory audit rollback, durable limits/private ACL иcrypto outside transaction. Legacy022→latest upgrade/непустой queue backup также остаются частью успешной регрессии.242local/remote blobs и38 protected files сверены; старые заявления «actualPG ещё не выполнен» ниже — история.

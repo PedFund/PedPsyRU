@@ -10,14 +10,16 @@ const origin="http://127.0.0.1:4174",headers={host:"127.0.0.1:4174",origin};
 const {PostgresStudyConstructor}=require("../dist/src/adapters/postgres/studies.js"),{createStudyApi}=require("../dist/src/application/study-api.js");
 const {PostgresGroupInvitations}=require("../dist/src/adapters/postgres/group-invitations.js"),{createGroupInvitationApi}=require("../dist/src/application/participant-registration-api.js");
 const {PostgresStageAccess}=require("../dist/src/adapters/postgres/stage-access.js"),{createStageAccessApi}=require("../dist/src/application/stage-access-api.js");
-function workspaceFixture(f,customOrigin=origin){const vault=new MfaVault(randomBytes(32)),auth=new PostgresStaffMfa(f.runtime,vault),uow=new PostgresUnitOfWork(f.runtime);
+const {registrationBoundary}=require("../dist/src/bootstrap/registration-boundary.js");
+function workspaceFixture(f,customOrigin=origin,options={}){const vault=new MfaVault(randomBytes(32)),auth=new PostgresStaffMfa(f.runtime,vault),uow=new PostgresUnitOfWork(f.runtime);
   const account=createAccountApi({access:new PostgresAccountAccess(f.runtime),auth,researchers:new PostgresResearcherGateway(f.runtime),researcherManagement:new PostgresResearcherManagement(f.runtime),staffManagement:new PostgresStaffManagement(f.runtime),diagnostics:new PostgresStaffDiagnostics(f.runtime)},
     {forToken:csrfFor,assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
   const participant=createParticipantApi(new PostgresParticipantGateway(f.runtime,uow),createParticipationService(uow,{newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,v)=>responsesDigest(ids.map(item_id=>({item_id})),v)}));
   const studies=createStudyApi(new PostgresStudyConstructor(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
   const invitations=createGroupInvitationApi(new PostgresGroupInvitations(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
   const stageAccess=createStageAccessApi(new PostgresStageAccess(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-  const app=createWorkspaceApp(participant,account,customOrigin,workspaceAssets(),studies,invitations,stageAccess);
+  const registration=options.contactKey?registrationBoundary(f.runtime,options.contactKey,customOrigin):undefined;
+  const app=createWorkspaceApp(participant,account,customOrigin,workspaceAssets(),studies,invitations,stageAccess,registration);
   return {app,vault,auth,account};}
 function cookie(response,name){const list=response.headers["set-cookie"],all=Array.isArray(list)?list:[list];const found=all.find(x=>x?.startsWith(name+"="));if(!found)throw new Error("EXPECTED_COOKIE_MISSING");return found.split(";")[0];}
 async function staffHttp(f,w,role="superadministrator"){
