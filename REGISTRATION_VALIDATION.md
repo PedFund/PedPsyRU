@@ -1,10 +1,16 @@
 # Проверка регистрации участника — фаза05в
 
+## 05в.2: исполненная функциональная проверка, финальный security gate требуется
+
+Head `964458a575442053ef5d587bc5f50c807eaccc38`, tree `7782fc52c4499b6993731760f2063c2b3b16e27a`, [run37213372532](https://github.com/PedFund/PedPsyRU/actions/runs/37213372532):230/230base Node22/24,175/175actualPG18.6 и три дополнительных независимых Chrome runs по2/2,0fail/cancel/skip; Dependency audit success. Test-only fresh-DOM reload barrier фактически прошёл Chrome; все26 новых registration/current-lock/password/group/compatibility/upgrade cases прошли. Это не all6 acceptance: Secret scan и Required checks failed, head не merged.
+
+Единственное finding — generic-api-key в исторической строке7 этого Markdown: после слова о результатах сканирования стоит счётчик тестов, scanner captured `174/175actualPG` (15 chars, Shannon entropy3.5068905956 совпадает с log3.506891). Сверены tracked строка, redacted Finding context и официальная pinned8.30.1 regex/threshold, секретов в строке нет. По прежней политике внесён ровно один commit:path:rule:line fingerprint, не исключение файла/правила/regex; текущая фраза разбита для читаемости. Обоснование и источник — SECURITY_AND_DEPENDENCIES. Workflow/scan/redaction/package/core/001–022 неизменны. Новый documentary/security-fingerprint head требует всех6jobs/230base+175PG/3Chrome/currentbase/preview/parents/full235manifest/protected37 передordinarymerge. Actual integration proof фиксируется вPR после сверки реальногоmain.
+
 ## Отказ compatibility head и проверка browser reload readiness
 
 Два детерминированных unit case отдельно проверяют old-ready=false/new-unready=false/new-ready=true и propagation navigation/readiness failure без повторных навигаций. Новый base suite230 (прежние228+2), actualPG175; новый весь gate обязателен. Helper чисто test-only, actual Chrome остаётся required, unit не его замена.
 
-Head `000045ad8daf46c14100284c43fa60932a791faa`, tree `970754f3d27773db957fd6de3388bad6ac46fc0f`, [run37206238264](https://github.com/PedFund/PedPsyRU/actions/runs/37206238264):228base/dependency/secrets passed,174/175actualPG; все26 новыеregistration cases прошли, но constructorChrome failed `CI_BROWSER_PAGE_EVALUATION_FAILED` на92:104 после `location.reload()`/visibility wait. Required checks failure, extra3Chrome skipped; head не объединялся и не считается accepted.
+Head `000045ad8daf46c14100284c43fa60932a791faa`, tree `970754f3d27773db957fd6de3388bad6ac46fc0f`, [run37206238264](https://github.com/PedFund/PedPsyRU/actions/runs/37206238264). Base228, dependency и Secret scan passed. ActualPG: 174 из175; все26 новыеregistration cases прошли, но constructorChrome failed `CI_BROWSER_PAGE_EVALUATION_FAILED` на92:104 после `location.reload()`/visibility wait. Required checks failure, extra3Chrome skipped; head не объединялся и не считается accepted.
 
 Существующая readiness visibility могла выполниться в старом DOM ещё до navigation; третье evaluate затем обращалось к ещё не заполненной новой странице. Добавлен test-only reload helper: маркирует старыйdocument, вызывает CDP Page.reload (не evaluate location.reload в dyingcontext), ждёт одновременно другой DOM epoch и прежний ready predicate. Три reload sites используют этот барьер; timeout10s, assertions/auth/production code unchanged. Это устранение обнаруженного test race, не попытка скрыть failedrun или ослабить проверку. Новыйhead должен пройти175PG и все3independent Chrome runs/all6 заново; actual new success ещё требуется.
 
