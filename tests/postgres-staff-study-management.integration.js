@@ -8,6 +8,7 @@ function scenario(name,fn){test("PostgreSQL staff researcher workflow: "+name,as
   const s=await verifiedStaff(f),x=await studyResearcher(f,s);await fn(f,w,x,s);
 });}
 const staffHeaders=s=>({...headers,cookie:"pedpsy_staff_demo="+s.session.token,"x-pedpsy-csrf":csrfFor(s.session.token)});
+async function waitForManager(f){const until=Date.now()+2000;while(Date.now()<until){if((await f.admin.query("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=$1 AND wait_event_type='Lock' AND query LIKE '%rename_study%') waiting",[f.database])).rows[0].waiting)return;await new Promise(r=>setTimeout(r,10));}assert.fail("staff manager never reached lock wait");}
 async function configured(f,x,token,owner){let d=owner?await x.studies.createFor(token,owner,"Synthetic managed"):await x.studies.create(token,"Synthetic owned");
   d=await x.studies.group(token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});
   d=await x.studies.stage(token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
@@ -54,7 +55,7 @@ scenario("fresh MFA and current identity required; staff cannot forge participan
   for(const cookie of ["pedpsy_staff_demo="+x.session.token,"pedpsy_staff_demo="+f.raw,"pedpsy_pending_demo="+s.session.token])
     assert.equal((await w.app.inject({method:"PATCH",url:"/api/v2/staff/studies/"+d.id,headers:{...h,cookie},payload:{title:"Cross realm",expected_version:0}})).statusCode,401);
   for(const change of [{origin:"https://other.test"},{"x-pedpsy-csrf":"wrong"}])assert.equal((await w.app.inject({method:"PATCH",url:"/api/v2/staff/studies/"+d.id,headers:{...h,...change},payload:{title:"Bad",expected_version:0}})).statusCode,403);
-  await f.admin.query("UPDATE pedpsy.staff_sessions SET mfa_verified_at=clock_timestamp()-interval '5 minutes' WHERE token_hash=$1",[tokenHash(s.session.token)]);
+  await f.admin.query("UPDATE pedpsy.staff_sessions SET created_at_ms=$2::bigint,mfa_verified_at=to_timestamp($2::bigint/1000.0) WHERE token_hash=$1",[tokenHash(s.session.token),Date.now()-360000]);
   await assert.rejects(x.studies.title(s.session.token,d.id,{title:"Stale MFA",expected_version:0}),e=>e.code==="MFA_RECHECK_REQUIRED");
   assert.equal((await x.studies.read(s.session.token,d.id)).version,0);
   await f.admin.query("UPDATE pedpsy.staff_credentials SET status='revoked',version=version+1 WHERE id=$1",[s.id]);
@@ -83,4 +84,22 @@ scenario("explicit creation owner must be active; private helpers and creator pr
   await assert.rejects(x.studies.createFor(s.session.token,randomUUID(),"Unknown owner"),e=>e.status===404);
   // Global managers retain close/control of a blocked researcher's existing work.
   assert.equal((await x.studies.lifecycle(s.session.token,d.id,{status:"closed",expected_version:d.version})).status,"closed");
+});
+scenario("staff revocation committed while waiting prevents write and allow audit",async(f,w,x,s)=>{
+  const d=await x.studies.create(x.session.token,"Current staff"),owner=await f.admin.connect();let pending;
+  try{await owner.query("BEGIN");await owner.query("SELECT id FROM pedpsy.staff_credentials WHERE id=$1 FOR UPDATE",[s.id]);
+    pending=x.studies.title(s.session.token,d.id,{title:"Denied",expected_version:0}).then(value=>({value}),error=>({error}));await waitForManager(f);
+    await owner.query("UPDATE pedpsy.staff_credentials SET status='revoked',version=version+1 WHERE id=$1",[s.id]);await owner.query("COMMIT");assert.equal((await pending).error?.status,401);
+  }finally{await owner.query("ROLLBACK");owner.release();if(pending)await pending;}
+  assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,0);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='studies.title' AND outcome='allow'",[d.id])).rows[0].n,0);
+});
+scenario("owner membership removal during study lock wait is rechecked, not trusted from pre-read",async(f,w,x,s)=>{
+  const d=await x.studies.create(x.session.token,"Current owner"),owner=await f.admin.connect();let pending;
+  try{await owner.query("BEGIN");await owner.query("SELECT id FROM pedpsy.studies WHERE id=$1 FOR UPDATE",[d.id]);
+    pending=x.studies.title(s.session.token,d.id,{title:"Denied",expected_version:0}).then(value=>({value}),error=>({error}));await waitForManager(f);
+    await owner.query("UPDATE pedpsy.study_memberships SET status='revoked' WHERE study_id=$1 AND user_id=$2",[d.id,x.row.user_id]);await owner.query("COMMIT");assert.equal((await pending).error?.status,404);
+  }finally{await owner.query("ROLLBACK");owner.release();if(pending)await pending;}
+  assert.equal((await f.admin.query("SELECT title,design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].title,"Current owner");
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='studies.title' AND outcome='allow'",[d.id])).rows[0].n,0);
 });

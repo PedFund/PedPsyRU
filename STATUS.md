@@ -2,6 +2,8 @@
 
 ## 05б.1 — новое MVP-управление за исследователя, 2026-10-04
 
+Первый actualPG CI head925b8d5b/run37194884293:116/121, пять failures, Required checks failed; ничего не объединено. Два прежних assertions staff-denied заменены утверждённой положительной матрицей (методики/обработка/participant writes остаются отрицательными). Duplicate cookie нейтрально401 по trusted realm check (не403); same-origin/CSRF403 сохранены. Stale-MFA fixture теперь корректно сдвигает created_at вместе с MFA, не нарушая прежнийCHECK; Chrome label сокращён до прежнего50-char allowlist, guard не ослаблен. Последующие актуальные checks обязательны. Владелец дополнительно выбрал **открытие этапа отдельно по каждой группе**; не автоизменять КГ при открытии ЭГ.
+
 Владелец принял manual stage opening researcher/admin/super и staff-management всех исследований MVP. До правок полная локальная копия210blobs совпала main feb1d5f3/4f6e42ac, открытых PR нет; локального.git нет, ветку/индекс нельзя выдавать за проверенные. Все прежние разработки сохранены.
 
 Реализованы central studies.configure для обеих staff-ролей +fresh MFA, guarded SQL/append-only020, реальные staff HTTP paths конструктора/invites и кабинет создания для явно выбранного исследователя. Квота остаётся у owner; одинаковый credential lock сериализует researcher/staff activation. CAS/frozen design/no direct table access/mandatory actor-role-study-resource audit сохранены. Staff creator отдельной FK, прежняя researcher provenance не теряется. Renamed-cookie realm проверяется account gateway; participant/methods/processing права не расширены.

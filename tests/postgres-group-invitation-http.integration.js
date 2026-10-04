@@ -29,8 +29,9 @@ scenario("authenticated group link CRUD persists, token returned once and no enr
 scenario("same-origin, CSRF, realm, exact DTO and foreign group protections never leak state",async(f,w,x,s,h,path)=>{
   for(const extra of [{role:"superadministrator"},{group_id:randomUUID()},{invite_token:"i".repeat(43)}])
     assert.equal((await w.app.inject({method:"POST",url:path,headers:h,payload:{expires_at:Date.now()+86400000,...extra}})).statusCode,400);
-  for(const changed of [{...h,origin:"https://other.test"},{...h,"x-pedpsy-csrf":"bad"},{...h,cookie:h.cookie+"; "+h.cookie}])
+  for(const changed of [{...h,origin:"https://other.test"},{...h,"x-pedpsy-csrf":"bad"}])
     assert.equal((await w.app.inject({method:"POST",url:path,headers:changed,payload:{expires_at:Date.now()+86400000}})).statusCode,403);
+  assert.equal((await w.app.inject({method:"POST",url:path,headers:{...h,cookie:h.cookie+"; "+h.cookie},payload:{expires_at:Date.now()+86400000}})).statusCode,401);
   const stranger=await studyResearcher(f,s),foreign={...h,cookie:"pedpsy_researcher_demo="+stranger.session.token,"x-pedpsy-csrf":csrfFor(stranger.session.token)};
   for(const url of [path,path.replace(x.design.id,randomUUID()),path.replace(x.design.groups[0].id,f.seed.studies[1].groups[0].id)]){
     const r=await w.app.inject({url,headers:foreign});assert.equal(r.statusCode,404);assert.deepEqual(r.json(),{error:"NOT_AVAILABLE"});
