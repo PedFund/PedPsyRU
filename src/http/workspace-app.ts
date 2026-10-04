@@ -2,6 +2,7 @@ import type {FastifyInstance,FastifyRequest} from "fastify";
 import type {createAccountApi} from "../application/account-api.js";
 import type {createStudyApi} from "../application/study-api.js";
 import type {createParticipantApi} from "../application/participant-api.js";
+import type {createGroupInvitationApi} from "../application/participant-registration-api.js";
 import {ParticipationError} from "../ports/errors.js";
 import {createParticipantApp,readParticipantCookie} from "./participant-app.js";
 import {createBaseApp} from "./app.js";
@@ -21,7 +22,7 @@ export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   app.setNotFoundHandler(async(_r,reply)=>reply.code(404).send({error:"NOT_AVAILABLE"}));
   app.setErrorHandler(async(_e,_r,reply)=>reply.code(500).send({error:"INTERNAL_ERROR"}));return app;
 }
-export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>){
+export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>){
   const names=workspaceCookies(origin),secure=new URL(origin).protocol==="https:";
   const token=(r:FastifyRequest,name:string)=>readParticipantCookie(r.headers.cookie,name);
   const csrf=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
@@ -68,6 +69,17 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         app.post("/api/v2/researcher/studies/:id/stages/copy",async r=>studies.copy(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
         app.post("/api/v2/researcher/studies/:id/lifecycle",async r=>studies.lifecycle(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
         app.patch("/api/v2/researcher/studies/:id",async r=>studies.title(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
+      }
+      if(invitations){
+        app.get("/api/v2/researcher/studies/:id/groups/:group/invitations",async r=>{
+          const p=r.params as {id:string;group:string};return invitations.list(token(r,names.researcher),p.id,p.group);
+        });
+        app.post("/api/v2/researcher/studies/:id/groups/:group/invitations",async r=>{
+          const p=r.params as {id:string;group:string};return invitations.create(token(r,names.researcher),p.id,p.group,r.body,csrf(r));
+        });
+        app.post("/api/v2/researcher/studies/:id/groups/:group/invitations/:invite/revoke",async r=>{
+          const p=r.params as {id:string;group:string;invite:string};return invitations.revoke(token(r,names.researcher),p.id,p.group,p.invite,r.body,csrf(r));
+        });
       }
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }

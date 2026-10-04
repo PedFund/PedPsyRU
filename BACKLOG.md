@@ -68,8 +68,8 @@
 
 |Задача|Зависимость|Проверяемый результат|Статус|
 |---|---|---|---|
-|05а. Контракт пути участника|Фаза4|Scope исследования/группы/этапа, серверное назначение, версии паспорта/согласий, отказ при чужом/закрытом ресурсе; не новые administrative права|Реализован в PR#34: ports/pure policy/strict DTO/projection; 224/224 base (19 новых), typecheck/architecture/dependencies/syntax local passed. Current-head CI/merge ещё требуются; release/calendar этапов отдельно, runtime не реализован|
-|05б. Приглашения участников|05а|Общая многократная ссылка на группу; исследователь управляет только своими invites; opaque token/hash/expiry/revoke/limiting/audit, не роль/чужая группа из клиента|Запланировано|
+|05а. Контракт пути участника|Фаза4|Scope исследования/группы/этапа, серверное назначение, версии паспорта/согласий, отказ при чужом/закрытом ресурсе; не новые administrative права|Интегрирован PR#34/main72edcbcc:224/224base+all6currenthead/run37191056447, exact204blobs/tree/parents. Release/calendar этапов отдельно; registration runtime не реализован|
+|05б. Приглашения участников|05а|Общая многократная ссылка на группу; исследователь управляет только своими invites; opaque token/hash/expiry/revoke/limiting/audit, не роль/чужая группа из клиента|Технически принят PR#35:019/adapter/HTTP,224base+115actualPG/3Chrome/all6runtime aff67dfa/run37192386231; finaldocs требуют своего CI/mergegate. UI/QR/participant join ещё05ж|
 |05в. Присоединение и возврат|05б|Индивидуальная регистрация email/собственный пароль/подтверждение контакта; атомарные participant/enrollment/credential/attempts только нужных assignments, repeat без дубля; T1 без фиктивного T0; group assignment сервером|Запланировано|
 |05г. Схема паспорта|05а|Versioned optional basic/additional fields, whitelist/limits, frozen used schema, никакой новой психометодики/individual researcher access|Запланировано|
 |05д. Собственный паспорт|05г+05в|Participant own scoped save/CAS/restore, контакты отдельно; researcher не получает individual values|Запланировано|

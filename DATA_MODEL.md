@@ -2,7 +2,9 @@
 
 ## Дополнение 2026-10-04: проект регистрации фазы 5
 
-Принята общая ссылка на группу и индивидуальная регистрация по подтверждённому email с собственным паролем. Будущие group_invites, pending_registration/email verification, scoped contacts и запись согласий дополняют existing participants/stage_enrollments/attempts/credentials. Их поля, ограничения и migrations пока не реализованы. Email не становится PK диагностических таблиц; постоянные participant_id и scope сохраняются при возврате и смене подтверждённого контакта. Повторы в одном исследовании не создают второе участие того же подтверждённого контакта; совпадение почты между исследованиями не объединяет данные. Доставка/outbox отдельна от SQL-транзакции присоединения. Проект и отрицательные сценарии — PHASE5_PARTICIPANT_FLOW.md.
+Принята общая ссылка на группу и индивидуальная регистрация по подтверждённому email с собственным паролем. 05а ports/policy/DTO интегрирован PR#34. 05б/PR#35 добавляет `group_invitations` миграцией019: ID/study/group/hashed token/status/revision/created_by/created_at_ms/expires_at_ms/revoked_at_ms, composite group FK, уникальный digest/одна active запись на группу, immutable identity, persistent cap/index и аудит study+invite/group. Runtime table privileges отсутствуют; fixed functions выполняют current-owning-researcher gate underlocks, no global staff editing. Details/tests/ограничения — INVITATION_VALIDATION.
+
+Pending_registration/email verification, scoped contacts, паспорта и запись согласий остаются будущими. Email не становится PK диагностических таблиц; постоянные participant_id и scope сохраняются при возврате и смене подтверждённого контакта. Повторы в одном исследовании не создают второе участие того же подтверждённого контакта; совпадение почты между исследованиями не объединяет данные. Доставка/outbox отдельна от SQL-транзакции присоединения. Проект и отрицательные сценарии — PHASE5_PARTICIPANT_FLOW.md. Domain snapshot не начинает включать auth/invites/contact secrets: старый формат/guard сохранены; full DB backup остаётся отдельным защищённым контуром.
 
 ## Актуальное дополнение фазы 4
 

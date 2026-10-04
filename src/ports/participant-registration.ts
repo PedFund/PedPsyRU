@@ -1,14 +1,14 @@
 import type {LoginSession} from "./identity.js";
 
 // Trusted, current server snapshots. None of these objects is an HTTP capability.
-export interface RegistrationScope {
+export interface GroupInvitationScope {
   readonly studyId: string;
   readonly groupId: string;
   readonly datasetKind: "demo";
   readonly studyStatus: "draft" | "active" | "closed";
   readonly groupStatus: "active" | "closed";
-  readonly contactNoticeVersion: string;
 }
+export interface RegistrationScope extends GroupInvitationScope {readonly contactNoticeVersion: string}
 export interface GroupInvitationSnapshot {
   readonly purpose: "group_join";
   readonly id: string;
