@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## 2026-10-04: регистрационный HTTP-блок принят; схема паспорта в работе
+
+PR #41 обычным merge в main `c9b80a5af59d3b3f75a405aae4792f25bd9cf976`, tree `ddd92186dd80f17cc153f3d2dce3079023d998c1`, родители — прежний main `09e0d63a` и head `ae529436`. [Actual run 37223885301](https://github.com/PedFund/PedPsyRU/actions/runs/37223885301): все шесть jobs completed/success, 244 base на Node 22/24, 199 actual PostgreSQL 18.6, все восемь новых HTTP cases прошли; три дополнительных независимых Chrome runs по 2/2; ноль fail/cancel/skip. Полные 254 blobs/parents/tree/preview и 39 protected paths проверены до merge и после в actual main. Исторические pending статусы ниже не актуальны; proof записан в PR #41. Owner stand/MFA/ключи не изменены.
+
+Новый ответ владельца: sex/age обязательны, обязательность остальных выбирает исследователь, максимум пять дополнительных вопросов. Фаза 11 пока тоже в GitHub/Actions synthetic CI, не Selectel. Уточнение внесено **до публикации** первой версии паспортного блока: ранее локально подготовленная optional-age/10-fields модель не попадала в main/БД владельца. Основной каталог из исходной спецификации (образование, семейное положение, дети, занятость, тип населённого пункта) дополним позднее; текущая реализация sex/age/city не весь каталог.
+
+05г локально: immutable passport schema versions/current pointer + default metadata for existing/new demo studies, strict application port/DTO, guarded PG read/configure, append-only026. 252/252 base (восемь новых units) и build/typecheck/syntax/architecture/dependency checks passed после уточнения требований. 14 новых actual PG cases написаны, **ещё не исполнены**, ожидается 213 total; PASSPORT_VALIDATION описывает границы. Нет индивидуальных паспортных значений/HTTP/UI, реальных данных, новых contact/science прав. После technical merge — отдельный05д own passport; затем05е раздельные согласия (withdrawal return ещё ждёт ответа),05в.4 current-availability enrollment,05ж UI,05з приёмка. Вся фаза 5 не завершена.
+
 ## 2026-10-04: 05в.3а в main; 05в.3б локально проверен
 
 PR #40 интегрирован обычным merge `09e0d63a4f85a4362c5937ded0fe2a3a01692f16`; tree `935c4156094284b9147a7bb58e3154ef7abb214c`, parents — прежний main `0ce94971` и final head `e90adce1`. [Финальный run 37221394432](https://github.com/PedFund/PedPsyRU/actions/runs/37221394432): все шесть jobs success, 233 base (Node 22/24), 191 actual PostgreSQL 18.6, три дополнительных Chrome runs по 2/2, ноль fail/cancel/skip. Все 242 blobs и 38 защищённых путей проверены до merge и в actual main; открытых PR после merge не было.

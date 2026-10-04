@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05г: versioned passport question metadata (026)
+
+`passport_schema_versions`: composite PK (study_id,schema_version), scoped study FK, version1..100, fields JSON с strict CHECK, created_at. Исторические строки immutable. `study_passport_schemas`: study PK/FK, schema version + composite FK/unique index к scoped immutable version. Default-v1 sex/age required и city optional создаётся existing demo backfill/new-study trigger, не изменяет старые clinical IDs/строки. Исследователь меняет city required flag и до пяти own fields только в draft через current study/schema CAS; следующая версия сохраняет предыдущую.
+
+Все основные поля из исходной спецификации ещё не добавлены: нет выдуманного полного standard dictionary. Собственные types text/integer/single_choice + strict bounded metadata/boolean required; нет primary email identity/PII exports/scoring handler. Значения участников здесь не хранятся —следующий05д с scoped immutable schema FK/CAS. Таблицы private/default-deny RLS, runtime только read/configure guarded functions; FK индексы покрыты PK/unique. Domain snapshot сохраняет прежний формат и не включает паспортную историю; полный operational pg_dump/restore новой metadata проверит отдельный actual PG test (пока не исполнен).
+
 ## 05в.3б: HTTP-композиция без новой identity модели
 
 Append-only `025_registration_http_denial.sql` добавляет только guarded security-definer функцию фиксированного anonymous denial audit с проверяемым reason code. Не добавляет participant/session/contact/enrollment таблиц и не раскрывает private таблицы runtime; PUBLIC execute отозван. Registration pre-auth nonce существует только в подписанном cookie, TTL один час, привязан к цели/серверному origin; в registration SQL остаётся его digest. Nonce не становится credential/session/participant_id. Contact master отдельный, immutable encrypted outbox и модели 022–024 не переписываются. Новые восемь actual PG HTTP tests ещё должны подтвердить композицию, прежде чем она считается принятой.
