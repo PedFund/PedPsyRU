@@ -1,5 +1,7 @@
 # Состояние ПедПси
 
+05в.2 compatibility head000045ad/run37206238264 NOT accepted:174/175PG, all26newregistration cases passed, constructorChrome failed at tests/postgres-workspace-browser.integration.js:92:104 CI_BROWSER_PAGE_EVALUATION_FAILED after location.reload/visibility wait. Old document can still satisfy readiness; no source-regression claim or successful rerun substitution. Test-only CDP reload helper marks old DOM and requires fresh document epoch+same existing ready predicate (10s unchanged), no auth retry/assertion weakening/runtime change. Three existing reload sites use it. Required checks failed/extra3Chrome skipped, NOT merged. Newhead/current175/all6 gate required; failure evidence preserved in REGISTRATION_VALIDATION/PR.
+
 05в.2 PR#39 первыйruntime dbae3021/run37205660781 all6success:228base+174actualPG18.6/3Chrome по2/2,0fail/cancel/skip. Затем добавлена защита старого code login для новых contact-linked credentials и26-йactualPG case; old004/core/package/legacy login preserved. Новый175suite/current-head gate ещё требуется, по прежнему174head не merged. REGISTRATION_VALIDATION сохраняет обе контрольные точки; HTTP/ownerstand/enrollment ещё не менялись.
 
 ## 05в.2 — подтверждение контакта и вход, локальная реализация

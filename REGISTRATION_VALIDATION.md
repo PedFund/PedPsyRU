@@ -1,5 +1,13 @@
 # Проверка регистрации участника — фаза05в
 
+## Отказ compatibility head и проверка browser reload readiness
+
+Два детерминированных unit case отдельно проверяют old-ready=false/new-unready=false/new-ready=true и propagation navigation/readiness failure без повторных навигаций. Новый base suite230 (прежние228+2), actualPG175; новый весь gate обязателен. Helper чисто test-only, actual Chrome остаётся required, unit не его замена.
+
+Head `000045ad8daf46c14100284c43fa60932a791faa`, tree `970754f3d27773db957fd6de3388bad6ac46fc0f`, [run37206238264](https://github.com/PedFund/PedPsyRU/actions/runs/37206238264):228base/dependency/secrets passed,174/175actualPG; все26 новыеregistration cases прошли, но constructorChrome failed `CI_BROWSER_PAGE_EVALUATION_FAILED` на92:104 после `location.reload()`/visibility wait. Required checks failure, extra3Chrome skipped; head не объединялся и не считается accepted.
+
+Существующая readiness visibility могла выполниться в старом DOM ещё до navigation; третье evaluate затем обращалось к ещё не заполненной новой странице. Добавлен test-only reload helper: маркирует старыйdocument, вызывает CDP Page.reload (не evaluate location.reload в dyingcontext), ждёт одновременно другой DOM epoch и прежний ready predicate. Три reload sites используют этот барьер; timeout10s, assertions/auth/production code unchanged. Это устранение обнаруженного test race, не попытка скрыть failedrun или ослабить проверку. Новыйhead должен пройти175PG и все3independent Chrome runs/all6 заново; actual new success ещё требуется.
+
 ## Первый actualCI 05в.2 и дополнительная защита compatibility route
 
 PR#39/head `dbae3021614b4844ea8406441d9a2f9338978ede`, tree `dab52167db5ad1159c8b1778786edacd31b0a40e`, [run37205660781](https://github.com/PedFund/PedPsyRU/actions/runs/37205660781): все6completed/success,228base Node22/24+174/174actualPG18.6/3extraChrome2/2each,0fail/cancel/skip. Все25 новые сценарии выполнились, включая current SQL waits, identity/password isolation и022→023 upgrade с сохранённой encrypted заявкой.
