@@ -1,5 +1,11 @@
 # AGENTS.md — PedPsyRU
 
+## Текущий малый блок05в.0 — 2026-10-04
+
+05в.0 технически принятPR#37/runtimee178d784/run37200472709 all6success:227base+136actualPG18.6/3Chrome по2/2.12newstagecases, failurea1b057e3/135of136 сохранён: shared test-only previous-step TOTP helper ждёт безопасного окна, production MFA неослаблена. Finaldocs проходят новыйcurrent-head gate;actualintegration вPR. Послеordinarymerge продолжать05в малымиблоками: pending/outbox → одноразовое confirmation/login → HTTP/synthetic receiver; enrollments только после05г–05е passport/consents/currentavailability. Старые строки «локально/CI требуется» ниже исторические. Не начинатьrealmail/Selectel/новыеscienceправа/переписываниеcore илиownerstand.
+
+PR#36 ordinary merged main a77dc62e, finala68523cc/run37195859358 all6success/225base+124PG/3Chrome;214blobs actualtree/parents проверены. Локально следующий05в.0: append-only021/ports/API/PG/HTTP/UI manual group opening. Отсутствие access row = not_open/revision0; insert immutable open/revision1; same-current replay audited, stale409; no design/enrollment/attempt mutation или auto-close других этапов. Пока226base passed; новые PG/Chrome не выдавать за проверенные до current-head all6. STAGE_ACCESS_VALIDATION/STATUS фиксируют proof и пределы. После ordinary merge последовательно05в registration/contact confirmation synthetic; новые реальные права/почта/legal/science требуют прежних решений. Не переписывать001–020/core, не трогатьignoredownerstand/secrets.
+
 ## Область действия
 
 Эти инструкции автономной разработки действуют во всем проекте PedPsyRU.

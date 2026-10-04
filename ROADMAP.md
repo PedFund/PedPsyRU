@@ -1,5 +1,9 @@
 # ПедПси — единая дорожная карта разработки
 
+05в.0 technical acceptance#37/runtimee178d784/run37200472709:all6success/227base+136PG18.6/3Chrome; finaldocs проходят новыйheadgate передmerge. Далее05в разбит наpending/outbox,confirmation/login,HTTP synthetic delivery. Enrollment не выдаётся раньшеpassport/consent/currentavailability gates05г–05е. Фаза5 всё ещё вработе; source/evidence/limits —STATUS/BACKLOG/STAGE_ACCESS_VALIDATION.
+
+05б.1 интегрирован#36/maina77dc62e. Следующий отдельный05в.0 реализуетmanual opening по study×group×stage с persisted CAS/current locks/audit/HTTP/UI; technical readiness определяетсяSTATUS/STAGE_ACCESS_VALIDATION иcurrent-head all6. После merge —05в registration/contact verification; масштабирование/почта/deployment не смешиваются с этим маленьким блоком.
+
 Актуальное уточнение 2026-10-04: фаза5 начата,05а/05б integrated#34/#35. Владелец утвердил ручное открытие этапов researcher/admin/super и обеим staff-ролям управление всеми исследованиями MVP за исследователя. 05б.1 — staff constructor/invites,05в.0 — отдельное server availability, затем05в registration. No impersonation/science/participant-write expansion; frozen design/owner quota/MFA/audit сохраняются. Фактическая приёмка в STATUS/BACKLOG, не утверждать будущие endpoints готовыми. Старые opening-undecided/staff-readonly контрольные точки — история.
 
 **Репозиторий:** `PedFund/PedPsyRU`  

@@ -1,5 +1,7 @@
 # Фаза 5: согласованный путь участника
 
+05в.0 технически отделяет availability от конструктора: guarded manual opening/metadata и кабинет выбора группы, append-only021. Отсутствие row=not_open; stage copy/activation не открывает доступ, individual enrollment ещё не подключён. История открытия не заменяет current active parents/consent/contact проверки будущего enrollment; существующие legacy synthetic attempts сохраняются. Приёмка/current-head proof — STAGE_ACCESS_VALIDATION/STATUS. Следующий блок05в — synthetic registration/одноразовое contact confirmation, не реальные письма.
+
 ## Принятое уточнение 2026-10-04
 
 В MVP администратор и суперадминистратор могут выполнять управление исследованиями за исследователя во всех исследованиях, включая групповые приглашения и ручное открытие этапов. Это свои staff-права с MFA/audit, не impersonation исследователя или участника. Создание для явно выбранного researcher owner, квота владельца сохранена. Методики/обработчики администратор не изменяет; контакты и participant writes не расширяются. 05б.1 технически реализует staff-конструктор/invites; opening/enrollment требуют отдельного следующего блока.

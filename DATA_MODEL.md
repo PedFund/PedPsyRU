@@ -1,5 +1,9 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05в.0: group_stage_access, append-only021
+
+UNIQUE(study_id,group_id,stage_id), composite group/stage FK, exactly-one real researcher/staff creator FK и indexes; серверное время/id и revision1, UPDATE/DELETE запрещены. Нет строки = not_open/revision0, её создаёт только явный guarded open. Не копируется при stage copy, не следует из constructor active и не изменяет design_version. Сохранённая история не отменяет current active study/group/stage/release проверку. Runtime private helpers/table DML закрыты, RLS/default deny; list projection7полей безcreator/contact/diagnostics. Все001–020/SQLite migrations и диагностические записи прежние. Enrollment gate следующий05в–05е.
+
 ## MVP staff-управление 2026-10-04
 
 Новая append-only020 не меняет диагностические IDs/данные/выпуски и не переписывает001–019. Прежняя group_invitations.created_by FK researcher остаётся; nullable только для staff-создателя. Новый created_by_staff FK staff и CHECK ровно одного creator сохраняют происхождение и исключают подмену; оба поля immutable, новый partial creator/time index. DTO/list/audit не включают digest или raw token. Все данные закрыты runtime direct access/RLS; только guarded functions.

@@ -1,5 +1,7 @@
 # Политика доступа: учебный контур
 
+05в.0 добавляет manual group-stage opening в принятую studies.configure область: own researcher/global admin+super, текущие identity/owner/membership/activeparents/release и stafffreshMFA, mandatory audit/CAS. Read metadata — studies.read, не контакт/ответ/результат; прямой table/private helper/anonymous access отсутствует. Constructor active само по себе не разрешает enrollment; следующий enrollment workflow обязан проверить persisted access. Это не новая роль или impersonation.
+
 ## Актуальное уточнение 2026-10-04: управление за исследователя в MVP
 
 Обе staff-роли управляют исследованиями глобально: создать черновик для явно выбранного активного исследователя, изменить draft-группы/этапы/назначения/название, копировать настройки, активировать/закрыть и управлять общими приглашениями. Действие выполняется своей staff-сессией после свежей MFA (<5 минут), не чужой researcher-сессией. Квота берётся у действительного владельца; CAS, frozen active/closed/attempt-bearing designs, текущий статус и обязательный аудит не обходятся. Отсутствующий/неподходящий owner не становится staff-owned исследованием. Для существующего заблокированного владельца сотрудник сохраняет управление/закрытие, но не создаёт ему новые исследования.

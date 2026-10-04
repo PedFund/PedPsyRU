@@ -3,6 +3,7 @@ import type {createAccountApi} from "../application/account-api.js";
 import type {createStudyApi} from "../application/study-api.js";
 import type {createParticipantApi} from "../application/participant-api.js";
 import type {createGroupInvitationApi} from "../application/participant-registration-api.js";
+import type {createStageAccessApi} from "../application/stage-access-api.js";
 import {ParticipationError} from "../ports/errors.js";
 import {createParticipantApp,readParticipantCookie} from "./participant-app.js";
 import {createBaseApp} from "./app.js";
@@ -22,7 +23,7 @@ export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   app.setNotFoundHandler(async(_r,reply)=>reply.code(404).send({error:"NOT_AVAILABLE"}));
   app.setErrorHandler(async(_e,_r,reply)=>reply.code(500).send({error:"INTERNAL_ERROR"}));return app;
 }
-export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>){
+export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>){
   const names=workspaceCookies(origin),secure=new URL(origin).protocol==="https:";
   const token=(r:FastifyRequest,name:string)=>readParticipantCookie(r.headers.cookie,name);
   const csrf=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
@@ -96,6 +97,11 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
           const p=r.params as {id:string;group:string;invite:string};return invitations.revoke(token(r,names.researcher),p.id,p.group,p.invite,r.body,csrf(r));
         });
       }
+      if(stageAccess){for(const [realm,name] of [["researcher",names.researcher],["staff",names.staff]] as const){
+        const base=`/api/v2/${realm}/studies/:id/groups/:group/stage-access`;
+        app.get(base,async r=>{const p=r.params as {id:string;group:string};return stageAccess.list(token(r,name),p.id,p.group);});
+        app.post(base+"/:stage/open",async r=>{const p=r.params as {id:string;group:string;stage:string};return stageAccess.open(token(r,name),p.id,p.group,p.stage,r.body,csrf(r));});
+      }}
       // Cookie names alone do not bind a bearer to its realm. This trusted
       // identity read prevents renamed staff/researcher cookies crossing routes;
       // the write adapter still rechecks current authority atomically under locks.
