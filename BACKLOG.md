@@ -6,7 +6,7 @@
 
 | Блок | Проверяемый результат | Текущее состояние |
 |---|---|---|
-|05б.1 staff-управление|Обе роли создают для выбранного owner, ведут draft/lifecycle/invites; owner quota/current locks/CAS/MFA/audit|Реализован локально, CI/integration gate ещё впереди|
+|05б.1 staff-управление|Обе роли создают для выбранного owner, ведут draft/lifecycle/invites; owner quota/current locks/CAS/MFA/audit|Технически принятPR#36/runtimece594173/run37195401170:225base+124PG18.6/3Chrome/all6success; finaldocs/current-head merge gate обязателен|
 |05в.0 ручное открытие этапов|Отдельное persisted availability/CAS/audit, не design.active; три роли, запреты чужого/закрытого|Следующий блок до enrollment|
 |05в регистрация|Общая ссылка → свой email/password → одноразовое подтверждение → тот же scoped participant|После05в.0; synthetic delivery, не реальные письма|
 

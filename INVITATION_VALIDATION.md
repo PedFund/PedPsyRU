@@ -1,5 +1,9 @@
 # 05б: общие групповые приглашения
 
+## Последующее разрешение владельца:05б.1 — 2026-10-04
+
+Staff-readonly ниже описывает первоначальный05б, не действующую MVP-матрицу. Владелец прямо разрешил administrator/superadministrator управление за исследователя глобально. Новая020 сохраняет019/history/token rules и добавляет реальные staff HTTP операции, current fresh MFA/owner lock/CAS/audit и отдельную immutable staff-creator FK. Приёмка — STAFF_STUDY_VALIDATION:PR#36/runtimece594173/run37195401170,225base+124actualPG18.6 и3Chrome по2/2/all6success; finaldocs gate/actualmerge вPR. Researcher foreign scope/participant/science/contact negatives сохраняются. Открытие этапов отдельно по группам принято, но availability/signup/enrollment здесь ещё не реализованы.
+
 Дата: 2026-10-04. Блок: [PR#35](https://github.com/PedFund/PedPsyRU/pull/35), база main72edcbcc после принятого 05а/PR#34. Актуальное CI-доказательство/интеграция — STATUS и PR; компиляция TypeScript не доказывает успех SQL.
 
 ## Компоненты и границы
