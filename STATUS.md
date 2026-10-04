@@ -1,5 +1,19 @@
 # Состояние ПедПси
 
+## 05а: технический контракт участника — 2026-10-04
+
+В [PR#34](https://github.com/PedFund/PedPsyRU/pull/34) к согласованным документам добавлены pure ports/policy и application DTO boundary: общая групповая ссылка, подтверждение email с отдельным pending browser, study-scoped вход, versioned основания паспорта/согласий, delivery port. Только owning researcher управляет recruitment invites через прежнее studies.configure; staff не получает новое право редактирования. Confirmation не выдаёт session и не заменяет существующий пароль. Выходные DTO явно проецируются; email normalization и UTF-8 password bounds описаны в PHASE5_PARTICIPANT_FLOW.
+
+Локально 224/224 base (19 новых), build/typecheck/architecture/dependency-policy/JS syntax success; 0fail/cancel/skip. Тесты проверяют смешанные scope/purpose, revoke/expiry/revision/versions, staff denial, неизменную группу, enrollment только для явно доступного этапа, optional secondary consent, mass assignment и отсутствие секретов в DTO. Это не DB/race/HTTP/Chrome доказательство новой регистрации: runtime ещё не подключён. All6 CI документационного head64201668 прошли, но не доказывают следующий технический head; новый current-head gate перед merge обязателен. Core/key/form/existing migrations/package/lock/workflow не меняются.
+
+05б–05з ещё впереди; подробное открытие этапов уточняется с владельцем, outbox/provider/reminder schedule/реальные данные не согласованы. Pure policy нельзя использовать как отложенную capability: adapter обязан повторить current identity/scope/version gate под locks вместе с записью и обязательным аудитом. Локальный runtime после перезагрузки этим блоком не запускался и не проверялся; диагностика ОС идёт отдельно.
+
+## Фаза 5: согласование регистрации — 2026-10-04
+
+По сообщению владельца личный вход суперадминистратора завершён и кабинет осмотрен. Историческое «account пока не создан» ниже относится к контрольной точке 2026-10-03, а не текущему пользовательскому подтверждению. Личный пароль, MFA-секрет и резервные коды не запрашивались и в документы не включаются.
+
+Принят сценарий общей групповой ссылки от исследователя и индивидуальной регистрации участника по подтверждённому email с собственным паролем. Подготовлен проект PHASE5_PARTICIPANT_FLOW.md: серверное назначение, постоянная идентичность в исследовании, повторный вход, T1 без фиктивного T0, отдельные контакты и будущие напоминания. Это документальная часть 05а; ports/DTO, регистрации/приглашения/паспорт/согласия, миграции и UI пока не реализованы. Новые проверки и интеграция в main этим текстом не заявляются. В текущем изменении только Markdown; зависимости/расчёты/схема/учётные записи не меняются.
+
 ## Локальный стенд и личный первый вход — 2026-10-03
 
 Блок —[PR#33](https://github.com/PedFund/PedPsyRU/pull/33). Runtimehead5464b76098e610e5cc442fd72a7a5a04dfa777d5/[run37152592115](https://github.com/PedFund/PedPsyRU/actions/runs/37152592115):все6jobs completed/success,205/205baseNode22/24+103/103actualPG18.6,3дополнительных независимыхChrome runs по2/2,0fail/cancel/skip.197sourceblobs совпали local/published,9scientificblobs/fixture/всеexistingmigrations/package/lock/workflow unchanged. Финальное documentation-only обновление проходит тот же current-head all6/base/tree/parents/fullmanifest gate перед ordinary merge; никаких force/reset/удалений/массовогоmerge. Actual merge/CI evidence фиксируются также вPR.
