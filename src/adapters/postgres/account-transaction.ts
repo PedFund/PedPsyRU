@@ -18,6 +18,8 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
       if(e.code==="54000"&&e.message==="INVITE_LIMIT")throw new ParticipationError(413,"INVITE_LIMIT");
       if(e.code==="P0001"&&["INVITE_EXISTS","INVITE_CONFLICT","STAGE_ACCESS_CONFLICT"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
       if(e.code==="54000"&&e.message==="DESIGN_LIMIT")throw new ParticipationError(413,"DESIGN_LIMIT");
+      if(e.code==="54000"&&e.message==="REGISTRATION_LIMIT")throw new ParticipationError(413,"REGISTRATION_LIMIT");
+      if(e.code==="P0001"&&e.message==="PARTICIPATION_REQUIREMENTS_CHANGED")throw new ParticipationError(409,"PARTICIPATION_REQUIREMENTS_CHANGED");
       if(e.code==="P0001"&&["DESIGN_CONFLICT","DESIGN_FROZEN","STUDY_QUOTA","DESIGN_INCOMPLETE","DESIGN_DUPLICATE"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
     }
     throw mapPostgresError(e);

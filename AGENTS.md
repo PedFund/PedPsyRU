@@ -1,5 +1,9 @@
 # AGENTS.md — PedPsyRU
 
+## Текущий05в.1 — persisted registration start, 2026-10-04
+
+05в.0 integrated#37/main5c2f5543, final8ca61c65/run37200928344 all6success/227base+136PG/3Chrome/222manifest. Теперьлокальный05в.1: append-only022/immutable synthetic notice+отдельная policy/pending/encryptedoutbox; landing/reserve/queue, browser+invite+revision+notice binding, prehash persistent throttle/1000live cap, mandatoryaudit/current locks. Локально228base passed,12newPG требуютactualCI; REGISTRATION_VALIDATION/STATUS ведутproof. Существующийcore/package/001–021/SQLite/snapshotформат не переписывается. После small ordinarymerge05в.2 одноразовоеconfirmation/existing-password-preserving/contact/scopedlogin;05в.3HTTP/syntheticreceiver. Enrollment послеpassport/consent/currentopening, не наcontactstart. Только@example.test; no realmail/provider/PII/Selectel/ownerstandsecrets/newscientificrights. Не выдавать pending/outbox за email proof/participant/готовыйbrowserpath.
+
 ## Текущий малый блок05в.0 — 2026-10-04
 
 05в.0 технически принятPR#37/runtimee178d784/run37200472709 all6success:227base+136actualPG18.6/3Chrome по2/2.12newstagecases, failurea1b057e3/135of136 сохранён: shared test-only previous-step TOTP helper ждёт безопасного окна, production MFA неослаблена. Finaldocs проходят новыйcurrent-head gate;actualintegration вPR. Послеordinarymerge продолжать05в малымиблоками: pending/outbox → одноразовое confirmation/login → HTTP/synthetic receiver; enrollments только после05г–05е passport/consents/currentavailability. Старые строки «локально/CI требуется» ниже исторические. Не начинатьrealmail/Selectel/новыеscienceправа/переписываниеcore илиownerstand.

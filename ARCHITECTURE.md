@@ -1,5 +1,9 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05в.1 — отдельный pending workflow и delivery boundary
+
+PostgresRegistrationStart реализует только landing/start port (не полныйParticipantRegistration). Shared email normalization вpureport позволяет adapter иapplication использоватьодинаковые правила без нарушенияASTграниц. FixedSQL022 делает prehash admission/reservation60сек; scrypt/encryption внеlocks; финальнаяqueue reread/current locks+mandatoryaudit atomichash/outbox. Один reserved row может пережить hashing/queuefailure без credential/clinicalwrite; neutral start response содержиттолькоstatus, encrypted mail token никогда не возвращается. Separate ContactTokenVault purpose/delivery-bound AAD и отдельныйkey, не MFA reuse. НовыйHTTP/delivery/worker/bootstrapkey намеренно ещёнеподключён; realcontacts/provider выключены. Legacy diagnostic snapshot формат прежний, completeoperational recovery толькоfullPGbackup+separatekey. REGISTRATION_VALIDATION фиксируетtests/limits.
+
 ## 05в.0: дизайн и разрешение этапа — разные состояния
 
 GroupStageAccess port → exact DTO API → PostgresStageAccess adapter → fixed guarded SQL021; HTTP/bootstrap только composition. Own researcher и global staff могут вручную открыть study × group × stage; staff write требуетfresh MFA. Access запись immutable, bounded metadata, CAS0→1, mandatory audit/central commit gate. Тот же current owner/study/group lock order сохраняет staff/researcher/revoke/closure сериализацию. UI показывает серверное состояние выбранной группы; conflict/uncertain outcome требует reload, не автоматический повтор. Новые enrollments позже обязаны проверить access/current parents/contact/passport/consent атомарно; нынешние legacy synthetic attempts не мигрируются и не отзываются этим блоком. Новые зависимости/внешний сервис не добавлены; приёмка отдельно STAGE_ACCESS_VALIDATION.

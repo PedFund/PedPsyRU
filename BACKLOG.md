@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+05в.0 integrated#37/main5c2f5543/all6finalrun37200928344,227base+136PG/3Chrome. Текущий05в.1 локально реализован: persisted landing/reservation/queue,228base passed;12newPG/current-headgate ещётребуются. REGISTRATION_VALIDATION —proof/limits. Следующие05в.2confirmation/contact/scopedlogin и05в.3HTTP/syntheticreceiver; no enrollment before05г–05е gates, no realmail/stand mutation.
+
 05в.0 технически принят#37/runtimee178d784/run37200472709 all6success:227base+136PG18.6 и3Chrome по2/2; STAGE_ACCESS_VALIDATION сохраняет failedfixture/correction/limits. Finaldocs=current-head gate передordinarymerge. Послеинтеграции05в:1)persisted landing/pending/throttle/outbox;2)одноразовоеconfirm/повторбезpasswordreset/ownemail login;3)HTTP/cookies/Origin/CSRF иsynthetic receiver. Enrollment выдаётся только после05г–05е passport/consents ипроверки manualavailability, не сразупоcontact confirmation.
 
 Актуально05в.0:05б.1 ordinary merged#36/maina77dc62e, all6finalrun37195859358. Ручное group-stage opening реализовано локально,226basepassed;12новыхPG/Chrome требуютcurrent-head CI/merge, журналSTAGE_ACCESS_VALIDATION. После принятия —05в registration/email verification в synthetic контуре, затем05г–05з; не повторять staff-блок или начинать deployment.

@@ -2,6 +2,8 @@ import {ParticipationError} from "../ports/errors.js";
 import type {GroupInvitations, ParticipantRegistration, RegistrationStart, RegistrationConfirmation,
   ParticipantEmailLogin, GroupInvitationRecord} from "../ports/participant-registration.js";
 import {studyId} from "./study-api.js";
+import {participantEmail} from "../ports/contact-email.js";
+export {participantEmail} from "../ports/contact-email.js";
 
 const invalid = (): never => {throw new ParticipationError(400, "INVALID_REGISTRATION_INPUT");};
 function object(input: unknown, keys: readonly string[]): Record<string, unknown> {
@@ -17,18 +19,6 @@ export function registrationToken(input: unknown): string {
   if (typeof input !== "string" || !/^[a-zA-Z0-9_-]{43}$/.test(input))
     throw new ParticipationError(404, "NOT_AVAILABLE");
   return input as string;
-}
-export function participantEmail(input: unknown): string {
-  // Supported enrollment contact format: ASCII dot-atom, DNS-style domain.
-  // Preserve local-part case/dots/+tags; only the domain is case-insensitive.
-  // Same policy MUST be used by registration, lookup, login and contact change.
-  if (typeof input !== "string" || input.length > 254 || /[^\x21-\x7e]/.test(input)) invalid();
-  const parts = (input as string).split("@");
-  const local = parts[0] ?? "", domain = parts[1] ?? "";
-  if (parts.length !== 2 || local.length > 64 || !/^[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-zA-Z0-9!#$%&'*+/=?^_`{|}~-]+)*$/.test(local) ||
-    domain.length > 253 || !domain.includes(".") || domain.split(".").some(label =>
-      !/^[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?$/.test(label))) invalid();
-  return local + "@" + domain.toLowerCase();
 }
 function password(input: unknown): string {
   // Existing scrypt size bounds: >=12 code units, <=256 UTF-8 bytes.
