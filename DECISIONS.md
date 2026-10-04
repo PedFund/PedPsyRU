@@ -1,5 +1,9 @@
 # Журнал решений
 
+## 2026-10-04 — малый persisted блок05в.1 вsynthetic контуре
+
+Регистрация делитсянаpending/outbox,confirmation/login,HTTP/syntheticdelivery; текущийблок не создаётучастникаилипрохождения. Доlegal/provider/real-datarelease принимаютсятольковымышленные@example.test, noticeявноsynthetic_only. Emailправилаapproved05а прежние, общийpurevalidator нужениз-заASTdependency boundaries. Отдельнаяnoticepolicy не изменяетfrozen design/legacy diagnostic snapshot; recoveryoperational state требуетfullPGbackup. Reservation60секдоhashing иconfirmation30мин, persistentglobal30/5мин+browser/email5/15мин, cap1000livepending — техническиеlimitingchoices, нерасписаниенапоминаний. Секретqueuedconfirmation шифруетсяотдельнымpurpose/row-bound vault/key, noactualmail/bootstrapstandchange вэтомблоке.
+
 ## 2026-10-04 — техническая форма принятого ручного открытия
 
 Отдельный05в.0 сохраняет opening по study × group × stage; отсутствие записи не разрешает новый enrollment. Только явное manual open/revision0→1, immutable creator/time/history; current revision1 replay idempotent с аудитом, stale409. Открытие не закрывает другие этапы/группы и не меняет frozen дизайн. Закрытие отдельных этапов/reopen/calendar не утверждены этим блоком и не вводятся. Исследователь действует в своём scope, обе staff-роли глобально соfresh MFA/real audit. SQL/HTTP/UI реализованы, actualPG/CI readiness — STATUS/STAGE_ACCESS_VALIDATION, не факт по этому решению.

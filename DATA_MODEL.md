@@ -1,5 +1,9 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05в.1 — append-only022 pending и contact queue
+
+contact_notices immutable/versioned/synthetic_only; study_contact_policies отдельно отstudies/design_version, FK/auto-init/defaultnotice дляexisting/new studies. registration_pending: exact study/group/invitation compositeFK/revision/browserdigest/emailkey/noticeFK, reserved→pending→confirmed|cancelled transitions (confirmationendpoint ещёнеimplemented), immutable scope/material послеpending, sharedpurpose digest, expiry/attemptbounds иunique activebrowser/email. contact_confirmation_outbox: UNIQUEpending, purposefixed, recipient изserverpending, delivery-bound AES-GCM envelope, expiry/status/retry bounds, immutableidentity. RLS/defaultdeny/privatehelpersclosed; no directruntimegrants. Domainparticipants/accounts/enrollments/attempts ещёнеизменяются; fullPGbackup покрываетновыеoperational tables, legacyDOMAIN_TABLEStransfer не ихbackup. Keyвнеrepo/DB инепересоздаватьприrestore.
+
 ## 05в.0: group_stage_access, append-only021
 
 UNIQUE(study_id,group_id,stage_id), composite group/stage FK, exactly-one real researcher/staff creator FK и indexes; серверное время/id и revision1, UPDATE/DELETE запрещены. Нет строки = not_open/revision0, её создаёт только явный guarded open. Не копируется при stage copy, не следует из constructor active и не изменяет design_version. Сохранённая история не отменяет current active study/group/stage/release проверку. Runtime private helpers/table DML закрыты, RLS/default deny; list projection7полей безcreator/contact/diagnostics. Все001–020/SQLite migrations и диагностические записи прежние. Enrollment gate следующий05в–05е.

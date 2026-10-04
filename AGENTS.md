@@ -1,5 +1,13 @@
 # AGENTS.md — PedPsyRU
 
+## Приёмка 05в.1 — 2026-10-04
+
+PR #38, runtime head `9bb3f94052afb2afca8164e86200b6f8a3976501`, tree `90eb6ca23787f1c173b6c0a251c0a2e8f5acf4df`, run `37203662168`: все шесть jobs completed/success; 228 base (Node22/24), 149 actualPG18.6 и три независимых Chrome runs по 2/2, без fail/cancel/skip. Проверен полный backup непустой pending/outbox с отдельным retained key и default-deny после restore. Финальный documentary head требует нового полного current-head gate перед ordinary merge; actual integration фиксируется в PR. После интеграции продолжать 05в.2 (одноразовое confirmation/contact/scoped login), затем 05в.3 (HTTP/synthetic receiver), без ожидания отдельного подтверждения. Ни enrollment, ни realmail/Selectel/новые права не добавлены. Старые «ожидается CI» ниже — история.
+
+## Текущий05в.1 — persisted registration start, 2026-10-04
+
+05в.0 integrated#37/main5c2f5543, final8ca61c65/run37200928344 all6success/227base+136PG/3Chrome/222manifest. Теперьлокальный05в.1: append-only022/immutable synthetic notice+отдельная policy/pending/encryptedoutbox; landing/reserve/queue, browser+invite+revision+notice binding, prehash persistent throttle/1000live cap, mandatoryaudit/current locks. Локально228base passed,12newPG требуютactualCI; REGISTRATION_VALIDATION/STATUS ведутproof. Существующийcore/package/001–021/SQLite/snapshotформат не переписывается. После small ordinarymerge05в.2 одноразовоеconfirmation/existing-password-preserving/contact/scopedlogin;05в.3HTTP/syntheticreceiver. Enrollment послеpassport/consent/currentopening, не наcontactstart. Только@example.test; no realmail/provider/PII/Selectel/ownerstandsecrets/newscientificrights. Не выдавать pending/outbox за email proof/participant/готовыйbrowserpath.
+
 ## Текущий малый блок05в.0 — 2026-10-04
 
 05в.0 технически принятPR#37/runtimee178d784/run37200472709 all6success:227base+136actualPG18.6/3Chrome по2/2.12newstagecases, failurea1b057e3/135of136 сохранён: shared test-only previous-step TOTP helper ждёт безопасного окна, production MFA неослаблена. Finaldocs проходят новыйcurrent-head gate;actualintegration вPR. Послеordinarymerge продолжать05в малымиблоками: pending/outbox → одноразовое confirmation/login → HTTP/synthetic receiver; enrollments только после05г–05е passport/consents/currentavailability. Старые строки «локально/CI требуется» ниже исторические. Не начинатьrealmail/Selectel/новыеscienceправа/переписываниеcore илиownerstand.

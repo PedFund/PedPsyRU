@@ -1,5 +1,7 @@
 # ПедПси — единая дорожная карта разработки
 
+2026-10-04: 05в.0 интегрирован#37/main5c2f5543; 05в.1 технически принят#38/runtime9bb3f940/run37203662168, all6success/228base+149actualPG18.6/3Chrome по2/2. Проверены заявки и защищённая очередь, включая непустой backup/restore, но ещё не confirmation/login/HTTP/participant flow. Финальный documentary head — новый gate; после ordinary merge следующие малые 05в.2 и 05в.3. Основная фаза5 остаётся в работе: паспорт/согласия/enrollment/единый browser path ещё не завершены. Proof/ограничения — REGISTRATION_VALIDATION/STATUS.
+
 05в.0 technical acceptance#37/runtimee178d784/run37200472709:all6success/227base+136PG18.6/3Chrome; finaldocs проходят новыйheadgate передmerge. Далее05в разбит наpending/outbox,confirmation/login,HTTP synthetic delivery. Enrollment не выдаётся раньшеpassport/consent/currentavailability gates05г–05е. Фаза5 всё ещё вработе; source/evidence/limits —STATUS/BACKLOG/STAGE_ACCESS_VALIDATION.
 
 05б.1 интегрирован#36/maina77dc62e. Следующий отдельный05в.0 реализуетmanual opening по study×group×stage с persisted CAS/current locks/audit/HTTP/UI; technical readiness определяетсяSTATUS/STAGE_ACCESS_VALIDATION иcurrent-head all6. После merge —05в registration/contact verification; масштабирование/почта/deployment не смешиваются с этим маленьким блоком.

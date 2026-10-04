@@ -1,5 +1,19 @@
 # Состояние ПедПси
 
+## 05в.1 технически принят — 2026-10-04
+
+[PR #38](https://github.com/PedFund/PedPsyRU/pull/38), runtime head `9bb3f94052afb2afca8164e86200b6f8a3976501`, tree `90eb6ca23787f1c173b6c0a251c0a2e8f5acf4df`, [run 37203662168](https://github.com/PedFund/PedPsyRU/actions/runs/37203662168): все шесть обязательных jobs completed/success. 228 основных тестов на Node22/24, 149/149 actualPG18.6, три дополнительных независимых Chrome runs по 2/2, 0 fail/cancel/skip. Включены 13 новых PG сценариев и восстановление непустой encrypted queue в отдельную БД; источник сохранён, ключ отдельно, direct/private/PUBLIC доступ закрыт. 230 blob source manifest и 36 protected core/method/001–021PG/SQLite/package/workflow blobs сверены. REGISTRATION_VALIDATION содержит границы доказательств.
+
+Финальный documentary head проходит новый all6/current-head/base/preview/tree/parents/fullmanifest gate перед обычным merge. Фактический merge SHA/дерево и повторная сверка фиксируются в PR; не выдавать успешный runtime run за проверку последующего head. Следующий малый блок — 05в.2 confirmation/contact/возврат по email; 05в.3 HTTP/test receiver и паспорт/согласия/enrollment ещё впереди. Owner stand/секреты не менялись; фаза5 не завершена.
+
+## 05в.1 — первая persisted часть регистрации, 2026-10-04
+
+ПервыйPR#38/head159cf497/run37202694987 all6success:228base+148actualPG18.6/3extraChrome2/2каждый,0fail/cancel/skip. Добавленотдельный13-й actualPG case непустойqueuebackup/restore сretainedkey изакрытиемpublic/helper/tableprivileges доruntime. Прежнийbounded/redactedcontainertransport переиспользованбезослабленияguards; новый149suite/currentheadещётребуетCI. Ничегонеmergedпоobsoletehead.
+
+05в.0 ordinary merged#37/main5c2f554323ae01366eccbee4f7ddb59f720579d2, final8ca61c65/run37200928344 all6success,227base+136PG18.6/3Chrome по2/2.222actualmergeblobs/parents/tree/protected35 совпали; открытыхPR послеmergeнет. Действующий owner stand не мигрировали/не запускали.
+
+05в.1 реализован локально: append-only022/synthetic notice+отдельная policy/pending/outbox, fixed landing/reserve/queue, prehash durable throttle, browser/invite/revision/version binding, salted scrypt внеSQLlocks и purpose/row-bound AES-GCM payload. Contact email validator pureport без изменения approved semantics; participant/credential/enrollment/attempt/login/delivery/HTTP пока не создаются. REGISTRATION_VALIDATION описывает staged commit/reservation60сек/confirmation30мин/1000live cap/ограниченияrestore. Локально228baseиchecks passed;12новыхPG ещё требуютactual CI/current-head all6/merge. Затем05в.2confirmation/login,05в.3HTTP/syntheticreceiver,passport/consent иenrollment gates отдельно.
+
 ## 05в.0 — ручное открытие отдельно по группам, 2026-10-04
 
 Технически принят [PR#37](https://github.com/PedFund/PedPsyRU/pull/37), runtimee178d784b5668a45bd00afdfd17fc0487ca88592/tree433c8ba8e458fa4bdff30c665f32362b78e0d695, [run37200472709](https://github.com/PedFund/PedPsyRU/actions/runs/37200472709): все6completed/success,227base Node22/24+136/136actualPG18.6 и3дополнительных Chrome runs по2/2,0fail/cancel/skip. STAGE_ACCESS_VALIDATION фиксирует12новыхcases/fixturefailure/correction/пределы;222blobs/protected35 проверены. Finaldocs требуют новогоcurrent-head all6/base/preview/tree/parents/fullmanifest передordinarymerge; actual integration записывается вPR. После merge —05в регистрация, разбитая на pending/outbox → одноразовое подтверждение/возврат → HTTP synthetic delivery; enrollment только послеpassport/consent gates. Всяфаза5 ещё не завершена.
