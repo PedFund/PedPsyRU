@@ -1,5 +1,7 @@
 # Фаза 5: согласованный путь участника
 
+05в.2 integrated#39/main0ce94971/finalrun37218552215 all6success. Следующий05в.3 дополнительно разбит:05в.3а — protected synthetic receipt/context,05в.3б — HTTP/cookies/CSRF/explicit separate key. Тестовый приёмник возвращает только own browser/invite proof иявный synthetic marker, не realmail ownership. Подтверждение контакта по-прежнему отдельное explicit action, неsession/enrollment/study consent. Public context даёт trusted study_id для scoped return link; registration group/role серверные. Фактическое исполнение tests/merge —STATUS/REGISTRATION_VALIDATION, не этот план. Паспорт/раздельные согласия/current opening enrollment/UI ещё впереди.
+
 05в.0 технически отделяет availability от конструктора: guarded manual opening/metadata и кабинет выбора группы, append-only021. Отсутствие row=not_open; stage copy/activation не открывает доступ, individual enrollment ещё не подключён. История открытия не заменяет current active parents/consent/contact проверки будущего enrollment; существующие legacy synthetic attempts сохраняются. Приёмка/current-head proof — STAGE_ACCESS_VALIDATION/STATUS. Следующий блок05в — synthetic registration/одноразовое contact confirmation, не реальные письма.
 
 ## Принятое уточнение 2026-10-04

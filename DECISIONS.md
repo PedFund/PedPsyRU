@@ -1,5 +1,9 @@
 # Журнал решений
 
+## 2026-10-04 — малый тестовый приёмник перед HTTP
+
+05в.3 разбит на persistence receipt/context иотдельное HTTP composition. Это техническая реализация уже принятого synthetic flow, не разрешение настоящей почты или новые контактные права. Explicit synthetic opt-in, только@example.test; public receipt явно synthetic ине доказывает владение реальным ящиком. Лимиты100/global/5min и10/browser/15min, current read→crypto outside SQL→fresh mandatory audited ACK, idempotent sent retry. Старый landing/ключи/credential/методики не меняются; новый server study_id нужен для permanent scoped return path, неclient authority. HTTP/почтовый provider/напоминания/enrollment/отзыв согласий остаются отдельными блоками. Вопрос о возврате после withdrawal ожидает владельца.
+
 ## 2026-10-04 — техническая реализация принятого сценария 05в.2
 
 Study-scoped подтверждённый email и неизменная group binding реализуются отдельно от diagnostic participant. Повторный подтверждённый контакт даёт только sign_in_required, никогда новый пароль/группу/роль/сессию или silent reactivation. Contact processing acknowledgement version хранится отдельно от будущих study/secondary consents. Пять неверных одноразовых подтверждений persistent/browser-scoped, final exhaustion отменяет own ready delivery; current notice/revision/expiry проверяются под SQL locks. Email login использует тот же existing credential/scrypt/session rotation и shared old login throttle, unknown contacts — dummy hash/neutral401. Отзыв общей recruitment ссылки не исключает принятых участников. Это внутреннее исполнение уже принятого product flow, не новые права или утверждённая юридическая форма. Только@example.test; real delivery/withdrawal/production/retention/minors/Selectel остаются отдельными решениями.

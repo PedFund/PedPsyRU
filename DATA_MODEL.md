@@ -1,5 +1,9 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05в.3а — append-only024, без новых контактных таблиц
+
+024 сохраняет022 pending/outbox и023 identity, добавляет partial pending(invitation_id,browser_hash,created_at_ms DESC,id) index. Public registration_context содержит metadata+study_id, не право выбрать scope. Private locked helper проверяет current parents/revision/notice, pending attempts/status иoutbox purpose/recipient/status/time; expiry берётся после SQL lock waits. Material функция возвращает серверу только зашифрованные поля, finalACK ready→sent не переписывает sent row. PUBLIC EXECUTE revoked, runtime получает только три guarded функции; helper/table grants отсутствуют. Receipt throttles используют existing login_throttles с отдельным purpose-prefixed hash иpersisted limits, неPII buckets. Диагностические записи/сессии/согласия участия не создаются, operational backup по-прежнему fullPostgreSQL+отдельный retained contact key.
+
 ## 05в.2 — append-only023 contact identity
 
 participant_group_bindings: PK(study,participant), composite participant/group FK, immutable scope/time. participant_contacts: server UUID, UNIQUE(study,email_key) и(study,participant), synthetic canonical email, original pending proof/time, active→withdrawn единственный storage transition; private/RLS/default deny. Контакт не диагностический PK; existing repeat не обновляет contact/credential/group. Withdrawal API/retention/contact-change ещё не реализованы. participant_contact_acceptances: immutable pending PK, scoped contact и exact pending notice composite FK, подтверждённая version/time; это только контактные условия, не участие/secondary consent. FK indexes явные. 023 добавляет два UNIQUE constraints в pending через новую миграцию; строки/material и checksums001–022 сохраняются.
