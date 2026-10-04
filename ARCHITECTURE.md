@@ -1,5 +1,9 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05в.0: дизайн и разрешение этапа — разные состояния
+
+GroupStageAccess port → exact DTO API → PostgresStageAccess adapter → fixed guarded SQL021; HTTP/bootstrap только composition. Own researcher и global staff могут вручную открыть study × group × stage; staff write требуетfresh MFA. Access запись immutable, bounded metadata, CAS0→1, mandatory audit/central commit gate. Тот же current owner/study/group lock order сохраняет staff/researcher/revoke/closure сериализацию. UI показывает серверное состояние выбранной группы; conflict/uncertain outcome требует reload, не автоматический повтор. Новые enrollments позже обязаны проверить access/current parents/contact/passport/consent атомарно; нынешние legacy synthetic attempts не мигрируются и не отзываются этим блоком. Новые зависимости/внешний сервис не добавлены; приёмка отдельно STAGE_ACCESS_VALIDATION.
+
 ## Новое MVP-решение 2026-10-04: управление исследованиями сотрудниками
 
 05б.1 добавляет staff paths конструктора и group-invite CRUD, централизованное studies.configure для обеих ролей с fresh MFA. Append-only020 повторяет current authority под locks; staff management → credential настоящего owner → user → study → membership → group/invite. Тот же owner credential сериализует квоту и researcher/staff writes. Current membership повторно проверяется после lock wait. Новый createFor не impersonation: owner выбирается явно, member только исследователь, audit — реальный staff credential/role/study/resource. Cookie realm дополнительно проверяется доверенным account API, затем write повторяется атомарно в adapter; UI не authority.

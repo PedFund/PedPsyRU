@@ -1,5 +1,9 @@
 # AGENTS.md — PedPsyRU
 
+## Текущий малый блок05в.0 — 2026-10-04
+
+PR#36 ordinary merged main a77dc62e, finala68523cc/run37195859358 all6success/225base+124PG/3Chrome;214blobs actualtree/parents проверены. Локально следующий05в.0: append-only021/ports/API/PG/HTTP/UI manual group opening. Отсутствие access row = not_open/revision0; insert immutable open/revision1; same-current replay audited, stale409; no design/enrollment/attempt mutation или auto-close других этапов. Пока226base passed; новые PG/Chrome не выдавать за проверенные до current-head all6. STAGE_ACCESS_VALIDATION/STATUS фиксируют proof и пределы. После ordinary merge последовательно05в registration/contact confirmation synthetic; новые реальные права/почта/legal/science требуют прежних решений. Не переписывать001–020/core, не трогатьignoredownerstand/secrets.
+
 ## Область действия
 
 Эти инструкции автономной разработки действуют во всем проекте PedPsyRU.

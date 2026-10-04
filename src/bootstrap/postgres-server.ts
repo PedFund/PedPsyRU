@@ -19,6 +19,8 @@ import {workspaceAssets} from "./workspace-assets.js";
 import {demoConfig} from "./demo-config.js";
 import {PostgresStudyConstructor} from "../adapters/postgres/studies.js";
 import {createStudyApi} from "../application/study-api.js";
+import {createStageAccessApi} from "../application/stage-access-api.js";
+import {PostgresStageAccess} from "../adapters/postgres/stage-access.js";
 import {PostgresGroupInvitations} from "../adapters/postgres/group-invitations.js";
 import {createGroupInvitationApi} from "../application/participant-registration-api.js";
 async function main(): Promise<void> {
@@ -35,7 +37,8 @@ async function main(): Promise<void> {
       {forToken:csrfFor,assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const studies=createStudyApi(new PostgresStudyConstructor(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations);
+    const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
+    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess);
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}

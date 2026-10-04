@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+Актуально05в.0:05б.1 ordinary merged#36/maina77dc62e, all6finalrun37195859358. Ручное group-stage opening реализовано локально,226basepassed;12новыхPG/Chrome требуютcurrent-head CI/merge, журналSTAGE_ACCESS_VALIDATION. После принятия —05в registration/email verification в synthetic контуре, затем05г–05з; не повторять staff-блок или начинать deployment.
+
 ## Текущий порядок фазы5 — 2026-10-04
 
 05а и05б интегрированы в main (#34/#35), две из восьми основных задач. Новое прямое решение владельца: manual opening исследователь/admin/super; обе staff-роли управляют всеми исследованиями MVP за исследователя (без impersonation/science/participant writes). Вставлены два малых зависимых блока, не одна огромная регистрация:
