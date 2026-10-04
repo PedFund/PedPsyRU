@@ -1,5 +1,11 @@
 # Проверка паспортной схемы и собственных значений
 
+## Первый actual CI и исправление fixture — 2026-10-04
+
+PR #42/head `e932fec6c4df844f53de69479c1f468c51d1472f`, tree `c35188105b67088272a33e0366189e313f8ec230`, [run37225848294](https://github.com/PedFund/PedPsyRU/actions/runs/37225848294): 252 base на Node22/24 passed, dependency/Secret success; actual PG18.6 —212 passed из213, один failure, ноль cancelled/skipped в PG. Три дополнительные Chrome runs **не выполнялись**: шаг пропущен после failure; Required gate failed, PR не объединён.
+
+Единственный failure — attempt-bearing fixture использовал legacy seed study с researcher membership без real credential. Staff owner guard правильно вернул NOT_AVAILABLE раньше ожидаемого DESIGN_FROZEN. Исправлен только synthetic fixture: отозван legacy placeholder membership, назначен ровно один уже созданный действующий researcher owner; затем та же сильная проверка DESIGN_FROZEN и новая сверка неизменности clinical IDs/status/revisions. Runtime authority/freeze/SQL/assertions не ослаблены. Upgrade test также считает число последующих append-only migrations, не предполагает навсегда ровно одну026. Все13 остальных новых PG schema cases, включая scoped roles/current locks/audit rollback/full operational recovery, фактически прошли; это не all-six acceptance. Исправленный descendant head требует полного нового current-head CI/213 и трёх независимых Chrome runs перед merge. История failure сохранена.
+
 ## 05г: metadata-only, 2026-10-04
 
 Основание — новое прямое решение владельца: sex/age обязательны; обязательность остальных researcher выбирает; max5 own questions. Default synthetic schema пока sex/age/city, не полный standard каталог. Образование/семья/дети/занятость/тип населённого пункта дополним позже с закреплёнными справочниками; не выдавать их за реализованные. Фаза11 пока GitHub/Actions, не Selectel.

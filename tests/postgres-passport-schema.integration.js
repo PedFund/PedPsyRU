@@ -36,7 +36,13 @@ scenario("active/closed/attempt-bearing designs cannot change even unused passpo
   d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});d=await x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version});
   let p=await x.schemas.read(x.session.token,d.id);assert.equal(p.frozen,true);await assert.rejects(x.schemas.configure(x.session.token,d.id,input(p)),e=>e.code==="DESIGN_FROZEN");
   d=await x.studies.lifecycle(x.session.token,d.id,{status:"closed",expected_version:d.version});p=await x.schemas.read(x.session.token,d.id);await assert.rejects(x.schemas.configure(x.s.session.token,d.id,input(p)),e=>e.code==="DESIGN_FROZEN");
+  // Legacy seed membership has no real researcher credential. A staff write
+  // must first have exactly one valid owner, then independently hit freeze.
+  const before=(await f.admin.query("SELECT id,status,revision FROM pedpsy.attempts WHERE study_id=$1 ORDER BY id",[f.studyId])).rows;
+  await f.admin.query("UPDATE pedpsy.study_memberships SET status='revoked' WHERE study_id=$1 AND role='researcher'",[f.studyId]);
+  await f.admin.query("INSERT INTO pedpsy.study_memberships(study_id,user_id,role) VALUES($1,$2,'researcher')",[f.studyId,x.row.user_id]);
   await f.admin.query("UPDATE pedpsy.studies SET status='draft' WHERE id=$1",[f.studyId]);const legacy=await x.schemas.read(x.s.session.token,f.studyId);assert.equal(legacy.frozen,true);await assert.rejects(x.schemas.configure(x.s.session.token,f.studyId,input(legacy)),e=>e.code==="DESIGN_FROZEN");
+  assert.deepEqual((await f.admin.query("SELECT id,status,revision FROM pedpsy.attempts WHERE study_id=$1 ORDER BY id",[f.studyId])).rows,before);
 });
 scenario("researcher scope and participant realm cannot grant metadata management",async(t,f,x)=>{
   const other=await studyResearcher(f,x.s);await assert.rejects(x.schemas.read(other.session.token,x.d.id),e=>e.status===404);await assert.rejects(x.schemas.configure(other.session.token,x.d.id,{expected_version:0,expected_schema_version:1,basic_required:{city:false},additional_fields:fields}),e=>e.status===404);
@@ -75,7 +81,7 @@ test("PostgreSQL passport schema: append-only025 to026 upgrade backfills only me
   t.after(async()=>{await f.close();const target=path.resolve(directory);if(path.dirname(target)!==path.resolve(os.tmpdir())||!path.basename(target).startsWith("pedpsy-passport-upgrade-"))throw Error("UNSAFE_UPGRADE_FIXTURE_TARGET");fs.rmSync(target,{recursive:true});});
   for(const n of fs.readdirSync(source).filter(n=>/^\d{3}_[a-z0-9_]+\.sql$/.test(n)&&Number(n.slice(0,3))<=25))fs.copyFileSync(path.join(source,n),path.join(directory,n));
   const c=await f.admin.connect();try{assert.equal(await migratePostgres(c,directory),25);const study=randomUUID();await c.query("INSERT INTO pedpsy.studies(id,title,status) VALUES($1,'Synthetic upgrade','active')",[study]);const before=(await c.query("SELECT * FROM pedpsy.studies WHERE id=$1",[study])).rows[0];
-    assert.equal(await migratePostgres(c,source),1);assert.equal(await migratePostgres(c,source),0);assert.deepEqual((await c.query("SELECT * FROM pedpsy.studies WHERE id=$1",[study])).rows[0],before);
+    const latest=fs.readdirSync(source).filter(n=>/^\d{3}_[a-z0-9_]+\.sql$/.test(n)).length;assert.equal(await migratePostgres(c,source),latest-25);assert.equal(await migratePostgres(c,source),0);assert.deepEqual((await c.query("SELECT * FROM pedpsy.studies WHERE id=$1",[study])).rows[0],before);
     assert.equal((await c.query("SELECT schema_version FROM pedpsy.study_passport_schemas WHERE study_id=$1",[study])).rows[0].schema_version,1);await grantRuntime(c,f.runtimeRole);await assert.rejects(f.runtime.query("SELECT * FROM pedpsy.passport_schema_versions"),e=>e.code==="42501");
   }finally{c.release();}
 });

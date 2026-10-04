@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+05г первый CI #42/e932fec6/run37225848294:252 base passed;212/213 PG18.6, один legacy-owner fixture failure; extra Chrome skipped, block не accepted/не merged. Synthetic fixture owner исправлен без изменения SQL/guards, прежний DESIGN_FROZEN assertion сохранён. Новый full current-head all-six/213PG/триChrome и merge gate обязателен; затем05д. История —PASSPORT_VALIDATION/STATUS.
+
 Текущее 2026-10-04: #41/05в.3б в main `c9b80a5a`, run `37223885301` all-six success (244 base + 199 PG 18.6 + три Chrome 2/2). Начат **05г — четвёртая из восьми основных задач фазы 5**, schema metadata-only; 252 local base/checks passed, 14 new PG/213 total требуют actual CI/merge gate. Затем05д own passport,05е consents,05в.4 guarded enrollment,05ж UI,05з acceptance. Регистрационный backend готов в synthetic scope, общий пользовательский путь ещё нет.
 
 Новый приоритет владельца: sex/age required; другие required flags выбирает researcher; не больше **пяти** own questions. Сейчас базовая schema sex/age/city, полный стандартный каталог дополним позже. Старые optional-basic требования ниже заменены. Фаза11 synthetic checks вGitHub/Actions, неSelectel/production/real data. Withdrawal return остаётся открытым только для соответствующей consent логики.

@@ -1,5 +1,7 @@
 # Состояние ПедПси
 
+05г/PR #42 первый actual run `37225848294`, head `e932fec6`:252 base Node22/24 и dependency/Secret passed; PG18.6 —212 из213, один fixture failure, без PG cancelled/skipped; дополнительный Chrome шаг skipped из-за failure, merge запрещён. Legacy attempt-bearing study не имел real researcher credential, поэтому staff owner guard вернул NOT_AVAILABLE до DESIGN_FROZEN. Исправлен только synthetic owner fixture (один действующий owner) и добавлена сверка прежних clinical IDs/status/revisions; runtime guards/assertions неизменны. PASSPORT_VALIDATION хранит точное доказательство; нужен новый полный current-head all-six. Остальные13 новых PG cases включая full operational restore прошли, но не объявлять whole block accepted. Owner stand не изменён.
+
 ## 2026-10-04: регистрационный HTTP-блок принят; схема паспорта в работе
 
 PR #41 обычным merge в main `c9b80a5af59d3b3f75a405aae4792f25bd9cf976`, tree `ddd92186dd80f17cc153f3d2dce3079023d998c1`, родители — прежний main `09e0d63a` и head `ae529436`. [Actual run 37223885301](https://github.com/PedFund/PedPsyRU/actions/runs/37223885301): все шесть jobs completed/success, 244 base на Node 22/24, 199 actual PostgreSQL 18.6, все восемь новых HTTP cases прошли; три дополнительных независимых Chrome runs по 2/2; ноль fail/cancel/skip. Полные 254 blobs/parents/tree/preview и 39 protected paths проверены до merge и после в actual main. Исторические pending статусы ниже не актуальны; proof записан в PR #41. Owner stand/MFA/ключи не изменены.

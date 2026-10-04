@@ -1,5 +1,7 @@
 # AGENTS.md — PedPsyRU
 
+05г первый actual CI #42/e932fec6/run37225848294:252 base passed, PG18.6 212 из213, один legacy-owner fixture failure; extra Chrome skipped, Required failed —не merge. Test-only fixture теперь имеет ровно одного real owner и проверяет прежний DESIGN_FROZEN плюс clinical immutability; guards/SQL не ослаблены. Нужен новый full current-head all-six/base/preview/tree/parents/262manifest/protected40 gate; PASSPORT_VALIDATION/STATUS ведут failure/proof. Обязательные sex/age/max5 и новые решения ниже сохраняются; после safe merge автономно05д, withdrawal return не угадывать.
+
 ## Новое прямое решение владельца и текущий 05г — 2026-10-04
 
 Пол и возраст обязательны. Обязательность остальных паспортных полей выбирает исследователь; своих вопросов максимум **пять**, не десять. Полный основной каталог паспортных полей добавляется позже: пока sex/age/city, не выдавать это за весь каталог. Это заменяет прежнее требование optional basic ниже. Настройка staff за исследователя остаётся принятым studies.configure с реальным actor/MFA/audit, не изменение индивидуальных паспортных ответов. Фаза 11 пока тоже GitHub/Actions synthetic tests, **не Selectel/deployment/real data**; GitHub не становится хранилищем реальных контактов/диагностики.
