@@ -1,5 +1,11 @@
 # Проверка регистрации участника — фаза05в
 
+## 05в.3а: actual PostgreSQL и текущий CI
+
+PR#40/runtime `8564527b7d3d48b3f92cd7f1864f2581969619e4`, tree `4595faf23adc6821a7ae5652cc4314167fd4aeb3`, [run37220579686](https://github.com/PedFund/PedPsyRU/actions/runs/37220579686): all6 completed/success;233/233base Node22/24,191/191actualPG18.6 и3extra independent Chrome runs по2/2,0fail/cancel/skip. Все16 новых scenarios реально исполнены, втом числе read→ACK cancellation/revocation/closure/notice, expiry crossing confirmed outbox lock wait, wrong retained key/tampered AEAD/digest, persistent unavailable-request throttle,2required-audit rollbacks,2concurrent receipts ипроверка отсутствия SQL transaction во времяcrypto. Старые022 encrypted upgrade иfull queue restore прошли сlatest024; old migrations не переписывались. Unit3 не подменяет actualSQL, существующие Chrome cases не объявляются новым participant registration UI.
+
+Полные242blob manifests совпали,38protected files preserved. Финальный documentary head проходит все6 проверок заново перед обычным merge; prior source success не substituted for finalhead. Actual integration proof —PR/STATUS. Следующий малый05в.3б отдельно соединит HTTP/CSRF/signed cookie/explicit contact key, без реальной доставки иenrollment. Дальнейшие паспорт/согласия/отзыв/current availability/UI требуют своих current-state/actualHTTP/PG/browser доказательств.
+
 ## 05в.2: actual integration; новый малый 05в.3а
 
 PR#39 merged main `0ce94971f48d68bd250535a1e5b23f2db56300fa`, final head `f93d3b643a76abe27830ce8f9dce8d841e1b4ab9`, tree `4e0891b4fec1850fe78e6e0f4f533a31583655c8`; [run37218552215](https://github.com/PedFund/PedPsyRU/actions/runs/37218552215) all6completed/success,230base+175actualPG18.6/3extraChrome2/2each,0fail/cancel/skip. Actual235blobs/main/parents/PRmerged проверены. История неудач ниже сохранена и не подменяет финальную проверку.

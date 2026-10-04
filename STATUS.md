@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 05в.3а — техническая проверка исполнена
+
+[PR #40](https://github.com/PedFund/PedPsyRU/pull/40), runtime head `8564527b7d3d48b3f92cd7f1864f2581969619e4`, tree `4595faf23adc6821a7ae5652cc4314167fd4aeb3`, [run 37220579686](https://github.com/PedFund/PedPsyRU/actions/runs/37220579686): все шесть jobs completed/success, 233base на Node22/24,191/191actualPG18.6, три дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Все16 новых receipt cases выполнились: current read→ACK races/SQL lock-wait expiry, AEAD/key/digest failure, idempotence/concurrency, mandatory audit rollback, durable limits/private ACL иcrypto outside transaction. Legacy022→latest upgrade/непустой queue backup также остаются частью успешной регрессии.242local/remote blobs и38 protected files сверены; старые заявления «actualPG ещё не выполнен» ниже — история.
+
+Финальный documentary head требует нового полного current-head all6/base/preview/tree/parents/fullmanifest gate перед ordinary merge. Actual main/merge/parents/tree повторно проверяются ификсируются вPR. Затем автономно05в.3б: HTTP, dedicated signed HttpOnly registration cookie/CSRF, явный отдельный contact key; без реальной почты, enrollment или ownerstand/MFA reset. Фаза5 не завершена, возврат после отзыва участия ещё требует решения владельца.
+
 ## 05в.2 в main; следующий малый блок 05в.3а — 2026-10-04
 
 [PR #39](https://github.com/PedFund/PedPsyRU/pull/39) объединён обычным merge: actual main `0ce94971f48d68bd250535a1e5b23f2db56300fa`, родители `fde3e100d023a72e4a5966a6e465995de58f12b6` и `f93d3b643a76abe27830ce8f9dce8d841e1b4ab9`, дерево `4e0891b4fec1850fe78e6e0f4f533a31583655c8`. Финальный [run 37218552215](https://github.com/PedFund/PedPsyRU/actions/runs/37218552215): все шесть jobs completed/success; 230 базовых тестов на Node22/24, 175 actual PostgreSQL18.6 и три дополнительных независимых Chrome runs по2/2, без fail/cancel/skip. До merge сверены текущие base/head/preview/parents, все235 local/remote blobs и37 protected files; после — actual main, PRmerged, дерево, родители и235 blobs. Доказательство вPR, прежние неудачи ниже сохранены. Открытых PR сразу после интеграции нет. Локально source copy без .git: чистый индекс/локальная ветка не заявляются.

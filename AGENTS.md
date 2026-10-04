@@ -1,5 +1,9 @@
 # AGENTS.md — PedPsyRU
 
+## 05в.3а технически проверен; финальный допуск — 2026-10-04
+
+PR#40/runtime8564527b/tree4595faf2/run37220579686 all6success:233base+191actualPG18.6/3extra independentChrome2/2each,0fail/cancel/skip.16newreceipt cases исполнены,242manifest/protected38 checked. STATUS/REGISTRATION_VALIDATION ведут ограничения/доказательства. Final documentary head —новый current-head all6/base/preview/tree/parents/fullmanifest gate; actualordinaryintegration вPR. Затем автономно05в.3б HTTP/key/signed dedicated HttpOnly cookie/CSRF; не realmail/provider/enrollment/ownerstand/MFA reset. Root main#39/0ce94971 сохранён,001–023/core/package/workflow unchanged. Вопрос withdrawal return ещё открыт, новую политику не вводить; независимые работы продолжать. Прежние «PG неисполнен» ниже —история.
+
 ## Текущий 05в.3а после интеграции #39 — 2026-10-04
 
 05в.2 actual ordinary merged main0ce94971/finalf93d3b64/run37218552215 all6success:230base+175PG18.6/3independentChrome2/2each, full235manifest/tree/parents verified; failures ниже исторические. Следующий05в.3 разделён на small persistence receipt/context (05в.3а), затем HTTP/key/cookies (05в.3б), не одна огромная задача. Append024/private current guards/crypto outside SQL/explicit synthetic opt-in/own browser+invite/mandatory audit/limits; нет realmail/HTTP/autoenrollment/session/ownerstand change.233/233base+build/typecheck/architecture/syntax/dependency passed;16newPG/191 total ещё не исполнены. Before ordinary merge current-head all6/actualPG/3Chrome/base/preview/tree/parents/fullmanifest/protected38 обязателен; actualintegration вPR/STATUS. Затем продолжать автономно05в.3б и независимые паспортные задачи. Вопрос о withdrawal return ожидает владельца; новую политику не угадывать. Core/001–023/package/workflow/MFA/stand secrets сохранить.
