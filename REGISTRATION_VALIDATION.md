@@ -16,6 +16,8 @@ Landing показывает только название исследован�
 
 ## Проверяемые сценарии и степень готовности
 
+Первый actualCI PR#38/head159cf497f18fbb7813652d7e0efb368439022f0c/tree2cdf437d88c9875d8b4879ee045c1dda23df5a38/[run37202694987](https://github.com/PedFund/PedPsyRU/actions/runs/37202694987):all6completed/success,228base Node22/24+148/148actualPG18.6 и3extraChrome2/2каждый,0fail/cancel/skip. После него добавлен13-йcase полногоpg_dump/pg_restore именнонепустойpending/outbox, retainedkey и hardenedruntime; transportвыделенизпрежнегоbackupfixture безизменениялимитов/redaction/контейнерногоguard. Новыйhead ожидает149actualPG, требуетновогоCI; первый148run неgatesпоследующиеsourcechanges.
+
 Локально228/228 base/build/typecheck/architecture/syntax/dependency-policy passed. Новая crypto unit проверяет nonce randomness, wrong key/context/row/MFA envelope/malformed/tamper и no plaintext. Прежние email DTO/normalization tests сохранились.
 
 Написаны12новых actualPG cases: metadata-only GET; salt/hash/encryptedoutbox/auditredaction/zero clinical rows; neutral repeat/rotation/other browser; invalid scope/contact/notice; durable prehash throttle; audit rollback с только reserved metadata; invite revoke/closure/notice change during hashing; current closure after confirmed SQL lock wait; runtime/private/immutable guards; metadata/live cap. Общий ожидаемый suite148actualPG cases (прежние136+12новых), включая Chrome/backup/legacy snapshot/upgrade, должен исполниться вactual CI. На момент записи новыеSQL/PG ещё не проверены, required current-head all6/base/preview/tree/parents/fullmanifest gate обязателен.

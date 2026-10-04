@@ -86,3 +86,24 @@ scenario("closure committed during confirmed SQL lock wait denies stale pre-read
   }finally{release?.();await owner.query("ROLLBACK");owner.release();if(pending)await pending;}
   assert.equal((await counts(f,x.design.id)).outbox,0);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='participants.registration.requested'",[x.design.id])).rows[0].n,0);
 });
+scenario("full pg_dump restore preserves queued token/binding/policy with separately retained key and closed runtime grants",async(f,x)=>{
+  const {dockerTool}=require("./pg-container-fixture.js"),{grantRuntime,migratePostgres}=require("../dist/src/adapters/postgres/migrate.js"),path=require("node:path");
+  await x.registration.start(x.i.invite_token,body,x.browser);const original=(await f.admin.query("SELECT p.*,o.id delivery_id,o.token_envelope FROM pedpsy.registration_pending p JOIN pedpsy.contact_confirmation_outbox o ON o.pending_id=p.id WHERE p.study_id=$1",[x.design.id])).rows[0];
+  const target=await postgresFixture({initialize:false,seedData:false});let archive;
+  try{for(const db of [f.database,target.database])assert.match(db,/^pedpsy_ci_[a-f0-9]{16}$/);
+    archive=await dockerTool(["pg_dump","-U","postgres","--format=custom","--no-owner","--no-privileges",f.database]);assert.equal(archive.subarray(0,5).toString(),"PGDMP");
+    await dockerTool(["pg_restore","-U","postgres","--dbname="+target.database,"--no-owner","--no-privileges","--single-transaction","--exit-on-error"],archive);
+    const c=await target.admin.connect();try{
+      // ACL-free restore remains quarantined until the same default-deny gate.
+      await c.query("REVOKE ALL ON SCHEMA pedpsy FROM PUBLIC; REVOKE CREATE ON SCHEMA public FROM PUBLIC; REVOKE ALL ON ALL TABLES IN SCHEMA pedpsy FROM PUBLIC; REVOKE ALL ON ALL FUNCTIONS IN SCHEMA pedpsy FROM PUBLIC; REVOKE ALL ON public.pedpsy_schema_migrations FROM PUBLIC");
+      await grantRuntime(c,target.runtimeRole);assert.equal(await migratePostgres(c,path.join(__dirname,"../storage/postgres")),0);
+      const restored=(await c.query("SELECT p.*,o.id delivery_id,o.token_envelope FROM pedpsy.registration_pending p JOIN pedpsy.contact_confirmation_outbox o ON o.pending_id=p.id WHERE p.id=$1",[original.id])).rows[0];
+      assert.ok(JSON.stringify(restored)===JSON.stringify(original),"operational backup row mismatch");assert.ok(tokenHash(x.vault.open(restored.delivery_id,restored.token_envelope))===restored.confirmation_hash,"retained-key recovery failed");
+      assert.equal((await c.query("SELECT notice_version FROM pedpsy.study_contact_policies WHERE study_id=$1",[x.design.id])).rows[0].notice_version,"demo-contact-1");
+      for(const sql of ["SELECT * FROM pedpsy.registration_pending","SELECT * FROM pedpsy.contact_confirmation_outbox","SELECT pedpsy.lock_registration_invite('x')"])
+        await assert.rejects(target.runtime.query(sql),e=>e.code==="42501");
+      assert.equal((await c.query("SELECT count(*)::integer n FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.pronamespace='pedpsy'::regnamespace AND a.grantee=0 AND a.privilege_type='EXECUTE'")).rows[0].n,0);
+    }finally{c.release();}
+    assert.equal((await counts(f,x.design.id)).outbox,1);
+  }finally{archive?.fill(0);await target.close();}
+});

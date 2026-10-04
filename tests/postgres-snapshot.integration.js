@@ -1,7 +1,7 @@
 "use strict";
 const {test} = require("node:test");
 const assert = require("node:assert/strict");
-const {spawn} = require("node:child_process");
+const {dockerTool} = require("./pg-container-fixture.js");
 const path = require("node:path");
 const {postgresFixture} = require("./postgres-fixture.js");
 const {completedSnapshotSource} = require("./snapshot-fixture.js");
@@ -37,21 +37,6 @@ test("PostgreSQL snapshot: target failure rolls back whole import, source stays 
     await importDemoSnapshot(client,snapshot);assert.deepEqual(await inspectPostgresSnapshot(client),snapshot);
   } finally {client.release();}
 });
-function dockerTool(args,input) {
-  const container=process.env.PGTEST_CONTAINER;
-  if(process.env.PEDPSY_PG_TEST!=="1"||!container||!/^[a-f0-9]{64}$/.test(container))throw new Error("EXPLICIT_SYNTHETIC_CONTAINER_REQUIRED");
-  return new Promise((resolve,reject)=>{
-    const p=spawn("docker",["exec",...(input?["-i"]:[]),container,...args],{stdio:["pipe","pipe","pipe"],shell:false});
-    const output=[];let size=0;
-    const timer=setTimeout(()=>{p.kill();reject(new Error("PG_TOOL_TIMEOUT"));},30000);
-    p.stdout.on("data",b=>{size+=b.length;if(size>4*1024*1024){p.kill();reject(new Error("SYNTHETIC_ARCHIVE_TOO_LARGE"));}else output.push(b);});
-    // Never echo stderr, backup data, login information or SQL statement values.
-    p.stderr.resume();p.stdin.on("error",()=>{});
-    p.on("error",e=>{clearTimeout(timer);reject(e);});
-    p.on("close",code=>{clearTimeout(timer);if(code!==0)reject(new Error("PG_TOOL_FAILED"));else resolve(Buffer.concat(output));});
-    p.stdin.end(input);
-  });
-}
 test("PostgreSQL snapshot: legacy v1 imports at zero and v2 preserves nonzero design revisions",async t=>{
   const source=await completedSnapshotSource();t.after(()=>source.db.close());const legacy=exportDemoSnapshot(source.db);
   legacy.format="pedpsy-demo-snapshot-1";legacy.tables.studies=legacy.tables.studies.map(({design_version,...s})=>s);

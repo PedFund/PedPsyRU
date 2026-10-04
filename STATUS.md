@@ -2,6 +2,8 @@
 
 ## 05в.1 — первая persisted часть регистрации, 2026-10-04
 
+ПервыйPR#38/head159cf497/run37202694987 all6success:228base+148actualPG18.6/3extraChrome2/2каждый,0fail/cancel/skip. Добавленотдельный13-й actualPG case непустойqueuebackup/restore сretainedkey изакрытиемpublic/helper/tableprivileges доruntime. Прежнийbounded/redactedcontainertransport переиспользованбезослабленияguards; новый149suite/currentheadещётребуетCI. Ничегонеmergedпоobsoletehead.
+
 05в.0 ordinary merged#37/main5c2f554323ae01366eccbee4f7ddb59f720579d2, final8ca61c65/run37200928344 all6success,227base+136PG18.6/3Chrome по2/2.222actualmergeblobs/parents/tree/protected35 совпали; открытыхPR послеmergeнет. Действующий owner stand не мигрировали/не запускали.
 
 05в.1 реализован локально: append-only022/synthetic notice+отдельная policy/pending/outbox, fixed landing/reserve/queue, prehash durable throttle, browser/invite/revision/version binding, salted scrypt внеSQLlocks и purpose/row-bound AES-GCM payload. Contact email validator pureport без изменения approved semantics; participant/credential/enrollment/attempt/login/delivery/HTTP пока не создаются. REGISTRATION_VALIDATION описывает staged commit/reservation60сек/confirmation30мин/1000live cap/ограниченияrestore. Локально228baseиchecks passed;12новыхPG ещё требуютactual CI/current-head all6/merge. Затем05в.2confirmation/login,05в.3HTTP/syntheticreceiver,passport/consent иenrollment gates отдельно.
