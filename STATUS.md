@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## 05а: технический контракт участника — 2026-10-04
+
+В [PR#34](https://github.com/PedFund/PedPsyRU/pull/34) к согласованным документам добавлены pure ports/policy и application DTO boundary: общая групповая ссылка, подтверждение email с отдельным pending browser, study-scoped вход, versioned основания паспорта/согласий, delivery port. Только owning researcher управляет recruitment invites через прежнее studies.configure; staff не получает новое право редактирования. Confirmation не выдаёт session и не заменяет существующий пароль. Выходные DTO явно проецируются; email normalization и UTF-8 password bounds описаны в PHASE5_PARTICIPANT_FLOW.
+
+Локально 224/224 base (19 новых), build/typecheck/architecture/dependency-policy/JS syntax success; 0fail/cancel/skip. Тесты проверяют смешанные scope/purpose, revoke/expiry/revision/versions, staff denial, неизменную группу, enrollment только для явно доступного этапа, optional secondary consent, mass assignment и отсутствие секретов в DTO. Это не DB/race/HTTP/Chrome доказательство новой регистрации: runtime ещё не подключён. All6 CI документационного head64201668 прошли, но не доказывают следующий технический head; новый current-head gate перед merge обязателен. Core/key/form/existing migrations/package/lock/workflow не меняются.
+
+05б–05з ещё впереди; подробное открытие этапов уточняется с владельцем, outbox/provider/reminder schedule/реальные данные не согласованы. Pure policy нельзя использовать как отложенную capability: adapter обязан повторить current identity/scope/version gate под locks вместе с записью и обязательным аудитом. Локальный runtime после перезагрузки этим блоком не запускался и не проверялся; диагностика ОС идёт отдельно.
+
 ## Фаза 5: согласование регистрации — 2026-10-04
 
 По сообщению владельца личный вход суперадминистратора завершён и кабинет осмотрен. Историческое «account пока не создан» ниже относится к контрольной точке 2026-10-03, а не текущему пользовательскому подтверждению. Личный пароль, MFA-секрет и резервные коды не запрашивались и в документы не включаются.
