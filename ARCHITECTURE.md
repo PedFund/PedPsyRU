@@ -1,5 +1,11 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05г — схема паспортных вопросов, не индивидуальные значения
+
+PassportSchemas port/application strict validator/Postgres fixed-functions adapter отделены от diagnostics/core. Append-only026 хранит immutable (study_id,schema_version,fields) и current pointer с composite FK/index; default-v1 metadata для existing/new demo studies не меняет participant/diagnostic данные. Sex/age всегда required; city required flag выбирается отдельно, пять own questions максимум с boolean required и limited text/integer/single_choice types. Никакого произвольного scoring/script/handler в schema. Default/current versions не заменяют consent/ownership/enrollment.
+
+Configuration повторяет существующий require_mutable_design: current owner либо real staff/fresh MFA → study lock → membership → schema pointer, study CAS + schema CAS. Active/closed/attempt-bearing frozen, historical schema update/delete запрещены; same-current replay audited без роста версий. Write/version/audit и центральный policy commit gate в одной короткой транзакции. Read выдаёт только question metadata, не contacts/profile values/diagnostics. Private tables RLS без public/runtime direct access; два guarded runtime EXECUTE. HTTP/UI/participant values — отдельный следующий блок; старый diagnostic domain snapshot не полный operational backup.
+
 ## HTTP-граница регистрации 05в.3б
 
 Application composition использует отдельные RegistrationBrowser/RegistrationDenials ports; security/postgres adapters и opt-in bootstrap находятся вне вычислительного core. Существующие guarded registration/receipt функции сохраняют current SQL locks/обязательный audit; nonce/CSRF не являются session, contact proof, ролью или enrollment. Cookie подписан стабильным purpose/origin-derived ключом от отдельного retained contact master; vault продолжает использовать прежний explicit master, не derived browser key. Missing/invalid key выключает только новые registration routes (503), не существующий staff/MFA кабинет; key generation и owner stand upgrade не выполняются автоматически.

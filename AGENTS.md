@@ -1,5 +1,15 @@
 # AGENTS.md — PedPsyRU
 
+05г первый actual CI #42/e932fec6/run37225848294:252 base passed, PG18.6 212 из213, один legacy-owner fixture failure; extra Chrome skipped, Required failed —не merge. Test-only fixture теперь имеет ровно одного real owner и проверяет прежний DESIGN_FROZEN плюс clinical immutability; guards/SQL не ослаблены. Нужен новый full current-head all-six/base/preview/tree/parents/262manifest/protected40 gate; PASSPORT_VALIDATION/STATUS ведут failure/proof. Обязательные sex/age/max5 и новые решения ниже сохраняются; после safe merge автономно05д, withdrawal return не угадывать.
+
+## Новое прямое решение владельца и текущий 05г — 2026-10-04
+
+Пол и возраст обязательны. Обязательность остальных паспортных полей выбирает исследователь; своих вопросов максимум **пять**, не десять. Полный основной каталог паспортных полей добавляется позже: пока sex/age/city, не выдавать это за весь каталог. Это заменяет прежнее требование optional basic ниже. Настройка staff за исследователя остаётся принятым studies.configure с реальным actor/MFA/audit, не изменение индивидуальных паспортных ответов. Фаза 11 пока тоже GitHub/Actions synthetic tests, **не Selectel/deployment/real data**; GitHub не становится хранилищем реальных контактов/диагностики.
+
+05в.3б интегрирован обычным merge #41/main `c9b80a5af59d3b3f75a405aae4792f25bd9cf976`, head `ae529436`, run `37223885301` all-six success: 244 base (Node 22/24), 199 actual PG 18.6, три дополнительных Chrome runs по 2/2, без fail/cancel/skip. Все 254 blobs/tree/parents и protected39 проверены. Source pending statements ниже — история; actual proof в PR #41.
+
+Текущий маленький 05г: metadata-only immutable versioned schema + current pointer, append-only026; обязательные sex/age, city requirement configurable, пять additional fields с boolean required/type/whitelist/limits. Draft-only existing current owner/staff/MFA locks + study/schema CAS + mandatory audit, private tables/helpers. Никаких индивидуальных значений/HTTP/UI/consents/enrollment/stand secrets. Восемь новых units passed; 14 новых PG tests ещё требуют actual CI (213 total) и fresh all-six/base/preview/tree/parents/fullmanifest/protected40 gate. Затем автономно05д own passport, 05е consents, 05в.4 enrollment, 05ж UI, 05з acceptance. Вопрос withdrawal return открыт; не угадывать, продолжать независимые блоки.
+
 ## Текущий блок 05в.3б — 2026-10-04
 
 05в.3а интегрирован обычным merge PR #40: main `09e0d63a4f85a4362c5937ded0fe2a3a01692f16`, final head `e90adce183243b15e9315590abd35de9e27a1ee8`, run `37221394432`: все шесть jobs success; 233 базовых теста на Node 22/24, 191 actual PostgreSQL 18.6, три дополнительных независимых Chrome runs по 2/2; без fail/cancel/skip. Проверены actual tree, parents и все 242 blobs.

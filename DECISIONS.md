@@ -1,5 +1,13 @@
 # Журнал решений
 
+## 2026-10-04 — прямое уточнение владельца: паспорт и среда фазы11
+
+Пол и возраст обязательны. Исследователь определяет обязательность остальных базовых/дополнительных вопросов; своих вопросов не больше пяти. Это заменяет прежние optional-basic и локальную неопубликованную идею лимита10. На первом небольшом блоке поддерживаем sex/age/city; образование, семейное положение, дети, занятость, тип населённого пункта из исходной спецификации — последующее дополнение каталога, не выдуманные сейчас справочники/научные нормы. Новая схема не изменяет незаметно уже полученные значения: версии immutable, default-v1 привязывается к demo study, draft-only metadata editing, active/closed/attempt-bearing frozen; последующая ревизия active исследования — отдельный workflow.
+
+Возраст в текущем контракте — целое число полных лет 0..130; это технический предел учебного поля, не медицинская норма/допуск несовершеннолетних. Sex dictionary в текущем synthetic scaffold: female/Женский, male/Мужской. Никакого ФИО, адреса, телефона или нового email identity из паспортной schema. Participant completion и применение обязательности реализует следующий05д; запись schema сама ничего не считает и не создаёт enrollment. Обе staff-роли настраивают metadata в уже разрешённом studies.configure с real actor/fresh MFA; individual researcher access не расширяется.
+
+Владелец прямо отложил Selectel также для фазы11: пока GitHub/Actions synthetic CI. Это не разрешение GitHub Pages/production hosting/загрузки реальных персональных данных/секретов. Старый Selectel target — лишь отложенный вариант будущего отдельного размещения.
+
 ## 2026-10-04 — техническая граница 05в.3б, без новых продуктовых прав
 
 Для existing synthetic registration используется отдельный подписанный pre-auth cookie/CSRF, а не staff nonce или session. MAC/CSRF key derived от retained explicit contact key с purpose/origin separation; MFA key не подходит, автоматического key generation/fallback нет. TTL cookie один час, HTTPS Secure; HTTP только configured loopback demo. Отсутствие валидного opt-in key выключает лишь registration (503), существующий вход сохраняется. Никакие owner secrets не изменены.

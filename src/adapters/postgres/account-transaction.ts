@@ -15,6 +15,8 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
       if(e.code==="54000"&&["INVITE_THROTTLED","EXPORT_LIMIT"].includes(String(e.message)))throw new ParticipationError(e.message==="INVITE_THROTTLED"?429:413,String(e.message));
       if(e.code==="22023"&&e.message==="INVALID_STUDY_INPUT")throw new ParticipationError(400,"INVALID_STUDY_INPUT");
       if(e.code==="22023"&&e.message==="INVALID_REGISTRATION_INPUT")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+      if(e.code==="22023"&&e.message==="INVALID_PASSPORT_SCHEMA")throw new ParticipationError(400,"INVALID_PASSPORT_SCHEMA");
+      if(e.code==="P0001"&&e.message==="PASSPORT_SCHEMA_CONFLICT")throw new ParticipationError(409,"PASSPORT_SCHEMA_CONFLICT");
       if(e.code==="54000"&&e.message==="INVITE_LIMIT")throw new ParticipationError(413,"INVITE_LIMIT");
       if(e.code==="P0001"&&["INVITE_EXISTS","INVITE_CONFLICT","STAGE_ACCESS_CONFLICT"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
       if(e.code==="54000"&&e.message==="DESIGN_LIMIT")throw new ParticipationError(413,"DESIGN_LIMIT");
