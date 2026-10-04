@@ -59,4 +59,5 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.copy_study_stage(uuid,integer,uuid,uuid,text,integer) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.change_study_lifecycle(uuid,integer,text),pedpsy.rename_study(uuid,integer,text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.staff_study_design_list() TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.group_invitation_policy_scope(uuid,uuid),pedpsy.list_group_invitations(uuid,uuid),pedpsy.create_group_invitation(uuid,uuid,uuid,text,bigint),pedpsy.revoke_group_invitation(uuid,uuid,uuid,integer) TO "${role}"`);
 }

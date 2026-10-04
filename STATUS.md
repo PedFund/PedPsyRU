@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## 05а интегрирован; 05б в разработке — 2026-10-04
+
+[PR#34](https://github.com/PedFund/PedPsyRU/pull/34) объединён ordinary merge72edcbccac81d1bceddac9483b8d2cbc6c1f01a9 после actual current-head eb2af24fb6fc0b65cf1eab011fc0331c887e23cb/[run37191056447](https://github.com/PedFund/PedPsyRU/actions/runs/37191056447): all6 completed/success, включая existing PostgreSQL suite и три независимых Chrome runs. 204 local/published blobs, preview и actual merge tree/оба родителя совпали. Предыдущие записи «CI/merge ещё требуются» ниже — история этой ветки, не текущий blocker.
+
+05б: новая append-only019 хранит hashed shared token/scope/expiry/revoke/CAS; один active invite группы, контролируемая замена истёкшего, persistent issuance throttle, bounded history, mandatory audit/locks/current-owning-researcher. Direct runtime DML/чтение таблицы и private helpers запрещены; три фиксированных CRUD и audited policy scope разрешены только с current identity. Добавлены adapter и cookie/Origin/CSRF/exact DTO HTTP routes owning researcher. Участнический /join, регистрация/email/enrollment/QR/UI ещё не реализованы. Pure management scope теперь не зависит от ещё не опубликованных условий контакта; registration scope по-прежнему требует их версию.
+
+Локально224/224 base/build/typecheck/architecture/dependency-policy/syntax passed. 12 новых actualPG/HTTP scenarios написаны, но пока не исполнены: localPG55432/API4174 после перезагрузки не слушают и не перезапускались этим блоком. Required all6 current-head CI обязателен; новый SQL не выдаётся за проверенный. Полный TKI/core/form/контрольныйfixture, предыдущие018PG/SQLite migrations/package/lock/workflow сохраняются. PostgreSQL skill использован дляleastprivilege, composite FK/index, short transactions и lock order; Supabase не подключён.
+
 ## 05а: технический контракт участника — 2026-10-04
 
 В [PR#34](https://github.com/PedFund/PedPsyRU/pull/34) к согласованным документам добавлены pure ports/policy и application DTO boundary: общая групповая ссылка, подтверждение email с отдельным pending browser, study-scoped вход, versioned основания паспорта/согласий, delivery port. Только owning researcher управляет recruitment invites через прежнее studies.configure; staff не получает новое право редактирования. Confirmation не выдаёт session и не заменяет существующий пароль. Выходные DTO явно проецируются; email normalization и UTF-8 password bounds описаны в PHASE5_PARTICIPANT_FLOW.

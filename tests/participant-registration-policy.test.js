@@ -21,6 +21,9 @@ const changed = e => e.status === 409 && e.code === "PARTICIPATION_REQUIREMENTS_
 
 test("only a current owning researcher manages group invitations; no new staff editing right", () => {
   requireGroupInvitationManagement(principal, scope, "create", now, true);
+  const {contactNoticeVersion: _notice, ...groupScope} = scope;
+  requireGroupInvitationManagement(principal, groupScope, "create", now, true);
+  requireGroupInvitationManagement(principal, {...groupScope, studyStatus: "closed"}, "list", now, true);
   assert.throws(() => requireGroupInvitationManagement(principal, scope, "create", now, false), unavailable);
   for (const role of ["administrator", "superadministrator"]) {
     assert.throws(() => requireGroupInvitationManagement({...principal, realm: "staff", role, mfaVerifiedAt: now}, scope, "create", now, true),

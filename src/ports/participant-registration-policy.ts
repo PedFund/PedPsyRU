@@ -1,7 +1,7 @@
 import type {AccountPrincipal} from "./accounts.js";
 import {requireAccountPermission} from "./account-policy.js";
 import {ParticipationError} from "./errors.js";
-import type {RegistrationScope, GroupInvitationSnapshot, EmailConfirmationSnapshot,
+import type {GroupInvitationScope, RegistrationScope, GroupInvitationSnapshot, EmailConfirmationSnapshot,
   EnrollmentBasis, EnrollmentRequirements} from "./participant-registration.js";
 
 const available = (): never => {throw new ParticipationError(404, "NOT_AVAILABLE");};
@@ -15,13 +15,13 @@ function activeScope(scope: RegistrationScope): void {
 // Pure policy checks are NOT authorization for a later database mutation.
 // Trusted adapters must reread/lock identity, membership, scope and versions in
 // the same transaction as the write, and commit mandatory secret-free audit.
-export function requireGroupInvitationManagement(principal: AccountPrincipal, scope: RegistrationScope,
-  action: "create" | "revoke", now: number, ownsStudy: boolean): void {
+export function requireGroupInvitationManagement(principal: AccountPrincipal, scope: GroupInvitationScope,
+  action: "list" | "create" | "revoke", now: number, ownsStudy: boolean): void {
   requireAccountPermission(principal, "studies.configure", {studyId: scope.studyId}, now, ownsStudy);
   if (!clock(now) || !scope.studyId || !scope.groupId || scope.datasetKind !== "demo" ||
     !["draft", "active", "closed"].includes(scope.studyStatus) || !["active", "closed"].includes(scope.groupStatus)) available();
-  if (action === "create") activeScope(scope);
-  else if (action !== "revoke") available();
+  if (action === "create" && (scope.studyStatus !== "active" || scope.groupStatus !== "active")) available();
+  else if (!["list", "create", "revoke"].includes(action)) available();
 }
 
 export function requireJoinInvitation(invite: GroupInvitationSnapshot, scope: RegistrationScope, now: number): void {

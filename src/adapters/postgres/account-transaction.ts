@@ -14,6 +14,9 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
       if(e.code==="42501"&&["FORBIDDEN","MFA_RECHECK_REQUIRED","SELF_ROLE_CHANGE_FORBIDDEN","LAST_SUPERADMIN_REQUIRED"].includes(String(e.message)))throw new ParticipationError(403,String(e.message));
       if(e.code==="54000"&&["INVITE_THROTTLED","EXPORT_LIMIT"].includes(String(e.message)))throw new ParticipationError(e.message==="INVITE_THROTTLED"?429:413,String(e.message));
       if(e.code==="22023"&&e.message==="INVALID_STUDY_INPUT")throw new ParticipationError(400,"INVALID_STUDY_INPUT");
+      if(e.code==="22023"&&e.message==="INVALID_REGISTRATION_INPUT")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+      if(e.code==="54000"&&e.message==="INVITE_LIMIT")throw new ParticipationError(413,"INVITE_LIMIT");
+      if(e.code==="P0001"&&["INVITE_EXISTS","INVITE_CONFLICT"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
       if(e.code==="54000"&&e.message==="DESIGN_LIMIT")throw new ParticipationError(413,"DESIGN_LIMIT");
       if(e.code==="P0001"&&["DESIGN_CONFLICT","DESIGN_FROZEN","STUDY_QUOTA","DESIGN_INCOMPLETE","DESIGN_DUPLICATE"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
     }
