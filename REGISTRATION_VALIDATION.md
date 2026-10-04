@@ -1,5 +1,11 @@
 # Проверка регистрации участника — фаза05в
 
+## Первый actualCI 05в.2 и дополнительная защита compatibility route
+
+PR#39/head `dbae3021614b4844ea8406441d9a2f9338978ede`, tree `dab52167db5ad1159c8b1778786edacd31b0a40e`, [run37205660781](https://github.com/PedFund/PedPsyRU/actions/runs/37205660781): все6completed/success,228base Node22/24+174/174actualPG18.6/3extraChrome2/2each,0fail/cancel/skip. Все25 новые сценарии выполнились, включая current SQL waits, identity/password isolation и022→023 upgrade с сохранённой encrypted заявкой.
+
+После него выявлен потенциальный compatibility обход для будущего HTTP wiring: внутренний P-code нового contact-linked credential не должен использовать старый code login, пропуская current contact/notice checks. Append-only023 заменяет preflight participant_login_material только этой дополнительной NOT EXISTS проверкой; старые004 bytes/legacy demo credentials/shared throttle/audit сохранены. Написан26-йcase: correct own password+internal code rejected до/после notice change/withdrawal, scoped email login accepted; прежний suite проверяет historical code accounts. Новый source head требует нового175actualPG/all6/current-head gate, успешный174run не считается его проверкой. Existing sessions не отзываются одной storage status mutation — будущий withdrawal workflow должен делать это атомарно, не обещается этим тестом.
+
 ## 05в.2 — локально реализовано, actual PostgreSQL ещё требуется
 
 После ordinary merge#38/mainfde3e100. Append-only023/private group binding/contact/contact acknowledgements и PostgresParticipantRegistration. Подтверждение только explicit mutation с opaque invite/browser/code digests, current active scope/revision/notice/expiry, atomic one-time identity/audit, persistent5attempts. Неверный код/повтор даёт neutral404 после committed denial audit, не rollback decrement. Wrong browser/scope/purpose не потребляет чужие attempts; replay старого code не расходует новый pending. Contact/email не diagnostics PK; repeated mailbox сохраняет first password/group/ID/status, across studies identity не объединяется. Аcknowledgement касается contact processing, не enrolment/study/secondary consent.

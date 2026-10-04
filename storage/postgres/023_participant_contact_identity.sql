@@ -152,3 +152,31 @@ BEGIN
   RETURN pedpsy.finish_participant_login(c.id,c.version,c.password_hash,session_hash);
 END $$;
 REVOKE ALL ON FUNCTION guard_participant_contact(),confirm_registration_email(text,text,text),participant_email_login_material(uuid,text),finish_participant_email_login(uuid,integer,text,uuid,text) FROM PUBLIC;
+
+-- Compatibility route is reserved for pre-existing code-based demo accounts.
+-- A contact-linked credential must pass scoped email/current notice checks;
+-- its internal display/login code is NOT an alternative auth route. Keep old
+-- 004 migration bytes intact and preserve its shared throttle/audit behavior.
+CREATE OR REPLACE FUNCTION participant_login_material(code text) RETURNS TABLE(throttled boolean,credential_id uuid,credential_version integer,salt text,password_hash text)
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
+DECLARE at bigint:=floor(extract(epoch FROM clock_timestamp())*1000)::bigint;bucket text;window_ms bigint;limit_n integer;state record;
+BEGIN
+  IF code IS NULL OR code !~ '^[A-Z0-9-]{3,80}$' THEN RAISE EXCEPTION 'INVALID_LOGIN' USING ERRCODE='28000';END IF;
+  PERFORM pg_advisory_xact_lock(5151980003);
+  FOR bucket,window_ms,limit_n IN SELECT 'global',300000::bigint,30 UNION ALL SELECT code,900000::bigint,5 LOOP
+    bucket:='sha256:'||encode(sha256(convert_to('pedpsy-login:'||bucket,'UTF8')),'hex');
+    SELECT * INTO state FROM pedpsy.login_throttles WHERE bucket_hash=bucket FOR UPDATE;
+    IF FOUND AND at-state.window_start_ms<window_ms AND state.count>=limit_n THEN
+      INSERT INTO pedpsy.access_audit_events(id,at_ms,action,outcome,reason) VALUES(gen_random_uuid(),at,'participant_login','deny','LOGIN_THROTTLED');
+      RETURN QUERY SELECT true,NULL::uuid,NULL::integer,NULL::text,NULL::text;RETURN;
+    END IF;
+    INSERT INTO pedpsy.login_throttles(bucket_hash,window_start_ms,count) VALUES(bucket,at,1)
+      ON CONFLICT(bucket_hash) DO UPDATE SET window_start_ms=CASE WHEN at-login_throttles.window_start_ms>=window_ms THEN at ELSE login_throttles.window_start_ms END,
+      count=CASE WHEN at-login_throttles.window_start_ms>=window_ms THEN 1 ELSE login_throttles.count+1 END;
+  END LOOP;
+  RETURN QUERY SELECT false,c.id,c.version,c.salt,c.password_hash FROM pedpsy.participant_credentials c
+    JOIN pedpsy.participants p ON (p.study_id,p.id)=(c.study_id,c.participant_id) JOIN pedpsy.studies s ON s.id=c.study_id
+    WHERE c.login_id=code AND c.status='active' AND p.status='active' AND s.status='active' AND s.dataset_kind='demo'
+      AND NOT EXISTS(SELECT 1 FROM pedpsy.participant_contacts contact WHERE contact.study_id=c.study_id AND contact.participant_id=c.participant_id);
+END $$;
+REVOKE ALL ON FUNCTION participant_login_material(text) FROM PUBLIC;

@@ -121,3 +121,10 @@ scenario("new current notice needs explicit reconfirmation, stores another conta
   await confirm(x,await requested(f,x,{browser:token(),input:{...body,password:"another new attempted password",contact_notice_version:"demo-contact-2"}}));assert.ok(JSON.stringify(await identity(f,x.design.id))===JSON.stringify(original),"reconfirmation changed identity");
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_contact_acceptances WHERE study_id=$1",[x.design.id])).rows[0].n,2);await x.registration.login(input);await noClinical(f,x.design.id);
 });
+scenario("contact-linked internal display/login code cannot bypass the new email/current notice route, even with correct password",async(f,x)=>{
+  await confirm(x,await requested(f,x));const c=await identity(f,x.design.id),gateway=new PostgresParticipantGateway(f.runtime,new PostgresUnitOfWork(f.runtime)),input={login_id:c.login_id,password:body.password};
+  await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,0);
+  await x.registration.login({study_id:x.design.id,email:body.email,password:body.password});
+  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic changed current notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");
+  await f.admin.query("UPDATE pedpsy.participant_contacts SET status='withdrawn' WHERE id=$1",[c.id]);await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,1);
+});

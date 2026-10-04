@@ -1,5 +1,7 @@
 # Состояние ПедПси
 
+05в.2 PR#39 первыйruntime dbae3021/run37205660781 all6success:228base+174actualPG18.6/3Chrome по2/2,0fail/cancel/skip. Затем добавлена защита старого code login для новых contact-linked credentials и26-йactualPG case; old004/core/package/legacy login preserved. Новый175suite/current-head gate ещё требуется, по прежнему174head не merged. REGISTRATION_VALIDATION сохраняет обе контрольные точки; HTTP/ownerstand/enrollment ещё не менялись.
+
 ## 05в.2 — подтверждение контакта и вход, локальная реализация
 
 05в.1 интегрирован [PR#38](https://github.com/PedFund/PedPsyRU/pull/38), actual main `fde3e100d023a72e4a5966a6e465995de58f12b6`, tree `7ddcb9befe9a81156a75cb480ce5b5503e7c92ff`, parents5c2f5543/4faf1bcf. Финальный [run37204228769](https://github.com/PedFund/PedPsyRU/actions/runs/37204228769) all6completed/success,228base+149actualPG18.6/3extraChrome2/2each,0fail/cancel/skip. Перед merge current base/head/preview/parents/full230manifest/protected36 сверены; actualmain/PRmerged/tree/parents/230blobs повторно проверены после ordinary merge. Открытых PR после интеграции нет; local source copy без .git, не заявляется чистый индекс/локальная ветка.
