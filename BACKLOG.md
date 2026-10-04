@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+05в.0 технически принят#37/runtimee178d784/run37200472709 all6success:227base+136PG18.6 и3Chrome по2/2; STAGE_ACCESS_VALIDATION сохраняет failedfixture/correction/limits. Finaldocs=current-head gate передordinarymerge. Послеинтеграции05в:1)persisted landing/pending/throttle/outbox;2)одноразовоеconfirm/повторбезpasswordreset/ownemail login;3)HTTP/cookies/Origin/CSRF иsynthetic receiver. Enrollment выдаётся только после05г–05е passport/consents ипроверки manualavailability, не сразупоcontact confirmation.
+
 Актуально05в.0:05б.1 ordinary merged#36/maina77dc62e, all6finalrun37195859358. Ручное group-stage opening реализовано локально,226basepassed;12новыхPG/Chrome требуютcurrent-head CI/merge, журналSTAGE_ACCESS_VALIDATION. После принятия —05в registration/email verification в synthetic контуре, затем05г–05з; не повторять staff-блок или начинать deployment.
 
 ## Текущий порядок фазы5 — 2026-10-04
@@ -8,8 +10,8 @@
 
 | Блок | Проверяемый результат | Текущее состояние |
 |---|---|---|
-|05б.1 staff-управление|Обе роли создают для выбранного owner, ведут draft/lifecycle/invites; owner quota/current locks/CAS/MFA/audit|Технически принятPR#36/runtimece594173/run37195401170:225base+124PG18.6/3Chrome/all6success; finaldocs/current-head merge gate обязателен|
-|05в.0 ручное открытие этапов|Отдельное persisted availability/CAS/audit, не design.active; три роли, запреты чужого/закрытого|Следующий блок до enrollment|
+|05б.1 staff-управление|Обе роли создают для выбранного owner, ведут draft/lifecycle/invites; owner quota/current locks/CAS/MFA/audit|Интегрирован#36/maina77dc62e, finalrun37195859358 all6success|
+|05в.0 ручное открытие этапов|Отдельное persisted availability/CAS/audit, не design.active; три роли, запреты чужого/закрытого|Технически принят#37/e178d784/run37200472709:227base+136PG/3Chrome/all6success; finaldocs/current-head mergegate|
 |05в регистрация|Общая ссылка → свой email/password → одноразовое подтверждение → тот же scoped participant|После05в.0; synthetic delivery, не реальные письма|
 
 Прежний staff-readonly и нерешённый вопрос opening ниже — история, заменены новым решением. Автономно продолжать последовательные технические задачи после checks/ordinary merge; не заявлять готовые паспорта/consents/реальные участники.

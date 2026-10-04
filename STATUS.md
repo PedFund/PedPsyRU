@@ -2,6 +2,8 @@
 
 ## 05в.0 — ручное открытие отдельно по группам, 2026-10-04
 
+Технически принят [PR#37](https://github.com/PedFund/PedPsyRU/pull/37), runtimee178d784b5668a45bd00afdfd17fc0487ca88592/tree433c8ba8e458fa4bdff30c665f32362b78e0d695, [run37200472709](https://github.com/PedFund/PedPsyRU/actions/runs/37200472709): все6completed/success,227base Node22/24+136/136actualPG18.6 и3дополнительных Chrome runs по2/2,0fail/cancel/skip. STAGE_ACCESS_VALIDATION фиксирует12новыхcases/fixturefailure/correction/пределы;222blobs/protected35 проверены. Finaldocs требуют новогоcurrent-head all6/base/preview/tree/parents/fullmanifest передordinarymerge; actual integration записывается вPR. После merge —05в регистрация, разбитая на pending/outbox → одноразовое подтверждение/возврат → HTTP synthetic delivery; enrollment только послеpassport/consent gates. Всяфаза5 ещё не завершена.
+
 PR#37 initiala1b057e3/run37199831817:135/136actualPG,12новыхopening и2Chrome passed; старый initial MFA fixture previous-step попал на30секboundary. Required failed/additionalbrowser skipped, ничего неmerged. Bounded pre-submission fixture wait устраняет эту гонку, productionMFA неизменна; деталиSTAGE_ACCESS_VALIDATION. Новый полный current-head CI обязателен.
 
 05б.1 интегрирован обычным PR#36 в main a77dc62ee8e315c8580bde28ce5f20732505fe43 после final head a68523cc/run37195859358: all6success,225base+124actualPG18.6/3Chrome по2/2, полный214-blob manifest/actual merge parents/tree совпали. Открытых PR после интеграции не осталось.

@@ -22,6 +22,10 @@ GET metadata и POST open подключены в обоих кабинетах,
 
 ## Подтверждённая степень готовности
 
+Техническая приёмка [PR#37](https://github.com/PedFund/PedPsyRU/pull/37), runtime head e178d784b5668a45bd00afdfd17fc0487ca88592/tree433c8ba8e458fa4bdff30c665f32362b78e0d695, [run37200472709](https://github.com/PedFund/PedPsyRU/actions/runs/37200472709): все6jobs completed/success,227base Node22/24 и136/136actualPG18.6 (12новых stage cases). Три дополнительные независимые Chrome runs по2/2,0fail/cancel/skip. Все source222blobs совпали с опубликованным tree;35прежних core/method/001–020PG/SQLite/package/workflow blobs неизменны. Далее меняются только документы: final head обязан повторно пройти все6checks/currentbase/preview/tree/parents/fullmanifest; actual merge proof — вPR, не предполагается по runtime evidence.
+
+Предыдущие «требуется CI» ниже — история реализации, не блокер технической приёмки. Новая регистрация/enrollment/реальная почта ещё не реализованы.
+
 Первый CI PR#37/heada1b057e3/tree f78b054d/run37199831817: actualPG135/136,12новых stage scenarios и2Chrome passed; один старый staff diagnostics fixture упалINVALID_MFA на initial verifiedStaff. Он вычислял previous TOTP step перед границей30сек, а чтение серверного clock уже происходило в новом step: старый previous выпадал из прежнего±1 окна. Дополнительные3Chrome runs/Required checks не прошли, merge не выполнялся. Fixture теперь перед отправкой previous step выдерживает bounded wait только в последних5сек окна; текущий step остаётся неиспользованным для reauth/replay tests. Production MFA/лимиты/replay/guards не меняются, ошибок auth не ретраим. SQL открытия дополнительно держит assignment rows FOR SHARE в фиксированном порядке. Нужен новый полный current-head прогон, не считать первый failed run приёмкой.
 
 Локально226/226 base, build/typecheck/architecture/syntax/dependency-policy passed. Новые PG/Chrome сценарии пока написаны, не исполнялись локально: прежний owner stand/secrets не мигрировали/не запускали. Требуется actual PostgreSQL18.6 CI и current-head all6/base/tree/parents/fullmanifest gate перед ordinary merge. Не выдавать наличие SQL за успешный тест.
