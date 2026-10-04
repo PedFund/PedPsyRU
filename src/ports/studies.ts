@@ -11,6 +11,7 @@ export interface AssignmentDesign {id:string;group_id:string;stage_id:string;rel
 export interface StudyConstructor {
   listStaff(token:string):Promise<StudySummary[]>;
   create(token:string,title:string):Promise<StudyDesign>;
+  createFor(token:string,ownerCredentialId:string,title:string):Promise<StudyDesign>;
   read(token:string,id:string):Promise<StudyDesign>;
   group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}):Promise<StudyDesign>;
   stage(token:string,id:string,stageId:string|undefined,input:{code:string;ordinal:number;expected_version:number}):Promise<StudyDesign>;

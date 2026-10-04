@@ -28,7 +28,8 @@ scenario("scope/role/CSRF/origin/input/CAS failures are neutral and never partia
   for(const h of [{...x.headers,origin:"https://foreign.test"},{...x.headers,"x-pedpsy-csrf":"bad"}])assert.equal((await send(w,{headers:h},"/"+d.id+"/groups",{name:"КГ",kind:"control",expected_version:0})).statusCode,403);
   const results=await Promise.all(["One","Two"].map(title=>send(w,x,"/"+d.id,{title,expected_version:0},"PATCH")));assert.deepEqual(results.map(r=>r.statusCode).sort(),[200,409]);assert.equal(results.find(r=>r.statusCode===409).json().error,"DESIGN_CONFLICT");
   assert.equal((await send(w,{headers:{...s.headers,cookie:s.headers.cookie.replace("staff","researcher")}},"",{title:"Staff"})).statusCode,401);
-  for(const path of ["staff/studies","staff/studies/"+d.id+"/groups","staff/methods","staff/processing"])assert.equal((await w.app.inject({method:"POST",url:"/api/v2/"+path,headers:s.headers,payload:{}})).statusCode,404);
+  for(const path of ["staff/studies","staff/studies/"+d.id+"/groups"])assert.equal((await w.app.inject({method:"POST",url:"/api/v2/"+path,headers:s.headers,payload:{}})).statusCode,400);
+  for(const path of ["staff/methods","staff/processing"])assert.equal((await w.app.inject({method:"POST",url:"/api/v2/"+path,headers:s.headers,payload:{}})).statusCode,404);
   assert.equal((await w.app.inject({url:"/api/v2/staff/studies",headers:{...x.headers,cookie:x.headers.cookie.replace("researcher","staff")}})).statusCode,401);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,0);
 });

@@ -37,7 +37,7 @@ scenario("same-origin, CSRF, realm, exact DTO and foreign group protections neve
   }
   for(const role of ["administrator","superadministrator"]){const staff=role===s.role?s:await verifiedStaff(f,role);
     const staffHeaders={...h,cookie:"pedpsy_researcher_demo="+staff.session.token,"x-pedpsy-csrf":csrfFor(staff.session.token)};
-    assert.equal((await w.app.inject({method:"POST",url:path,headers:staffHeaders,payload:{expires_at:Date.now()+86400000}})).statusCode,403);
+    assert.equal((await w.app.inject({method:"POST",url:path,headers:staffHeaders,payload:{expires_at:Date.now()+86400000}})).statusCode,401);
   }
   assert.equal((await w.app.inject({url:path,headers})).statusCode,401);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.group_invitations")).rows[0].n,0);

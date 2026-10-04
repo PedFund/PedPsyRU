@@ -9,7 +9,7 @@ interface Csrf{forToken(token:string):string;assert(token:string,csrf:string):vo
 export function createAccountApi(d:Dependencies,csrf:Csrf){
   const staffSession=async(token:string)=>{
     const s=await d.access.session(token);if(s.role==="researcher")throw new ParticipationError(401,"AUTH_REQUIRED");
-    return {...s,csrf:csrf.forToken(token),permissions:["researchers.read","researchers.invite","researchers.block","protocols.read","protocols.download","results.read","results.download",
+    return {...s,csrf:csrf.forToken(token),permissions:["studies.configure","researchers.read","researchers.invite","researchers.block","protocols.read","protocols.download","results.read","results.download",
       ...(s.role==="superadministrator"?["staff.roles.assign"]:[])]};
   };
   const mutate=async<T>(token:string,value:string,fn:()=>Promise<T>):Promise<T>=>{csrf.assert(token,value);return fn();};

@@ -22,6 +22,7 @@ export class PostgresStudyConstructor implements StudyConstructor{
       return data;});
   }
   create(token:string,title:string){return this.call(token,"studies.configure","SELECT pedpsy.create_study($1,$2) data",[randomUUID(),title]);}
+  createFor(token:string,ownerCredentialId:string,title:string){return this.call(token,"studies.configure","SELECT pedpsy.create_study_for_researcher($1,$2,$3) data",[randomUUID(),ownerCredentialId,title]);}
   listStaff(token:string){return this.call<StudySummary[]>(token,"studies.read","SELECT pedpsy.staff_study_design_list() data",[]);}
   read(token:string,id:string){return this.call(token,"studies.read","SELECT pedpsy.read_study_design($1) data",[id]);}
   group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}){

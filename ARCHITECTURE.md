@@ -1,5 +1,11 @@
 # Архитектура ПедПси: текущий пилот
 
+## Новое MVP-решение 2026-10-04: управление исследованиями сотрудниками
+
+05б.1 добавляет staff paths конструктора и group-invite CRUD, централизованное studies.configure для обеих ролей с fresh MFA. Append-only020 повторяет current authority под locks; staff management → credential настоящего owner → user → study → membership → group/invite. Тот же owner credential сериализует квоту и researcher/staff writes. Current membership повторно проверяется после lock wait. Новый createFor не impersonation: owner выбирается явно, member только исследователь, audit — реальный staff credential/role/study/resource. Cookie realm дополнительно проверяется доверенным account API, затем write повторяется атомарно в adapter; UI не authority.
+
+Научный core, прежние001–019 migrations и зависимости не переписываются; tables/private helpers не открываются runtime. Staff creator приглашения хранится отдельной FK, researcher provenance сохранён. Active/closed/attempt-bearing designs по-прежнему frozen. Ручное открытие этапа принято владельцем, но отдельно от design.status: следующий workflow availability, не автоматическое открытие всех T0–T2. Прежние staff-readonly абзацы ниже — история. Email/паспорт/согласия/realdata ещё не включены.
+
 Дата: 2026-10-03. Основной репозиторий разработки — `PedFund/PedPsyRU`.
 
 ## Дополнение 2026-10-04: проект входа участника

@@ -1,5 +1,15 @@
 # Состояние ПедПси
 
+## 05б.1 — новое MVP-управление за исследователя, 2026-10-04
+
+Владелец принял manual stage opening researcher/admin/super и staff-management всех исследований MVP. До правок полная локальная копия210blobs совпала main feb1d5f3/4f6e42ac, открытых PR нет; локального.git нет, ветку/индекс нельзя выдавать за проверенные. Все прежние разработки сохранены.
+
+Реализованы central studies.configure для обеих staff-ролей +fresh MFA, guarded SQL/append-only020, реальные staff HTTP paths конструктора/invites и кабинет создания для явно выбранного исследователя. Квота остаётся у owner; одинаковый credential lock сериализует researcher/staff activation. CAS/frozen design/no direct table access/mandatory actor-role-study-resource audit сохранены. Staff creator отдельной FK, прежняя researcher provenance не теряется. Renamed-cookie realm проверяется account gateway; participant/methods/processing права не расширены.
+
+Локальные проверки:225/225 base tests, strict typecheck, architecture/dependency/syntax прошли. Новые actualPG/HTTP/CAS/quota/MFA/audit/provenance и расширенный Chrome staff-create/edit/reload тест добавлены, но CI ещё не проверен; интеграцию не заявляем. Нет новых dependencies, старые001–019 migrations/SQLite/core/form/key не менялись. Local owner stand не запускался/не мигрировался, secret files не читались.
+
+Следующий малый блок05в.0: отдельное server availability/manual opening всех трёх ролей перед05в registration. Сейчас constructor active не stage-opening, новых registration/email/passport/consent end-user flow ещё нет. Сохраняем2/8 основного планафазы5; staff-права — вставленный согласованный блок, не «готовая фаза5».
+
 ## 05б технически принят; следующий 05в — 2026-10-04
 
 [PR#35](https://github.com/PedFund/PedPsyRU/pull/35), runtimeheadaff67dfa8c06e7ce7b9dc37fab9d8fe1292598d1/[run37192386231](https://github.com/PedFund/PedPsyRU/actions/runs/37192386231): все6jobs completed/success;224/224base Node22/24,115/115actualPG18.6 (12 новых), три дополнительные независимые Chrome runs по2/2,0fail/cancel/skip. Cap100/101/saturation fixture с явными bigint casts фактически прошёл; тесты не ослаблены. История предыдущего отменённого/failed CI ниже сохранена. Приёмка — INVITATION_VALIDATION.

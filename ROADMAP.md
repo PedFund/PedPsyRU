@@ -1,5 +1,7 @@
 # ПедПси — единая дорожная карта разработки
 
+Актуальное уточнение 2026-10-04: фаза5 начата,05а/05б integrated#34/#35. Владелец утвердил ручное открытие этапов researcher/admin/super и обеим staff-ролям управление всеми исследованиями MVP за исследователя. 05б.1 — staff constructor/invites,05в.0 — отдельное server availability, затем05в registration. No impersonation/science/participant-write expansion; frozen design/owner quota/MFA/audit сохраняются. Фактическая приёмка в STATUS/BACKLOG, не утверждать будущие endpoints готовыми. Старые opening-undecided/staff-readonly контрольные точки — история.
+
 **Репозиторий:** `PedFund/PedPsyRU`  
 **Дата базовой сверки:** 2026-10-03  
 **Назначение:** продуктовая и инженерная последовательность разработки платформы. Не заменяет текущие технические документы `ARCHITECTURE.md`, `DATA_MODEL.md`, `DECISIONS.md`, `ACCESS_POLICY.md`, `STORAGE_CONTRACT.md`, `BACKLOG.md` и `STATUS.md` в рабочих ветках. При расхождении фактической реализации с планом фиксируй его, не выдавай планируемое за сделанное.
