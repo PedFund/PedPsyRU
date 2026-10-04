@@ -1,5 +1,29 @@
 # Проверка паспортной схемы и собственных значений
 
+## 05г интегрирован; 05д локальные проверки — 2026-10-04
+
+Окончательный `check:syntax` после18-гоPGcase иdocupdates passed; весь доступный localregression261/build/types/architecture/dependencypolicy passed на неизмененном runtime. LocalPG/Chrome не запускались, actual231/fullcurrent-headall-six остаются обязательной проверкойGitHub, не текущим результатом.
+
+#42 ordinary maina738c57e/tree439e4099/finalbcd3a073, [run37228089292](https://github.com/PedFund/PedPsyRU/actions/runs/37228089292) all-six success:252baseNode22/24,213actualPG18.6/14newcases,триindependentextraChrome2/2,0fail/cancel/skip. Fresh updatedbase67015b70/preview/source/parents/262manifest/protected40 и actualpostmerge tree/parents/blobs verified. Work instructions/phase6plan exact retained, oldfailedrun37225848294 preserved below. Individualpassport/UI еще не проверялись этимschemaCI.
+
+**05д runtime/model/application**: strict own ParticipantPassports port/DTO, pure scalar/schema feedback, Postgres fixed guardedread/save/complete, private027/pinned compositeFK/index/triggers. Partial/restart/CAS, saved-only requiredcompletion, completedimmutable/narrowlast-transitionretry; mandatorymetadata-onlyauditrollback/touch, current locks+wallclockexpiry after waits. No caller IDs/impersonation/null/coercion/zeroimputation/contactvalues/auditPII/clinicalrecords/autoenrollment. SQL independently repeats current field/types/bounds/choices/canonical Unicode trim; UI is notauthority.
+
+Локально: initial TS buildfailure(controlflow arrow-never) исправлен functiondeclaration; попытка unitпослеfailedbuild далаmissingdist, затем9/9newunits иfull261/261base/build/typecheck/architecture/dependency passed, finalsyntaxcheck требуетсяпослепоследнихtests. Testtypes forbidforeignscope/formula/inlinecompletion. **18newactualPGcases написаны, еще не исполнены (ожидается231total)**:
+
+- Metadata-onlyownnot_started/noinsert/noclinical; partialsnapshot/restart/sessionrotation/clearing безimputation.
+- Mandatorysex-age-city-requiredcustom толькоexplicitcomplete; SQLvalue/types/options/range/Unicode/blankwhitelist.
+- Two-tabCAS/stale schema/revision; immutableconcurrent/lost-responsecompletion.
+- Separateparticipants/forgedGUCs/staff/researcher/legacy/sessiondenial, noimpersonation.
+- Privatehelpers/table/PUBLIC ACL/compositeFK/pinnedschema/completedimmutability.
+- Mandatoryvalue-freeaudit failure rollbacksave/complete/read/sessiontouch.
+- Recruitmentrevoke preservesexistingaccess; currentnoticechange deniesoldack.
+- Credential/group/contact/study lock-wait currentrevocation (fourcases).
+- Profilelock-wait wall-clocksessionexpiry; contactpolicylock-wait noticechange.
+- Nonemptycompleted fulloperationalpg_dump/restore exactrows/projection/privateACL.
+- Existing026→027upgradenoautomaticprofiles/identity/schema/studymutation.
+
+Передordinarymerge fullfreshcurrent-headall-six/actualPG/threeindependentChrome/base/preview/parents/fullmanifest/protected41 mandatory. ExistingChrome regressions не новыйpassport UI. Owner stand/config/MFA/core/packages/workflow/001–026 unchanged. Wholephase5/HTTP/UI/consents/enrollment/legal/security/scientific/realdata readiness не заявлять. SQL guidance influenced minimalEXEC/indexed scopedFK/shortfixedlock-ordertransactions; no Supabase service introduced. Primary PostgreSQL references remain applicable: [JSON functions](https://www.postgresql.org/docs/18/functions-json.html), [row-level security](https://www.postgresql.org/docs/18/ddl-rowsecurity.html); runtime tests не замена независимой приемки.
+
 ## Corrected-head actual CI; актуализация base — 2026-10-04
 
 Work дополнительно обновил только план фазы6 в ROADMAP.md, main67015b70 (parentd40f28df). Точная секция сохраняется без изменения текущего passport code и требований владельца; окончательный свежий base —67015b70, необходим заново полный gate. Это план, не начало фазы6.

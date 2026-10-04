@@ -1,5 +1,11 @@
 # Журнал решений
 
+## 2026-10-04 — технический блок05д и сохранение инструкций Work
+
+Существующие решения владельца (mandatorysex/age, other flags researcher, max5own, GitHubнеSelectel) реализуются небольшим ownpassport workflow. Fixed own session defines scope; partial snapshot/CAS до explicit saved-value completion; completed pinned values immutable, narrowly idempotent last-completion retry. Passport не consent и неenrollment, администраторы неimpersonate участника. Это внутреннее устройство утвержденного шага, не новые права/научные нормы/реальные данные. Full standard basic catalog позже; age0..130 technicalsynthetic limit, не minors approval.
+
+Work d40f28df/67015b70 обновил AGENTS/ROADMAP: exact incoming sections сохранены обычным двухродительским sync и acceptedmain#42; новыйfullcurrent-headrun37228089292 all6 passed. Адресные tests приотладке, fullregression передPR и fullactualhead/baseCI передmerge, no weakening gates. Фаза6А/6Б только план доотдельногоперехода. Withdrawal-return product choice еще отсутствует; не вводить silentself-reactivation.
+
 ## 2026-10-04 — прямое уточнение владельца: паспорт и среда фазы11
 
 Пол и возраст обязательны. Исследователь определяет обязательность остальных базовых/дополнительных вопросов; своих вопросов не больше пяти. Это заменяет прежние optional-basic и локальную неопубликованную идею лимита10. На первом небольшом блоке поддерживаем sex/age/city; образование, семейное положение, дети, занятость, тип населённого пункта из исходной спецификации — последующее дополнение каталога, не выдуманные сейчас справочники/научные нормы. Новая схема не изменяет незаметно уже полученные значения: версии immutable, default-v1 привязывается к demo study, draft-only metadata editing, active/closed/attempt-bearing frozen; последующая ревизия active исследования — отдельный workflow.
