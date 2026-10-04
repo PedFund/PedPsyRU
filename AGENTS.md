@@ -1,5 +1,11 @@
 # AGENTS.md — PedPsyRU
 
+## Текущий05д после интеграции схемы и инструкций Work — 2026-10-04
+
+PR#42 ordinary merged main `a738c57e04c6e9b6dcd854ee9572829857585487`, final head `bcd3a07353af8b27ab962697a57d6c76b3155da5`, run37228089292 all-six success:252baseNode22/24,213actualPG18.6 (14new schema cases),три extra independentChrome2/2,0fail/cancel/skip. Fresh main67015b70/preview/source/parents/full262manifest/protected40 и postmergeactualmain проверены. Work updates AGENTS targeted-test/full-acceptance и ROADMAP future6А/6Б перенесены точно; phase6 не начинать. Старые pending ниже —история, failure сохранен вPASSPORT_VALIDATION.
+
+Следующий малый05д локально: own participant passport port/pure DTO/PG save/read/complete, append-only027/private pinned schema FK/CAS/mandatory sex-age-current flags/current locks/wall-clock expiry/metadata-only mandatoryaudit; безHTTP/UI/consent/enrollment.261localbase(build/typecheck/architecture/dependencies) passed,18newPG написаны (ожидается231total),actualCI обязателен передordinarymerge. Owner stand/MFA/secrets/core/package/workflow/001–026 не менять. После accepted merge продолжать05е раздельные согласия; withdrawal-return product question еще открыт, новую политику не угадывать. Можно независимыйHTTP/UI подготовительный блок, но не заявлятьсквознойflow готовым. Основной порядок05г→05д→05е→05в.4enrollment→05жUI→05зacceptance сохраняется.
+
 05г первый actual CI #42/e932fec6/run37225848294:252 base passed, PG18.6 212 из213, один legacy-owner fixture failure; extra Chrome skipped, Required failed —не merge. Test-only fixture теперь имеет ровно одного real owner и проверяет прежний DESIGN_FROZEN плюс clinical immutability; guards/SQL не ослаблены. Нужен новый full current-head all-six/base/preview/tree/parents/262manifest/protected40 gate; PASSPORT_VALIDATION/STATUS ведут failure/proof. Обязательные sex/age/max5 и новые решения ниже сохраняются; после safe merge автономно05д, withdrawal return не угадывать.
 
 ## Новое прямое решение владельца и текущий 05г — 2026-10-04

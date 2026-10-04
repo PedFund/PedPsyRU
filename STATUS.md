@@ -1,5 +1,15 @@
 # Состояние ПедПси
 
+## 2026-10-04: схема паспорта в main; собственный паспорт локально реализован
+
+PR #42 интегрирован **обычным merge**: main `a738c57e04c6e9b6dcd854ee9572829857585487`, tree `439e4099214a3910b09837c07a48a6feaa9147fe`, parents — новый main `67015b70` и final head `bcd3a073`. [run37228089292](https://github.com/PedFund/PedPsyRU/actions/runs/37228089292): все шесть jobs completed/success, 252 base Node22/24, 213 actual PostgreSQL18.6 (все14 новых schema cases), три дополнительные независимые Chrome runs по2/2, ноль fail/cancel/skip. До merge —fresh base/head/preview/tree/parents/full262manifest/protected40, после —actual main/PRmerged/tree/parents/all262blobs. Обе внешние правки Work сохранены точно: AGENTS —адресная отладка+полная приемка, ROADMAP —будущие6А/6Б; код/guards не перезаписаны, история первого fixture failure сохранена. Proof вPR#42; прежние «05г еще не исполнен» ниже исторические.
+
+**05д — пятая из восьми основных задач фазы5**: локально собственные passport values/read/save/complete, private append-only027, pinned immutable question schema, partial draft/restart/CAS, mandatory sex-age/current flags только при explicit completion. Metadata-only allow audit и touch session атомарны, failed audit rollback; no caller scope/staff impersonation/clinical attempts/autoenrollment. Real-time session check после всех lock waits дополняет existing statement-time identity. Private helpers/table ACL и indexed composite FK сохраняют минимальный доступ.
+
+Локально 261/261 base, включая9 новых units, build/typecheck/architecture/dependency policy passed. Первый build обнаружил TS control-flow narrowing arrow-never helper, исправлен declaration без изменения проверок; преждевременный unit запуск после failed build не мог загрузить dist, затем9/9 и полный261/261 passed. Это не actual PG. **18 новых PostgreSQL cases написаны, еще не исполнены; ожидается231total**, включая race current notice/credential/group/contact/study/profile expiry, mandatory audit rollback и nonempty full operational backup. Перед публикацией окончательный syntax check; передordinarymerge свежийcurrent-head all-six/actualPG/Chrome/base/preview/parents/fullmanifest/protected41. PASSPORT_VALIDATION ведет приемку и границы.
+
+Owner stand не запускался/не мигрировался, MFA/секреты/SQLite/core/001–026/packages/workflow неизменны. Собственный паспорт пока не подключен HTTP/UI и не равен согласиям/доступу к тестам. Далее05е→05в.4→05ж→05з; возврат после withdrawal требует ответа владельца. Selectel и реализацияфазы6 не входят в текущий блок. Успешное CI не независимая legal/security/scientific приемка и не разрешение реальных данных.
+
 ## 2026-10-04: актуальные инструкции Work сохраняются при интеграции 05г
 
 Дополнительный main `67015b70fdb0a4058f54167f74b1daca909f1677` — descendant d40f28df, только ROADMAP.md: уточнены направления6А/6Б и граница будущей фазы6. Секция6 переносится точно, локальные passport requirements и контрольные точки сохраняются. Итоговый current-base gate относится к67015b70; реализация фазы6 не начинается.

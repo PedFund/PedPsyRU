@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05д: собственные значения паспорта (027)
+
+`participant_passports`: PK(study_id,participant_id), composite FK в immutable participant_group_bindings и passport_schema_versions(study_id,schema_version); отдельный FK index(study_id,schema_version). revision1..2147483646, statusdraft/completed, scalar `answers` JSONB, created/updated/completed milliseconds. Created scope/schema неизменяемы; draft update ровноrevision+1, completion не меняет saved answers, completed/delete запрещены. Первое read возвращает not_started/revision0/empty values без строки. Same-current save values audited/no increment; staleCAS всегда409. Complete replay только current completed revision или непосредственно preceding revision (lost response); никакой reactivation/edit workflow.
+
+SQL проверяет толькоknown schema keys, scalar exact type/options/bounds/canonical Unicode trim/codepoint limits; no null/coercion/imputation. Частичный draft допустим, complete требуетsex/age ивсехconfigured required. Current contact/notice/fixed group/session must still valid; recruitment invite revoke не исключает alreadyaccepted identity. Metadata-only mandatory audit сreal credential/study/participantresource/count, безконтакта/значений. Private RLS/runtime only3guardedEXEC, no extra staff/researcher data read/write grants. Append027 не создает profile/identity/clinicalrecords длястарыхучастников. Старый domain snapshot не содержитэтиданные; separate nonempty operational pg_dump/restore testwritten, actualCIещеpending. 001–026 bytes unchanged.
+
 ## 05г: versioned passport question metadata (026)
 
 `passport_schema_versions`: composite PK (study_id,schema_version), scoped study FK, version1..100, fields JSON с strict CHECK, created_at. Исторические строки immutable. `study_passport_schemas`: study PK/FK, schema version + composite FK/unique index к scoped immutable version. Default-v1 sex/age required и city optional создаётся existing demo backfill/new-study trigger, не изменяет старые clinical IDs/строки. Исследователь меняет city required flag и до пяти own fields только в draft через current study/schema CAS; следующая версия сохраняет предыдущую.

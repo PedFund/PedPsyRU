@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+Текущее2026-10-04: **05г интегрирован#42**, maina738c57e/finalbcd3(run37228089292 all-six success:252base+213actualPG18.6/триextraChrome2/2), actual262blobs/parents/tree/protected40 verified. Work AGENTS/ROADMAP edits сохранены точно, phase6 только план. **05д — пятая из восьми** основных задачфазы5, own passport values/read/save/complete локально261base/checks passed;18newPG/231total еще требуютactualCI/fullfreshmergegate. Participant HTTP/UI/consents/enrollment не считатьготовыми. Затем05е→05в.4→05ж→05з; withdrawal-return еще ожидает владельца, новуюполитику не угадывать. Старые05гpending/failure ниже —история.
+
 05г первый CI #42/e932fec6/run37225848294:252 base passed;212/213 PG18.6, один legacy-owner fixture failure; extra Chrome skipped, block не accepted/не merged. Synthetic fixture owner исправлен без изменения SQL/guards, прежний DESIGN_FROZEN assertion сохранён. Новый full current-head all-six/213PG/триChrome и merge gate обязателен; затем05д. История —PASSPORT_VALIDATION/STATUS.
 
 Текущее 2026-10-04: #41/05в.3б в main `c9b80a5a`, run `37223885301` all-six success (244 base + 199 PG 18.6 + три Chrome 2/2). Начат **05г — четвёртая из восьми основных задач фазы 5**, schema metadata-only; 252 local base/checks passed, 14 new PG/213 total требуют actual CI/merge gate. Затем05д own passport,05е consents,05в.4 guarded enrollment,05ж UI,05з acceptance. Регистрационный backend готов в synthetic scope, общий пользовательский путь ещё нет.

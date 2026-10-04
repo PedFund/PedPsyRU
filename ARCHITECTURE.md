@@ -1,5 +1,13 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05д — own passport, без расширения научных прав
+
+ParticipantPassports принимает только собственный opaque session и save/completion CAS, никогда caller participant/study/group/role. Pure passportScalars/passportValues дают strict DTO/feedback, не authority; fixed Postgres functions повторяют schema key/type/range/choice/Unicode/required checks под current identity/group/contact/notice/schema/profile locks. Read not_started не inserts; save partial snapshot с revision, completed frozen; explicit completion только saved values, lost-last-transition replay idempotent. Ни autoenrollment, ни diagnostic attempts, ни consent acknowledgement в этом workflow.
+
+Порядок короткой транзакции: existing credential/session/study/participant identity locks → fixed binding/group/contact policy/notice/contact/current schema locks → own profile lock → fresh wall-clock expiry check → guarded write → mandatory value-free audit → fresh expiry check/touch session → commit. Нет crypto/network/realmail вSQL. Private participant_passports/RLS/no direct runtime table/helper EXEC; только3own guarded functions. Composite FK и индекс фиксируют scoped immutable schema. Staff manage question metadata своими прежними studies.configure правами, но этот adapter не читает/заполняет чужие individual values и не добавляет staff scientific permissions. Будущие approved exports —отдельные workflows.
+
+18newPG/current-headCI еще требуют actual acceptance; metadata schema05г alreadymain#42. HTTP/UI/consent/enrollment следуют отдельными малыми блоками. Owner stand и старыйdomain snapshot не меняются; operational full backup проверяется отдельно.
+
 ## 05г — схема паспортных вопросов, не индивидуальные значения
 
 PassportSchemas port/application strict validator/Postgres fixed-functions adapter отделены от diagnostics/core. Append-only026 хранит immutable (study_id,schema_version,fields) и current pointer с composite FK/index; default-v1 metadata для existing/new demo studies не меняет participant/diagnostic данные. Sex/age всегда required; city required flag выбирается отдельно, пять own questions максимум с boolean required и limited text/integer/single_choice types. Никакого произвольного scoring/script/handler в schema. Default/current versions не заменяют consent/ownership/enrollment.
