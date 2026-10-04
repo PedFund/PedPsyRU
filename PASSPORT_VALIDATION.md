@@ -1,5 +1,13 @@
 # Проверка паспортной схемы и собственных значений
 
+## Corrected-head actual CI; актуализация base — 2026-10-04
+
+Work дополнительно обновил только план фазы6 в ROADMAP.md, main67015b70 (parentd40f28df). Точная секция сохраняется без изменения текущего passport code и требований владельца; окончательный свежий base —67015b70, необходим заново полный gate. Это план, не начало фазы6.
+
+PR #42/head `69f967cac46629ecaf840012655cee764b550d1e`, [run37226646849](https://github.com/PedFund/PedPsyRU/actions/runs/37226646849): all-six completed/success, 252 base Node22/24, 213 actual PG18.6, все14 новых schema cases; три дополнительные независимые Chrome runs по2/2, без fail/cancel/skip. Первый failure ниже сохранен. Сведения «еще не исполнены» в исходном локальном отчете ниже исторические.
+
+Свежий merge gate остановил интеграцию: main обновлен владельцем через Work, `d40f28df`, только новые AGENTS test/acceptance instructions. Точная новая секция сохраняется вместе с локальными паспортными изменениями обычным двухродительским commit; код/guards/packages/001–025/owner stand не изменяются. Run37226646849 доказывает прежний base c9b80, не новый head/base. Перед ordinary merge обязательны заново полный current-head all-six, actual213PG, браузерные регрессии, fresh base/preview/parents/full262manifest/protected40. Proof финальной интеграции в PR и следующем STATUS, не выдавать проверку схемы за individual passport/UI/consent/enrollment.
+
 ## Первый actual CI и исправление fixture — 2026-10-04
 
 PR #42/head `e932fec6c4df844f53de69479c1f468c51d1472f`, tree `c35188105b67088272a33e0366189e313f8ec230`, [run37225848294](https://github.com/PedFund/PedPsyRU/actions/runs/37225848294): 252 base на Node22/24 passed, dependency/Secret success; actual PG18.6 —212 passed из213, один failure, ноль cancelled/skipped в PG. Три дополнительные Chrome runs **не выполнялись**: шаг пропущен после failure; Required gate failed, PR не объединён.

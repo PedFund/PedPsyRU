@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## 2026-10-04: актуальные инструкции Work сохраняются при интеграции 05г
+
+Дополнительный main `67015b70fdb0a4058f54167f74b1daca909f1677` — descendant d40f28df, только ROADMAP.md: уточнены направления6А/6Б и граница будущей фазы6. Секция6 переносится точно, локальные passport requirements и контрольные точки сохраняются. Итоговый current-base gate относится к67015b70; реализация фазы6 не начинается.
+
+PR #42 corrected head `69f967cac46629ecaf840012655cee764b550d1e`, [run37226646849](https://github.com/PedFund/PedPsyRU/actions/runs/37226646849): все шесть jobs completed/success, 252 base Node22/24, 213 actual PostgreSQL18.6 (все14 новых паспортных cases), три дополнительные независимые Chrome runs по2/2; ноль fail/cancel/skip. Эти доказательства относятся к прежнему base `c9b80a5a`, не к последующему обновлению main.
+
+Перед merge свежий gate обнаружил внешний main `d40f28dfb16533e612c0c1ad22d31a53d8054f2d`: по поручению владельца Work изменил только AGENTS.md, добавив адресные тесты при разработке и полную обязательную приемку перед PR/merge. PR не объединялся со старым base. Новая секция переносится точно, существующие локальные инструкции/паспортный код сохраняются; ветка интегрирует оба родителя обычным commit, без force/rebase/удаления истории. Требуется полный новый current-head/current-base all-six и manifest gate. Не объявлять старый успешный run приемкой нового head. Локальные неизмененные 252 base/build/types/architecture/syntax/dependencies переиспользуются по новой инструкции; actual CI повторяется целиком. Owner stand не изменен.
+
 05г/PR #42 первый actual run `37225848294`, head `e932fec6`:252 base Node22/24 и dependency/Secret passed; PG18.6 —212 из213, один fixture failure, без PG cancelled/skipped; дополнительный Chrome шаг skipped из-за failure, merge запрещён. Legacy attempt-bearing study не имел real researcher credential, поэтому staff owner guard вернул NOT_AVAILABLE до DESIGN_FROZEN. Исправлен только synthetic owner fixture (один действующий owner) и добавлена сверка прежних clinical IDs/status/revisions; runtime guards/assertions неизменны. PASSPORT_VALIDATION хранит точное доказательство; нужен новый полный current-head all-six. Остальные13 новых PG cases включая full operational restore прошли, но не объявлять whole block accepted. Owner stand не изменён.
 
 ## 2026-10-04: регистрационный HTTP-блок принят; схема паспорта в работе
