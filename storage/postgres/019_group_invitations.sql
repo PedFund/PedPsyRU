@@ -43,6 +43,17 @@ BEGIN
   PERFORM 1 FROM pedpsy.research_groups WHERE study_id=study AND id=target_group FOR UPDATE;
   IF NOT FOUND THEN RAISE EXCEPTION 'NOT_AVAILABLE' USING ERRCODE='P0002'; END IF;
 END $$;
+CREATE FUNCTION group_invitation_audit(operation text,study uuid,target uuid) RETURNS void
+LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
+DECLARE a record;at_ms bigint;
+BEGIN
+  SELECT * INTO a FROM pedpsy.account_actor();
+  IF NOT FOUND OR a.actor_role<>'researcher' THEN RAISE EXCEPTION 'AUTH_REQUIRED' USING ERRCODE='28000'; END IF;
+  at_ms:=floor(extract(epoch FROM clock_timestamp())*1000)::bigint;
+  INSERT INTO pedpsy.access_audit_events(id,at_ms,credential_id,study_id,action,outcome,reason,resource_id)
+    VALUES(gen_random_uuid(),at_ms,a.credential_id,study,operation,'allow','GROUP_INVITATION',target);
+  UPDATE pedpsy.researcher_sessions SET last_seen_at_ms=at_ms WHERE token_hash=current_setting('app.session_hash',true);
+END $$;
 CREATE FUNCTION group_invitation_record(target uuid) RETURNS jsonb
 LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
   SELECT jsonb_build_object('id',id,'study_id',study_id,'group_id',group_id,'revision',revision,
@@ -57,7 +68,7 @@ BEGIN
     THEN RAISE EXCEPTION 'INVITE_LIMIT' USING ERRCODE='54000'; END IF;
   SELECT coalesce(jsonb_agg(pedpsy.group_invitation_record(id) ORDER BY created_at_ms,id),'[]'::jsonb)
     INTO data FROM pedpsy.group_invitations WHERE study_id=study AND group_id=target_group;
-  PERFORM pedpsy.constructor_audit('participants.invites.list',study);
+  PERFORM pedpsy.group_invitation_audit('participants.invites.list',study,target_group);
   RETURN data;
 END $$;
 CREATE FUNCTION group_invitation_policy_scope(study uuid,target_group uuid) RETURNS jsonb
@@ -68,7 +79,7 @@ BEGIN
   SELECT jsonb_build_object('studyId',s.id,'groupId',g.id,'datasetKind',s.dataset_kind,
     'studyStatus',s.status,'groupStatus',g.status) INTO data
     FROM pedpsy.studies s JOIN pedpsy.research_groups g ON g.study_id=s.id WHERE s.id=study AND g.id=target_group;
-  PERFORM pedpsy.constructor_audit('participants.invites.policy',study);
+  PERFORM pedpsy.group_invitation_audit('participants.invites.policy',study,target_group);
   RETURN data;
 END $$;
 CREATE FUNCTION create_group_invitation(study uuid,target_group uuid,target uuid,digest text,expiry bigint) RETURNS jsonb
@@ -92,11 +103,11 @@ BEGIN
     IF old.expires_at_ms>at_ms THEN RAISE EXCEPTION 'INVITE_EXISTS' USING ERRCODE='P0001'; END IF;
     IF old.revision>=2147483646 THEN RAISE EXCEPTION 'INVITE_LIMIT' USING ERRCODE='54000'; END IF;
     UPDATE pedpsy.group_invitations SET status='revoked',revision=revision+1,revoked_at_ms=at_ms WHERE id=old.id;
-    PERFORM pedpsy.constructor_audit('participants.invites.expire',study);
+    PERFORM pedpsy.group_invitation_audit('participants.invites.expire',study,old.id);
   END IF;
   INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms)
     VALUES(target,study,target_group,digest,a.credential_id,at_ms,expiry);
-  PERFORM pedpsy.constructor_audit('participants.invites.create',study);
+  PERFORM pedpsy.group_invitation_audit('participants.invites.create',study,target);
   RETURN pedpsy.group_invitation_record(target);
 END $$;
 CREATE FUNCTION revoke_group_invitation(study uuid,target_group uuid,target uuid,expected_revision integer) RETURNS jsonb
@@ -108,13 +119,13 @@ BEGIN
   IF NOT FOUND THEN RAISE EXCEPTION 'NOT_AVAILABLE' USING ERRCODE='P0002'; END IF;
   IF expected_revision IS NULL OR expected_revision<>row_invite.revision THEN RAISE EXCEPTION 'INVITE_CONFLICT' USING ERRCODE='P0001'; END IF;
   IF row_invite.status='revoked' THEN
-    PERFORM pedpsy.constructor_audit('participants.invites.revoke',study); RETURN pedpsy.group_invitation_record(target);
+    PERFORM pedpsy.group_invitation_audit('participants.invites.revoke',study,target); RETURN pedpsy.group_invitation_record(target);
   END IF;
   IF row_invite.revision>=2147483646 THEN RAISE EXCEPTION 'INVITE_LIMIT' USING ERRCODE='54000'; END IF;
   at_ms:=floor(extract(epoch FROM clock_timestamp())*1000)::bigint;
   UPDATE pedpsy.group_invitations SET status='revoked',revision=revision+1,revoked_at_ms=at_ms WHERE id=target;
-  PERFORM pedpsy.constructor_audit('participants.invites.revoke',study);
+  PERFORM pedpsy.group_invitation_audit('participants.invites.revoke',study,target);
   RETURN pedpsy.group_invitation_record(target);
 END $$;
 REVOKE ALL ON FUNCTION guard_group_invitation(),lock_group_invitation_owner(uuid,uuid),group_invitation_record(uuid),
-  group_invitation_policy_scope(uuid,uuid),list_group_invitations(uuid,uuid),create_group_invitation(uuid,uuid,uuid,text,bigint),revoke_group_invitation(uuid,uuid,uuid,integer) FROM PUBLIC;
+  group_invitation_audit(text,uuid,uuid),group_invitation_policy_scope(uuid,uuid),list_group_invitations(uuid,uuid),create_group_invitation(uuid,uuid,uuid,text,bigint),revoke_group_invitation(uuid,uuid,uuid,integer) FROM PUBLIC;

@@ -27,12 +27,15 @@ scenario("one active shared token per group, stored hashed, list is secret-free;
     await assert.rejects(x.invitations.create(staff.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}), e => e.status === 403);
   await assert.rejects(x.invitations.list(f.raw,x.design.id,x.design.groups[0].id), e => e.status === 401);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participants WHERE study_id=$1",[x.design.id])).rows[0].n,0);
-  assert.ok(!JSON.stringify((await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE resource_id=$1",[x.design.id])).rows).includes(invite_token));
+  const audit=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE study_id=$1",[x.design.id])).rows;
+  assert.ok(!JSON.stringify(audit).includes(invite_token));
+  assert.ok(audit.some(a=>a.action==="participants.invites.create"&&a.resource_id===r.id&&a.credential_id===x.row.id));
 });
 scenario("direct tables/private helpers are inaccessible; identity/expiry/scope cannot be edited or deleted",async(f,x)=>{
   const r=await create(x);
   for(const sql of ["SELECT * FROM pedpsy.group_invitations", "DELETE FROM pedpsy.group_invitations", "UPDATE pedpsy.group_invitations SET status='revoked'",
-    "SELECT pedpsy.group_invitation_record(gen_random_uuid())", "SELECT pedpsy.lock_group_invitation_owner(gen_random_uuid(),gen_random_uuid())"])
+    "SELECT pedpsy.group_invitation_record(gen_random_uuid())", "SELECT pedpsy.lock_group_invitation_owner(gen_random_uuid(),gen_random_uuid())",
+    "SELECT pedpsy.group_invitation_audit('participants.invites.revoke',gen_random_uuid(),gen_random_uuid())"])
     await assert.rejects(f.runtime.query(sql), e=>e.code==="42501");
   for(const sql of ["DELETE FROM pedpsy.group_invitations WHERE id=$1", "UPDATE pedpsy.group_invitations SET group_id=gen_random_uuid() WHERE id=$1",
     "UPDATE pedpsy.group_invitations SET expires_at_ms=expires_at_ms+1 WHERE id=$1", "UPDATE pedpsy.group_invitations SET token_hash='sha256:'||repeat('0',64) WHERE id=$1"])
@@ -64,7 +67,7 @@ scenario("expiry is bounded by server clock, exhausted old invitation is explici
   const r=await create(x), rows=await x.invitations.list(x.session.token,x.design.id,x.design.groups[0].id);
   assert.equal(rows.find(x=>x.id===oldId).status,"revoked");assert.equal(rows.find(x=>x.id===oldId).revision,1);assert.equal(rows.find(x=>x.id===r.id).status,"active");
   assert.equal((await x.studies.read(x.session.token,x.design.id)).version,x.design.version);
-  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE resource_id=$1 AND action='participants.invites.expire'",[x.design.id])).rows[0].n,1);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE study_id=$1 AND resource_id=$2 AND action='participants.invites.expire'",[x.design.id,oldId])).rows[0].n,1);
 });
 scenario("mandatory audit failure rolls back invite creation and revoke",async(f,x)=>{
   const r=await create(x);
@@ -87,7 +90,7 @@ scenario("revocation committed during credential lock wait blocks creation and a
     assert.equal((await pending).error?.status,401);
   }finally{await owner.query("ROLLBACK");owner.release();if(pending)await pending;}
   assert.equal(await count(f),0);
-  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE resource_id=$1 AND action='participants.invites.create'",[x.design.id])).rows[0].n,0);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='participants.invites.create'",[x.design.id])).rows[0].n,0);
 });
 scenario("study closure and membership removal while waiting are rechecked under current scope locks",async(f,x)=>{
   for(const mutation of ["membership","closure"]){
