@@ -115,11 +115,11 @@ scenario("100-item history and saturated revision are rejected explicitly, never
   await f.admin.query("INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms,revision) VALUES($1,$2,$3,$4,$5,$6,$7,2147483646)",
     [id,x.design.id,x.design.groups[0].id,tokenHash(randomBytes(32).toString("base64url")),x.row.id,at,Date.now()+100000]);
   await assert.rejects(revoke(x,{id,revision:2147483646}),e=>e.status===413&&e.code==="INVITE_LIMIT");
-  await f.admin.query("INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms,status,revision,revoked_at_ms) SELECT gen_random_uuid(),$1,$2,'sha256:'||md5(gen_random_uuid()::text)||md5(gen_random_uuid()::text),$3,$4,$4+1000,'revoked',1,$4+500 FROM generate_series(1,99)",
+  await f.admin.query("INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms,status,revision,revoked_at_ms) SELECT gen_random_uuid(),$1,$2,'sha256:'||md5(gen_random_uuid()::text)||md5(gen_random_uuid()::text),$3,$4::bigint,$4::bigint+1000,'revoked',1,$4::bigint+500 FROM generate_series(1,99)",
     [x.design.id,x.design.groups[0].id,x.row.id,at]);
   assert.equal((await x.invitations.list(x.session.token,x.design.id,x.design.groups[0].id)).length,100);
   await assert.rejects(create(x),e=>e.status===413&&e.code==="INVITE_LIMIT");
-  await f.admin.query("INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms,status,revision,revoked_at_ms) VALUES(gen_random_uuid(),$1,$2,$3,$4,$5,$5+1000,'revoked',1,$5+500)",
+  await f.admin.query("INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms,status,revision,revoked_at_ms) VALUES(gen_random_uuid(),$1,$2,$3,$4,$5::bigint,$5::bigint+1000,'revoked',1,$5::bigint+500)",
     [x.design.id,x.design.groups[0].id,tokenHash(randomBytes(32).toString("base64url")),x.row.id,at]);
   await assert.rejects(x.invitations.list(x.session.token,x.design.id,x.design.groups[0].id),e=>e.status===413&&e.code==="INVITE_LIMIT");
 });
