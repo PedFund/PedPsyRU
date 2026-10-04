@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+05в.1 технически принят PR#38/runtime9bb3f940/run37203662168: all6 success, 228base+149actualPG18.6/3Chrome по2/2, включая непустой operational backup. Documentary head и ordinary merge требуют отдельного полного gate; actual integration — PR/STATUS. После интеграции автономно 05в.2: одноразовое browser/invite/notice-bound подтверждение, private contact/фиксированная группа, повтор без password reset, scoped email login; затем 05в.3 HTTP/cookies/Origin/CSRF/synthetic receiver. Не выдавать queued заявку за email proof или доступ к методикам.
+
 05в.0 integrated#37/main5c2f5543/all6finalrun37200928344,227base+136PG/3Chrome. Текущий05в.1 локально реализован: persisted landing/reservation/queue,228base passed;12newPG/current-headgate ещётребуются. REGISTRATION_VALIDATION —proof/limits. Следующие05в.2confirmation/contact/scopedlogin и05в.3HTTP/syntheticreceiver; no enrollment before05г–05е gates, no realmail/stand mutation.
 
 05в.0 технически принят#37/runtimee178d784/run37200472709 all6success:227base+136PG18.6 и3Chrome по2/2; STAGE_ACCESS_VALIDATION сохраняет failedfixture/correction/limits. Finaldocs=current-head gate передordinarymerge. Послеинтеграции05в:1)persisted landing/pending/throttle/outbox;2)одноразовоеconfirm/повторбезpasswordreset/ownemail login;3)HTTP/cookies/Origin/CSRF иsynthetic receiver. Enrollment выдаётся только после05г–05е passport/consents ипроверки manualavailability, не сразупоcontact confirmation.

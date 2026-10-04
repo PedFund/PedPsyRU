@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 05в.1 технически принят — 2026-10-04
+
+[PR #38](https://github.com/PedFund/PedPsyRU/pull/38), runtime head `9bb3f94052afb2afca8164e86200b6f8a3976501`, tree `90eb6ca23787f1c173b6c0a251c0a2e8f5acf4df`, [run 37203662168](https://github.com/PedFund/PedPsyRU/actions/runs/37203662168): все шесть обязательных jobs completed/success. 228 основных тестов на Node22/24, 149/149 actualPG18.6, три дополнительных независимых Chrome runs по 2/2, 0 fail/cancel/skip. Включены 13 новых PG сценариев и восстановление непустой encrypted queue в отдельную БД; источник сохранён, ключ отдельно, direct/private/PUBLIC доступ закрыт. 230 blob source manifest и 36 protected core/method/001–021PG/SQLite/package/workflow blobs сверены. REGISTRATION_VALIDATION содержит границы доказательств.
+
+Финальный documentary head проходит новый all6/current-head/base/preview/tree/parents/fullmanifest gate перед обычным merge. Фактический merge SHA/дерево и повторная сверка фиксируются в PR; не выдавать успешный runtime run за проверку последующего head. Следующий малый блок — 05в.2 confirmation/contact/возврат по email; 05в.3 HTTP/test receiver и паспорт/согласия/enrollment ещё впереди. Owner stand/секреты не менялись; фаза5 не завершена.
+
 ## 05в.1 — первая persisted часть регистрации, 2026-10-04
 
 ПервыйPR#38/head159cf497/run37202694987 all6success:228base+148actualPG18.6/3extraChrome2/2каждый,0fail/cancel/skip. Добавленотдельный13-й actualPG case непустойqueuebackup/restore сretainedkey изакрытиемpublic/helper/tableprivileges доruntime. Прежнийbounded/redactedcontainertransport переиспользованбезослабленияguards; новый149suite/currentheadещётребуетCI. Ничегонеmergedпоobsoletehead.

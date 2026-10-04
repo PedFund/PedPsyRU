@@ -1,5 +1,13 @@
 # Проверка регистрации участника — фаза05в
 
+## Техническая приёмка 05в.1
+
+[PR #38](https://github.com/PedFund/PedPsyRU/pull/38), runtime head `9bb3f94052afb2afca8164e86200b6f8a3976501`, tree `90eb6ca23787f1c173b6c0a251c0a2e8f5acf4df`, [run 37203662168](https://github.com/PedFund/PedPsyRU/actions/runs/37203662168). Все шесть jobs completed/success: Tests Node22/24, Dependency audit, Secret scan, PostgreSQL18 isolation, Required checks. 228/228 base и 149/149 actualPG18.6, 0 fail/cancel/skip. Три дополнительных независимых actual Chrome runs — 2/2 каждый, также без fail/cancel/skip. Это technical acceptance перечисленного persistence scope, не независимая научная/юридическая/production приёмка.
+
+13-й новый actualPG сценарий действительно выполнил custom pg_dump/pg_restore непустой pending/outbox в отдельную пустую generated БД. Сверены operational row/hash/browser/invite/version/envelope и current notice policy, retained отдельный ContactTokenVault key расшифровал исходный digest. До runtime enable закрыты PUBLIC schema/table/helper EXECUTE privileges; runtime не может читать queue/pending или вызвать private helper. Старые migration checksums повторно приняты, источник не изменён. Backup bytes/secret messages не записаны в stdout/artifacts, buffer очищен. Доказан synthetic backup при отдельно сохранённом ключе; не обещается восстановление при утрате ключа или реальная доставка.
+
+Финальные документы не меняют runtime/source/022/package/workflow, но создают новый head: до ordinary merge требуется новый полный all6/current-head/base/preview/tree/parents/fullmanifest gate. Actual integration proof добавляется в PR после проверки реального main. Исторические «ещё требует CI» ниже относятся к предыдущим контрольным точкам. Следующий блок 05в.2; HTTP/delivery/login/participant/enrollment этим persistence блоком не объявлены готовыми.
+
 ## 05в.1 — landing, reservation и durable confirmation outbox
 
 Дата2026-10-04; synthetic only. После интегрированногоPR#37/main5c2f5543. Это первый малый persisted блок, ещё не подтверждение email, вход, выдача прохождений или готовый UI регистрации.
