@@ -1,5 +1,11 @@
 # Зависимости, архитектурные проверки и безопасность
 
+## Фаза05в.2 — точечная проверка ложного finding счётчика
+
+[Run37213372532](https://github.com/PedFund/PedPsyRU/actions/runs/37213372532), head964458a5: функциональные175PG/230base/3Chrome прошли, но обязательный Secret scan остановил допуск. Findings=1, rule generic-api-key, file REGISTRATION_VALIDATION.md historicalline7, entropy3.506891. Tracked строка содержит отчёт о прошлых тестах; redacted log context после scan-status слова указывает на `174/175actualPG`, а не на credential. Для этого 15-char счётчика локально вычислена Shannon entropy3.506890595608518 — совпадает с log. [Официальная pinned конфигурация Gitleaks8.30.1](https://github.com/gitleaks/gitleaks/blob/v8.30.1/config/gitleaks.toml#L563) допускает comma после keyword и base64-подобную последовательность с slash, threshold3.5: это объясняет ложное совпадение. Никакой key/token/password в этой строке не хранится.
+
+По существующей политике добавлен единственный historical fingerprint `964458a575442053ef5d587bc5f50c807eaccc38:REGISTRATION_VALIDATION.md:generic-api-key:7`. Старые три исключения diagnostic digests сохранены. Не исключены новые commits, Markdown файл, правило или любые произвольные ключи; не добавлены continue-on-error/skip/unredacted output/history rewrite. Текущая фраза теперь отделяет scan status от счётчика для читаемости, но history scan сохраняется и требует этого точного доказанного исключения. Новый current-head должен полностью пройти Secret scan и остальные5jobs перед ordinary merge; failedhead не accepted. Runtime/source/001–022/core/package/workflow не изменены этой документальной правкой. Матрица прав/contact separation/current locks/audit в REGISTRATION_VALIDATION; HTTP/realmail/Selectel ещё не включены.
+
 ## Фаза 4 — конструктор и контроль приёмки
 
 Фаза4/04а–04з реализована/проверена:8из8.04а–04ж main#25–#31,04з#32 проходит final documentary current-head gate. Runtimee5b4a8b/[run37149537791](https://github.com/PedFund/PedPsyRU/actions/runs/37149537791):all6success,202baseNode22/24+101actualPG18.6,3/3независимых дополнительных Chrome runs по2/2,0fail/cancel/skip. Revocation while waiting/limits/fake release/lifecycle rollback/frozen routes и finalstrictkind/018/readiness фактически проверены; PHASE4_ACCEPTANCE/STATUS сохраняют неудачный предыдущийrun.

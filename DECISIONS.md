@@ -1,5 +1,9 @@
 # Журнал решений
 
+## 2026-10-04 — техническая реализация принятого сценария 05в.2
+
+Study-scoped подтверждённый email и неизменная group binding реализуются отдельно от diagnostic participant. Повторный подтверждённый контакт даёт только sign_in_required, никогда новый пароль/группу/роль/сессию или silent reactivation. Contact processing acknowledgement version хранится отдельно от будущих study/secondary consents. Пять неверных одноразовых подтверждений persistent/browser-scoped, final exhaustion отменяет own ready delivery; current notice/revision/expiry проверяются под SQL locks. Email login использует тот же existing credential/scrypt/session rotation и shared old login throttle, unknown contacts — dummy hash/neutral401. Отзыв общей recruitment ссылки не исключает принятых участников. Это внутреннее исполнение уже принятого product flow, не новые права или утверждённая юридическая форма. Только@example.test; real delivery/withdrawal/production/retention/minors/Selectel остаются отдельными решениями.
+
 ## 2026-10-04 — малый persisted блок05в.1 вsynthetic контуре
 
 Регистрация делитсянаpending/outbox,confirmation/login,HTTP/syntheticdelivery; текущийблок не создаётучастникаилипрохождения. Доlegal/provider/real-datarelease принимаютсятольковымышленные@example.test, noticeявноsynthetic_only. Emailправилаapproved05а прежние, общийpurevalidator нужениз-заASTdependency boundaries. Отдельнаяnoticepolicy не изменяетfrozen design/legacy diagnostic snapshot; recoveryoperational state требуетfullPGbackup. Reservation60секдоhashing иconfirmation30мин, persistentglobal30/5мин+browser/email5/15мин, cap1000livepending — техническиеlimitingchoices, нерасписаниенапоминаний. Секретqueuedconfirmation шифруетсяотдельнымpurpose/row-bound vault/key, noactualmail/bootstrapstandchange вэтомблоке.
