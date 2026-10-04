@@ -1,5 +1,11 @@
 # Журнал решений
 
+## 2026-10-04 — техническая граница 05в.3б, без новых продуктовых прав
+
+Для existing synthetic registration используется отдельный подписанный pre-auth cookie/CSRF, а не staff nonce или session. MAC/CSRF key derived от retained explicit contact key с purpose/origin separation; MFA key не подходит, автоматического key generation/fallback нет. TTL cookie один час, HTTPS Secure; HTTP только configured loopback demo. Отсутствие валидного opt-in key выключает лишь registration (503), существующий вход сохраняется. Никакие owner secrets не изменены.
+
+Групповой invite в custom header, не query; все DTO строгие. Только явное confirmation подтверждает synthetic контакт; только последующий scoped email/password login создаёт participant session. Не выдавать credential participant code как обход подтверждения. Participant login не impersonates и не отзывает параллельные staff/researcher realms. Registration HTTP denial пишется как anonymous metadata-only mandatory audit. Контактное acknowledgement не заменяет участие/научное согласие; passport/consents/current availability проверит отдельный будущий guarded enrollment. Вопрос self-return после withdrawal ещё открыт; не делать за владельца продуктовый выбор.
+
 ## 2026-10-04 — малый тестовый приёмник перед HTTP
 
 05в.3 разбит на persistence receipt/context иотдельное HTTP composition. Это техническая реализация уже принятого synthetic flow, не разрешение настоящей почты или новые контактные права. Explicit synthetic opt-in, только@example.test; public receipt явно synthetic ине доказывает владение реальным ящиком. Лимиты100/global/5min и10/browser/15min, current read→crypto outside SQL→fresh mandatory audited ACK, idempotent sent retry. Старый landing/ключи/credential/методики не меняются; новый server study_id нужен для permanent scoped return path, неclient authority. HTTP/почтовый provider/напоминания/enrollment/отзыв согласий остаются отдельными блоками. Вопрос о возврате после withdrawal ожидает владельца.

@@ -1,5 +1,9 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05в.3б: HTTP-композиция без новой identity модели
+
+Append-only `025_registration_http_denial.sql` добавляет только guarded security-definer функцию фиксированного anonymous denial audit с проверяемым reason code. Не добавляет participant/session/contact/enrollment таблиц и не раскрывает private таблицы runtime; PUBLIC execute отозван. Registration pre-auth nonce существует только в подписанном cookie, TTL один час, привязан к цели/серверному origin; в registration SQL остаётся его digest. Nonce не становится credential/session/participant_id. Contact master отдельный, immutable encrypted outbox и модели 022–024 не переписываются. Новые восемь actual PG HTTP tests ещё должны подтвердить композицию, прежде чем она считается принятой.
+
 ## 05в.3а — append-only024, без новых контактных таблиц
 
 024 сохраняет022 pending/outbox и023 identity, добавляет partial pending(invitation_id,browser_hash,created_at_ms DESC,id) index. Public registration_context содержит metadata+study_id, не право выбрать scope. Private locked helper проверяет current parents/revision/notice, pending attempts/status иoutbox purpose/recipient/status/time; expiry берётся после SQL lock waits. Material функция возвращает серверу только зашифрованные поля, finalACK ready→sent не переписывает sent row. PUBLIC EXECUTE revoked, runtime получает только три guarded функции; helper/table grants отсутствуют. Receipt throttles используют existing login_throttles с отдельным purpose-prefixed hash иpersisted limits, неPII buckets. Диагностические записи/сессии/согласия участия не создаются, operational backup по-прежнему fullPostgreSQL+отдельный retained contact key.

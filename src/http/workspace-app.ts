@@ -4,6 +4,8 @@ import type {createStudyApi} from "../application/study-api.js";
 import type {createParticipantApi} from "../application/participant-api.js";
 import type {createGroupInvitationApi} from "../application/participant-registration-api.js";
 import type {createStageAccessApi} from "../application/stage-access-api.js";
+import type {createRegistrationHttpApi} from "../application/registration-http-api.js";
+import {registerRegistrationRoutes} from "./registration-routes.js";
 import {ParticipationError} from "../ports/errors.js";
 import {createParticipantApp,readParticipantCookie} from "./participant-app.js";
 import {createBaseApp} from "./app.js";
@@ -23,17 +25,19 @@ export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   app.setNotFoundHandler(async(_r,reply)=>reply.code(404).send({error:"NOT_AVAILABLE"}));
   app.setErrorHandler(async(_e,_r,reply)=>reply.code(500).send({error:"INTERNAL_ERROR"}));return app;
 }
-export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>){
+export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>){
   const names=workspaceCookies(origin),secure=new URL(origin).protocol==="https:";
   const token=(r:FastifyRequest,name:string)=>readParticipantCookie(r.headers.cookie,name);
   const csrf=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
   const cookie=(name:string,value:string,expiry:number)=>`${name}=${value}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${Math.max(0,Math.floor((expiry-Date.now())/1000))}${secure?"; Secure":""}`;
   const empty=(body:unknown)=>{if(body&& (typeof body!=="object"||Array.isArray(body)||Object.keys(body).length))throw new ParticipationError(400,"INVALID_REQUEST");};
   return createParticipantApp(participant,origin,{
-    denied:async(r,reason)=>{if(r.url.startsWith("/api/v2/participant/"))await participant.denied(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"),reason);
+    denied:async(r,reason)=>{if(r.url.startsWith("/api/v2/registration/")){if(registration)await registration.denied(reason);else await accounts.denied("",reason);}
+      else if(r.url.startsWith("/api/v2/participant/"))await participant.denied(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"),reason);
       else await accounts.denied(token(r,r.url.startsWith("/api/v2/researcher/")?names.researcher:names.staff),reason);},
     register:app=>{
       staticRoutes(app,assets);
+      registerRegistrationRoutes(app,origin,registration);
       app.post("/api/v2/staff/password",async(r,reply)=>{const p=await accounts.password(r.body);reply.header("Set-Cookie",cookie(names.pending,p.challenge,p.expiresAt));
         // CSRF is computed server-side; raw challenge only goes into HttpOnly cookie.
         return {status:p.status,expires_at:p.expiresAt,csrf:accounts.pendingCsrf(p.challenge)};});

@@ -23,6 +23,8 @@ import {createStageAccessApi} from "../application/stage-access-api.js";
 import {PostgresStageAccess} from "../adapters/postgres/stage-access.js";
 import {PostgresGroupInvitations} from "../adapters/postgres/group-invitations.js";
 import {createGroupInvitationApi} from "../application/participant-registration-api.js";
+import {contactDemoKey} from "./registration-config.js";
+import {registrationBoundary} from "./registration-boundary.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
@@ -38,7 +40,9 @@ async function main(): Promise<void> {
     const studies=createStudyApi(new PostgresStudyConstructor(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess);
+    const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined;
+    try{if(contactKey)registration=registrationBoundary(pool,contactKey,"http://127.0.0.1:4174");}finally{contactKey?.fill(0);}
+    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess,registration);
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}

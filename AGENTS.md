@@ -1,5 +1,11 @@
 # AGENTS.md — PedPsyRU
 
+## Текущий блок 05в.3б — 2026-10-04
+
+05в.3а интегрирован обычным merge PR #40: main `09e0d63a4f85a4362c5937ded0fe2a3a01692f16`, final head `e90adce183243b15e9315590abd35de9e27a1ee8`, run `37221394432`: все шесть jobs success; 233 базовых теста на Node 22/24, 191 actual PostgreSQL 18.6, три дополнительных независимых Chrome runs по 2/2; без fail/cancel/skip. Проверены actual tree, parents и все 242 blobs.
+
+05в.3б локально реализует HTTP-композицию существующей регистрации: отдельный подписанный pre-auth HttpOnly cookie/CSRF, explicit separate contact key, synthetic-only receipt, session только после собственного email/password login, append-only 025 для обезличенного обязательного denial audit. 244 базовых теста и проверки сборки/типов/архитектуры/зависимостей пройдены; восемь новых PG HTTP-сценариев ещё требуют actual CI (ожидается 199). Перед ordinary merge обязателен свежий current-head all-six/base/preview/tree/parents/fullmanifest/protected gate. Затем продолжать 05г (версия паспорта), 05д (собственный паспорт), 05е (раздельные согласия), 05в.4 (guarded enrollment), 05ж (UI), 05з (приёмка). Вопрос о возврате после withdrawal открыт; независимые задачи не блокирует, политику не угадывать. Старые статусы ниже исторические. Owner stand, MFA, secrets, 001–024, core, packages и workflow сохранить; real mail/Selectel/новые права не вводить.
+
 ## 05в.3а технически проверен; финальный допуск — 2026-10-04
 
 PR#40/runtime8564527b/tree4595faf2/run37220579686 all6success:233base+191actualPG18.6/3extra independentChrome2/2each,0fail/cancel/skip.16newreceipt cases исполнены,242manifest/protected38 checked. STATUS/REGISTRATION_VALIDATION ведут ограничения/доказательства. Final documentary head —новый current-head all6/base/preview/tree/parents/fullmanifest gate; actualordinaryintegration вPR. Затем автономно05в.3б HTTP/key/signed dedicated HttpOnly cookie/CSRF; не realmail/provider/enrollment/ownerstand/MFA reset. Root main#39/0ce94971 сохранён,001–023/core/package/workflow unchanged. Вопрос withdrawal return ещё открыт, новую политику не вводить; независимые работы продолжать. Прежние «PG неисполнен» ниже —история.
