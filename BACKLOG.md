@@ -1,5 +1,7 @@
 # Очередность небольших задач
 
+Текущий05в.2 после ordinarymerge#38/mainfde3e100: confirmation/contact/scoped email login локально реализованы,25newPG ещё требуютactualCI/174total/all6. 05в — третья из восьми основных задач фазы5, но ещё не завершённый end-user flow; 05в.0/05в.1 — малые промежуточные принятые блоки. Следом05в.3 HTTP/синтетический приёмник сообщения/CSRF/cookies, затем05г паспорт,05д согласия,05е guarded enrollment,05ж browser path,05з приёмка. Старые readiness ниже исторические. Контактное acknowledgement не заменяет согласия участия или научного повторного использования.
+
 05в.1 технически принят PR#38/runtime9bb3f940/run37203662168: all6 success, 228base+149actualPG18.6/3Chrome по2/2, включая непустой operational backup. Documentary head и ordinary merge требуют отдельного полного gate; actual integration — PR/STATUS. После интеграции автономно 05в.2: одноразовое browser/invite/notice-bound подтверждение, private contact/фиксированная группа, повтор без password reset, scoped email login; затем 05в.3 HTTP/cookies/Origin/CSRF/synthetic receiver. Не выдавать queued заявку за email proof или доступ к методикам.
 
 05в.0 integrated#37/main5c2f5543/all6finalrun37200928344,227base+136PG/3Chrome. Текущий05в.1 локально реализован: persisted landing/reservation/queue,228base passed;12newPG/current-headgate ещётребуются. REGISTRATION_VALIDATION —proof/limits. Следующие05в.2confirmation/contact/scopedlogin и05в.3HTTP/syntheticreceiver; no enrollment before05г–05е gates, no realmail/stand mutation.

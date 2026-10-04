@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05в.2 — append-only023 contact identity
+
+participant_group_bindings: PK(study,participant), composite participant/group FK, immutable scope/time. participant_contacts: server UUID, UNIQUE(study,email_key) и(study,participant), synthetic canonical email, original pending proof/time, active→withdrawn единственный storage transition; private/RLS/default deny. Контакт не диагностический PK; existing repeat не обновляет contact/credential/group. Withdrawal API/retention/contact-change ещё не реализованы. participant_contact_acceptances: immutable pending PK, scoped contact и exact pending notice composite FK, подтверждённая version/time; это только контактные условия, не участие/secondary consent. FK indexes явные. 023 добавляет два UNIQUE constraints в pending через новую миграцию; строки/material и checksums001–022 сохраняются.
+
+Первое подтверждение атомарно создаёт participants+binding+contact+salted existing credentials+ack/pending confirmed/audit; повтор — только новое acknowledgement/pending transition/audit, не reactivation/password reset/group move. Ни enrollment/attempt, ни session на подтверждении. Scoped email login отдельно создаёт established private participant session после current checks; нет общего межисследовательского аккаунта. Full DB backup включает operational records; legacy domain snapshot намеренно не получает контакты/auth.
+
 ## 05в.1 — append-only022 pending и contact queue
 
 contact_notices immutable/versioned/synthetic_only; study_contact_policies отдельно отstudies/design_version, FK/auto-init/defaultnotice дляexisting/new studies. registration_pending: exact study/group/invitation compositeFK/revision/browserdigest/emailkey/noticeFK, reserved→pending→confirmed|cancelled transitions (confirmationendpoint ещёнеimplemented), immutable scope/material послеpending, sharedpurpose digest, expiry/attemptbounds иunique activebrowser/email. contact_confirmation_outbox: UNIQUEpending, purposefixed, recipient изserverpending, delivery-bound AES-GCM envelope, expiry/status/retry bounds, immutableidentity. RLS/defaultdeny/privatehelpersclosed; no directruntimegrants. Domainparticipants/accounts/enrollments/attempts ещёнеизменяются; fullPGbackup покрываетновыеoperational tables, legacyDOMAIN_TABLEStransfer не ихbackup. Keyвнеrepo/DB инепересоздаватьприrestore.

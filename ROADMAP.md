@@ -1,5 +1,7 @@
 # ПедПси — единая дорожная карта разработки
 
+05в.1 integrated#38/mainfde3e100, finalrun37204228769 all6success/228base+149PG18.6/3Chrome. Сейчас05в.2 — persisted одноразовое confirmation/private contact/fixed group/scoped email login; написано25newPG, technical acceptance ещё требует174actualPG/current-headCI. 05в как третья основная задача фазы5 ещё не завершена: HTTP/test delivery/единый participant flow впереди. Следующие05г–05е passport/раздельныеconsents/enrollment не подменяются подтверждением контакта. Фактическая приёмка —STATUS/REGISTRATION_VALIDATION, не эта дорожная карта.
+
 2026-10-04: 05в.0 интегрирован#37/main5c2f5543; 05в.1 технически принят#38/runtime9bb3f940/run37203662168, all6success/228base+149actualPG18.6/3Chrome по2/2. Проверены заявки и защищённая очередь, включая непустой backup/restore, но ещё не confirmation/login/HTTP/participant flow. Финальный documentary head — новый gate; после ordinary merge следующие малые 05в.2 и 05в.3. Основная фаза5 остаётся в работе: паспорт/согласия/enrollment/единый browser path ещё не завершены. Proof/ограничения — REGISTRATION_VALIDATION/STATUS.
 
 05в.0 technical acceptance#37/runtimee178d784/run37200472709:all6success/227base+136PG18.6/3Chrome; finaldocs проходят новыйheadgate передmerge. Далее05в разбит наpending/outbox,confirmation/login,HTTP synthetic delivery. Enrollment не выдаётся раньшеpassport/consent/currentavailability gates05г–05е. Фаза5 всё ещё вработе; source/evidence/limits —STATUS/BACKLOG/STAGE_ACCESS_VALIDATION.

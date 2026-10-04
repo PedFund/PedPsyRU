@@ -1,5 +1,9 @@
 # AGENTS.md — PedPsyRU
 
+## Текущий малый блок 05в.2 — 2026-10-04
+
+05в.1 ordinary merged#38/mainfde3e100d023a72e4a5966a6e465995de58f12b6, final4faf1bcf/run37204228769 all6success/228base+149actualPG18.6/3Chrome по2/2; 230 actual blobs/parents/tree проверены, открытых PR после merge нет. Теперь локальный 05в.2: append-only023, private fixed group/contact/contact-notice acknowledgements, одноразовое browser/invite/current-notice confirmation и scoped email login через existing scrypt/session rotation. 25 новых PG cases написаны, требуют actualCI (ожидается174 total); build/typecheck/architecture/syntax/dependency policy и228base passed. Никаких HTTP/bootstrap/mail/receiver/enrollment/consent bypass; это следующий05в.3/05г–05е. Проверять current SQL lock state, а не только JS snapshots; failed proof attempts/audit коммитятся до neutral404. Existing email никогда не заменяет пароль/группу/ID/status и не объединяется между studies. Owner stand/секреты/core/001–022/package/workflow не менять. После small ordinarymerge продолжать следующий блок, не останавливаться после успешной подзадачи.
+
 ## Приёмка 05в.1 — 2026-10-04
 
 PR #38, runtime head `9bb3f94052afb2afca8164e86200b6f8a3976501`, tree `90eb6ca23787f1c173b6c0a251c0a2e8f5acf4df`, run `37203662168`: все шесть jobs completed/success; 228 base (Node22/24), 149 actualPG18.6 и три независимых Chrome runs по 2/2, без fail/cancel/skip. Проверен полный backup непустой pending/outbox с отдельным retained key и default-deny после restore. Финальный documentary head требует нового полного current-head gate перед ordinary merge; actual integration фиксируется в PR. После интеграции продолжать 05в.2 (одноразовое confirmation/contact/scoped login), затем 05в.3 (HTTP/synthetic receiver), без ожидания отдельного подтверждения. Ни enrollment, ни realmail/Selectel/новые права не добавлены. Старые «ожидается CI» ниже — история.

@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 05в.2 — подтверждение контакта и вход, локальная реализация
+
+05в.1 интегрирован [PR#38](https://github.com/PedFund/PedPsyRU/pull/38), actual main `fde3e100d023a72e4a5966a6e465995de58f12b6`, tree `7ddcb9befe9a81156a75cb480ce5b5503e7c92ff`, parents5c2f5543/4faf1bcf. Финальный [run37204228769](https://github.com/PedFund/PedPsyRU/actions/runs/37204228769) all6completed/success,228base+149actualPG18.6/3extraChrome2/2each,0fail/cancel/skip. Перед merge current base/head/preview/parents/full230manifest/protected36 сверены; actualmain/PRmerged/tree/parents/230blobs повторно проверены после ordinary merge. Открытых PR после интеграции нет; local source copy без .git, не заявляется чистый индекс/локальная ветка.
+
+Следующий малый 05в.2 реализован локально: append-only023/private contact identity и fixed group binding, versioned contact acknowledgements (не study/secondary consent), atomic one-time confirmation с пятью persistent attempts, neutral repeat без password/group/ID/status rewrite, study-scoped email login/dummy hashing/shared old login throttle/current state locks/existing session rotation. HTTP/receiver/key bootstrap/enrollment не подключены, owner stand не мигрировали. Локально228/228base и build/typecheck/architecture/syntax/dependency-policy passed. Написано25 actualPG cases, ожидается174 total; они ещё не выполнены, требуется полный actualCI/current-head all6/merge gate. Подробности — REGISTRATION_VALIDATION. Фаза5 остаётся в работе.
+
 ## 05в.1 технически принят — 2026-10-04
 
 [PR #38](https://github.com/PedFund/PedPsyRU/pull/38), runtime head `9bb3f94052afb2afca8164e86200b6f8a3976501`, tree `90eb6ca23787f1c173b6c0a251c0a2e8f5acf4df`, [run 37203662168](https://github.com/PedFund/PedPsyRU/actions/runs/37203662168): все шесть обязательных jobs completed/success. 228 основных тестов на Node22/24, 149/149 actualPG18.6, три дополнительных независимых Chrome runs по 2/2, 0 fail/cancel/skip. Включены 13 новых PG сценариев и восстановление непустой encrypted queue в отдельную БД; источник сохранён, ключ отдельно, direct/private/PUBLIC доступ закрыт. 230 blob source manifest и 36 protected core/method/001–021PG/SQLite/package/workflow blobs сверены. REGISTRATION_VALIDATION содержит границы доказательств.
