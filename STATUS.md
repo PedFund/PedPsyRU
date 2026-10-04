@@ -1,5 +1,13 @@
 # Состояние ПедПси
 
+## 05б технически принят; следующий 05в — 2026-10-04
+
+[PR#35](https://github.com/PedFund/PedPsyRU/pull/35), runtimeheadaff67dfa8c06e7ce7b9dc37fab9d8fe1292598d1/[run37192386231](https://github.com/PedFund/PedPsyRU/actions/runs/37192386231): все6jobs completed/success;224/224base Node22/24,115/115actualPG18.6 (12 новых), три дополнительные независимые Chrome runs по2/2,0fail/cancel/skip. Cap100/101/saturation fixture с явными bigint casts фактически прошёл; тесты не ослаблены. История предыдущего отменённого/failed CI ниже сохранена. Приёмка — INVITATION_VALIDATION.
+
+05б содержит server invitation CRUD/019/adapter/HTTP/current-owner/locks/audit/CAS/limits, не готовый participant `/join`/регистрацию/почту/QR. 05а уже в main через#34. Совокупно два технических блока из восьми фазы5 приняты;05в–05з ещё предстоят. Точное release правило T0/T1/T2 ожидает решения владельца: предложено manual opening researcher либо все сразу; не выводить доступность из constructor.active. Реальные данные/legal/provider/Selectel/publication/научные решения не включены.
+
+209blobs runtime tree сверены local/published; финальное documentation-only обновление проходит отдельный current-head all6/base/preview/fullmanifest/parents gate перед ordinary merge#35. Actual integration фиксируется вPR; прошлыйruntime success не заменяет финальныйCI. Protected core/key/form/fixture/все018existingPG+SQLite migrations/package/lock/workflow неизменны. LocalPG/API не перезапускались; их readiness не доказана CI другого компьютера. PostgreSQL skill повлиял наleastprivilege/composite FK/index/короткие транзакции/lock order, Supabase не подключён.
+
 ## 05а интегрирован; 05б в разработке — 2026-10-04
 
 История CI05б: head929b50a0/run37191932468 заменён до окончания SQL job усилением точного audit resource; PG cancelled, Required checks failure, merge не выполнялся. Затем headb3dafed7/[run37192082506](https://github.com/PedFund/PedPsyRU/actions/runs/37192082506) фактически224base success,114/115PG: cap fixture INSERT SELECT получил42P08/inconsistent types integer versus bigint для$4. Тест лимита100/101 не закончен, дополнительные3Chrome runs skipped по падениюPG, Required checks failure; никакой приёмки/merge. Исправлен только fixture явными bigint casts в SELECT/VALUES, assertions/порог100/115test count неизменны; весь current-head CI повторяется. Runtime019 audit теперь содержит study_id и resource_id конкретного invite/group, без токена.
