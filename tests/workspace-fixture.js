@@ -25,7 +25,7 @@ async function staffHttp(f,w,role="superadministrator"){
   const pending=cookie(p,"pedpsy_pending_demo"),h={...headers,cookie:pending,"x-pedpsy-csrf":p.json().csrf};
   const enrolled=await w.app.inject({method:"POST",url:"/api/v2/staff/enroll",headers:h,payload:{}});if(enrolled.statusCode!==200)throw new Error("ENROLL_FLOW_FAILED");
   const factor=(await f.admin.query("SELECT secret_envelope FROM pedpsy.staff_mfa_factors WHERE credential_id=$1",[s.id])).rows[0],secret=w.vault.open(s.id,factor.secret_envelope);let v;
-  try{v=await w.app.inject({method:"POST",url:"/api/v2/staff/verify",headers:h,payload:{type:"totp",code:otpAt(secret,Math.floor(Date.now()/30000)-1)}});}finally{secret.fill(0);}
+  try{v=await w.app.inject({method:"POST",url:"/api/v2/staff/verify",headers:h,payload:{type:"totp",code:await require("./mfa-fixture.js").previousFixtureCode(secret)}});}finally{secret.fill(0);}
   if(v.statusCode!==200)throw new Error("MFA_FLOW_FAILED");return {...s,pending,passwordResponse:p,verifyResponse:v,headers:{...headers,cookie:cookie(v,"pedpsy_staff_demo"),"x-pedpsy-csrf":v.json().csrf}};
 }
 module.exports={workspaceFixture,staffHttp,cookie,origin,headers};

@@ -2,6 +2,8 @@
 
 ## 05в.0 — ручное открытие отдельно по группам, 2026-10-04
 
+PR#37 initiala1b057e3/run37199831817:135/136actualPG,12новыхopening и2Chrome passed; старый initial MFA fixture previous-step попал на30секboundary. Required failed/additionalbrowser skipped, ничего неmerged. Bounded pre-submission fixture wait устраняет эту гонку, productionMFA неизменна; деталиSTAGE_ACCESS_VALIDATION. Новый полный current-head CI обязателен.
+
 05б.1 интегрирован обычным PR#36 в main a77dc62ee8e315c8580bde28ce5f20732505fe43 после final head a68523cc/run37195859358: all6success,225base+124actualPG18.6/3Chrome по2/2, полный214-blob manifest/actual merge parents/tree совпали. Открытых PR после интеграции не осталось.
 
 Следующий малый05в.0 реализован локально: append-only021, GroupStageAccess port/API/PG adapter, guarded realm GET/POST и UI выбора группы. Constructor active не открывает этапы; отдельный persisted access с CAS, real creator/current locks/MFA/mandatory audit не меняет design_version/enrollments/attempts. Подробности и пределы — STAGE_ACCESS_VALIDATION. Локально226/226 base/build/typecheck/architecture/syntax/dependency-policy passed; новые12actualPG и Chrome сценарии ещё требуют исполнения CI/current-head all6 и ordinary merge gate. Owner stand/secrets не менялись. Регистрация/email/паспорт/согласия ещё впереди, вся фаза5 не завершена.

@@ -12,7 +12,7 @@ async function setup(f,role="superadministrator"){
   const secret=vault.open(s.id,factor.secret_envelope);assert.equal(shown.secret,base32(secret));
   return {s,g,p,secret,vault};
 }
-async function confirm(x){return x.g.verify(x.p.challenge,{type:"totp",code:otpAt(x.secret,Math.floor(Date.now()/30000)-1)});}
+async function confirm(x){return x.g.verify(x.p.challenge,{type:"totp",code:await require("./mfa-fixture.js").previousFixtureCode(x.secret)});}
 scenario("actual TOTP enrollment for both roles gives global session only after confirmation",async f=>{
   for(const role of ["administrator","superadministrator"]){const x=await setup(f,role);try{
     await assert.rejects(new PostgresAccountAccess(f.runtime).session(x.p.challenge),e=>e.status===401);
@@ -45,7 +45,7 @@ scenario("five failed TOTP attempts exhaust challenge durably across gateway rec
   }finally{x.secret.fill(0);}
 });
 scenario("concurrent confirmation yields one session/recovery set, no replay",async f=>{
-  const x=await setup(f);try{const code=otpAt(x.secret,Math.floor(Date.now()/30000)-1),r=await Promise.allSettled([x.g.verify(x.p.challenge,{type:"totp",code}),x.g.verify(x.p.challenge,{type:"totp",code})]);
+  const x=await setup(f);try{const code=await require("./mfa-fixture.js").previousFixtureCode(x.secret),r=await Promise.allSettled([x.g.verify(x.p.challenge,{type:"totp",code}),x.g.verify(x.p.challenge,{type:"totp",code})]);
     assert.equal(r.filter(p=>p.status==="fulfilled").length,1);assert.equal((await f.admin.query("SELECT * FROM pedpsy.staff_sessions WHERE credential_id=$1",[x.s.id])).rowCount,1);
     assert.equal((await f.admin.query("SELECT * FROM pedpsy.staff_recovery_codes WHERE credential_id=$1",[x.s.id])).rowCount,8);
   }finally{x.secret.fill(0);}

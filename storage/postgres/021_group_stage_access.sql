@@ -60,6 +60,7 @@ BEGIN
     OR NOT EXISTS(SELECT 1 FROM pedpsy.research_groups WHERE study_id=study AND id=target_group AND status='active') THEN RAISE EXCEPTION 'NOT_AVAILABLE' USING ERRCODE='P0002';END IF;
   PERFORM 1 FROM pedpsy.research_stages WHERE study_id=study AND id=target_stage AND status='active' FOR SHARE;
   IF NOT FOUND THEN RAISE EXCEPTION 'NOT_AVAILABLE' USING ERRCODE='P0002';END IF;
+  PERFORM 1 FROM pedpsy.assignments WHERE study_id=study AND group_id=target_group AND stage_id=target_stage ORDER BY id FOR SHARE;
   IF NOT EXISTS(SELECT 1 FROM pedpsy.assignments WHERE study_id=study AND group_id=target_group AND stage_id=target_stage AND status='active')
     OR EXISTS(SELECT 1 FROM pedpsy.assignments WHERE study_id=study AND group_id=target_group AND stage_id=target_stage AND status='active' AND NOT pedpsy.constructor_release_allowed(release_id))
     THEN RAISE EXCEPTION 'NOT_AVAILABLE' USING ERRCODE='P0002';END IF;

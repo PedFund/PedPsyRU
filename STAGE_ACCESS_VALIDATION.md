@@ -22,6 +22,10 @@ GET metadata и POST open подключены в обоих кабинетах,
 
 ## Подтверждённая степень готовности
 
+Первый CI PR#37/heada1b057e3/tree f78b054d/run37199831817: actualPG135/136,12новых stage scenarios и2Chrome passed; один старый staff diagnostics fixture упалINVALID_MFA на initial verifiedStaff. Он вычислял previous TOTP step перед границей30сек, а чтение серверного clock уже происходило в новом step: старый previous выпадал из прежнего±1 окна. Дополнительные3Chrome runs/Required checks не прошли, merge не выполнялся. Fixture теперь перед отправкой previous step выдерживает bounded wait только в последних5сек окна; текущий step остаётся неиспользованным для reauth/replay tests. Production MFA/лимиты/replay/guards не меняются, ошибок auth не ретраим. SQL открытия дополнительно держит assignment rows FOR SHARE в фиксированном порядке. Нужен новый полный current-head прогон, не считать первый failed run приёмкой.
+
 Локально226/226 base, build/typecheck/architecture/syntax/dependency-policy passed. Новые PG/Chrome сценарии пока написаны, не исполнялись локально: прежний owner stand/secrets не мигрировали/не запускали. Требуется actual PostgreSQL18.6 CI и current-head all6/base/tree/parents/fullmanifest gate перед ordinary merge. Не выдавать наличие SQL за успешный тест.
+
+После fixture correction локально227/227 base passed, включая детерминированные clock/sleep проверки границ0/24999/25000/25001/29999мс, bounded wait≤5100мс и сохранение current step для replay/reauth. Один helper применён ко всем test-only previous-step preparations (PG MFA concurrency, staff fixture, HTTP/browser login), без повторной отправки неуспешного auth или ослабления production окна. Production auth/scoring packages/migrations001–020 прежние.
 
 Новая регистрация ещё не подключена: следующий05в должен проверять эту availability заново при enrollment вместе с invite/contact/passport/consent/current parent scope. Эта миграция не отзывает существующие legacy seed attempts и не открывает anonymous capability. Реальные данные, email provider, Selectel, юридические тексты и scientific publication остаются вне разрешённого synthetic блока.
