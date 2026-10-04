@@ -1,5 +1,9 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05в.3а — отдельный тестовый приёмник
+
+RegistrationReceipt port → whitelist application projection → PostgresRegistrationReceipt → append024 fixed functions. Public context добавляет server study_id, старый landing API сохраняется. Тестовый приёмник opt-in, только собственный browser/invite иsynthetic email. Encrypted material read/crypto вне SQL/fresh guarded ACK разделены: plaintext выдаётся только после текущих parent/pending/outbox locks иmandatory audit. Secret tables/private helper не открываются runtime; read denial/throttle коммитятся до нейтральной ошибки. Sent response retry идемпотентен, не возвращает отменённый/подтверждённый/просроченный proof. Новая миграция не переписывает данные или001–023, добавляет partial lookup index. HTTP/key/cookies ещё отдельный05в.3б; no real provider/delivery/enrollment/session/stand mutation. PostgreSQL skill повлиял на least privilege, индекс иshort transactions/consistent locks, Supabase product не подключён. Actual readiness —REGISTRATION_VALIDATION/STATUS.
+
 ## 05в.2 — отдельная contact identity и повторный вход
 
 PostgresParticipantRegistration композиционно использует проверенный issuance adapter; полный port теперь реализован на persistence уровне, но не wired HTTP/bootstrap/delivery. Подтверждение — fixed SQL/browser+invite+purpose digest, current scope/version/time под locks, одноразовый переход/audit/identity атомарны. Неверная попытка возвращает false, коммитит decrement/denial audit; adapter выдаёт neutral404 только после commit. Последняя попытка отменяет только own pending/ready outbox. Не создаётся сессия на GET/confirmation.
