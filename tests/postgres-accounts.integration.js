@@ -30,7 +30,7 @@ scenario("both verified staff roles are global, admin cannot process/method/appo
     for(const op of ["protocols.read","protocols.download","results.read","results.download","researchers.invite","researchers.block"])await a.check(s.raw,op,{studyId:f.seed.studies[1].id});
     if(role==="administrator")for(const op of ["methods.manage","processing.manage","staff.roles.assign"])await assert.rejects(a.check(s.raw,op),e=>e.status===403);
     else for(const op of ["methods.manage","processing.manage","staff.roles.assign"])await a.check(s.raw,op);
-    await assert.rejects(a.check(s.raw,"studies.configure"),e=>e.status===403);
+    await a.check(s.raw,"studies.configure",{studyId:f.seed.studies[1].id});
   }
 });
 scenario("password-only, participant, unknown or client role labels cannot authorize",async(f,a)=>{

@@ -59,6 +59,7 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
       if(studies){
         app.get("/api/v2/staff/studies",async r=>studies.listStaff(token(r,names.staff)));
         app.post("/api/v2/researcher/studies",async r=>studies.create(token(r,names.researcher),r.body,csrf(r)));
+        app.post("/api/v2/staff/studies",async r=>studies.createFor(token(r,names.staff),r.body,csrf(r)));
         app.get("/api/v2/researcher/studies/:id",async r=>studies.read(token(r,names.researcher),(r.params as {id:string}).id));
         app.get("/api/v2/staff/studies/:id",async r=>studies.read(token(r,names.staff),(r.params as {id:string}).id));
         app.post("/api/v2/researcher/studies/:id/groups",async r=>studies.group(token(r,names.researcher),(r.params as {id:string}).id,undefined,r.body,csrf(r)));
@@ -69,8 +70,22 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         app.post("/api/v2/researcher/studies/:id/stages/copy",async r=>studies.copy(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
         app.post("/api/v2/researcher/studies/:id/lifecycle",async r=>studies.lifecycle(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
         app.patch("/api/v2/researcher/studies/:id",async r=>studies.title(token(r,names.researcher),(r.params as {id:string}).id,r.body,csrf(r)));
+        app.post("/api/v2/staff/studies/:id/groups",async r=>studies.group(token(r,names.staff),(r.params as {id:string}).id,undefined,r.body,csrf(r)));
+        app.patch("/api/v2/staff/studies/:id/groups/:group",async r=>{const p=r.params as {id:string;group:string};return studies.group(token(r,names.staff),p.id,p.group,r.body,csrf(r));});
+        app.post("/api/v2/staff/studies/:id/stages",async r=>studies.stage(token(r,names.staff),(r.params as {id:string}).id,undefined,r.body,csrf(r)));
+        app.patch("/api/v2/staff/studies/:id/stages/:stage",async r=>{const p=r.params as {id:string;stage:string};return studies.stage(token(r,names.staff),p.id,p.stage,r.body,csrf(r));});
+        app.post("/api/v2/staff/studies/:id/assignments",async r=>studies.assign(token(r,names.staff),(r.params as {id:string}).id,r.body,csrf(r)));
+        app.post("/api/v2/staff/studies/:id/stages/copy",async r=>studies.copy(token(r,names.staff),(r.params as {id:string}).id,r.body,csrf(r)));
+        app.post("/api/v2/staff/studies/:id/lifecycle",async r=>studies.lifecycle(token(r,names.staff),(r.params as {id:string}).id,r.body,csrf(r)));
+        app.patch("/api/v2/staff/studies/:id",async r=>studies.title(token(r,names.staff),(r.params as {id:string}).id,r.body,csrf(r)));
       }
       if(invitations){
+        for(const [realm,name] of [["staff",names.staff]] as const){
+          const base=`/api/v2/${realm}/studies/:id/groups/:group/invitations`;
+          app.get(base,async r=>{const p=r.params as {id:string;group:string};return invitations.list(token(r,name),p.id,p.group);});
+          app.post(base,async r=>{const p=r.params as {id:string;group:string};return invitations.create(token(r,name),p.id,p.group,r.body,csrf(r));});
+          app.post(base+"/:invite/revoke",async r=>{const p=r.params as {id:string;group:string;invite:string};return invitations.revoke(token(r,name),p.id,p.group,p.invite,r.body,csrf(r));});
+        }
         app.get("/api/v2/researcher/studies/:id/groups/:group/invitations",async r=>{
           const p=r.params as {id:string;group:string};return invitations.list(token(r,names.researcher),p.id,p.group);
         });
@@ -81,6 +96,13 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
           const p=r.params as {id:string;group:string;invite:string};return invitations.revoke(token(r,names.researcher),p.id,p.group,p.invite,r.body,csrf(r));
         });
       }
+      // Cookie names alone do not bind a bearer to its realm. This trusted
+      // identity read prevents renamed staff/researcher cookies crossing routes;
+      // the write adapter still rechecks current authority atomically under locks.
+      app.addHook("preHandler",async r=>{
+        if(/^\/api\/v2\/researcher\/studies(?:\/|$)/.test(r.url))await accounts.researcherSession(token(r,names.researcher));
+        if(/^\/api\/v2\/staff\/studies(?:\/|$)/.test(r.url))await accounts.staffSession(token(r,names.staff));
+      });
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }
   });

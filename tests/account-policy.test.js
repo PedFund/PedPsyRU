@@ -6,8 +6,8 @@ const {requireAccountPermission,FRESH_MFA_MS}=require("../dist/src/ports/account
 const now=1800000000000;
 const principal=role=>({realm:role==="researcher"?"researcher":"staff",userId:"internal",credentialId:"internal",role,sessionVersion:1,expiresAt:now+1800000,mfaVerifiedAt:role==="researcher"?null:now});
 const matrix={researcher:["account.read","studies.read","studies.configure","aggregates.read"],
-  administrator:["account.read","studies.read","aggregates.read","researchers.read","researchers.invite","researchers.block","protocols.read","protocols.download","results.read","results.download"],
-  superadministrator:["account.read","studies.read","aggregates.read","researchers.read","researchers.invite","researchers.block","protocols.read","protocols.download","results.read","results.download","staff.roles.assign","methods.manage","processing.manage"]};
+  administrator:["account.read","studies.read","studies.configure","aggregates.read","researchers.read","researchers.invite","researchers.block","protocols.read","protocols.download","results.read","results.download"],
+  superadministrator:["account.read","studies.read","studies.configure","aggregates.read","researchers.read","researchers.invite","researchers.block","protocols.read","protocols.download","results.read","results.download","staff.roles.assign","methods.manage","processing.manage"]};
 for(const [role,allowed] of Object.entries(matrix))test("Account policy: exact agreed permissions for "+role,()=>{
   for(const op of ACCOUNT_OPERATIONS){const fn=()=>requireAccountPermission(principal(role),op,{studyId:"owned"},now,true);
     if(allowed.includes(op))assert.doesNotThrow(fn);else assert.throws(fn,e=>e.status===403&&e.code==="FORBIDDEN");}
@@ -30,7 +30,7 @@ test("Account policy: expiry, missing MFA, mixed realms and invalid versions fai
 });
 test("Account policy: sensitive operation requires fresh MFA, read does not",()=>{
   for(const role of ["administrator","superadministrator"]){const p={...principal(role),mfaVerifiedAt:now-FRESH_MFA_MS};
-    for(const op of ["researchers.invite","researchers.block","protocols.download","results.download"])
+    for(const op of ["studies.configure","researchers.invite","researchers.block","protocols.download","results.download"])
       assert.throws(()=>requireAccountPermission(p,op,{},now,false),e=>e.code==="MFA_RECHECK_REQUIRED");
     assert.doesNotThrow(()=>requireAccountPermission(p,"results.read",{},now,false));}
 });

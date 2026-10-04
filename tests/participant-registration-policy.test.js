@@ -19,15 +19,15 @@ const requirements = {scope, availableStageIds: ["stage-T1"], passportVersion: "
 const unavailable = e => e.status === 404 && e.code === "NOT_AVAILABLE";
 const changed = e => e.status === 409 && e.code === "PARTICIPATION_REQUIREMENTS_CHANGED";
 
-test("only a current owning researcher manages group invitations; no new staff editing right", () => {
+test("owning researcher and both verified staff roles manage group invitations in approved MVP", () => {
   requireGroupInvitationManagement(principal, scope, "create", now, true);
   const {contactNoticeVersion: _notice, ...groupScope} = scope;
   requireGroupInvitationManagement(principal, groupScope, "create", now, true);
   requireGroupInvitationManagement(principal, {...groupScope, studyStatus: "closed"}, "list", now, true);
   assert.throws(() => requireGroupInvitationManagement(principal, scope, "create", now, false), unavailable);
   for (const role of ["administrator", "superadministrator"]) {
-    assert.throws(() => requireGroupInvitationManagement({...principal, realm: "staff", role, mfaVerifiedAt: now}, scope, "create", now, true),
-      e => e.status === 403 && e.code === "FORBIDDEN");
+    requireGroupInvitationManagement({...principal, realm: "staff", role, mfaVerifiedAt: now}, scope, "create", now, false);
+    assert.throws(() => requireGroupInvitationManagement({...principal, realm: "staff", role, mfaVerifiedAt: null}, scope, "create", now, false),e=>e.status===401);
   }
 });
 test("invitation management does not accept expired, wrong realm or malformed principal", () => {

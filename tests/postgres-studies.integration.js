@@ -32,7 +32,7 @@ scenario("group kinds, uniqueness, scope and concurrent compare-and-swap",async(
   assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"DESIGN_CONFLICT");
   d=await x.studies.read(x.session.token,d.id);await assert.rejects(x.studies.group(x.session.token,d.id,undefined,{name:"ЭГ",kind:"other",expected_version:d.version}),e=>e.code==="DESIGN_DUPLICATE");
   const foreign=f.seed.studies[0].groups[0].id;await assert.rejects(x.studies.group(x.session.token,d.id,foreign,{name:"Foreign",kind:"control",expected_version:d.version}),e=>e.status===404);
-  await assert.rejects(x.studies.group(s.session.token,d.id,undefined,{name:"Staff",kind:"other",expected_version:d.version}),e=>e.status===403);
+  d=await x.studies.group(s.session.token,d.id,undefined,{name:"Staff",kind:"other",expected_version:d.version});assert.equal(d.groups.length,4);
   const y=await studyResearcher(f,s);await assert.rejects(y.studies.group(y.session.token,d.id,undefined,{name:"Foreign",kind:"other",expected_version:d.version}),e=>e.status===404);
 });
 scenario("T0/T1/T2/custom stage ordering and duplicate/cross-study/version denial",async(f,x)=>{
@@ -77,7 +77,7 @@ scenario("activation completeness, atomic active quota race, closed frees quota 
   assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"STUDY_QUOTA");
   let active=result.find(r=>r.status==="fulfilled").value;await assert.rejects(x.studies.title(x.session.token,active.id,{title:"Changed",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
   await assert.rejects(x.studies.assign(x.session.token,active.id,{group_id:active.groups[0].id,stage_id:active.stages[0].id,release_ids:[],expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
-  await assert.rejects(x.studies.lifecycle(s.session.token,active.id,{status:"closed",expected_version:active.version}),e=>e.status===401);
+  assert.deepEqual(await x.studies.lifecycle(s.session.token,active.id,{status:"active",expected_version:active.version}),active);
   active=await x.studies.lifecycle(x.session.token,active.id,{status:"closed",expected_version:active.version});assert.equal(active.status,"closed");await assert.rejects(x.studies.lifecycle(x.session.token,active.id,{status:"active",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
   const other=drafts.find(d=>d.id!==active.id),second=await x.studies.lifecycle(x.session.token,other.id,{status:"active",expected_version:other.version});assert.equal(second.status,"active");
   const renamed=await x.studies.title(x.session.token,incomplete.id,{title:"Новое название",expected_version:0});assert.equal(renamed.title,"Новое название");assert.equal(renamed.version,1);

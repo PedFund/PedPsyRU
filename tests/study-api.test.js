@@ -1,6 +1,13 @@
 "use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict");
 const {createStudyApi,studyId}=require("../dist/src/application/study-api.js");
+test("staff creation requires explicit existing owner ID, exact DTO and CSRF, no implicit impersonation",async()=>{
+  const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({createFor:async(...x)=>calls.push(x)},{assert:(_t,c)=>{if(c!=="csrf")throw Error("csrf");}});
+  await api.createFor("staff",{title:"  Demo  ",owner_credential_id:id},"csrf");assert.deepEqual(calls,[["staff",id,"Demo"]]);
+  for(const b of [{title:"Demo"},{title:"Demo",owner_credential_id:id,role:"researcher"},{title:"Demo",owner_credential_id:id,user_id:id}])assert.throws(()=>api.createFor("staff",b,"csrf"),e=>e.status===400);
+  assert.throws(()=>api.createFor("staff",{title:"Demo",owner_credential_id:"bad"},"csrf"),e=>e.status===404);
+  assert.throws(()=>api.createFor("staff",{title:"Demo",owner_credential_id:id},"bad"),/csrf/);assert.equal(calls.length,1);
+});
 test("constructor input is strict, normalized and never client authority",async()=>{
   const calls=[],api=createStudyApi({create:async(...x)=>calls.push(x),read:async(...x)=>calls.push(x)},{assert:(t,c)=>{if(c!=="csrf")throw Error("csrf");}});
   for(const input of [{title:""},{title:"x",user_id:"client"},{title:"x",role:"superadministrator"},{title:"\nsecret"},{title:"x".repeat(201)},[],null])assert.throws(()=>api.create("token",input,"csrf"),e=>e.code==="INVALID_STUDY_INPUT");

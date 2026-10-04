@@ -3,9 +3,9 @@ import type {AccountOperation, AccountPrincipal, AccountResource} from "./accoun
 import {ParticipationError} from "./errors.js";
 export const FRESH_MFA_MS = 300000;
 const researcher = new Set<AccountOperation>(["account.read", "studies.read", "studies.configure", "aggregates.read"]);
-const administrator = new Set<AccountOperation>(["account.read", "studies.read", "aggregates.read", "researchers.read", "researchers.invite", "researchers.block", "protocols.read", "protocols.download", "results.read", "results.download"]);
+const administrator = new Set<AccountOperation>(["account.read", "studies.read", "studies.configure", "aggregates.read", "researchers.read", "researchers.invite", "researchers.block", "protocols.read", "protocols.download", "results.read", "results.download"]);
 const superadministrator = new Set<AccountOperation>([...administrator, "staff.roles.assign", "methods.manage", "processing.manage"]);
-const sensitive = new Set<AccountOperation>(["researchers.invite", "researchers.block", "staff.roles.assign", "protocols.download", "results.download", "methods.manage", "processing.manage"]);
+const sensitive = new Set<AccountOperation>(["studies.configure", "researchers.invite", "researchers.block", "staff.roles.assign", "protocols.download", "results.download", "methods.manage", "processing.manage"]);
 // Pure policy evaluation only. Authentication, current membership lookup, locks
 // and mandatory audit remain responsibilities of the trusted server adapter.
 export function requireAccountPermission(principal: AccountPrincipal, operation: AccountOperation, resource: AccountResource,

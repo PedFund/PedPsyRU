@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## MVP staff-управление 2026-10-04
+
+Новая append-only020 не меняет диагностические IDs/данные/выпуски и не переписывает001–019. Прежняя group_invitations.created_by FK researcher остаётся; nullable только для staff-создателя. Новый created_by_staff FK staff и CHECK ровно одного creator сохраняют происхождение и исключают подмену; оба поля immutable, новый partial creator/time index. DTO/list/audit не включают digest или raw token. Все данные закрыты runtime direct access/RLS; только guarded functions.
+
+Создание staff за исследователя использует существующую active researcher credential и membership единственного owner, без новых staff-owned memberships. Квота владельца сериализуется его credential lock независимо от actor; mandatory audit отдельно фиксирует настоящий credential/роль/study/resource. Закреплённый дизайн неизменен. Stage availability — следующее отдельное состояние; constructor-active этапы ещё не означают их открытие. Контакты/паспорт/согласия/enrollment нового пути пока не сохранены.
+
 ## Дополнение 2026-10-04: проект регистрации фазы 5
 
 Принята общая ссылка на группу и индивидуальная регистрация по подтверждённому email с собственным паролем. 05а ports/policy/DTO интегрирован PR#34. 05б/PR#35 добавляет `group_invitations` миграцией019: ID/study/group/hashed token/status/revision/created_by/created_at_ms/expires_at_ms/revoked_at_ms, composite group FK, уникальный digest/одна active запись на группу, immutable identity, persistent cap/index и аудит study+invite/group. Runtime table privileges отсутствуют; fixed functions выполняют current-owning-researcher gate underlocks, no global staff editing. Details/tests/ограничения — INVITATION_VALIDATION.

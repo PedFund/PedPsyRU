@@ -10,7 +10,7 @@ function scenario(name, fn) {test("PostgreSQL group invites: " + name, async t =
 const create = x => x.invitations.create(x.session.token, x.design.id, x.design.groups[0].id, {expires_at: Date.now()+86400000});
 const revoke = (x, r) => x.invitations.revoke(x.session.token, x.design.id, x.design.groups[0].id, r.id, {expected_revision: r.revision});
 async function count(f) {return (await f.admin.query("SELECT count(*)::integer n FROM pedpsy.group_invitations")).rows[0].n;}
-scenario("one active shared token per group, stored hashed, list is secret-free; staff and чужой researcher denied", async (f,x,s) => {
+scenario("one active shared token per group, stored hashed, list is secret-free; staff global, foreign researcher denied", async (f,x,s) => {
   const r = await create(x); assert.match(r.invite_token, /^[A-Za-z0-9_-]{43}$/); assert.equal(r.revision, 0); assert.equal(r.status, "active");
   const {invite_token, ...record} = r;
   assert.deepEqual(await x.invitations.list(x.session.token,x.design.id,x.design.groups[0].id), [record]);
@@ -24,7 +24,7 @@ scenario("one active shared token per group, stored hashed, list is secret-free;
   for(const groupId of [x.design.groups[0].id, randomUUID()])
     await assert.rejects(x.invitations.list(other.session.token,x.design.id,groupId), e => e.status === 404);
   for(const staff of [s, await verifiedStaff(f,"administrator")])
-    await assert.rejects(x.invitations.create(staff.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}), e => e.status === 403);
+    await assert.rejects(x.invitations.create(staff.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}), e => e.code === "INVITE_EXISTS");
   await assert.rejects(x.invitations.list(f.raw,x.design.id,x.design.groups[0].id), e => e.status === 401);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participants WHERE study_id=$1",[x.design.id])).rows[0].n,0);
   const audit=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE study_id=$1",[x.design.id])).rows;
