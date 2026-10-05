@@ -1,5 +1,15 @@
 # Журнал решений
 
+## 2026-10-05 — малый технический05е.0, не новые правовые условия
+
+05е.0 — отдельный persistence/application блок: ParticipantConsents own-session-only port, strict explicit-purpose/version/policy-revision/accept:true DTO и fixed guarded PG read/accept. Append028 хранит immutable synthetic документы, текущие scoped policy pointers и immutable own acceptance с actualcredential/server time/composite FK/indexes. Existing023 contact acknowledgement проецируется отдельно с происхождением contact_notice_confirmation, не копируется в participation/secondary records. Required contact+study, secondary отдельно optional согласно прежнему решению; новое обязательное третье согласие не вводится. Same-current retry сохраняет исходное время/одну запись; stale policy/version409. Read/accept ничего не создают в passport/clinical enrollment/attempts.
+
+Только два guarded EXEC runtime; private tables/helpers/PUBLIC revoked/default-deny. Current identity/group/contact/question scope027 reused, затем policy/docs/ownacceptance locks в стабильном порядке, fresh wall-clock expiry после ожиданий и mandatory metadata-only audit/touch в той же короткой транзакции. Нет сетевых вызовов, HTTP/UI/реальных юридических текстов, participant withdrawal/self-return/admin impersonation/operator mutation endpoint/автоматического удаления. Обращения оператору отдельно остаются принятым правилом; техническая неизменяемость истории не означает юридическую неотзывность/бессрочное хранение. Реальные данные/несовершеннолетние/сроки/оператор/правовые тексты требуют отдельной проверки до pilot.
+
+Новый owneranswer no-button/manualoperator сохранён, но finalthreepurposes/mandatoryness ещё неуточнены; не превращать secondary вrequired. Contact processing acknowledgement уже явное отдельное условиеsyntheticregistration; не выдавать его за научноеилиstudy принятие. Никакого operationallegaltext editing илиauthorisedoperator deletion workflow пока. Immutabletechnicalhistory неотменяет правоотзыва по [статье9 152-ФЗ](https://www.consultant.ru/document/cons_doc_LAW_61801/6c94959bc017ac80140621762d2ac59f6006b08c/); источник проверялся2026-10-04, это не независимая правоваяприемка. Before realdata отдельные legal/operator/minors/retention решения.
+
+05д.1 accepted#44 доказал238PG + currentrole isolation безизмененияruntimeSQL послеtestfix. На05е.0 это не распространяется: append028 требуетnewcurrent-headactualPG/all-six. Ownerstand/secretkeys/MFA/основнойhandler неменяются.
+
 ## 2026-10-05 — принятое уточнение владельца о согласиях
 
 Владелец принял: в MVP нет кнопки отзыва согласия и самостоятельного возвращения; обращения к оператору рассматриваются отдельно, без автоматического удаления данных. Это не юридическая «неотзывность» и не разрешение бессрочного хранения: основания дальнейшей обработки/сроки/процедура обращения требуют отдельной правовой проверки перед реальными данными. Состав/обязательность третьего согласия ещё не уточнены; прежние два обязательных + отдельное добровольное научное использование не меняются.

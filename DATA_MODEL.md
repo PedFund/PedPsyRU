@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05е.0: документы/политика/принятие (028)
+
+`consent_documents`: PK(purpose,version) для study_participation/secondary_research, exactbodytext, synthetic_only; update/delete immutable. `study_consent_policies`: studyPK/FK, revision0..2147483646, current participation/secondary versions и generatedfixed purpose columns + compositeFK и дваFKиндекса; initial metadata default existing/newstudy, **без backfill acceptances**. Manualpolicyversion update не runtime API этого блока; trigger требует revision+1/changed versions, immutable study identity. `participant_consent_acceptances`: PK(study,participant,purpose,version), scoped bindingFK, documentFK, actualcredential scopedFK, serveraccepted_at_ms>=0; FKиндексы, immutable update/delete, runtimeнетtablegrants.
+
+Existing023 participant_contact_acceptances остаются самостоятельными; snapshot contact timestamp/provenance означает explicit synthetic notice confirmation, не inferred study/scientific consent. В snapshot три цели, двеrequired, secondaryoptional; currentpolicyrevision, точные text/version/legalstatus/acceptedtime. Own read/accept never callerIDs; accepted tupleidempotent сохранитfirstactualcredential/time, currentpolicy/version rechecked. Refusal не acceptance; versionchange сохраняетстарое принятие, не молчаливоеnewconsent. Старый14-table domain snapshotunchanged; new fulloperational pg_dump/restore testwritten требуетactualCI. Не бесконечная юридическаяretention: operatorcases/сроки/реальныетексты отдельно.
+
 ## 05д.1: HTTP без новой миграции
 
 Собственные HTTP snapshots содержат ровно study_id/schema_version/status/revision/fields/values; metadata snapshots — study_id/study_version/schema_version/frozen/fields. Values выдаются только по известным ключам pinned schema. Schema DTO/CAS и saved-only completion остаются прежними; caller study/participant/group/role никогда не определяют own scope. Новых таблиц/клинических rows/согласий/автоматического enrollment нет; 001–027 сохраняются.

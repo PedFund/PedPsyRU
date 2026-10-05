@@ -1,5 +1,13 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05е.0: точные документы и собственное явное принятие
+
+05е.0 — отдельный persistence/application блок: ParticipantConsents own-session-only port, strict explicit-purpose/version/policy-revision/accept:true DTO и fixed guarded PG read/accept. Append028 хранит immutable synthetic документы, текущие scoped policy pointers и immutable own acceptance с actualcredential/server time/composite FK/indexes. Existing023 contact acknowledgement проецируется отдельно с происхождением contact_notice_confirmation, не копируется в participation/secondary records. Required contact+study, secondary отдельно optional согласно прежнему решению; новое обязательное третье согласие не вводится. Same-current retry сохраняет исходное время/одну запись; stale policy/version409. Read/accept ничего не создают в passport/clinical enrollment/attempts.
+
+Только два guarded EXEC runtime; private tables/helpers/PUBLIC revoked/default-deny. Current identity/group/contact/question scope027 reused, затем policy/docs/ownacceptance locks в стабильном порядке, fresh wall-clock expiry после ожиданий и mandatory metadata-only audit/touch в той же короткой транзакции. Нет сетевых вызовов, HTTP/UI/реальных юридических текстов, participant withdrawal/self-return/admin impersonation/operator mutation endpoint/автоматического удаления. Обращения оператору отдельно остаются принятым правилом; техническая неизменяемость истории не означает юридическую неотзывность/бессрочное хранение. Реальные данные/несовершеннолетние/сроки/оператор/правовые тексты требуют отдельной проверки до pilot.
+
+Хранение отделено отcontacts/passwords, scoring иHTTP. `required_consents_accepted` означает только выполнение текущих двух consent gates, не общую eligibility/test access: futureenrollment ещё обязан проверить completed currentpassport/manual groupstage availability/currentassignment. Нет crypto/network внутри SQL. Рекомендации PostgreSQL skill повлияли на private minimalEXEC/indexed scopedFK/short stable-lock-order transaction; никакого Supabase сервиса.
+
 ## 05д.1: HTTP-композиция паспортных портов
 
 `passport-routes` → строгие application API → прежние guarded PostgreSQL adapters/functions026–027. Metadata GET/PATCH в researcher/staff realms, own GET/PUT draft/POST complete в participant realm. Query authority/лишние DTO-поля запрещены, output whitelist; current identity prehandler не заменяет transactional SQL authority. Existing Origin/Host/CSRF/body limits/neutral mandatory denial audit сохраняются. Optional `passportBoundary` только композирует порты; не знает секретов/не создаёт identity/consent и не запускает migrations. Existing explicit synthetic registration opt-in включает его в demo server; old stand по умолчанию disabled.

@@ -1,5 +1,11 @@
 # Политика доступа: учебный контур
 
+## 2026-10-05: собственные раздельные согласия
+
+Участник читает и явно принимает только свои текущие syntheticstudy/optionalsecondary документы черезреальнуюparticipant session. Caller study/participant/group/role/accepted_time не определяютобласть. Contact notice acceptance остаётсяregistration-only: новыйport не принимаетpurposecontact_processing. Runtime только2guardedEXEC, private tables/helpers/PUBLICdefaultdeny; researcher/staff неaccept/неimpersonate/неизменяютчужиеconsents. Нет новогоoperator-rolegrant илиscientificprocessinggrant.
+
+Currentauthority/credential/group/contactnotice/policy/documentversions/freshclock/audit checked underlocks; stalepolicy/version/expiry/revocation не могут записатьconsent. Two required + optional secondary preserved. No participantwithdraw/selfreturn endpoint; externaloperatorrequests отдельно, безautomaticdeletion/irrevocablelegalpromise. Currentrequired_consents_accepted не даёт доступ ктестамсампо себе.
+
 ## 2026-10-05: паспортный HTTP и согласия MVP
 
 Passport schema metadata read/configure доступны current owning researcher и обеим current MFA staff по прежним правам studies.read/configure. Individual passport HTTP только своему участнику; никакого staff/researcher impersonation или нового individual passport-value export. Cookie names не authority; prehandler realm и SQL current locks обязательны. Approved staff diagnostic read/export rights не уменьшаются и не расширяются этой feature.
