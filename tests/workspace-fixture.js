@@ -12,6 +12,7 @@ const {PostgresGroupInvitations}=require("../dist/src/adapters/postgres/group-in
 const {PostgresStageAccess}=require("../dist/src/adapters/postgres/stage-access.js"),{createStageAccessApi}=require("../dist/src/application/stage-access-api.js");
 const {registrationBoundary}=require("../dist/src/bootstrap/registration-boundary.js");
 const {passportBoundary}=require("../dist/src/bootstrap/passport-boundary.js");
+const {consentBoundary}=require("../dist/src/bootstrap/consent-boundary.js");
 function workspaceFixture(f,customOrigin=origin,options={}){const vault=new MfaVault(randomBytes(32)),auth=new PostgresStaffMfa(f.runtime,vault),uow=new PostgresUnitOfWork(f.runtime);
   const account=createAccountApi({access:new PostgresAccountAccess(f.runtime),auth,researchers:new PostgresResearcherGateway(f.runtime),researcherManagement:new PostgresResearcherManagement(f.runtime),staffManagement:new PostgresStaffManagement(f.runtime),diagnostics:new PostgresStaffDiagnostics(f.runtime)},
     {forToken:csrfFor,assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
@@ -21,7 +22,8 @@ function workspaceFixture(f,customOrigin=origin,options={}){const vault=new MfaV
   const stageAccess=createStageAccessApi(new PostgresStageAccess(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
   const registration=options.contactKey?registrationBoundary(f.runtime,options.contactKey,customOrigin):undefined;
   const passports=options.passports?passportBoundary(f.runtime):undefined;
-  const app=createWorkspaceApp(participant,account,customOrigin,workspaceAssets(),studies,invitations,stageAccess,registration,passports);
+  const consents=options.consents?consentBoundary(f.runtime):undefined;
+  const app=createWorkspaceApp(participant,account,customOrigin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents);
   return {app,vault,auth,account};}
 function cookie(response,name){const list=response.headers["set-cookie"],all=Array.isArray(list)?list:[list];const found=all.find(x=>x?.startsWith(name+"="));if(!found)throw new Error("EXPECTED_COOKIE_MISSING");return found.split(";")[0];}
 async function staffHttp(f,w,role="superadministrator"){

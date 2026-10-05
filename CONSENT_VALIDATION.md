@@ -1,5 +1,17 @@
 # Проверка раздельных согласий
 
+## 2026-10-05: 028 принят; HTTP05е.1 проверяется
+
+PR #45 объединён обычным merge: main `b75f4a21228ee5ad09ec9b7704514604d790ba57`, final head `88c2c7238c91e320bb280719517750037058a1e9`, tree `f1ff3ceadf25881ff9129391bbab587c4ffe13ef`. [Run37270789111](https://github.com/PedFund/PedPsyRU/actions/runs/37270789111): все шесть jobs success; Node22/24 по275, actual PostgreSQL18.6 250/250 (все12 новых случаев), три дополнительные независимые Chrome runs по2/2;0fail/cancel/skip. Проверены source lineage/preview/current base/parents/full282 local+remote blobs/42critical/262unchanged, затем actual main/tree/parents/all282. Первый compile failure0/250 и второй projection failure241/250 сохранены; current SQL/guards подтверждены новым полным engine прогоном, не прежними зелёными units.
+
+Следующий малый 05е.1 — HTTP-composition существующего собственного порта: GET `/api/v2/participant/consents`, POST `/api/v2/participant/consents/accept`. Exact output whitelist (документ, версия, текст, synthetic status, required, время, provenance), strict own DTO, query/caller scope rejected; existing participant realm/CSRF/Origin/Host/body cap/media/mandatory denial audit. Prehandler realm не заменяет current SQL authority. Optional bootstrap включён только прежним explicit synthetic registration configuration, без migration/key generation/stand startup. No withdrawal/self-return/operator mutation endpoints, impersonation, real legal texts/data/mail/science permissions, consent inference или clinical enrollment.
+
+Локально7 новых HTTP units и полный282/282/build/typecheck/architecture/syntax/dependency policy passed,0fail/cancel/skip. 6 new actualPG HTTP cases написаны, не исполнены локально (256expected): registration/contact отдельно→явное own consent/retry/relogin/restart; refusal/optional/current policy; real own/role/query/CSRF/no-withdraw boundaries; recruitment revoke/current contact notice; mandatory consent+denial audit rollback; disabled endpoints/no-newSQL+actual staff MFA. Fresh current-head all-six/256actualPG/threeextraChrome/currentbase/preview/source ancestry/fullmanifests/protected43 обязательны доordinarymerge. Existing Chrome регрессии не consent UI proof.
+
+После принятия05е.1 —05в.4 guarded enrollment (current completed passport + mandatory current consents + manually opened own group/stage + current assignments), затем05ж общий browser flow и05зacceptance. **Фаза5, шестая из восьми основных задач** ещё вработе; библиотекуфазы6 не начинать. Третье purpose/requiredness finalowneranswer ещё отсутствует; прежние2required+optionalsecondary сохраняются. Внешние обращения оператору отдельно/no automatic deletion принято, не irrevocable consent/bессрочнаяretention. Owner stand/MFA/secrets/core/package/workflow/001–028 сохранены.
+
+New units доказываютprojection/type/cookie/CSRF/negative-route/Origin/body/security boundaries на mocks, не SQLauthority. New PG HTTP должен проверить реальные регистрационные иtyped guardedports. Не выдавать backendHTTP заend-to-endUI/reallegalconsent; failedruns сохранять, mandatoryjobs/criticalassertions неослаблять.
+
 ## 2026-10-05: 05е.0 — точная проекция контакта, второй failure
 
 После n.body AS text/exact-body regression повторный full local275/275/build/exit0,0fail/cancel/skip; syntax/architecture passed. Эти результаты не actual SQL/PG/Chrome; new current-head250/fullall-six remains mandatory.

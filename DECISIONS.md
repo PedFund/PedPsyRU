@@ -1,5 +1,13 @@
 # Журнал решений
 
+## 2026-10-05 — малый HTTP05е.1 после принятого028
+
+Следующий малый 05е.1 — HTTP-composition существующего собственного порта: GET `/api/v2/participant/consents`, POST `/api/v2/participant/consents/accept`. Exact output whitelist (документ, версия, текст, synthetic status, required, время, provenance), strict own DTO, query/caller scope rejected; existing participant realm/CSRF/Origin/Host/body cap/media/mandatory denial audit. Prehandler realm не заменяет current SQL authority. Optional bootstrap включён только прежним explicit synthetic registration configuration, без migration/key generation/stand startup. No withdrawal/self-return/operator mutation endpoints, impersonation, real legal texts/data/mail/science permissions, consent inference или clinical enrollment.
+
+Правила владельца не меняются: externaloperator requests вместоparticipantwithdraw/selfreturn UI, no automaticdeletion/noirrevocablepromise; третьеpurpose/requiredness пока прежнееoptionalsecondary. Optionalbootstrap сохраняет старыйстенд disabled, никакихnewlegaltext/codecore/научных/правовых/роль-grantрешений. Приёмка025/026/027/028 иполитика scientificoptional не пересматриваются по имениURI; новыйHTTP нуженотдельныйcurrentheadgate.
+
+После принятия05е.1 —05в.4 guarded enrollment (current completed passport + mandatory current consents + manually opened own group/stage + current assignments), затем05ж общий browser flow и05зacceptance. **Фаза5, шестая из восьми основных задач** ещё вработе; библиотекуфазы6 не начинать. Третье purpose/requiredness finalowneranswer ещё отсутствует; прежние2required+optionalsecondary сохраняются. Внешние обращения оператору отдельно/no automatic deletion принято, не irrevocable consent/bессрочнаяretention. Owner stand/MFA/secrets/core/package/workflow/001–028 сохранены.
+
 ## 2026-10-05 — малый технический05е.0, не новые правовые условия
 
 05е.0 — отдельный persistence/application блок: ParticipantConsents own-session-only port, strict explicit-purpose/version/policy-revision/accept:true DTO и fixed guarded PG read/accept. Append028 хранит immutable synthetic документы, текущие scoped policy pointers и immutable own acceptance с actualcredential/server time/composite FK/indexes. Existing023 contact acknowledgement проецируется отдельно с происхождением contact_notice_confirmation, не копируется в participation/secondary records. Required contact+study, secondary отдельно optional согласно прежнему решению; новое обязательное третье согласие не вводится. Same-current retry сохраняет исходное время/одну запись; stale policy/version409. Read/accept ничего не создают в passport/clinical enrollment/attempts.

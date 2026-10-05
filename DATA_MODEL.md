@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05е.1: DTO без новой миграции
+
+HTTP own snapshot: study_id,policy_revision,required_consents_accepted,documents. Document projection: purpose,version,text,legal_status,required,accepted_at_ms,provenance. Только актуальные own documents/decisions; неизвестные/private additions отбрасываются. Accept DTO остаётся exact purpose/document_version/expected_policy_revision/accept:true; participant/study/group/role/time нельзя задать снаружи. Current bool —не clinicaleligibility.
+
+No new tables/migrations/clinical rows; 028 accepted#45 actual250PG. Existing contact record отдельныйprovenance, два required/secondaryoptional; no participant withdrawal/selfreturn, operatorcases отдельно. HTTP full282local/6newPGexpected256 не считаетсяactualengine доCI.
+
 ## 05е.0: документы/политика/принятие (028)
 
 `consent_documents`: PK(purpose,version) для study_participation/secondary_research, exactbodytext, synthetic_only; update/delete immutable. `study_consent_policies`: studyPK/FK, revision0..2147483646, current participation/secondary versions и generatedfixed purpose columns + compositeFK и дваFKиндекса; initial metadata default existing/newstudy, **без backfill acceptances**. Manualpolicyversion update не runtime API этого блока; trigger требует revision+1/changed versions, immutable study identity. `participant_consent_acceptances`: PK(study,participant,purpose,version), scoped bindingFK, documentFK, actualcredential scopedFK, serveraccepted_at_ms>=0; FKиндексы, immutable update/delete, runtimeнетtablegrants.
