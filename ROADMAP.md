@@ -1,5 +1,9 @@
 # ПедПси — единая дорожная карта разработки
 
+Актуально2026-10-05: passportHTTP05д.1 вmain#44/618bbe3e, finalrun37266471322 all-six success:268base+238actualPG18.6/три extraChrome2/2, full274/parents/tree/protected42/257unchanged checked. **Текущая фаза5, шестая из восьми основных задач —05е согласия.** Малый05е.0 own versioned persistence/application локально275base/checks passed,12newPG ожидаютactual250/current-headCI, неготовый UI илиenrollment. Старые failed/pending checkpoints ниже —история с сохранённым доказательством.
+
+Версии/явные собственные решения отдельны отcontact confirmation; secondary отдельноoptional пока прежнее решение не изменено. No participant withdrawal/self-return button, operatorrequests отдельно безautomaticdeletion; legal rights/retention остаются обязательной отдельной проверкой передrealdata. Далее05е.1HTTP→05в.4enrollment→05жUI→05зacceptance. Futurephase6А/6Б план сохранён, реализация не начинается; Selectel/реальнаяпочта/публикация не включены.
+
 ## 2026-10-05: 05д.1 — исправление тестового предположения, не прав
 
 Первый CI PR #44/head `507d6ed26b79ed163586b9cffb162f930aee7579`, [run37265445238](https://github.com/PedFund/PedPsyRU/actions/runs/37265445238): Node22/24 по268 и secret/dependency success; actualPG18.6 237/238, один новый metadata-role test failed, три extra Chrome skipped, Required failed. Merge запрещён. Причина — неверное ожидание нового теста: существующее audit.actor_role обозначает только staff (002/020), researcher хранится с null и реальным credential_id. Тест исправлен по действующему контракту и усилен join-проверкой resolved credential role, exact real credential/resource/reason; SQL/runtime/MFA/правила не изменены и assertions доступа не ослаблены. Нужен новый полный current-head all-six/238 actual PG/three extra Chrome/fresh base/preview/parents/manifests/protected42 gate; failed head/run сохранены.

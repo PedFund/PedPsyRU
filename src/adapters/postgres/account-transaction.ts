@@ -18,6 +18,7 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
       if(e.code==="22023"&&e.message==="INVALID_PASSPORT_SCHEMA")throw new ParticipationError(400,"INVALID_PASSPORT_SCHEMA");
       if(e.code==="P0001"&&e.message==="PASSPORT_SCHEMA_CONFLICT")throw new ParticipationError(409,"PASSPORT_SCHEMA_CONFLICT");
       if(e.code==="22023"&&e.message==="INVALID_PASSPORT_VALUES")throw new ParticipationError(400,"INVALID_PASSPORT_VALUES");
+      if(e.code==="22023"&&e.message==="INVALID_CONSENT_INPUT")throw new ParticipationError(400,"INVALID_CONSENT_INPUT");
       if(e.code==="P0001"&&["PASSPORT_CONFLICT","PASSPORT_FROZEN","PASSPORT_INCOMPLETE"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
       if(e.code==="54000"&&e.message==="PASSPORT_LIMIT")throw new ParticipationError(413,"PASSPORT_LIMIT");
       if(e.code==="54000"&&e.message==="INVITE_LIMIT")throw new ParticipationError(413,"INVITE_LIMIT");

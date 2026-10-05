@@ -68,4 +68,5 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.record_registration_http_denial(text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_passport_schema(uuid),pedpsy.configure_passport_schema(uuid,integer,integer,jsonb,jsonb) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_own_passport(),pedpsy.save_own_passport(integer,integer,jsonb),pedpsy.complete_own_passport(integer,integer) TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_own_consents(),pedpsy.accept_own_consent(text,text,integer,boolean) TO "${role}"`);
 }

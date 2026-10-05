@@ -1,5 +1,11 @@
 # Проверка паспортной схемы и собственных значений
 
+## 2026-10-05: 05д.1 фактически принят
+
+Паспортный HTTP 05д.1 интегрирован обычным PR #44 merge: main `618bbe3eb11c617b1b970aa57853dd87a975c7de`, final source `7581ace6167e50962f0aeef53e43fd5a5ffd20bd`, tree `e7a4fa4125f118db64cb37913de1d3c2cafb44fd`. [Run37266471322](https://github.com/PedFund/PedPsyRU/actions/runs/37266471322): все шесть jobs completed/success; 268base Node22/24, 238actualPG18.6 (все7newHTTP cases), три дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Source ancestry/preview/current base/full274blobs/protected42/all257unchanged и actualpostmerge main/parents/tree/allblobs проверены. Первый failedrun37265445238/237of238 сохранён; исправлен тест ожидания staff-only audit.actor_role, runtime/SQL/права не изменены, real credential role/resource/reason проверяются дополнительно.
+
+Все7HTTPPGcases проверены, включая усиленный real credential role audit assertion и foreign/frozen/staleMFA. Actualordinarymerge родители[06b4bb24,7581ace6], весь274tree совпал. Новый05е.0 раздельныеconsents не меняетpassport/core/001–027; его newSQL acceptance требуетсяотдельно вCONSENT_VALIDATION, прежние268/238 не заменяют275/250actualheadCI.
+
 ## 2026-10-05: 05д.1 — исправление тестового предположения, не прав
 
 После исправления новый полный локальный прогон268/268/build/exit0,0fail/cancel/skip; syntax/architecture passed. Actual PG/Chrome локально не запускались; фактическая проверка исправленного metadata-role case возможна только новым current-head CI. Runtime/SQL/types/dependencies unchanged.
