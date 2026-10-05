@@ -1,5 +1,9 @@
 # Очередность небольших задач
 
+## 2026-10-05: 05д.1 — исправление тестового предположения, не прав
+
+Первый CI PR #44/head `507d6ed26b79ed163586b9cffb162f930aee7579`, [run37265445238](https://github.com/PedFund/PedPsyRU/actions/runs/37265445238): Node22/24 по268 и secret/dependency success; actualPG18.6 237/238, один новый metadata-role test failed, три extra Chrome skipped, Required failed. Merge запрещён. Причина — неверное ожидание нового теста: существующее audit.actor_role обозначает только staff (002/020), researcher хранится с null и реальным credential_id. Тест исправлен по действующему контракту и усилен join-проверкой resolved credential role, exact real credential/resource/reason; SQL/runtime/MFA/правила не изменены и assertions доступа не ослаблены. Нужен новый полный current-head all-six/238 actual PG/three extra Chrome/fresh base/preview/parents/manifests/protected42 gate; failed head/run сохранены.
+
 Текущее 2026-10-05: own passport 05д persistence принят и интегрирован #43/main06b4bb24, all-six run37230123877:261base+231actualPG18.6/три extra Chrome2/2, full270/protected41/parents/tree verified. **05д — пятая основная задача из восьми фазы 5**, ещё не общий UI. Следующий малый **05д.1 — HTTP passport/schema boundary**: 7 new local units и full local regression268/268/checks passed; 7 new PG HTTP cases требуют actual238/current-head all-six/fresh merge gate. Старые pending 05д ниже исторические.
 
 Владелец принял: в MVP нет кнопки отзыва согласия и самостоятельного возвращения; обращения к оператору рассматриваются отдельно, без автоматического удаления данных. Это не юридическая «неотзывность» и не разрешение бессрочного хранения: основания дальнейшей обработки/сроки/процедура обращения требуют отдельной правовой проверки перед реальными данными. Состав/обязательность третьего согласия ещё не уточнены; прежние два обязательных + отдельное добровольное научное использование не меняются.
