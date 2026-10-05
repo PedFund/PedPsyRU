@@ -137,7 +137,7 @@ BEGIN
     OR target_version !~ '^[a-z][a-z0-9_-]{0,63}$' OR expected_policy_revision IS NULL OR expected_policy_revision NOT BETWEEN 0 AND 2147483646
     OR approved IS DISTINCT FROM true THEN RAISE EXCEPTION 'INVALID_CONSENT_INPUT' USING ERRCODE='22023';END IF;
   IF expected_policy_revision<>scope.policy_revision OR target_version IS DISTINCT FROM
-    CASE WHEN target_purpose='study_participation' THEN scope.participation_version ELSE scope.secondary_version END THEN
+    (CASE WHEN target_purpose='study_participation' THEN scope.participation_version ELSE scope.secondary_version END) THEN
     RAISE EXCEPTION 'PARTICIPATION_REQUIREMENTS_CHANGED' USING ERRCODE='P0001';END IF;
   PERFORM 1 FROM pedpsy.participant_consent_acceptances a WHERE a.study_id=scope.owner_study AND a.participant_id=scope.owner_participant
     AND a.purpose=target_purpose ORDER BY a.document_version FOR UPDATE;

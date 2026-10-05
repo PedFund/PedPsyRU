@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 2026-10-05: 05е.0 — первая SQLcompile ошибка, не приёмка
+
+После исправления повторный полный локальный прогон275/275/build/exit0,0fail/cancel/skip; syntax/architecture passed. Type/dependency/application runtime unchanged. PG/Chrome локально не запускались; SQL исправление ещё не принято до нового actual CI.
+
+Первый CI PR #45/head `f2024aa5830dde2e1aa0f047bf8fe78d4fcfba37`, [run37268672816](https://github.com/PedFund/PedPsyRU/actions/runs/37268672816): Node22/24 по275, secret/dependency success; PG18.6 0/250, все fixtures остановились при создании схемы (42601, position12123/028 line140), extraChrome skipped, Required failed. Это общий дефект новой миграции, не250 разных ошибок обработки; merge запрещён. SQL CASE внутри IF не был заключён в скобки, поэтому read_sql_construct останавливал expression на первом THEN при parenlevel0. CASE expression теперь parenthesized без изменения сравнения currentpolicy/documentversion; old001–027/guards/grants/assertions unchanged. Грамматика подтверждена [официальным PostgreSQL18 parser source](https://raw.githubusercontent.com/postgres/postgres/REL_18_STABLE/src/pl/plpgsql/src/pl_gram.y), раздел read_sql_construct. Новый full current-head250PG/threeextraChrome/all-six/source/base/preview/parents/manifests gate обязателен; локальный JSsyntax не доказывает SQLcompile.
+
 ## 2026-10-05: паспортный HTTP в main; согласия 05е.0 локально
 
 Паспортный HTTP 05д.1 интегрирован обычным PR #44 merge: main `618bbe3eb11c617b1b970aa57853dd87a975c7de`, final source `7581ace6167e50962f0aeef53e43fd5a5ffd20bd`, tree `e7a4fa4125f118db64cb37913de1d3c2cafb44fd`. [Run37266471322](https://github.com/PedFund/PedPsyRU/actions/runs/37266471322): все шесть jobs completed/success; 268base Node22/24, 238actualPG18.6 (все7newHTTP cases), три дополнительных независимых Chrome runs по2/2,0fail/cancel/skip. Source ancestry/preview/current base/full274blobs/protected42/all257unchanged и actualpostmerge main/parents/tree/allblobs проверены. Первый failedrun37265445238/237of238 сохранён; исправлен тест ожидания staff-only audit.actor_role, runtime/SQL/права не изменены, real credential role/resource/reason проверяются дополнительно.
