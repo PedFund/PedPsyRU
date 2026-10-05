@@ -1,5 +1,11 @@
 # Политика доступа: учебный контур
 
+## 2026-10-05: паспортный HTTP и согласия MVP
+
+Passport schema metadata read/configure доступны current owning researcher и обеим current MFA staff по прежним правам studies.read/configure. Individual passport HTTP только своему участнику; никакого staff/researcher impersonation или нового individual passport-value export. Cookie names не authority; prehandler realm и SQL current locks обязательны. Approved staff diagnostic read/export rights не уменьшаются и не расширяются этой feature.
+
+Владелец принял: в MVP нет кнопки отзыва согласия и самостоятельного возвращения; обращения к оператору рассматриваются отдельно, без автоматического удаления данных. Это не юридическая неотзывность и не разрешение бессрочного хранения; основания дальнейшей обработки, сроки и процедура обращения проверяются отдельно перед реальными данными. Состав/обязательность третьего согласия ещё не уточнены; прежние два обязательных + отдельное добровольное научное использование не меняются.
+
 05в.0 добавляет manual group-stage opening в принятую studies.configure область: own researcher/global admin+super, текущие identity/owner/membership/activeparents/release и stafffreshMFA, mandatory audit/CAS. Read metadata — studies.read, не контакт/ответ/результат; прямой table/private helper/anonymous access отсутствует. Constructor active само по себе не разрешает enrollment; следующий enrollment workflow обязан проверить persisted access. Это не новая роль или impersonation.
 
 ## Актуальное уточнение 2026-10-04: управление за исследователя в MVP
@@ -101,4 +107,3 @@
 # Фактическая граница после фазы2 —2026-10-03
 
 Participant APIv2/PostgreSQL реализован и интегрирован через#14: только собственные доступные назначения, strict context/CSRF/Origin, черновик/complete/raw result, no чужиеIDs/staff impersonation. Обе staff роли с настоящим server MFA proof имеют согласованный global read policy вPG RLS; CI proof synthetic, реальная MFA enrollment и manager/view/export/results API нового контура еще не реализованы. Legacy4173/global answers API сохранен отдельно. Целевая матрица ниже/PHASE2_DESIGN не означает готовность manager/processing/researcheraggregate endpoints. Последующие задачи03а–03з вBACKLOG, подтверждения readiness—STATUS/PHASE2_ACCEPTANCE.
-

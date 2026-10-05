@@ -1,5 +1,15 @@
 # ПедПси — единая дорожная карта разработки
 
+## 2026-10-05: 05д.1 — исправление тестового предположения, не прав
+
+Первый CI PR #44/head `507d6ed26b79ed163586b9cffb162f930aee7579`, [run37265445238](https://github.com/PedFund/PedPsyRU/actions/runs/37265445238): Node22/24 по268 и secret/dependency success; actualPG18.6 237/238, один новый metadata-role test failed, три extra Chrome skipped, Required failed. Merge запрещён. Причина — неверное ожидание нового теста: существующее audit.actor_role обозначает только staff (002/020), researcher хранится с null и реальным credential_id. Тест исправлен по действующему контракту и усилен join-проверкой resolved credential role, exact real credential/resource/reason; SQL/runtime/MFA/правила не изменены и assertions доступа не ослаблены. Нужен новый полный current-head all-six/238 actual PG/three extra Chrome/fresh base/preview/parents/manifests/protected42 gate; failed head/run сохранены.
+
+Актуально 2026-10-05: собственный паспорт 05д persistence в main через #43/06b4bb24, run37230123877 all-six success:261base+231actualPG18.6 и три extra Chrome2/2; exact270 manifest/parents/tree/protected41 verified. Малый 05д.1 — HTTP own passport и metadata schema — реализован локально, 7 адресных units и full regression268/268/checks passed; actual238/current-head CI ещё требуют завершения. **Фаза 5, пятая из восьми основных задач**, не готовый end-to-end UI. Следом05е→05в.4→05ж→05з; фазу6 6А/6Б пока не начинать.
+
+Владелец принял: в MVP нет кнопки отзыва согласия и самостоятельного возвращения; обращения к оператору рассматриваются отдельно, без автоматического удаления данных. Это не юридическая «неотзывность» и не разрешение бессрочного хранения: основания дальнейшей обработки/сроки/процедура обращения требуют отдельной правовой проверки перед реальными данными. Состав/обязательность третьего согласия ещё не уточнены; прежние два обязательных + отдельное добровольное научное использование не меняются.
+
+Ни Selectel, ни реальные данные/почта/публикация не включены. Старые контрольные точки ниже — история; принятый no-button MVP не отменяет внешние обращения оператору.
+
 Актуально2026-10-04:05г вmain#42/a738c57e, finalheadbcd3a073/run37228089292 all-six success:252base+213PG18.6 и три extraChrome2/2, full262manifest/protected40/parents/tree verified. Work updates AGENTS и будущейфазы6 сохранены. Текущий05д —пятая из восьми основных задачфазы5: локальные own passport/CAS/completion и261base/checks,18newPG еще требуютactual231/current-headgate. Собственные значения не означаютготовыеHTTP/UI/consents/enrollment. Затем05е→05в.4→05ж→05з; withdrawal-return еще вопрос владельцу. Selectel/realdata/phase6 implementation не начинаются. Старые контрольные точки ниже исторические.
 
 05г ещё вработе: первый run37225848294 PR#42/e932fec6 passed252base, но212/213 actualPG18.6 (legacy-owner fixture), поэтомуextraChrome skipped/merge запрещён. Fixture исправлен при сохранённых runtimeguards/сильномfreeze assertion, новыйcurrent-head all-six требуется. PASSPORT_VALIDATION/STATUS сохраняют историю; четвёртая задача не считается законченной до gate.

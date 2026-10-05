@@ -1,5 +1,15 @@
 # Журнал решений
 
+## 2026-10-05 — принятое уточнение владельца о согласиях
+
+Владелец принял: в MVP нет кнопки отзыва согласия и самостоятельного возвращения; обращения к оператору рассматриваются отдельно, без автоматического удаления данных. Это не юридическая «неотзывность» и не разрешение бессрочного хранения: основания дальнейшей обработки/сроки/процедура обращения требуют отдельной правовой проверки перед реальными данными. Состав/обязательность третьего согласия ещё не уточнены; прежние два обязательных + отдельное добровольное научное использование не меняются.
+
+Выбор интерфейса не отменяет право на отзыв по [статье 9 152-ФЗ](https://www.consultant.ru/document/cons_doc_LAW_61801/6c94959bc017ac80140621762d2ac59f6006b08c/). Не создавать утверждённых юридических текстов/не объявлять реальный набор допустимым. До production нужны точный оператор/контакты для обращений, основания/сроки, сценарий несовершеннолетних и независимая проверка; это не автоматическое удаление каждой записи и не unconditional retention. В MVP не добавляются participant withdrawal/reconsent endpoints, admin impersonation или scientific consent inference.
+
+## 2026-10-05 — малый HTTP-блок 05д.1
+
+Проверенный в #43 собственный паспорт подключается к существующему workspace отдельным optional boundary; право определяется current own session/SQL, не ID тела/query/cookie-name. Метаданные researcher/staff доступны по прежним studies.read/configure, значения только собственному участнику. Prehandler проверяет realm, guarded SQL повторяет current authority под locks. Bootstrap ничего не мигрирует/не запускает/не генерирует; old stand остаётся без новой feature до отдельного safe upgrade. Эти маршруты не создают согласие/enrollment/attempt и не утверждают UI.
+
 ## 2026-10-04 — технический блок05д и сохранение инструкций Work
 
 Существующие решения владельца (mandatorysex/age, other flags researcher, max5own, GitHubнеSelectel) реализуются небольшим ownpassport workflow. Fixed own session defines scope; partial snapshot/CAS до explicit saved-value completion; completed pinned values immutable, narrowly idempotent last-completion retry. Passport не consent и неenrollment, администраторы неimpersonate участника. Это внутреннее устройство утвержденного шага, не новые права/научные нормы/реальные данные. Full standard basic catalog позже; age0..130 technicalsynthetic limit, не minors approval.
@@ -200,4 +210,3 @@ Seed — два вымышленных исследования, КГ/ЭГ и T0
 Snapshot/import/backup acceptance использует только synthetic domain data, пустой отдельный target и новый offline restore с возвращением ограниченных ACL; credentials/сессии не переносятся, исходная SQLite сохранена. pg_dump restore —не утверждение production RPO/RTO. Participant APIv2 предъявляет только whitelist DTO, использует прежние salted scrypt primitives, durable throttles, rotation/CSRF/Origin и immutable TKI result. Staff/researcher realm не преобразуется в participant; manager/MFA enrollment и глобальные results UI —следующая фаза.
 
 Эти решения не меняют согласованную матрицу прав, методику, условия публикации или хостинг-бюджет. Проверенный исходный расчет TKI/ключ/формы не переписываются. Фактический CI/merge статус —STATUS/BACKLOG; отчет приемки —PHASE2_ACCEPTANCE.
-

@@ -1,5 +1,19 @@
 # Проверка паспортной схемы и собственных значений
 
+## 2026-10-05: 05д.1 — исправление тестового предположения, не прав
+
+После исправления новый полный локальный прогон268/268/build/exit0,0fail/cancel/skip; syntax/architecture passed. Actual PG/Chrome локально не запускались; фактическая проверка исправленного metadata-role case возможна только новым current-head CI. Runtime/SQL/types/dependencies unchanged.
+
+Первый CI PR #44/head `507d6ed26b79ed163586b9cffb162f930aee7579`, [run37265445238](https://github.com/PedFund/PedPsyRU/actions/runs/37265445238): Node22/24 по268 и secret/dependency success; actualPG18.6 237/238, один новый metadata-role test failed, три extra Chrome skipped, Required failed. Merge запрещён. Причина — неверное ожидание нового теста: существующее audit.actor_role обозначает только staff (002/020), researcher хранится с null и реальным credential_id. Тест исправлен по действующему контракту и усилен join-проверкой resolved credential role, exact real credential/resource/reason; SQL/runtime/MFA/правила не изменены и assertions доступа не ослаблены. Нужен новый полный current-head all-six/238 actual PG/three extra Chrome/fresh base/preview/parents/manifests/protected42 gate; failed head/run сохранены.
+
+## 2026-10-05: 05д принят; 05д.1 HTTP проверяется
+
+PR #43 объединён обычным merge в main `06b4bb2447d148789f1fdecfb4a03095db4e2c0e`; head `21e7c0b2d678d886333da0ab2b52ee4ba0ee6d53`, tree `b2903fdff01308cd884deb10dfdaaef0fbc5b711`. [Run 37230123877](https://github.com/PedFund/PedPsyRU/actions/runs/37230123877): все шесть jobs success; 261 базовый тест на Node 22/24, 231 actual PostgreSQL 18.6 (18 новых own-passport cases), три дополнительных независимых Chrome runs по 2/2; ноль fail/cancel/skip. Проверены source/preview/current base/parents, полные 270 blobs и protected41, затем actual main/tree/parents/blobs.
+
+Локально 7 new HTTP units прошли: whitelist projection/no private additions; saved-only completion/metadata CSRF; renamed/duplicate/missing realms; caller/query/null/inline completion denial; Origin/Host/SecFetch/CSRF/malformed/body cap/media/audit fail-closed; disabled old workspace; HTTPS Host-bound names. Build/typecheck/architecture/syntax/dependencies и полная локальная регрессия268/268 passed,0fail/cancel/skip. Предыдущая недоступная exec-сессия не засчитывалась; итог подтверждён повторным полным прогоном exit0. PG/Chrome локально не запускались.
+
+7 new actual PG HTTP cases написаны (238 expected): реальная synthetic registration→own passport→completion→rotated login/restart; strict scope/private audit; two HTTP tabs CAS; researcher + оба MFA staff metadata rights/foreign/frozen/stale MFA; recruitment revoke/current notice; mandatory passport+HTTP denial audit failures; disabled endpoint/no new SQL/actual staff MFA. Они требуют действительного CI, не считаются успешными заранее. Existing Chrome tests доказывают только прежние сценарии, не новый participant passport UI. SQL/core/package/workflow/001–027/owner stand unchanged; protected42 сохраняются, full current-head/base/preview/source/parents/manifests gates обязательны.
+
 ## 05г интегрирован; 05д локальные проверки — 2026-10-04
 
 Окончательный `check:syntax` после18-гоPGcase иdocupdates passed; весь доступный localregression261/build/types/architecture/dependencypolicy passed на неизмененном runtime. LocalPG/Chrome не запускались, actual231/fullcurrent-headall-six остаются обязательной проверкойGitHub, не текущим результатом.

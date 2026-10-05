@@ -1,5 +1,19 @@
 # AGENTS.md — PedPsyRU
 
+## 2026-10-05: 05д.1 — исправление тестового предположения, не прав
+
+Первый CI PR #44/head `507d6ed26b79ed163586b9cffb162f930aee7579`, [run37265445238](https://github.com/PedFund/PedPsyRU/actions/runs/37265445238): Node22/24 по268 и secret/dependency success; actualPG18.6 237/238, один новый metadata-role test failed, три extra Chrome skipped, Required failed. Merge запрещён. Причина — неверное ожидание нового теста: существующее audit.actor_role обозначает только staff (002/020), researcher хранится с null и реальным credential_id. Тест исправлен по действующему контракту и усилен join-проверкой resolved credential role, exact real credential/resource/reason; SQL/runtime/MFA/правила не изменены и assertions доступа не ослаблены. Нужен новый полный current-head all-six/238 actual PG/three extra Chrome/fresh base/preview/parents/manifests/protected42 gate; failed head/run сохранены.
+
+## Текущий малый 05д.1 и новое решение о согласиях — 2026-10-05
+
+PR #43 объединён обычным merge в main `06b4bb2447d148789f1fdecfb4a03095db4e2c0e`; head `21e7c0b2d678d886333da0ab2b52ee4ba0ee6d53`, tree `b2903fdff01308cd884deb10dfdaaef0fbc5b711`. [Run 37230123877](https://github.com/PedFund/PedPsyRU/actions/runs/37230123877): все шесть jobs success; 261 базовый тест на Node 22/24, 231 actual PostgreSQL 18.6 (18 новых own-passport cases), три дополнительных независимых Chrome runs по 2/2; ноль fail/cancel/skip. Проверены source/preview/current base/parents, полные 270 blobs и protected41, затем actual main/tree/parents/blobs.
+
+05д.1 подключает существующий own passport и metadata schema к HTTP: строгие DTO/projection/query rejection, отдельные существующие cookie realms, CSRF/Origin/Host/body cap и обязательный denial audit; SQL повторно проверяет текущие права под locks. Passport boundary включается только с прежним explicit synthetic registration opt-in, старый owner stand не мигрировать/не запускать/не трогать ключи и MFA. Локально 7 новых адресных HTTP units и полная регрессия 268/268 passed; build/typecheck/architecture/syntax/dependency policy passed. Семь новых actual PG HTTP cases написаны (ожидается 238 total), требуют current-head all-six CI/actual PG/three extra Chrome/current base/preview/parents/full manifest/protected42 перед ordinary merge.
+
+Владелец принял: в MVP нет кнопки отзыва согласия и самостоятельного возвращения; обращения к оператору рассматриваются отдельно, без автоматического удаления данных. Это не юридическая «неотзывность» и не разрешение бессрочного хранения: основания дальнейшей обработки/сроки/процедура обращения требуют отдельной правовой проверки перед реальными данными. Состав/обязательность третьего согласия ещё не уточнены; прежние два обязательных + отдельное добровольное научное использование не меняются.
+
+После принятого малогo HTTP-блока продолжать 05е отдельными версиями/событиями согласий, затем 05в.4 guarded enrollment, 05ж UI, 05з acceptance; никакого silent reconsent/autoenrollment/science grant. Work targeted-testing/full-acceptance инструкции и phase6 6А/6Б план ниже сохранены. Старые «05д/PG/withdrawal ожидает ответа» ниже — история; вся фаза 5 ещё не закончена.
+
 ## Текущий05д после интеграции схемы и инструкций Work — 2026-10-04
 
 PR#42 ordinary merged main `a738c57e04c6e9b6dcd854ee9572829857585487`, final head `bcd3a07353af8b27ab962697a57d6c76b3155da5`, run37228089292 all-six success:252baseNode22/24,213actualPG18.6 (14new schema cases),три extra independentChrome2/2,0fail/cancel/skip. Fresh main67015b70/preview/source/parents/full262manifest/protected40 и postmergeactualmain проверены. Work updates AGENTS targeted-test/full-acceptance и ROADMAP future6А/6Б перенесены точно; phase6 не начинать. Старые pending ниже —история, failure сохранен вPASSPORT_VALIDATION.
