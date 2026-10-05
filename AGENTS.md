@@ -1,5 +1,11 @@
 # AGENTS.md — PedPsyRU
 
+## 2026-10-05: discovery вmain; текущий05в.4б атомарный допуск
+
+PR#47 ordinary merged main003b50f3275125eee7182a0a01211087ea95bb44/final478e542c/treeb5bcbb2f; [run37298213466](https://github.com/PedFund/PedPsyRU/actions/runs/37298213466) all6success:285baseNode22/24,267actualPG18.6/all11discovery,триextraChrome2/2,0fail/cancel/skip. Freshbase/source/preview/parents/full293/protected44/276unchanged иactualmain/tree/parents/all293 verified. Firstlocal283/285 diagnosticslost/unresolved retained; capturedrepeat иобаindependentCI285/285 passed, no inventedfix.
+
+05в.4б — own atomic admission/evidence/attempts иcurrent newcohort clinical/RLS guards, append030; strictownstage/CAS/policy/schema/CSRFfirst DTO,17newPG pending284,9addressedunits/full294localpassed. Legacyunbound records unchanged/no backfill, excluded/bareexistingdeny, optional secondary, originalTKI/bothMFAstaffglobalview/download preserved. [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md)/[ENROLLMENT_IMPLEMENTATION_PLAN.md](ENROLLMENT_IMPLEMENTATION_PLAN.md) describe locks/privateFK/ACL/mandatoryaudit/risks. Wholecurrent-head all-six/actual284PG/threeChrome/currentbase/preview/parents/fullmanifests/protected45 required. Existing001–029/core/packages/currentworkflow/ownerstand/MFA/secrets preserved; no unguardedoldfunctionalias/publichelpers. NoHTTP/bootstrap/UI/realdata/mail/legalapproval/newscience/Selectel/phase6. Послеacceptedmerge HTTP→05жUI→05зacceptance; текущаяфаза5 неготова целиком. Newbindings require currenteligibility beyondfirstcreate; consent flagsalone noauthority. Oldpending below historical; failedruns retain.
+
 ## 2026-10-05: HTTP согласий принят; следующий малый05в.4а
 
 PR #46 принят ordinary merge в main `58a98740f4df159c3310dd20ac6b223843621ae7`, finalhead `ed98c9b6594745fd6a1c7b5a48bd3528c2605ce3`, tree `f08e0d2396c0fcbf2441f8e41ab5375c03f1207f`; [run37296166023](https://github.com/PedFund/PedPsyRU/actions/runs/37296166023) все6success:282base Node22/24,256actualPG18.6 (все6newHTTP), три extraChrome2/2,0fail/cancel/skip. Fresh currentbase/source lineage/preview/parents/all286blobs/268unchanged и actualpostmerge main/tree/parents/all286 проверены.43critical:42unchanged + exact workflow budget10→15min; отменённый run37273736621 сохранён. SQL/auth/MFA/тесты/requiredjobs не ослаблены.

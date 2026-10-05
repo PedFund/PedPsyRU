@@ -14,6 +14,7 @@ export const mapPostgresError = (error: unknown): unknown => {
   const code = error && typeof error === "object" && "code" in error ? error.code : undefined;
   if (code === "28000") return new ParticipationError(401, "AUTH_REQUIRED");
   if (code === "P0002") return new ParticipationError(404, "NOT_AVAILABLE");
+  if (code === "P0001" && error && typeof error === "object" && "message" in error && error.message === "PARTICIPATION_REQUIREMENTS_CHANGED") return new ParticipationError(409,"PARTICIPATION_REQUIREMENTS_CHANGED");
   if (["55P03", "57014", "40001", "40P01"].includes(String(code))) return new ParticipationError(503, "STORAGE_BUSY");
   return error;
 };

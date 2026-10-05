@@ -1,5 +1,9 @@
 # Политика доступа: учебный контур
 
+## 2026-10-05: current admission для новой contact-bound cohort
+
+Own enrollment принимает только current participant session +stage selector/CAS. Не caller study/group/PID/role/clock/eligibility flags;staff/researcher не заполняют заучастника. Completed currentpassport, separate currentcontact+study acceptances иmanualown groupstage обязательны; secondaryoptional. Newprivate immutable scoped admission/evidence, runtimeoneguardedEXEC/no directINSERTenrollment/evidence/privatehelpers/PUBLIC. RLS own attempts/responses/results/releases требуетbasis/currentrequirements иholds currentlocks; clinical form/read/save/complete беруттотже scope доattemptlock. Missing/stale/currentunavailable вsessionmetadata фильтруетattempts, не блокируетconsentmodule. Oldunbound syntheticcohort retainsoldstatus/ownership policy/no fabricatedprofile. BothactualMFAstaff globalview/download включаяclosedstudy остаются, processing/methods admin нерасширены. Noimpersonation/reactivation/groupmove/autoT0/realdata/operatorwithdraw implementation.030 локально/17actualPG pending284+fullfreshgate, неприёмка SQL поbuild; подробностиENROLLMENT_VALIDATION.
+
 ## 2026-10-05: собственный HTTP consent realm
 
 Own consent URI принимают только genuine participant session вexisting cookie realm; staff/researcher/preauth bearer нельзяпереименоватьвparticipant. Caller scope/query/time/role неauthority, SQLпроверяетcurrent locks/clock послеprehandler. Only own read/explicitaccept; no withdrawal/selfreturn/operator write/read чужихconsents/newscientificrights. Existingglobalstaffdiagnosticread/exportправа не меняются.

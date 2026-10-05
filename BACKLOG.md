@@ -1,5 +1,9 @@
 # Очередность небольших задач
 
+## 2026-10-05: локальный05в.4б послеaccepted#47
+
+Discovery#47/main003b50f3/all-six run37298213466 принят (285base/267PG/триChrome); actualproof вSTATUS. Новый малый05в.4б — [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md): own atomic enrollment+immutable basis+attempts и current newcohort RLS/clinical locks/guard, append030/minimalEXEC/scopedFK/audit.9newunits/full294local passed;17actualPG/pending284/fullfreshgate beforemerge. NoHTTP/UI/standupdate/ownerMFA/secret/old001–029/core/package/workflow change. Legacyunbound preserved, newbindings no silentbasisbackfill/excludedreactivation/fakeT0/secondaryrequired;bothstaffglobalMFAread/download preserved. ДалееHTTP→05жUI→05зacceptance, неphase6/Selectel/realmail/legalapproval. Старыеpending ниже —история.
+
 ## 2026-10-05: малый05в.4а после accepted#46
 
 HTTP согласий вmain58a98740/all-six run37296166023 (282base/256PG/триChrome); exactproof вSTATUS/CONSENT_VALIDATION. Следующий блок только read-only own discovery029, не clinical enrollment. [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md) задаёт контракт/locks/границы/11actualPG cases pending267 и очередность atomicenrollment+currentclinicalguards→HTTP→05жUI→05зacceptance. Own immutable group/PID/currentcontact, completedpassport иexplicitmandatoryconsents независимы; stage flag/JSON не capability. No backfill/impersonation/secondaryrequired/withdrawreturn/realdata/Selectel/phase6.001–028/core/packages/currentworkflow/ownerstand сохранены.
