@@ -1,5 +1,9 @@
 # Фаза 5: согласованный путь участника
 
+## 2026-10-05: локальный05в.4б послеaccepted#47
+
+Discovery#47/main003b50f3/all-six run37298213466 принят (285base/267PG/триChrome); actualproof вSTATUS. Новый малый05в.4б — [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md): own atomic enrollment+immutable basis+attempts и current newcohort RLS/clinical locks/guard, append030/minimalEXEC/scopedFK/audit.9newunits/full294local passed;17actualPG/pending284/fullfreshgate beforemerge. NoHTTP/UI/standupdate/ownerMFA/secret/old001–029/core/package/workflow change. Legacyunbound preserved, newbindings no silentbasisbackfill/excludedreactivation/fakeT0/secondaryrequired;bothstaffglobalMFAread/download preserved. ДалееHTTP→05жUI→05зacceptance, неphase6/Selectel/realmail/legalapproval. Старыеpending ниже —история.
+
 HTTP согласий принят#46/main58a98740, all-six run37296166023:282base/256actualPG/три extraChrome. Следующий малый05в.4а — [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md): только own discovery открытых этапов/отдельные readiness flags, не создание enrollment.11newPG pending267; после current-head acceptance — атомарный допуск с повторными current checks и защитой subsequent clinical routes, затем HTTP/05жUI/05зacceptance. Participant группу/ID не задаёт, T0 не фабрикуется; optionalsecondary/no withdraw-return/operatorrequests отдельно остаются. Старые pending ниже —история.
 
 Собственное хранение согласий принято#45/mainb75f4a21/run37270789111 (275base/250actualPG18.6/триextraChrome2/2). Текущиймалый05е.1 даёт own GET/explicit POST черезsignedinsession, no withdrawal/self-return endpoints. Contact confirmation показано со своимпроисхождением; study/secondary отдельно принимаютсявexactversion. Neitherlogin noroptionalchoice create otherconsents/enrollment/attempts. 282local/checks passed,6newPG/256total ещё требуютactualCI.

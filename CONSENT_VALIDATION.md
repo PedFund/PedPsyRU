@@ -1,5 +1,9 @@
 # Проверка раздельных согласий
 
+## 2026-10-05: accepted backend и следующий own admission
+
+ConsentHTTP#46 accepted/main58a98740/all-six run37296166023 (282base/256actualPG/триChrome); own discovery#47 accepted/main003b50f3/all-six run37298213466 (285base/267PG/триChrome). Local030 admission independently requirescurrent explicitstudy/contact andcompletedpassport/manualstage; FKpinsactualaccepted participation version, neverinfersconsent orrequiressecondary. RLS unavailableattempts arefiltered soownconsentread/explicitnewaccept remainspossible. Contactbound barelegacy data notsilently suppliedbasis, no no-button/operator policychange.17newPG/pending284 andcurrent-headfullgate beforemerge;ENROLLMENT_VALIDATION/STATUS containproof/limits/localfirstfailurehistory. Existing022/023/028 exactrecords/versions preserved.
+
 ## 2026-10-05: HTTP согласий принят; следующий малый05в.4а
 
 PR #46 принят ordinary merge в main `58a98740f4df159c3310dd20ac6b223843621ae7`, finalhead `ed98c9b6594745fd6a1c7b5a48bd3528c2605ce3`, tree `f08e0d2396c0fcbf2441f8e41ab5375c03f1207f`; [run37296166023](https://github.com/PedFund/PedPsyRU/actions/runs/37296166023) все6success:282base Node22/24,256actualPG18.6 (все6newHTTP), три extraChrome2/2,0fail/cancel/skip. Fresh currentbase/source lineage/preview/parents/all286blobs/268unchanged и actualpostmerge main/tree/parents/all286 проверены.43critical:42unchanged + exact workflow budget10→15min; отменённый run37273736621 сохранён. SQL/auth/MFA/тесты/requiredjobs не ослаблены.
