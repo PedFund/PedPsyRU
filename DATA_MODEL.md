@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 05д.1: HTTP без новой миграции
+
+Собственные HTTP snapshots содержат ровно study_id/schema_version/status/revision/fields/values; metadata snapshots — study_id/study_version/schema_version/frozen/fields. Values выдаются только по известным ключам pinned schema. Schema DTO/CAS и saved-only completion остаются прежними; caller study/participant/group/role никогда не определяют own scope. Новых таблиц/клинических rows/согласий/автоматического enrollment нет; 001–027 сохраняются.
+
+Будущий05е хранит точные версии и отдельные явные события принятия. No-button/manual operator-request policy не превращает сохранённое принятие в юридическую неотзывность и не разрешает implicit scientific reuse. Третье согласие пока отдельно добровольно; окончательное уточнение ожидается.
+
 ## 05д: собственные значения паспорта (027)
 
 `participant_passports`: PK(study_id,participant_id), composite FK в immutable participant_group_bindings и passport_schema_versions(study_id,schema_version); отдельный FK index(study_id,schema_version). revision1..2147483646, statusdraft/completed, scalar `answers` JSONB, created/updated/completed milliseconds. Created scope/schema неизменяемы; draft update ровноrevision+1, completion не меняет saved answers, completed/delete запрещены. Первое read возвращает not_started/revision0/empty values без строки. Same-current save values audited/no increment; staleCAS всегда409. Complete replay только current completed revision или непосредственно preceding revision (lost response); никакой reactivation/edit workflow.

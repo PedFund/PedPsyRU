@@ -1,5 +1,11 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05д.1: HTTP-композиция паспортных портов
+
+`passport-routes` → строгие application API → прежние guarded PostgreSQL adapters/functions026–027. Metadata GET/PATCH в researcher/staff realms, own GET/PUT draft/POST complete в participant realm. Query authority/лишние DTO-поля запрещены, output whitelist; current identity prehandler не заменяет transactional SQL authority. Existing Origin/Host/CSRF/body limits/neutral mandatory denial audit сохраняются. Optional `passportBoundary` только композирует порты; не знает секретов/не создаёт identity/consent и не запускает migrations. Existing explicit synthetic registration opt-in включает его в demo server; old stand по умолчанию disabled.
+
+Новый HTTP слой не меняет данные/compute/core/матрицу. Общий UI/consents/enrollment позже. Принятый MVP no-withdraw-button означает внешний процесс обращения к оператору, не irrevocable consent; третья обязательность не изменена.
+
 ## 05д — own passport, без расширения научных прав
 
 ParticipantPassports принимает только собственный opaque session и save/completion CAS, никогда caller participant/study/group/role. Pure passportScalars/passportValues дают strict DTO/feedback, не authority; fixed Postgres functions повторяют schema key/type/range/choice/Unicode/required checks под current identity/group/contact/notice/schema/profile locks. Read not_started не inserts; save partial snapshot с revision, completed frozen; explicit completion только saved values, lost-last-transition replay idempotent. Ни autoenrollment, ни diagnostic attempts, ни consent acknowledgement в этом workflow.
