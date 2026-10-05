@@ -1,5 +1,9 @@
 # Архитектура ПедПси: текущий пилот
 
+## 2026-10-05: accepted#49 илокальный05жparticipantUI
+
+OwnHTTPadmission#49/mainb7ebb42b/run37306516744 all-six/301base/291actualPG/триChrome принят;exactproof вSTATUS. [PARTICIPANT_UI_VALIDATION.md](PARTICIPANT_UI_VALIDATION.md) —newbrowserflow/onepairperslide,onefieldpassport,explicitconsents,serverrestore/CAS,no privilegedboot/storage/realmail;manager city/max5extras/sharedgrouplink viaexistingapprovedAPIs.7newunits/full308localpassed;3newChrome pending whole294PG/fiveextraChromecases×3/fullfreshgate. Onecriticalworkflowbudgetexception15→20min forexpandedmandatorybrowserworkload, noSQL/auth/MFA/cmd/assertionweakening;other44critical/core/packages/001–030/standkeys preserved. QRseparatedependency-reviewedconvenience,notimplementedhere;noexternaltoken-sharing. Далее05зacceptance,notphase6/Selectel/realpilot.
+
 ## 2026-10-05: accepted#48; следующий малыйHTTP05в.4в
 
 Admission#48/mainea8a02a0/run37302686895 all6success (294base/284actualPG/триChrome), exactproof вSTATUS/ENROLLMENT_VALIDATION. ТолькоHTTPGETownstages/POSTexplicitownenroll/exactprojection/query+realm/CSRF/Origin/Host/body/audit иoptionalboundary:7newunits/full301local,7actualPG pending291/fullfreshgate. Backend eligibility independently currentSQL, flags/selectorнеcapability; noSQL/key/stand/MFA/core/package/workflow change, noforce/groupmove/return/newrights/science/legal/realmail. Далее05жbrowserparticipantpath→05зacceptance;phase6не начинать.

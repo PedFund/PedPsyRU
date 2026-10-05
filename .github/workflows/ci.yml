@@ -100,8 +100,9 @@ jobs:
   postgres:
     name: PostgreSQL 18 isolation
     runs-on: ubuntu-24.04
-    # Full growing PG suite + three mandatory browser runs; not a SQL/auth timeout.
-    timeout-minutes: 15
+    # Full PG suite + 3 mandatory repeats of all five browser cases, including
+    # signup/30 pairs/reload; execution budget only, not SQL/auth timeouts.
+    timeout-minutes: 20
     services:
       postgres:
         image: postgres:18.6-bookworm@sha256:3725f4e2499eef5134592b3b4ab79a543ed7f8e533b05b5b637af926630f6650

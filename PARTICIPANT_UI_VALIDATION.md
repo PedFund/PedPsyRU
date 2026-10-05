@@ -1,0 +1,25 @@
+# Участник: браузерная проверка фазы5
+
+## Локальная реализация05ж — не actual browser acceptance
+
+Protected backend#49 принятmainb7ebb42b/run37306516744:301base/291actualPG/триChrome2/2/all-six, all308manifests/currentbase/preview/parents/protected45/postmerge verified (STATUS). UI uses those existing endpoints, no SQL/method/key/stand changes.
+
+Group links `/workspace#join=opaque` отправляют секрет только вsame-origin header, неquery/path/referrer. После publiccontext invitefragment очищается, secret тольковmemory; stable reentry `/workspace#study=UUID` —selector дляscopedemail/PW, не signup/authority/email globalmerge. Registration demands explicitsyntheticcontactcheckbox/ownpreauthCSRF; testreceipt clearlynotrealmailbox proof. Explicit confirmation затемPWlogin, noautoenrollment. No diagnostic/auth/contact localStorage/sessionStorage;pagehide clearsroot/memory/passwords/proof;no privilegedworkspace boot behindparticipant fragment even withotherrealm cookie. Не скрыватьмодули вместо serverauthority: inheritedcurrentSQL/strictrealms/Origin/Host/CSRF/RLS/audit still required.
+
+Passport rendersonefieldperpage, known configuredkind/required/range/options; emptyoptional omitted, notzero/imputed; partialvalues/revision savedtoserver, completesavedvaluesexplicitly/frozenafter. Basicsex/age alwaysrequired, cityresearcher-configurable, max5extras; fullcatalogstillfuture. Study/scienceconsents shownexacttext/version/source/timestamp, contactackfromconfirmation separate. Onlytargetexplicitversionaccepted, scientificoptionalunchecked; no withdrawal/return/button/autoapproval or legallyirrevocablepromise. Operator requests separate/synthetic legaltext notapproved.
+
+Own stage availability fromserver; UIflagsfeedbackonly, POSTenroll repeatscurrentchecks/CAS. No groupchoice/force/reactivation/fabricatedT0. Afteradmission methodslistedfromownattemptmetadata; TKIrenders onlycurrentpair/twochoices, savesresponse+slide/revision viaexistingpurehandler/protectedDB. Reload restoresservercurrentitem/responses; completionexplicitonlyall30, raw5measures/nonnormative teachingresult. Conflict/uncertaintylocksclientwrites untilmanualreread; noautomaticretry/overwrite. Missing/closedscope clearsaccessnot data. Realmail/Selectel/realparticipants/scientificpublication remainoutside.
+
+Researcher/bothstaff metadataUI cityrequired/max5text-integer-singlechoiceextras usesexistingdraft/frozen/CAS schema API. InviteUI usesexistingactive study/group expiry1..30days/one-time rawtoken/listwithouthash/token/revoke/audit; creates onecommonlink pergroup, no individualmail or impersonation. Frozenactive schema fieldsetdisabled; actualAPI remainsauthority evenDOMtampered. Secret clearedwhenreread/hide/logout/pagehide. QRgenerator notimplemented here; no externalQR service/token transmission/dependency. Separate dependency-reviewed convenience block remains.
+
+Local7modelunits+full308/308/build/types/architecture/syntax/dependencies passed,0fail/cancel/skip. Three NEW actualChrome cases written **NOT runlocal**, ondisposablePG/preinstalledLinuxChrome inexistingsequentialbrowserfile (no parallelport4174collision):
+
+1. Sharedinvite withactualotherMFAstaffcookie→syntheticemailconfirm+ownPWlogin→passportsex/age/optionalcity→mandatoryexplicitstudyconsent/secondaryabsent→manualownstage→onepairperslide/mobile390px/nohorizontaloverflow→reloadrestoresquestion2→all30responses/originalTKIresult5/sum30/no browserstorage/privateworkspace.
+2. Actualresearchercookie fromrealgateway→draftcityrequired+fiveextrafields/max5UI+actualschema storage→activefrozenmetadata→othergroup sharedlink/fragmentonly/secretclearedonreread.
+3. Invalid/closedgroupentry withactualMFAstaffcookie neverbootsprivilegedpanels/signup/clinicalrows.
+
+ExistingtwoactualMFA/download/constructor+conflict+delegationbrowsercases retained unchangedassertions. Wholeexpected294PG includesfivebrowsercases; mandatoryextraChrome file nowfivecases×threeindependentruns, not previously2/2. Nativesuite/currenthead all-six/security/dep/source/base/preview/lineage/fullmanifests/criticalpreservation required beforemerge; oldgreenSQL notbrowserproof.
+
+Resource budget: previous291PGjob719seconds; three new browsercases areexecuted onceinwholePG andagaininallthreeextraChrome runs. Overallpostgresjob15→20min isdocumentedboundedexecution-budget exception, notSQL/auth/MFA/lock/session/cmd-security change; old60s testcapsretained,newwholeflow120s for70+UIactions. No skip/retry-on-failure/continue-on-error/changedsecurityassertions. This workflowdifference mustbeexplicitlyverifiedagainstrawcriticalmanifest; other44critical/source001–030/core/packages remainidentical.
+
+Nexttechnicalacceptance05з aftercurrenthead actualbrowserpass. No ownerstand upgrade/start/MFAreset orrealpilot implied. Fullmethodscientific/legal/minors/operator/retention/delivery/deployment checksremain separate.
