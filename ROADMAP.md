@@ -1,5 +1,9 @@
 # ПедПси — единая дорожная карта разработки
 
+Актуально2026-10-05: #45/05е.0 вmainb75f4a21, finalrun37270789111 all-six success:275base+250actualPG18.6/12newcases/триextraChrome2/2; actual282blobs/parents/tree/protected42/262unchanged checked. Малый05е.1HTTP локально282base/checks passed,6newPG/256total ещё actualCI. Это шестаяизвосьмиосновных задачфазы5, не готовый browser/enrollment путь. Старыеfailed/pending ниже —история с сохранёнными доказательствами.
+
+После принятия05е.1 —05в.4 guarded enrollment (current completed passport + mandatory current consents + manually opened own group/stage + current assignments), затем05ж общий browser flow и05зacceptance. **Фаза5, шестая из восьми основных задач** ещё вработе; библиотекуфазы6 не начинать. Третье purpose/requiredness finalowneranswer ещё отсутствует; прежние2required+optionalsecondary сохраняются. Внешние обращения оператору отдельно/no automatic deletion принято, не irrevocable consent/bессрочнаяretention. Owner stand/MFA/secrets/core/package/workflow/001–028 сохранены.
+
 ## 2026-10-05: 05е.0 — точная проекция контакта, второй failure
 
 Второй actual CI #45/head `4c8870842fbcd21d749122a6ab2539db37cc6ed1`, [run37269417616](https://github.com/PedFund/PedPsyRU/actions/runs/37269417616): new028 SQLcompile прошёл, Node22/24 по275/secret/dependency success; PG18.6 241/250, девять новых snapshot-dependent cases failed, три новые invalid/refusal/expiry/upgrade ветви прошли (12 total, триpassed); все238 прежних сценариев прошли. Общая причина 42703: own_consents_snapshot ошибочно читал contact_notices.text, тогда как существующая022 хранит body. Только new028 projection теперь n.body AS text; old022/schema/условия/гранты не меняются, added exact-contact-body PG regression assertion. ExtraChrome skipped/Required failed —не merge. First0/250compile failure сохранён отдельно; требуется новыйfullcurrent-head all-six/250PG/threeChrome/freshbase/preview/parents/fullmanifest/protected42 gate.

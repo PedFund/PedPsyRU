@@ -1,5 +1,11 @@
 # Политика доступа: учебный контур
 
+## 2026-10-05: собственный HTTP consent realm
+
+Own consent URI принимают только genuine participant session вexisting cookie realm; staff/researcher/preauth bearer нельзяпереименоватьвparticipant. Caller scope/query/time/role неauthority, SQLпроверяетcurrent locks/clock послеprehandler. Only own read/explicitaccept; no withdrawal/selfreturn/operator write/read чужихconsents/newscientificrights. Existingglobalstaffdiagnosticread/exportправа не меняются.
+
+Currentcontact+study required/secondaryoptional по прежнейpolicy. Mandatory denial auditfail =>neutral500/no newack. HTTP readiness неоткрываетtests; separate current passport/stage/assignment enrollment ещёследующийблок. Operatorcases/retention/reallegal/minors остаютсяотдельно.
+
 ## 2026-10-05: собственные раздельные согласия
 
 Участник читает и явно принимает только свои текущие syntheticstudy/optionalsecondary документы черезреальнуюparticipant session. Caller study/participant/group/role/accepted_time не определяютобласть. Contact notice acceptance остаётсяregistration-only: новыйport не принимаетpurposecontact_processing. Runtime только2guardedEXEC, private tables/helpers/PUBLICdefaultdeny; researcher/staff неaccept/неimpersonate/неизменяютчужиеconsents. Нет новогоoperator-rolegrant илиscientificprocessinggrant.

@@ -1,5 +1,11 @@
 # Архитектура ПедПси: текущий пилот
 
+## 05е.1: HTTP-композиция собственного согласия
+
+Следующий малый 05е.1 — HTTP-composition существующего собственного порта: GET `/api/v2/participant/consents`, POST `/api/v2/participant/consents/accept`. Exact output whitelist (документ, версия, текст, synthetic status, required, время, provenance), strict own DTO, query/caller scope rejected; existing participant realm/CSRF/Origin/Host/body cap/media/mandatory denial audit. Prehandler realm не заменяет current SQL authority. Optional bootstrap включён только прежним explicit synthetic registration configuration, без migration/key generation/stand startup. No withdrawal/self-return/operator mutation endpoints, impersonation, real legal texts/data/mail/science permissions, consent inference или clinical enrollment.
+
+`consent-routes` → strict application API → принятый guarded PostgreSQL port028. Optional boundary не выполняет DDL/создание identities/операторские действия; existing demo registration opt-in включает его вbootstrap. Current consent flags отдельно отenrollment/test eligibility. Study/scientific acceptances никогда не выводятся изcontact confirmation; public snapshot содержит происхождение и exacttime/version, не контакты/ключи/оценки. Whole UI позже05ж; runtime SQL001–028/core неизменны.
+
 ## 05е.0: точные документы и собственное явное принятие
 
 05е.0 — отдельный persistence/application блок: ParticipantConsents own-session-only port, strict explicit-purpose/version/policy-revision/accept:true DTO и fixed guarded PG read/accept. Append028 хранит immutable synthetic документы, текущие scoped policy pointers и immutable own acceptance с actualcredential/server time/composite FK/indexes. Existing023 contact acknowledgement проецируется отдельно с происхождением contact_notice_confirmation, не копируется в participation/secondary records. Required contact+study, secondary отдельно optional согласно прежнему решению; новое обязательное третье согласие не вводится. Same-current retry сохраняет исходное время/одну запись; stale policy/version409. Read/accept ничего не создают в passport/clinical enrollment/attempts.
