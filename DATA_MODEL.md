@@ -1,5 +1,9 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 2026-10-05: accepted#48; следующий малыйHTTP05в.4в
+
+Admission#48/mainea8a02a0/run37302686895 all6success (294base/284actualPG/триChrome), exactproof вSTATUS/ENROLLMENT_VALIDATION. ТолькоHTTPGETownstages/POSTexplicitownenroll/exactprojection/query+realm/CSRF/Origin/Host/body/audit иoptionalboundary:7newunits/full301local,7actualPG pending291/fullfreshgate. Backend eligibility independently currentSQL, flags/selectorнеcapability; noSQL/key/stand/MFA/core/package/workflow change, noforce/groupmove/return/newrights/science/legal/realmail. Далее05жbrowserparticipantpath→05зacceptance;phase6не начинать.
+
 ## 2026-10-05: локальный05в.4б послеaccepted#47
 
 Discovery#47/main003b50f3/all-six run37298213466 принят (285base/267PG/триChrome); actualproof вSTATUS. Новый малый05в.4б — [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md): own atomic enrollment+immutable basis+attempts и current newcohort RLS/clinical locks/guard, append030/minimalEXEC/scopedFK/audit.9newunits/full294local passed;17actualPG/pending284/fullfreshgate beforemerge. NoHTTP/UI/standupdate/ownerMFA/secret/old001–029/core/package/workflow change. Legacyunbound preserved, newbindings no silentbasisbackfill/excludedreactivation/fakeT0/secondaryrequired;bothstaffglobalMFAread/download preserved. ДалееHTTP→05жUI→05зacceptance, неphase6/Selectel/realmail/legalapproval. Старыеpending ниже —история.
