@@ -84,7 +84,7 @@ CREATE FUNCTION own_consents_snapshot(study uuid,participant uuid,policy_revisio
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 DECLARE contact_document record;participation_document record;secondary_document record;contact_at bigint;participation_at bigint;secondary_at bigint;
 BEGIN
-  SELECT n.version,n.text INTO contact_document FROM pedpsy.study_contact_policies p
+  SELECT n.version,n.body AS text INTO contact_document FROM pedpsy.study_contact_policies p
     JOIN pedpsy.contact_notices n ON n.version=p.notice_version WHERE p.study_id=study;
   SELECT min(a.confirmed_at_ms) INTO contact_at FROM pedpsy.participant_contacts c JOIN pedpsy.participant_contact_acceptances a
     ON (a.study_id,a.contact_id)=(c.study_id,c.id) WHERE c.study_id=study AND c.participant_id=participant AND a.notice_version=contact_document.version;

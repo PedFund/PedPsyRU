@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 2026-10-05: 05е.0 — точная проекция контакта, второй failure
+
+После projection fix и exact-body assertion повторный full local275/275/build/exit0,0fail/cancel/skip; syntax/architecture passed. Type/dependency/pure application unchanged; actual newPG/Chrome ещё требуют новый full current-head CI, не прежние241/250.
+
+Второй actual CI #45/head `4c8870842fbcd21d749122a6ab2539db37cc6ed1`, [run37269417616](https://github.com/PedFund/PedPsyRU/actions/runs/37269417616): new028 SQLcompile прошёл, Node22/24 по275/secret/dependency success; PG18.6 241/250, девять новых snapshot-dependent cases failed, три новые invalid/refusal/expiry/upgrade ветви прошли (12 total, триpassed); все238 прежних сценариев прошли. Общая причина 42703: own_consents_snapshot ошибочно читал contact_notices.text, тогда как существующая022 хранит body. Только new028 projection теперь n.body AS text; old022/schema/условия/гранты не меняются, added exact-contact-body PG regression assertion. ExtraChrome skipped/Required failed —не merge. First0/250compile failure сохранён отдельно; требуется новыйfullcurrent-head all-six/250PG/threeChrome/freshbase/preview/parents/fullmanifest/protected42 gate.
+
 ## 2026-10-05: 05е.0 — первая SQLcompile ошибка, не приёмка
 
 После исправления повторный полный локальный прогон275/275/build/exit0,0fail/cancel/skip; syntax/architecture passed. Type/dependency/application runtime unchanged. PG/Chrome локально не запускались; SQL исправление ещё не принято до нового actual CI.
