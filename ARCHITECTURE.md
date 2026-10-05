@@ -1,5 +1,9 @@
 # Архитектура ПедПси: текущий пилот
 
+## 2026-10-05: малый05в.4а после accepted#46
+
+HTTP согласий вmain58a98740/all-six run37296166023 (282base/256PG/триChrome); exactproof вSTATUS/CONSENT_VALIDATION. Следующий блок только read-only own discovery029, не clinical enrollment. [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md) задаёт контракт/locks/границы/11actualPG cases pending267 и очередность atomicenrollment+currentclinicalguards→HTTP→05жUI→05зacceptance. Own immutable group/PID/currentcontact, completedpassport иexplicitmandatoryconsents независимы; stage flag/JSON не capability. No backfill/impersonation/secondaryrequired/withdrawreturn/realdata/Selectel/phase6.001–028/core/packages/currentworkflow/ownerstand сохранены.
+
 ## 05е.1: HTTP-композиция собственного согласия
 
 Следующий малый 05е.1 — HTTP-composition существующего собственного порта: GET `/api/v2/participant/consents`, POST `/api/v2/participant/consents/accept`. Exact output whitelist (документ, версия, текст, synthetic status, required, время, provenance), strict own DTO, query/caller scope rejected; existing participant realm/CSRF/Origin/Host/body cap/media/mandatory denial audit. Prehandler realm не заменяет current SQL authority. Optional bootstrap включён только прежним explicit synthetic registration configuration, без migration/key generation/stand startup. No withdrawal/self-return/operator mutation endpoints, impersonation, real legal texts/data/mail/science permissions, consent inference или clinical enrollment.

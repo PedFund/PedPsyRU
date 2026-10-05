@@ -1,5 +1,9 @@
 # ПедПси — единая дорожная карта разработки
 
+## 2026-10-05: малый05в.4а после accepted#46
+
+HTTP согласий вmain58a98740/all-six run37296166023 (282base/256PG/триChrome); exactproof вSTATUS/CONSENT_VALIDATION. Следующий блок только read-only own discovery029, не clinical enrollment. [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md) задаёт контракт/locks/границы/11actualPG cases pending267 и очередность atomicenrollment+currentclinicalguards→HTTP→05жUI→05зacceptance. Own immutable group/PID/currentcontact, completedpassport иexplicitmandatoryconsents независимы; stage flag/JSON не capability. No backfill/impersonation/secondaryrequired/withdrawreturn/realdata/Selectel/phase6.001–028/core/packages/currentworkflow/ownerstand сохранены.
+
 Актуально2026-10-05: #45/05е.0 вmainb75f4a21, finalrun37270789111 all-six success:275base+250actualPG18.6/12newcases/триextraChrome2/2; actual282blobs/parents/tree/protected42/262unchanged checked. Малый05е.1HTTP локально282base/checks passed,6newPG/256total ещё actualCI. Это шестаяизвосьмиосновных задачфазы5, не готовый browser/enrollment путь. Старыеfailed/pending ниже —история с сохранёнными доказательствами.
 
 После принятия05е.1 —05в.4 guarded enrollment (current completed passport + mandatory current consents + manually opened own group/stage + current assignments), затем05ж общий browser flow и05зacceptance. **Фаза5, шестая из восьми основных задач** ещё вработе; библиотекуфазы6 не начинать. Третье purpose/requiredness finalowneranswer ещё отсутствует; прежние2required+optionalsecondary сохраняются. Внешние обращения оператору отдельно/no automatic deletion принято, не irrevocable consent/bессрочнаяretention. Owner stand/MFA/secrets/core/package/workflow/001–028 сохранены.

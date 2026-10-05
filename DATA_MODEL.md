@@ -1,5 +1,9 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 2026-10-05: малый05в.4а после accepted#46
+
+HTTP согласий вmain58a98740/all-six run37296166023 (282base/256PG/триChrome); exactproof вSTATUS/CONSENT_VALIDATION. Следующий блок только read-only own discovery029, не clinical enrollment. [ENROLLMENT_VALIDATION.md](ENROLLMENT_VALIDATION.md) задаёт контракт/locks/границы/11actualPG cases pending267 и очередность atomicenrollment+currentclinicalguards→HTTP→05жUI→05зacceptance. Own immutable group/PID/currentcontact, completedpassport иexplicitmandatoryconsents независимы; stage flag/JSON не capability. No backfill/impersonation/secondaryrequired/withdrawreturn/realdata/Selectel/phase6.001–028/core/packages/currentworkflow/ownerstand сохранены.
+
 ## 05е.1: DTO без новой миграции
 
 HTTP own snapshot: study_id,policy_revision,required_consents_accepted,documents. Document projection: purpose,version,text,legal_status,required,accepted_at_ms,provenance. Только актуальные own documents/decisions; неизвестные/private additions отбрасываются. Accept DTO остаётся exact purpose/document_version/expected_policy_revision/accept:true; participant/study/group/role/time нельзя задать снаружи. Current bool —не clinicaleligibility.
