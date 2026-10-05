@@ -8,6 +8,7 @@ import type {createRegistrationHttpApi} from "../application/registration-http-a
 import {registerRegistrationRoutes} from "./registration-routes.js";
 import {registerPassportRoutes,type PassportHttpApis} from "./passport-routes.js";
 import {registerConsentRoutes,type ConsentHttpApi} from "./consent-routes.js";
+import {registerAdmissionRoutes,type AdmissionHttpApi} from "./admission-routes.js";
 import {ParticipationError} from "../ports/errors.js";
 import {createParticipantApp,readParticipantCookie} from "./participant-app.js";
 import {createBaseApp} from "./app.js";
@@ -27,7 +28,7 @@ export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   app.setNotFoundHandler(async(_r,reply)=>reply.code(404).send({error:"NOT_AVAILABLE"}));
   app.setErrorHandler(async(_e,_r,reply)=>reply.code(500).send({error:"INTERNAL_ERROR"}));return app;
 }
-export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>,passports?:PassportHttpApis,consents?:ConsentHttpApi){
+export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>,passports?:PassportHttpApis,consents?:ConsentHttpApi,admissions?:AdmissionHttpApi){
   const names=workspaceCookies(origin),secure=new URL(origin).protocol==="https:";
   const token=(r:FastifyRequest,name:string)=>readParticipantCookie(r.headers.cookie,name);
   const csrf=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
@@ -42,6 +43,7 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
       registerRegistrationRoutes(app,origin,registration);
       registerPassportRoutes(app,origin,names,passports);
       registerConsentRoutes(app,origin,consents);
+      registerAdmissionRoutes(app,origin,admissions);
       app.post("/api/v2/staff/password",async(r,reply)=>{const p=await accounts.password(r.body);reply.header("Set-Cookie",cookie(names.pending,p.challenge,p.expiresAt));
         // CSRF is computed server-side; raw challenge only goes into HttpOnly cookie.
         return {status:p.status,expires_at:p.expiresAt,csrf:accounts.pendingCsrf(p.challenge)};});
@@ -118,6 +120,7 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         if(/^\/api\/v2\/staff\/studies(?:\/|$)/.test(r.url))await accounts.staffSession(token(r,names.staff));
         if(/^\/api\/v2\/participant\/passport(?:\/|$)/.test(r.url))await participant.session(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
         if(/^\/api\/v2\/participant\/consents(?:\/|$)/.test(r.url))await participant.session(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
+        if(/^\/api\/v2\/participant\/stages(?:\/|$)/.test(r.url))await participant.session(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
       });
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }

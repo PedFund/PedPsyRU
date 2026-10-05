@@ -27,6 +27,7 @@ import {contactDemoKey} from "./registration-config.js";
 import {registrationBoundary} from "./registration-boundary.js";
 import {passportBoundary} from "./passport-boundary.js";
 import {consentBoundary} from "./consent-boundary.js";
+import {admissionBoundary} from "./admission-boundary.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
@@ -46,7 +47,8 @@ async function main(): Promise<void> {
     try{if(contactKey)registration=registrationBoundary(pool,contactKey,"http://127.0.0.1:4174");}finally{contactKey?.fill(0);}
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
-    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents);
+    const admissions=registration?admissionBoundary(pool):undefined;
+    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions);
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}

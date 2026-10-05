@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 2026-10-05: атомарный допуск вmain; текущийHTTP05в.4в
+
+PR#48 ordinary merged main`ea8a02a0cbb27d565c0469c1c4c7b428c8f1f3ae`, final`03963028b21f84a26944bc70428397552b5aa82c`, tree`de22132a45235dd1b888a518f8a92657a62421c1`; [run37302686895](https://github.com/PedFund/PedPsyRU/actions/runs/37302686895) all6success:294baseNode22/24,284actualPG18.6/all17newadmission+currentguards+originalTKI+bothactualMFAstaffglobalclosedview/download,триextraChrome2/2,0fail/cancel/skip. Freshbase/source/preview/parents/full303/44unchangedcritical+030new45/279unchanged иactualmain/parents/tree/all303 verified.
+
+Следующий05в.4в — толькоHTTPcomposition accepted discovery/admission: GET`/api/v2/participant/stages`,POST`/api/v2/participant/stages/enroll`, exactwhitelists/querydenial/currentownrealm/CSRF/Origin/Host/body/media/mandatorydenialaudit. Separateoptional11thworkspace API, bootstrap onlyexisting explicit synthetic registration opt-in/no migrations/keygeneration/standstart. ExistingSQL001–030/currentguards/core/packages/workflow/MFA/ownerstand unchanged; no reactive enrollment/force/group-switch routes.7newHTTPunits/full301localpassed;7newactualPGHTTP written/pending291, wholecurrent-head all-six/threeChrome/currentbase/preview/parents/fullmanifest/protected45 beforemerge. No wholeparticipantUI claim; afteracceptedHTTP05ж browserflow→05зacceptance,notphase6/Selectel/realdata/mail. Priorfalse/pending statements below historical; firstlocal283/285 unknown diagnostics retained.
+
 ## 2026-10-05: discovery вmain; текущий05в.4б атомарный допуск
 
 PR#47 ordinary merged main003b50f3275125eee7182a0a01211087ea95bb44/final478e542c/treeb5bcbb2f; [run37298213466](https://github.com/PedFund/PedPsyRU/actions/runs/37298213466) all6success:285baseNode22/24,267actualPG18.6/all11discovery,триextraChrome2/2,0fail/cancel/skip. Freshbase/source/preview/parents/full293/protected44/276unchanged иactualmain/tree/parents/all293 verified. Firstlocal283/285 diagnosticslost/unresolved retained; capturedrepeat иобаindependentCI285/285 passed, no inventedfix.
