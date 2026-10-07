@@ -1,5 +1,17 @@
 # Очередность небольших задач
 
+## 2026-10-07: текущий06а.1 — контракт черновика методики
+
+От accepted main29932a67/PR#52/run37591582200, phase6 отдельно разрешена владельцем. [PHASE6_PLAN.md](PHASE6_PLAN.md) разделяет06а.1 structural submission и06а.2 trustedartifact/handler verification. [METHOD_PACKAGE_CONTRACT.md](METHOD_PACKAGE_CONTRACT.md)/[METHOD_LIBRARY_VALIDATION.md](METHOD_LIBRARY_VALIDATION.md): schema1.0/pinned package+form+handler versions, exactJSON/UTF8/depth/duplicates/whitelists/refs/dataonlypaths/caps/finitebounds, explicitmissing/normsabsence/draft-onlyreview, complete synthetic control vectors. Deepfreeze/publishablefalse; no scoring/I/O/SQL/fetch/eval/authority/HTTP/UI/newdeps.11newgroups/firstfull324passed; linear malformedstring scanner review+11/11 retest, finalfull/current-head all-six/294PG/threeChrome5/5/freshbase/source/preview/parents/fullrawmanifest gate обязательны. ExistingPG/Chrome —regression, не librarypersistence/scientificapproval.
+
+METHOD_IMPORT_INVENTORY metadata50(24+12+14), все non-TKI inventory_only, currentTKI separateverified package/oldkeynotcopied. All45critical/SQL/core/TKI/key/form/releases/packages/workflow/ownerstand/MFA/secrets unchanged. После accepted06а.1 продолжать06а.2 then06б, не выполнять всюphase6 однимзаданием; научные источники/правомерность/утверждение отдельно, отсутствие данных не угадывать. Старые phase6-not-start/validator-not-implemented ниже —history.
+
+## 2026-10-07: разрешён старт фазы6, текущий06а
+
+Владелец новым поручением разрешил фазу6; прежняя остановка после05з состоялась. Основа actual main29932a67/PR#52/run37591582200 all-six success:313base Node22/24,294actualPG18.6,триChrome5/5. [PHASE6_PLAN.md](PHASE6_PLAN.md) разбивает библиотеку на малые блоки06а–06з/6А–6Б. Текущий [METHOD_IMPORT_INVENTORY.json](METHOD_IMPORT_INVENTORY.json): actual source registry50(24+12+14), толькоmetadata/статусы, не перенос ключей/форм/норм/вычислений. Non-TKI inventory_only; TKI только existing PedPsyRU verified package, legacy ключ не копировать. Plan+inventory пока локальные, validator/DB/API/editor/imports не реализованы/не приняты.
+
+Продолжать06а versioned package contract/validator и independent technical foundation; scientific approvals/new norms/method publication/rights/realmail/PII/Selectel/ownerstand/MFA отдельно. Только superadmin methods.manage; admin не получает научное управление. Immutable used versions/current locks/MFA/CAS/audit/all-six actualPG/browser/freshbase/manifests обязательны. Материалы и научные противоречия не восполнять догадками; задержавшийся паспорт не признание ошибки кода. Model recommendation6.1Sol/medium, high forcomplexcases, setting не менялось. Старыеphase6-not-start sections —history до нового поручения.
+
 ## 2026-10-07: завершающий 05з — приёмка фазы5
 
 Фаза5/05а–05з реализована:8 основных блоков; runtime#34–#51 в main. [PHASE5_ACCEPTANCE.md](PHASE5_ACCEPTANCE.md) — итоговый сценарий, actual suites/гонки/backup/upgrade/матрица и ограничения. Последний accepted#51 main `5b1f7ea014f9f738b1e376549c607c5c7a1a6d08`, head `f6046181db03822c08cca857723d45d4b1727982` / [run37589156038](https://github.com/PedFund/PedPsyRU/actions/runs/37589156038):all-six success;313base Node22/24,294actualPG18.6,триextraChrome5/5,0fail/cancel/skip. Source/base/preview/parents/all315/298unchanged/43critical+exactone-package exception и actualmain parents/tree/all315 проверены. UI#50/mainae2fd073 тоже принят, не pending. Historical statements below сохранены.
