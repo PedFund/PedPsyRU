@@ -1,5 +1,11 @@
 # AGENTS.md — PedPsyRU
 
+## 2026-10-07: UI в main; текущий 05ж.1 — локальный QR
+
+PR #50 ordinary merged main `ae2fd073860b2540ad2f1ee7fc1ba3e8c603fa08`; current-head `f16d704c3d57bb23083dabab531b1ca734bd9868` / [run37312700977](https://github.com/PedFund/PedPsyRU/actions/runs/37312700977) all-six success:308base Node22/24,294actualPG18.6,три extraChrome5/5,0fail/cancel/skip. Source/base/preview/parents/all311/292unchanged/44critical+exactworkflowbudgetexception и actualmain parents/tree/all311 verified. Участнический browser flow технически принят; ownerstand/MFA не обновлялись.
+
+Текущий маленький QR блок — [QR_VALIDATION.md](QR_VALIDATION.md): pinned qrcode-generator2.0.4/MIT/no runtime deps/no install scripts, same-origin local SVG/strict fragment/no external service/storage/PII; QR и secret очищаются вместе. Explicit critical exception только package.json/package-lock.json (один новый пакет), dependency-policy register; другие43critical/workflow/SQL/core неизменны.5newunits/final full313/313/build/types/architecture/syntax/dependency policy и npm audit0 локально; actual QR browser assertions ещё требуют current-head all-six/294PG/threeChrome5/5/freshbase/preview/source/parents/fullmanifests gate. Golden matrix/SVG не независимый decoder/Android scan. История двух адресных ошибок сохранена; scanner/guards не ослаблены. Затем05зacceptance; неphase6/realmail/Selectel/realdata/stand restart.
+
 ## 2026-10-05: HTTPдопуск вmain; текущий05жbrowserflow
 
 PR#49 ordinary merged main`b7ebb42bb916c5f4e865a0e314f80e7c9d0c13de`, final`9efacd16aecd7f3a348199b1b07b436fab305a50`, tree`683415a4bb55ab2194b298bd04cedc9334f1ae16`; [run37306516744](https://github.com/PedFund/PedPsyRU/actions/runs/37306516744) all6success:301baseNode22/24,291actualPG18.6/all7admissionHTTP,триextraChrome2/2,0fail/cancel/skip. Freshbase/source/preview/parents/full308/45unchangedcritical/291unchanged иactualmain/parents/tree/all308 verified.

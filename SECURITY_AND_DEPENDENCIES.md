@@ -1,5 +1,16 @@
 # Зависимости, архитектурные проверки и безопасность
 
+## 2026-10-07: локальный QR, dependency review
+
+qrcode-generator2.0.4 exact/MIT/без runtime dependencies и install scripts;
+официальный npm integrity сверён с lock, `--ignore-scripts`, npm audit0.
+Только same-origin browser asset/локальный SVG, не scientific core/HTTP import,
+не внешний QR-сервис. CSP/architecture scanner/SQL/auth/MFA сохранены.
+Полное notice — THIRD_PARTY_NOTICES.md; registry/source/proof/ограничения и
+два исправленных адресных failure — QR_VALIDATION.md. Package/lock — явное
+исключение критических файлов для этой reviewed зависимости; прежние пакеты
+не обновлялись. Chrome QR assertions/current-head CI ещё ожидаются.
+
 ## 05в.3б — отдельная подписанная pre-auth граница
 
 Registration master задаётся явно, 32 ненулевых байта canonical base64, отдельно от MFA. Missing/invalid/equal-MFA key выключает лишь registration, без fallback/автогенерации/перезаписи owner secrets. Прежний AES-GCM outbox использует master; browser MAC/CSRF используют purpose/origin-separated derived key. Реализация использует поддерживаемый Node 22 `hkdfSync` и `timingSafeEqual` с предварительной проверкой равной длины: [официальная документация HKDF](https://nodejs.org/docs/latest-v22.x/api/crypto.html#cryptohkdfsyncdigest-ikm-salt-info-keylen), [timingSafeEqual](https://nodejs.org/docs/latest-v22.x/api/crypto.html#cryptotimingsafeequala-b). Одна constant-time операция не доказывает безопасность всего workflow; retained-key/time/tamper/CSRF тесты и actual SQL race/audit tests имеют отдельные границы доказательства.
