@@ -64,3 +64,22 @@ trusted handler и independently checked vector в следующем блоке
 special/continuous formats; это не перенос реальной методики и не восполнение
 отсутствующего бланка. TKI unchanged; legacy ошибочный ключ не возвращается.
 Новый validator не подключён к HTTP/UI/БД/production.
+
+## 06а.2 — отдельно проверяемая целостность
+
+verifyMethodArtifactIntegrity использует host-supplied reader+hasher, не функции
+из JSON. Канонический fingerprint пакета — SHA256(canonical-json-v1), sortedobject
+keys/исходный array order/text. Каждый actual data artifact: bounded declared
+bytes, owned Uint8Array snapshot (не Buffer.slice view), SHA256 и strictUTF8.
+Reader scope — method_id/package_version/artifact_id/path, no substitutions.
+ScopedMemoryMethodArtifacts имеет private immutable scope/copy-in/copy-out/8MBcap;
+нет файловой системы, архивов, сети, auth bypass или исполнения загруженного кода.
+
+Evidence содержит только fingerprint/IDs/paths/sizes/hashes, не rawcontent.
+Частичная ошибка не возвращает evidence; missing/hash/size/UTF8 — нейтральный400,
+provider failure —503 без частных значений. Empty draft остаётся artifactsblocked.
+После успеха handler/scientific/publication blockers сохраняются; дополнительно
+artifact_content_not_validated, потому что совпавшие байты не доказательство формы,
+ключа, формул, JSONsemantic или прав. Norms/expected/scoring не вычисляются и не
+меняются. Проверка содержания с pinnedhandler иvectors —отдельный06а.3.
+Это не upload/API/persistence и не заявление о новой scientificvalidity.
