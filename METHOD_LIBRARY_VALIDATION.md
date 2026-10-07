@@ -1,5 +1,11 @@
 # Фаза6: технический журнал библиотеки методик
 
+## 2026-10-07: принятый draft Карпова и локальный06а.3
+
+PR#55 ordinary mainbb2bb115245e0effaa13abbb410a130c09c125ef/head924764bf/run37603815117: all-six success,338baseNode22/24,294actualPG18.6,threeChrome5/5,0all. Freshbase/source/preview/334rawblobs/319unchanged/old45critical и actualmain/parents/tree/full334 verified;2newdraftJSON→47critical. Научный выпуск/нормы/primarykey/fullauthorinstruction/rights не утверждены.
+
+[METHOD_HANDLER_VALIDATION.md](METHOD_HANDLER_VALIDATION.md) —06а.3 staticexistingTKI/form+key bytepins/schema/handler/exact3legacyvectors;8newgroups/address8/8/capturedfull346/346/build/types/architecture/syntax/deps passed. Firstfull344/346 twofailures retained (one fetch failed captured, second detail truncated), unchangedweb9/9/repeat346 passed; причина не объявлена исправленной. Current-head all-six/actual294PG/threeChrome/currentbase/preview/parents/fullmanifests gate pending. Positivehandler evidence не scientificapproval, publishablefalse и basis review required; unsupportedKarpov не зарегистрирован. All47critical/SQL/core/packages/workflow/ownerstand/MFA unchanged. Послеacceptance06бpersistence→API/editor.
+
 ## 2026-10-07:06а.2 в main; новые материалы Карпова06е.0
 
 PR#54 accepted maindb37069509ad6db45fd6e9f576136a8fb023ef51/final7a99ea83/run37600160276 all-six success:332baseNode22/24,294actualPG18.6,триChrome5/5,0all; source/base/preview/parents/all329/314unchanged/all45critical и actualmain/tree/parents/all329 verified. Framework06а.3 staticruntime/vector verification и06бpersistence ещёне реализованы; не выдавать integrity за science.

@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 2026-10-07: приняты материалы Карпова, текущий06а.3
+
+PR#55 ordinary merged mainbb2bb115245e0effaa13abbb410a130c09c125ef; run37603815117 all-six success,338baseNode22/24,294actualPG18.6,threeChrome5/5,0fail/cancel/skip. Source/base/preview/334blobs/319unchanged/old45critical и actualmain/parents/tree/full334 verified. Two new draft JSON→47critical. Карпов сохранён как draft, не scientific approved или clinical release.
+
+06а.3 locally adds static trusted TKI handler binding, exact actual form/key byte pins, metadata shape and control execution.8newgroups/address8/8/build/type/architecture/syntax/deps passed. Firstfull344/346 two failures retained, one captured fetch failed in web-server setup, other detail truncated; unchanged targetedweb9/9 and capturedrepeat346/346 passed. Independentcurrent-head CI pending; not conceal failure or invent productionfix. [METHOD_HANDLER_VALIDATION.md](METHOD_HANDLER_VALIDATION.md) describes limits. NoSQL/HTTP/UI/permissions/newdeps/scientificnorms/ownerstand/MFA change. Следующий06б private versioned library persistence; фаза6 ещё не завершена.
+
 ## 2026-10-07:06а.2 в main; новые материалы Карпова06е.0
 
 PR#54 accepted maindb37069509ad6db45fd6e9f576136a8fb023ef51/final7a99ea83/run37600160276 all-six success:332baseNode22/24,294actualPG18.6,триChrome5/5,0all; source/base/preview/parents/all329/314unchanged/all45critical и actualmain/tree/parents/all329 verified. Framework06а.3 staticruntime/vector verification и06бpersistence ещёне реализованы; не выдавать integrity за science.

@@ -73,8 +73,12 @@ https://developers.openai.com/api/docs/guides/reasoning
 integrity и06а.3 static pinned handler/control-vector verification.
 06а.1 принят в main через PR#53/9a34cfbc/run37597066870:all-six,
 324base/294actualPG/триChrome5/5,0all;actual324blobs/parents/tree проверены.
-06а.2 локально: actualbyte/size/SHA256/UTF8/scopedmemorysnapshot/canonicalpackage
-evidence,8newgroups;332base ожидаются. Actual current-head CI ещё обязателен.
+06а.2 принят PR#54/main db370695/run37600160276: all-six/332base/294PG/
+threeChrome5/5. Карпов06е.0 draft принят PR#55/mainbb2bb115/run37603815117:
+all-six/338base/294PG/threeChrome5/5,actual334blobs/parents/tree verified.
 Новые migrations/API/editor/imports/approved releases ещё НЕ реализованы.
-Следующий блок06а.3 проверяет exact trusted form/key/handler и control execution
+Текущий06а.3 реализует exact trusted TKI form/key/handler и control execution
 через trusted порты, без scientific approval/произвольного импортированного JS.
+8newgroups/346capturedlocal passed; first344/346 failure retained в
+METHOD_HANDLER_VALIDATION; current-head all-six acceptance ещё обязательна.
+Затем06б private versioned persistence, отдельно API/editor.
