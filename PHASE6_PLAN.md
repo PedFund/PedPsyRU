@@ -35,6 +35,12 @@ explicit norms basis or absent, independent control vectors, artifact digests
 norms, rights/publication остаются отдельной проверкой и решением. Отсутствующие
 текст/инструкция/контрольные исходники не восстанавливаются догадками.
 
+Владелец затем предоставил27statements+7labels/primarycitation. Отдельный
+малый06е.0блок сохраняет dataform/rawkeydraft/commongender8edits и6testgroups;
+сверка первичнойстатьи/полнойавторскойинструкции/норм/прав не завершена.
+Это дополнение материалов не заменяет pending06а.3/06б/редактор/clinicaldispatch;
+новая методика пока не доступна к научному прохождению/публикации.
+
 |Блок|Результат|
 |---|---|
 |06а Реестр/контракт|Фактический metadata registry + versioned package schema/validator, positive/negative tests|

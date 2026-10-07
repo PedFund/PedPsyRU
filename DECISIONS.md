@@ -1,5 +1,11 @@
 # Журнал решений
 
+## 2026-10-07:06а.2 в main; новые материалы Карпова06е.0
+
+PR#54 accepted maindb37069509ad6db45fd6e9f576136a8fb023ef51/final7a99ea83/run37600160276 all-six success:332baseNode22/24,294actualPG18.6,триChrome5/5,0all; source/base/preview/parents/all329/314unchanged/all45critical и actualmain/tree/parents/all329 verified. Framework06а.3 staticruntime/vector verification и06бpersistence ещёне реализованы; не выдавать integrity за science.
+
+Владелец прислал27утверждений/7labels Карпова и primarycitation, явно разрешил общую грамматику через/. [KARPOV_VALIDATION.md](KARPOV_VALIDATION.md): отдельныйsmall06е.0 draftform+rawkeyизexistingcode, source_text retained/2questions11+26 и6labelsedits/numeric1..7/orderunchanged. PrimaryURLtool403, fullauthorinstruction/independentkey-source/norms/rights approvalpending. RawfieldscopySHA4992123e/15direct12reverse; normsstenslevelsнеперенесены;5legacyvectorsнеindependentproof.6newgroups/full338local/build/types/architecture/syntax/depspassed0all; newcurrent-head all-six/294actualPG/threeChrome5/5/freshbase/source/preview/parents/manifests beforemerge. Existing45criticaluntouched+2newdraftJSON→47; no oldkeyrestoration/TKIchanges/clinicalregistration/permissions/SQL/packages/workflow/ownerstand/MFA/secrets change. Genericdraft validation+4artifact integrity acceptsstructure/bytes, publishablefalse/handler+source/instruction+rights/scientific/publicationblocked. Послеdraftmaterialgate continue06а.3 then06б; no automaticscientificpublication/realdata/mail/Selectel. Старыеpending statementsbelow historical.
+
 ## 2026-10-07:06а.1 в main; текущий06а.2 — целостность артефактов
 
 PR#53 accepted main9a34cfbceb5a544276e47f9f68096600187e1bc9/final0c905653/run37597066870 all-six success:324baseNode22/24,294actualPG18.6,триChrome5/5,0all. Freshbase/sourcelineage/preview/parents/full324/308unchanged/all45critical и actualmain/tree/parents/all324 verified; incoming trafficrule preserved; canceledpriorheads не acceptance. [METHOD_LIBRARY_VALIDATION.md](METHOD_LIBRARY_VALIDATION.md) содержит proof/history; Карпов27 selected nextdraftafterTKI, notscientificapproval.

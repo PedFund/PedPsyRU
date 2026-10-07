@@ -1,5 +1,16 @@
 # Журнал проверки методик и обработчиков
 
+## 2026-10-07: Карпов27 — отдельный draft material, не scientific approval
+
+Владелец предоставил полный27statement text/7labels и primarycitation; common
+respondent gender through/разрешён. Новые draftform+rawkey —methods/karpov,
+source_text retained,8displayedits(11/26+sixlabels), numeric1..7/orderunchanged.
+Rawkey fields exactly existinglegacy/15direct+12reverse; normsstens/levels
+не перенесены. Source link tool403, fullauthorinstruction/rights/independentsource
+approval ещёне подтверждены.6newgroups/5legacyrawvectors иgenericdraftintegrity
+passedлокально; fullcurrent-headCI ещёобязателен. [KARPOV_VALIDATION.md](KARPOV_VALIDATION.md)
+фиксируетhashes/provenance/limits. TKIoldkey не возвращён, currentTKI untouched.
+
 ## 2026-10-07: старт06а.1, не научный импорт
 
 METHOD_IMPORT_INVENTORY подтвердил metadata реестра50legacy обработчиков;
