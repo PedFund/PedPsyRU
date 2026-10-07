@@ -63,11 +63,12 @@ technical merge. Ниже scientific/method publication approval не автом
 https://developers.openai.com/api/docs/models/gpt-6.1-sol
 https://developers.openai.com/api/docs/guides/reasoning
 
-06а разделён на06а.1 structural draft contract/inventory и06а.2 actual artifact/
-static handler verification. Сейчас06а.1 локально реализован: typed submission1.0,
-pure JSON validator/deepfreeze/publishablefalse,11new test groups/324base.
-Финальный повтор после code-review linear scanner обязателен перед публикацией;
-actual current-head CI/PG/browser ещё не выполнен для нового кода.
+06а разделён на06а.1 structural draft contract/inventory,06а.2 actual artifact
+integrity и06а.3 static pinned handler/control-vector verification.
+06а.1 принят в main через PR#53/9a34cfbc/run37597066870:all-six,
+324base/294actualPG/триChrome5/5,0all;actual324blobs/parents/tree проверены.
+06а.2 локально: actualbyte/size/SHA256/UTF8/scopedmemorysnapshot/canonicalpackage
+evidence,8newgroups;332base ожидаются. Actual current-head CI ещё обязателен.
 Новые migrations/API/editor/imports/approved releases ещё НЕ реализованы.
-Следующий блок06а.2 проверяет actual bytes/digests и handler/control execution
+Следующий блок06а.3 проверяет exact trusted form/key/handler и control execution
 через trusted порты, без scientific approval/произвольного импортированного JS.

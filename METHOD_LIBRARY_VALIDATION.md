@@ -1,5 +1,27 @@
 # Фаза6: технический журнал библиотеки методик
 
+## 06а.1 принят; текущий06а.2 — actual artifact integrity
+
+PR#53 ordinarymain9a34cfbceb5a544276e47f9f68096600187e1bc9, final
+0c905653ca2b4cde2e0da23d7c9e70fa910d5aee/tree5ce6aefc;
+[run37597066870](https://github.com/PedFund/PedPsyRU/actions/runs/37597066870)
+all-six success:324baseNode22/24,294actualPG18.6,триextraChrome5/5,0all.
+Incomingmainafbf6b3d trafficinstruction preserved via ordinarytwo-parent sync;
+thenexistingformcompatfix. Freshbase/sourceancestry/preview/parents/all324/
+308unchangedbase/all45critical и actualpostmain/tree/parents/all324 verified.
+Supersededcancelled37596037959/37596338453 NOTaccepted, retainedinPRbody.
+
+Новый06а.2: trustedportreader+SHA256adapter+boundedscopedmemorystaging (notauth),
+actuallength/hash/strictUTF8/ownedbyte snapshots/copyin-out/privateimmutablescope,
+canonicalJSONv1packagefingerprint/deepfrozenmetadataevidence, neutral400mismatch/
+503providererror. Nofiles/archives/network/eval/scoring/DB/HTTP/roles/approval.
+Emptydraftnotverified; artifactsvalidbytes ≠ semanticform/key/right/scientific
+validation. Handler/scientific/publication blockers remain+contentnotvalidated.
+8newgroups passed locally, full332 expected; current-head allsix/actual294PG/
+threeChrome5/5/freshbase/source/preview/parents/rawmanifest requiredbeforemerge.
+All45critical/currentpackage/SQL/core/TKI/ownerstand/MFA preserved; nonewdeps.
+Next06а.3 pinnedhandler/exactcurrentform-key/controlvectors, then06бpersistence.
+
 ## 06а.1 — metadata inventory и structural package contract, 2026-10-07
 
 От accepted main29932a6781eebcc1bc696acf23fefad438ba96d5 /PR#52/run37591582200

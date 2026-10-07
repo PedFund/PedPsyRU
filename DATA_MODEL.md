@@ -1,5 +1,11 @@
 # Модель данных: пилот и тренировочная база 01д.2
 
+## 2026-10-07:06а.1 в main; текущий06а.2 — целостность артефактов
+
+PR#53 accepted main9a34cfbceb5a544276e47f9f68096600187e1bc9/final0c905653/run37597066870 all-six success:324baseNode22/24,294actualPG18.6,триChrome5/5,0all. Freshbase/sourcelineage/preview/parents/full324/308unchanged/all45critical и actualmain/tree/parents/all324 verified; incoming trafficrule preserved; canceledpriorheads не acceptance. [METHOD_LIBRARY_VALIDATION.md](METHOD_LIBRARY_VALIDATION.md) содержит proof/history; Карпов27 selected nextdraftafterTKI, notscientificapproval.
+
+06а.2 actualboundedbyte/size/SHA256/UTF8 verification/canonicalpackagefingerprint/frozenevidence/scopedmemorystaging/copyin-out/privateimmutablescope; nofiles/network/archives/eval/scoring/SQL/auth/HTTP/newdeps.8newgroups/full332local/checks passed0all; current-head allsix/294actualPG/threeChrome5/5/freshbase/source/preview/parents/rawmanifests gate ещёобязателен. Emptydraftnotverified; successful integrity не semanticform/key/handler/scientific/right approval, publishablefalse/handler+scientific+publicationblocked/contentnotvalidated. All45critical/SQL/core/TKI/key/form/packages/workflow/ownerstand/MFA/secretspreserved. Далее06а.3 staticpinnedhandler/exactcurrentform-key/controls, затем06бlibrarypersistence; не scientificpublication/realdata/mail/Selectel. Старыеpending ниже исторические.
+
 ## 2026-10-07: текущий06а.1 — контракт черновика методики
 
 От accepted main29932a67/PR#52/run37591582200, phase6 отдельно разрешена владельцем. [PHASE6_PLAN.md](PHASE6_PLAN.md) разделяет06а.1 structural submission и06а.2 trustedartifact/handler verification. [METHOD_PACKAGE_CONTRACT.md](METHOD_PACKAGE_CONTRACT.md)/[METHOD_LIBRARY_VALIDATION.md](METHOD_LIBRARY_VALIDATION.md): schema1.0/pinned package+form+handler versions, exactJSON/UTF8/depth/duplicates/whitelists/refs/dataonlypaths/caps/finitebounds, explicitmissing/normsabsence/draft-onlyreview, complete synthetic control vectors. Deepfreeze/publishablefalse; no scoring/I/O/SQL/fetch/eval/authority/HTTP/UI/newdeps.11newgroups/firstfull324passed; linear malformedstring scanner review+11/11 retest, finalfull/current-head all-six/294PG/threeChrome5/5/freshbase/source/preview/parents/fullrawmanifest gate обязательны. ExistingPG/Chrome —regression, не librarypersistence/scientificapproval.
