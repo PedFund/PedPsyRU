@@ -1,5 +1,11 @@
 # Архитектура ПедПси: текущий пилот
 
+## 2026-10-07: завершающий 05з — приёмка фазы5
+
+Фаза5/05а–05з реализована:8 основных блоков; runtime#34–#51 в main. [PHASE5_ACCEPTANCE.md](PHASE5_ACCEPTANCE.md) — итоговый сценарий, actual suites/гонки/backup/upgrade/матрица и ограничения. Последний accepted#51 main `5b1f7ea014f9f738b1e376549c607c5c7a1a6d08`, head `f6046181db03822c08cca857723d45d4b1727982` / [run37589156038](https://github.com/PedFund/PedPsyRU/actions/runs/37589156038):all-six success;313base Node22/24,294actualPG18.6,триextraChrome5/5,0fail/cancel/skip. Source/base/preview/parents/all315/298unchanged/43critical+exactone-package exception и actualmain parents/tree/all315 проверены. UI#50/mainae2fd073 тоже принят, не pending. Historical statements below сохранены.
+
+Финальный documentary05зhead проходит собственный current-head all-six/whole294PG/threeChrome5/5/freshbase/source/preview/parents/fullmanifest gate; runtime/packages/SQL/core/workflow не менять ради отчёта. Actual ordinaryintegration/SHA фиксируется в PR приёмки. После его merge остановиться перед phase6; новых прав/методик/realmail/Selectel/realdata/pilot не вводить автоматически. Ownerstand/MFA/passwords/secrets не обновлялись. QR independentdecoder/Androidscan не заявлен, научнаявалидность/legal/production readiness не доказаны; sex/age/city+max5extras не весь futurecatalog. Техническая приёмка synthetic контура не разрешает сбор реальных данных.
+
 ## 2026-10-05: accepted#49 илокальный05жparticipantUI
 
 OwnHTTPadmission#49/mainb7ebb42b/run37306516744 all-six/301base/291actualPG/триChrome принят;exactproof вSTATUS. [PARTICIPANT_UI_VALIDATION.md](PARTICIPANT_UI_VALIDATION.md) —newbrowserflow/onepairperslide,onefieldpassport,explicitconsents,serverrestore/CAS,no privilegedboot/storage/realmail;manager city/max5extras/sharedgrouplink viaexistingapprovedAPIs.7newunits/full308localpassed;3newChrome pending whole294PG/fiveextraChromecases×3/fullfreshgate. Onecriticalworkflowbudgetexception15→20min forexpandedmandatorybrowserworkload, noSQL/auth/MFA/cmd/assertionweakening;other44critical/core/packages/001–030/standkeys preserved. QRseparatedependency-reviewedconvenience,notimplementedhere;noexternaltoken-sharing. Далее05зacceptance,notphase6/Selectel/realpilot.

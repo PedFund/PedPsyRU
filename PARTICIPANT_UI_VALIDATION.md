@@ -1,5 +1,11 @@
 # Участник: браузерная проверка фазы5
 
+## 2026-10-07: завершающий 05з — приёмка фазы5
+
+Фаза5/05а–05з реализована:8 основных блоков; runtime#34–#51 в main. [PHASE5_ACCEPTANCE.md](PHASE5_ACCEPTANCE.md) — итоговый сценарий, actual suites/гонки/backup/upgrade/матрица и ограничения. Последний accepted#51 main `5b1f7ea014f9f738b1e376549c607c5c7a1a6d08`, head `f6046181db03822c08cca857723d45d4b1727982` / [run37589156038](https://github.com/PedFund/PedPsyRU/actions/runs/37589156038):all-six success;313base Node22/24,294actualPG18.6,триextraChrome5/5,0fail/cancel/skip. Source/base/preview/parents/all315/298unchanged/43critical+exactone-package exception и actualmain parents/tree/all315 проверены. UI#50/mainae2fd073 тоже принят, не pending. Historical statements below сохранены.
+
+Финальный documentary05зhead проходит собственный current-head all-six/whole294PG/threeChrome5/5/freshbase/source/preview/parents/fullmanifest gate; runtime/packages/SQL/core/workflow не менять ради отчёта. Actual ordinaryintegration/SHA фиксируется в PR приёмки. После его merge остановиться перед phase6; новых прав/методик/realmail/Selectel/realdata/pilot не вводить автоматически. Ownerstand/MFA/passwords/secrets не обновлялись. QR independentdecoder/Androidscan не заявлен, научнаявалидность/legal/production readiness не доказаны; sex/age/city+max5extras не весь futurecatalog. Техническая приёмка synthetic контура не разрешает сбор реальных данных.
+
 ## Локальная реализация05ж — не actual browser acceptance
 
 Protected backend#49 принятmainb7ebb42b/run37306516744:301base/291actualPG/триChrome2/2/all-six, all308manifests/currentbase/preview/parents/protected45/postmerge verified (STATUS). UI uses those existing endpoints, no SQL/method/key/stand changes.
