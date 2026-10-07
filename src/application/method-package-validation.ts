@@ -17,8 +17,9 @@ function text(value:unknown,max:number):string {
 function id(value:unknown):string {
   if(typeof value!=="string"||! /^[a-z][a-z0-9_-]{0,95}$/.test(value))invalid();return value;
 }
-function version(value:unknown):string {
-  if(typeof value!=="string"||value.length>32||! /^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(value))invalid();return value;
+function version(value:unknown,formDraft=false):string {
+  const pattern=formDraft?/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-draft(?:\.(0|[1-9]\d*))?)?$/:/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/;
+  if(typeof value!=="string"||value.length>32||!pattern.test(value))invalid();return value;
 }
 function number(value:unknown):number {if(typeof value!=="number"||!Number.isFinite(value))invalid();return value;}
 function integer(value:unknown,min:number,max:number):number {
@@ -98,7 +99,7 @@ export function validateMethodPackageJson(input:unknown):MethodPackageValidation
   const artifactIds=unique(artifacts.map(a=>a.id as string));unique(artifacts.map(a=>a.path as string));
   const instruction=record(p.instruction,["artifact_id"]);nullableRef(instruction.artifact_id,artifactIds);
   const form=record(p.form,["artifact_id","version"]);nullableRef(form.artifact_id,artifactIds);
-  if(form.artifact_id===null){if(form.version!==null)invalid();}else version(form.version);
+  if(form.artifact_id===null){if(form.version!==null)invalid();}else version(form.version,true);
   const items=list(p.items,500).map((v,i)=>{
     const base=v as Record<string,unknown>;const choice=base?.kind==="single_choice";
     const item=record(v,choice?["id","ordinal","kind","options"]:["id","ordinal","kind","min","max"]);

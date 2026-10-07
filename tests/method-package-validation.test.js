@@ -23,6 +23,8 @@ test("method package: all object levels whitelist keys, versions/types/status cl
  for(const at of levels)rejected(p=>{at(p).role="superadministrator";});
  for(const value of [null,[],"1",1,"01.0.0","1.0","1.0.0-beta","1.0.0+build"])rejected(p=>{p.package_version=value;});
  rejected(p=>{p.schema_version="2.0";});rejected(p=>{p.items[0].ordinal="1";});rejected(p=>{p.calculation.adapter_version=null;});rejected(p=>{p.form.version=null;});
+ const existingForm=require("../methods/tki/form.json"),p=fixture();p.form.version=existingForm.version;assert.equal(run(p).package.form.version,"0.1.0-draft");
+ for(const bad of ["0.1.0-unknown","0.1.0+build","0.1.0-draft.01","0.1.0-draft/../../"]){rejected(p=>{p.form.version=bad;});}
  for(const [key,value]of [["technical","verified"],["scientific","approved"],["publication","published"]])rejected(p=>{p.review[key]=value;});
 });
 test("method package: identifiers/text/finite numeric bounds/ordinals are strict",()=>{

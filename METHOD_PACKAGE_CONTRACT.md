@@ -26,7 +26,7 @@ adapter reference не загрузка кода и не доказательс�
 |provenance|origin existing_processor/owner_materials/new_sources; <=50 unique sourceIDs/citations/HTTPS bibliographic URLs ornull; отдельные missing flags|
 |rights|unknown/no sources либо evidence_supplied/nonempty source refs; не approved|
 |instruction|artifact ID либо явноnull; missing не восполняется текстом|
-|form|artifact ID и отдельная exactversion либо обаnull|
+|form|artifact ID и отдельная exactversion либо обаnull; numeric x.y.z и optional -draft[.N], чтобы сохранять действующий TKI0.1.0-draft без переименования|
 |items|<=500 uniqueIDs, ordinal1..N, single_choice(2..20 uniquevalue/label options), integer или finite number(min<=max); текст вопросов во внешнем data artifact|
 |scales|<=100 uniqueIDs/labels, finite bounds orbothnull, direction explicit higher/lower/not_specified|
 |calculation|kind sum/reverse_sum/forced_choice/profile/special, adapterID+exactversion orbothnull, specification/key artifact refs ornull|

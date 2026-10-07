@@ -38,3 +38,17 @@ library persistence/MFA/CAS/audit, API/editor and multi-method independent accep
 Послеaccepted06а.1 отдельный06а.2 trustedartifact/handler verification, затем06б.
 При нехватке источников блокировать конкретный import, продолжать независимую
 техническую библиотеку; не выполнять всю фазу как одно огромное задание.
+
+### Совместимость existing TKI form и выбор владельца
+
+Code review actual form.json выявила version0.1.0-draft; initial structural
+formversion numeric-only её не принимал. Existing protectedform НЕ переименован:
+формат form.version расширен только numeric x.y.z[-draft[.N]], без изменения
+package/handler numeric-onlyversions, без неизвестных suffix/build/coercion.
+Added exact existingformversion andbadversions regressions в прежней группе.
+Это несовместимость нового контракта, не дефект/исправление научного TKI.
+Нужен новый full current-head CI после изменения, прежний run не acceptance.
+
+Владелец выбрал следующий реальный draft import: reflexivity_karpov_27
+(рефлексивность Карпова,27вопросов). Выбор приоритета не scientificapproval,
+не разрешение восстановить отсутствующие источники/форму/нормы догадками.

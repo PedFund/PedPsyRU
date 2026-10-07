@@ -30,6 +30,11 @@ explicit norms basis or absent, independent control vectors, artifact digests
 
 ## Последовательность проверяемых блоков
 
+Владелец выбрал следующий реальный импорт после TKI: **Карпов — рефлексивность,
+27 вопросов** (`reflexivity_karpov_27`). Черновик из existing source; scientific,
+norms, rights/publication остаются отдельной проверкой и решением. Отсутствующие
+текст/инструкция/контрольные исходники не восстанавливаются догадками.
+
 |Блок|Результат|
 |---|---|
 |06а Реестр/контракт|Фактический metadata registry + versioned package schema/validator, positive/negative tests|
