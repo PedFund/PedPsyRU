@@ -12,7 +12,7 @@ import {registerAdmissionRoutes,type AdmissionHttpApi} from "./admission-routes.
 import {ParticipationError} from "../ports/errors.js";
 import {createParticipantApp,readParticipantCookie} from "./participant-app.js";
 import {createBaseApp} from "./app.js";
-export interface WorkspaceAssets{html:string;js:string;css:string;participantJs?:string}
+export interface WorkspaceAssets{html:string;js:string;css:string;participantJs?:string;qrJs?:string}
 export function workspaceCookies(origin:string){return new URL(origin).protocol==="https:"?
   {staff:"__Host-pedpsy_staff",pending:"__Host-pedpsy_pending",researcher:"__Host-pedpsy_researcher"}:
   {staff:"pedpsy_staff_demo",pending:"pedpsy_pending_demo",researcher:"pedpsy_researcher_demo"};}
@@ -22,6 +22,7 @@ function staticRoutes(app:FastifyInstance,assets:WorkspaceAssets){
   app.get("/workspace/app.js",async(_r,reply)=>reply.type("text/javascript; charset=utf-8").send(assets.js));
   app.get("/workspace/styles.css",async(_r,reply)=>reply.type("text/css; charset=utf-8").send(assets.css));
   if(assets.participantJs!==undefined)app.get("/workspace/participant.js",async(_r,reply)=>reply.type("text/javascript; charset=utf-8").send(assets.participantJs));
+  if(assets.qrJs!==undefined)app.get("/workspace/qr.js",async(_r,reply)=>reply.type("text/javascript; charset=utf-8").send(assets.qrJs));
 }
 export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   const app=createBaseApp();staticRoutes(app,assets);

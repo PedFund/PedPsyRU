@@ -1,5 +1,5 @@
 {
   "version": 1,
-  "approvedNpmPackages": ["fastify", "pg", "typescript", "@types/node", "@types/pg"],
+  "approvedNpmPackages": ["fastify", "pg", "qrcode-generator", "typescript", "@types/node", "@types/pg"],
   "note": "Exact versions in package-lock.json; purposes, licenses and review in SECURITY_AND_DEPENDENCIES.md. Dev packages are not permitted as runtime imports."
 }

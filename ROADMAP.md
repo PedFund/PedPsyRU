@@ -1,5 +1,11 @@
 # ПедПси — единая дорожная карта разработки
 
+## 2026-10-07: UI в main; текущий 05ж.1 — локальный QR
+
+PR #50 ordinary merged main `ae2fd073860b2540ad2f1ee7fc1ba3e8c603fa08`; current-head `f16d704c3d57bb23083dabab531b1ca734bd9868` / [run37312700977](https://github.com/PedFund/PedPsyRU/actions/runs/37312700977) all-six success:308base Node22/24,294actualPG18.6,три extraChrome5/5,0fail/cancel/skip. Source/base/preview/parents/all311/292unchanged/44critical+exactworkflowbudgetexception и actualmain parents/tree/all311 verified. Участнический browser flow технически принят; ownerstand/MFA не обновлялись.
+
+Текущий маленький QR блок — [QR_VALIDATION.md](QR_VALIDATION.md): pinned qrcode-generator2.0.4/MIT/no runtime deps/no install scripts, same-origin local SVG/strict fragment/no external service/storage/PII; QR и secret очищаются вместе. Explicit critical exception только package.json/package-lock.json (один новый пакет), dependency-policy register; другие43critical/workflow/SQL/core неизменны.5newunits/final full313/313/build/types/architecture/syntax/dependency policy и npm audit0 локально; actual QR browser assertions ещё требуют current-head all-six/294PG/threeChrome5/5/freshbase/preview/source/parents/fullmanifests gate. Golden matrix/SVG не независимый decoder/Android scan. История двух адресных ошибок сохранена; scanner/guards не ослаблены. Затем05зacceptance; неphase6/realmail/Selectel/realdata/stand restart.
+
 ## 2026-10-05: accepted#49 илокальный05жparticipantUI
 
 OwnHTTPadmission#49/mainb7ebb42b/run37306516744 all-six/301base/291actualPG/триChrome принят;exactproof вSTATUS. [PARTICIPANT_UI_VALIDATION.md](PARTICIPANT_UI_VALIDATION.md) —newbrowserflow/onepairperslide,onefieldpassport,explicitconsents,serverrestore/CAS,no privilegedboot/storage/realmail;manager city/max5extras/sharedgrouplink viaexistingapprovedAPIs.7newunits/full308localpassed;3newChrome pending whole294PG/fiveextraChromecases×3/fullfreshgate. Onecriticalworkflowbudgetexception15→20min forexpandedmandatorybrowserworkload, noSQL/auth/MFA/cmd/assertionweakening;other44critical/core/packages/001–030/standkeys preserved. QRseparatedependency-reviewedconvenience,notimplementedhere;noexternaltoken-sharing. Далее05зacceptance,notphase6/Selectel/realpilot.
