@@ -1,5 +1,15 @@
 # Журнал проверки методик и обработчиков
 
+## 2026-10-07: старт06а.1, не научный импорт
+
+METHOD_IMPORT_INVENTORY подтвердил metadata реестра50legacy обработчиков;
+новый typed package1.0/pure validator принимает только structurally_valid_draft,
+publishablefalse. Ни ключи/формы/нормы non-TKI, ни новые вычислители не перенесены.
+Original TKI/key/form/core unchanged, старый ключ не восстановлен. Scalar/control
+vector syntax не доказательство расчёта/источника/прав; scientific/publication
+status не повышается. Контракт/техническая проверка — METHOD_PACKAGE_CONTRACT/
+METHOD_LIBRARY_VALIDATION; actual artifact/handler validation следующий06а.2.
+
 Дата: 2026-10-02. Томас—Килманн (`tki_ru_30_pairs`), русская 30-парная форма.
 
 Статусы кода, контрольных расчетов, источника, текста формы и публикации учитываются отдельно. Успех программных тестов не означает утверждение методики.
