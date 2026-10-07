@@ -1,0 +1,64 @@
+{
+  "schema_version": "1.0",
+  "id": "reflexivity_karpov_27",
+  "version": "0.1.0-draft",
+  "items": 27,
+  "type": "directreverse",
+  "valid": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "reverseMax": 8,
+  "scales": {
+    "Рефлексивность": {
+      "direct": [
+        1,
+        3,
+        4,
+        5,
+        9,
+        10,
+        11,
+        14,
+        15,
+        18,
+        19,
+        20,
+        22,
+        24,
+        25
+      ],
+      "reverse": [
+        2,
+        6,
+        7,
+        8,
+        12,
+        13,
+        16,
+        17,
+        21,
+        23,
+        26,
+        27
+      ]
+    }
+  },
+  "verification_state": "legacy_unverified",
+  "publication_state": "draft",
+  "norms_included": false,
+  "provenance": {
+    "authority": "existing_processor_key",
+    "source_file": "methods/builtin.js: reflexivity_karpov_27",
+    "legacy_reference_url": "https://cpd-program.ru/methods/rfk.htm",
+    "primary_reference_url": "https://psyjournras.ru/s0205-95920000621-0-1-ru-280",
+    "primary_verification": "pending_tool_http_403",
+    "calculation_digest_sha256": "4992123ed197210833bedd35974ef0eeb872d5f7307a5067288d99e7d6c632de",
+    "note": "Raw calculation fields copied unchanged. Legacy stenTable/levels excluded; not independently scientifically approved."
+  }
+}
