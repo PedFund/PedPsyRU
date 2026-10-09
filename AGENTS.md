@@ -1,5 +1,11 @@
 # AGENTS.md — PedPsyRU
 
+## 2026-10-07: Карпов в main; текущий06а.3
+
+Draft materials PR#55 accepted mainbb2bb115245e0effaa13abbb410a130c09c125ef/run37603815117: all-six success,338baseNode22/24,294actualPG18.6,threeChrome5/5,0all; actual334blobs/parents/tree/319unchanged/old45critical verified, two new draftJSON→47critical. Scientific/fullauthorinstruction/key-primarysource/rights/publication pending; no clinical Karpov release.
+
+06а.3 static TKI registry/pinned raw form+key/current handler/metadata/exact vectors implemented locally,8newgroups. First full344/346 two failures (one captured fetch failed in web-server setup; other diagnostics truncated), unchanged address9/9 and capturedfull346/346 passed, no guessed fix. METHOD_HANDLER_VALIDATION records evidence/limits. Beforemerge fresh current-head all-six/294actualPG/threeChrome/parents/manifests required. All47critical/SQL/core/packages/workflow/ownerstand/MFA unchanged. No rights/scientific approval, norms, dynamic imported code, HTTP or persistence; continue06б aftertechnicalacceptance. Historical pending entries below remain history.
+
 ## 2026-10-07:06а.2 в main; новые материалы Карпова06е.0
 
 PR#54 accepted maindb37069509ad6db45fd6e9f576136a8fb023ef51/final7a99ea83/run37600160276 all-six success:332baseNode22/24,294actualPG18.6,триChrome5/5,0all; source/base/preview/parents/all329/314unchanged/all45critical и actualmain/tree/parents/all329 verified. Framework06а.3 staticruntime/vector verification и06бpersistence ещёне реализованы; не выдавать integrity за science.

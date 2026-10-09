@@ -1,5 +1,9 @@
 # Очередность небольших задач
 
+## Текущая очередь фазы6, 2026-10-07
+
+06а.1/#53 и06а.2/#54 приняты; материалы06е.0/#55 приняты как draft (mainbb2bb115/run37603815117 all-six/338base/294PG/threeChrome5/5). Сейчас06а.3 static TKI handler/form/key/control verification:8addressed groups/capturedfull346local passed, current-head all-six gate pending. Затем06б private library persistence with real current superadmin/MFA/short locks/CAS/mandatory audit/immutable history/backup/upgrade tests, отдельно06в API и06г editor. Karpov science/source/fullinstruction/rights/norms/publication separate, не объявлять draft пригодным участникам. Ownerstand/Selectel/realmail/PII unchanged.
+
 ## 2026-10-07:06а.2 в main; новые материалы Карпова06е.0
 
 PR#54 accepted maindb37069509ad6db45fd6e9f576136a8fb023ef51/final7a99ea83/run37600160276 all-six success:332baseNode22/24,294actualPG18.6,триChrome5/5,0all; source/base/preview/parents/all329/314unchanged/all45critical и actualmain/tree/parents/all329 verified. Framework06а.3 staticruntime/vector verification и06бpersistence ещёне реализованы; не выдавать integrity за science.
