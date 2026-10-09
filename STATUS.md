@@ -1,5 +1,11 @@
 # Состояние ПедПси
 
+## 2026-10-09: приоритет — ручной тест существующей платформы на ТКИ
+
+PR#56 integrated after all-six CI/run37607368722:346base eachNode22/24,294actualPG18.6,threeChrome5/5,0fail/cancel/skip; lineage/tree/manifests verified. Новая платформа сохраняется; legacyExcelUI и другие методики не переносятся для этого теста. Scientific review Карпова пока отложена владельцем.
+
+Launcher now supports explicit synthetic contact opt-in with validated distinct key, never enables from inherited flags or creates keys on startup.4targeted/full347local/build/types/architecture/syntax/deps passed. Separate current-head GitHub CI pending for this small patch; previous green not its acceptance. Manual owner login/full end-to-end not claimed; TKI_LOCAL_TEST.md describes generic scenario. Operational stand reports/configs/backups remain local and unpublished; no realmail/data/Selectel/newrights/scientificpublication.
+
 ## 2026-10-07: приняты материалы Карпова, текущий06а.3
 
 PR#55 ordinary merged mainbb2bb115245e0effaa13abbb410a130c09c125ef; run37603815117 all-six success,338baseNode22/24,294actualPG18.6,threeChrome5/5,0fail/cancel/skip. Source/base/preview/334blobs/319unchanged/old45critical и actualmain/parents/tree/full334 verified. Two new draft JSON→47critical. Карпов сохранён как draft, не scientific approved или clinical release.

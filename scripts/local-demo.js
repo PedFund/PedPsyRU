@@ -11,6 +11,13 @@ function validateConfig(c, realm) {
     c.user !== "pedpsy_" + realm + "_" + c.database.slice(-16) ||
     !/^[a-f0-9]{64}$/.test(c.password || "") ||
     realm === "runtime" && (!/^[A-Za-z0-9+/]{43}=$/.test(c.mfaKey || "") || Buffer.from(c.mfaKey, "base64").toString("base64") !== c.mfaKey)) throw new Error("INVALID_LOCAL_CONFIG");
+  if (realm === "runtime" && c.contactDemo !== undefined && c.contactDemo !== true && c.contactDemo !== false) throw new Error("INVALID_LOCAL_CONTACT_CONFIG");
+  if (realm === "runtime" && c.contactDemo === true) {
+    const {contactDemoKey} = require("../dist/src/bootstrap/registration-config.js");
+    const contact = contactDemoKey({PEDPSY_CONTACT_DEMO:"1",PEDPSY_CONTACT_KEY:c.contactKey,PEDPSY_MFA_KEY:c.mfaKey});
+    if (!contact) throw new Error("INVALID_LOCAL_CONTACT_CONFIG");
+    contact.fill(0);
+  }
   return c;
 }
 function readConfig(realm) {return validateConfig(JSON.parse(fs.readFileSync(path.join(directory, realm + ".json"), "utf8")), realm);}
@@ -74,7 +81,8 @@ function runtimeEnvironment(c, inherited = process.env) {
   validateConfig(c, "runtime");
   const env = Object.fromEntries(Object.entries(inherited).filter(([key]) => !/^PG|^PEDPSY_/i.test(key)));
   return {...env, PEDPSY_PG_DEMO: "1", PGHOST: c.host, PGPORT: String(c.port), PGDATABASE: c.database, PGUSER: c.user,
-    PGPASSWORD: c.password, PEDPSY_MFA_KEY: c.mfaKey};
+    PGPASSWORD: c.password, PEDPSY_MFA_KEY: c.mfaKey,
+    ...(c.contactDemo === true ? {PEDPSY_CONTACT_DEMO:"1",PEDPSY_CONTACT_KEY:c.contactKey} : {})};
 }
 async function main(command) {
   if (command === "secrets") {initializeSecrets(); return;}

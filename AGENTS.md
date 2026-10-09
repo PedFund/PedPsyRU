@@ -1,5 +1,9 @@
 # AGENTS.md — PedPsyRU
 
+## 2026-10-09: приоритет владельца — тест ТКИ
+
+Тестировать уже созданную новую платформу, не создавать другой stand/репозиторий и не переносить Excel UI. Проверку Карпова пока отложить. PR#56 accepted after all-six CI/run37607368722 (346base eachNode22/24,294actualPG18.6,threeChrome5/5,0all), source/base/preview/parents/tree/manifests verified. Новый launcher opt-in patch имеет отдельные347local tests/build/types/architecture/syntax/deps passed; собственный current-headCI обязателен доmerge. Не выдавать публичный readiness за личный вход или ручной end-to-end тест. Секреты, локальные конфигурации, отчёты об операциях и резервные копии не публиковать. TKI_LOCAL_TEST.md — общий ручной сценарий; другие методики/права/realmail/Selectel/scientificpublication не добавлять автоматически.
+
 ## 2026-10-07: Карпов в main; текущий06а.3
 
 Draft materials PR#55 accepted mainbb2bb115245e0effaa13abbb410a130c09c125ef/run37603815117: all-six success,338baseNode22/24,294actualPG18.6,threeChrome5/5,0all; actual334blobs/parents/tree/319unchanged/old45critical verified, two new draftJSON→47critical. Scientific/fullauthorinstruction/key-primarysource/rights/publication pending; no clinical Karpov release.

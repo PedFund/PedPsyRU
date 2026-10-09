@@ -1,5 +1,9 @@
 # Очередность небольших задач
 
+## Приоритет владельца2026-10-09: ручной тест ТКИ
+
+06а.3/#56 accepted after all-six CI. Далее ручной тест существующей новой платформы: личный вход→тестовый исследователь→study/groups/T0/TKI→manualgroupopening/sharedinvite→syntheticparticipant/passport/consents/30slides/results→staffview/download. Не создавать платформу/stand заново и не ждать новых методик. Launcher explicit opt-in patch347local passed, independentCIpending. Scientific review Карпова/новые права/realmail/Selectel/publication отдельно; private operational reports/configs/backups не публикуются.
+
 ## Текущая очередь фазы6, 2026-10-07
 
 06а.1/#53 и06а.2/#54 приняты; материалы06е.0/#55 приняты как draft (mainbb2bb115/run37603815117 all-six/338base/294PG/threeChrome5/5). Сейчас06а.3 static TKI handler/form/key/control verification:8addressed groups/capturedfull346local passed, current-head all-six gate pending. Затем06б private library persistence with real current superadmin/MFA/short locks/CAS/mandatory audit/immutable history/backup/upgrade tests, отдельно06в API и06г editor. Karpov science/source/fullinstruction/rights/norms/publication separate, не объявлять draft пригодным участникам. Ownerstand/Selectel/realmail/PII unchanged.
