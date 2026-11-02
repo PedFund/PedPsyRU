@@ -8,7 +8,7 @@ const {migratePostgres,grantRuntime}=require("../dist/src/adapters/postgres/migr
 const extra=[{key:"extra_context",label:"Контекст",kind:"text",required:true,max_length:40},{key:"extra_years",label:"Стаж",kind:"integer",required:false,min:-10,max:50},{key:"extra_setting",label:"Среда",kind:"single_choice",required:false,options:[{value:"school",label:"Школа"}]}];
 const full={sex:"female",age:42,city:"Synthetic town",extra_context:"Synthetic context"};
 async function identity(f,x,email="own@example.test"){
-  const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"demo-contact-1",accept_contact_notice:true};
+  const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"demo-contact-2",accept_contact_notice:true};
   await x.registration.start(x.i.invite_token,body,browser);
   const outbox=(await f.admin.query("SELECT o.id,o.token_envelope FROM pedpsy.contact_confirmation_outbox o JOIN pedpsy.registration_pending p ON p.id=o.pending_id WHERE p.study_id=$1 AND p.browser_hash=$2 AND p.status='pending'",[x.design.id,tokenHash(browser)])).rows[0];
   await x.registration.confirm(x.i.invite_token,{confirmation_token:x.vault.open(outbox.id,outbox.token_envelope)},browser);
@@ -80,7 +80,7 @@ scenario("mandatory value-free audit failure rolls back save and completion, inc
 });
 scenario("recruitment revocation preserves accepted own passport access, changed notice blocks it",async(t,f,x)=>{
   await x.invitations.revoke(x.session.token,x.design.id,x.design.groups[0].id,x.i.id,{expected_revision:0});await save(x,full);await complete(x,1);assert.equal((await x.passports.read(x.ownSession.token)).status,"completed");
-  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic changed contact notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await assert.rejects(x.passports.read(x.ownSession.token),e=>e.code==="PARTICIPATION_REQUIREMENTS_CHANGED");await noClinical(f,x);
+  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic changed contact notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);await assert.rejects(x.passports.read(x.ownSession.token),e=>e.code==="PARTICIPATION_REQUIREMENTS_CHANGED");await noClinical(f,x);
 });
 for(const kind of ["credential","group","contact","study"])scenario(kind+" change committed during row lock wait blocks current write",async(t,f,x)=>{
   const c=await f.admin.connect();let pending;const target=kind==="credential"?["participant_credentials","id",x.own.credential_id]:kind==="group"?["research_groups","id",x.design.groups[0].id]:kind==="contact"?["participant_contacts","id",x.own.contact_id]:["studies","id",x.design.id];
@@ -97,7 +97,7 @@ scenario("wall-clock expiry while waiting on profile defeats statement-time stal
 scenario("contact notice changed during policy lock wait denies stale acknowledgement without a profile",async(t,f,x)=>{
   const c=await f.admin.connect();let pending;
   try{await c.query("BEGIN");await c.query("SELECT study_id FROM pedpsy.study_contact_policies WHERE study_id=$1 FOR UPDATE",[x.design.id]);pending=save(x,full).then(value=>({value}),error=>({error}));await wait(f);
-    await c.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic policy race','synthetic_only')");await c.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await c.query("COMMIT");assert.equal((await pending).error?.code,"PARTICIPATION_REQUIREMENTS_CHANGED");
+    await c.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic policy race','synthetic_only')");await c.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);await c.query("COMMIT");assert.equal((await pending).error?.code,"PARTICIPATION_REQUIREMENTS_CHANGED");
   }finally{await c.query("ROLLBACK");c.release();if(pending)await pending;}assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_passports")).rows[0].n,"0");
 });
 scenario("nonempty completed passport full operational backup/restore retains exact data, scope and ACL",async(t,f,x)=>{

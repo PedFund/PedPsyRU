@@ -2,7 +2,7 @@
 const {test}=require("node:test"),assert=require("node:assert/strict"),{randomBytes}=require("node:crypto");
 const {postgresFixture}=require("./postgres-fixture.js"),{verifiedStaff}=require("./mfa-fixture.js"),{invitationResearcher}=require("./group-invitation-fixture.js");
 const {workspaceFixture,staffHttp,cookie,headers,origin}=require("./workspace-fixture.js");
-const body={email:"Server.HTTP.Owner@example.test",password:"synthetic server HTTP password",contact_notice_version:"demo-contact-1",accept_contact_notice:true};
+const body={email:"Server.HTTP.Owner@example.test",password:"synthetic server HTTP password",contact_notice_version:"demo-contact-2",accept_contact_notice:true};
 function scenario(name,fn){test("PostgreSQL registration HTTP: "+name,async t=>{const f=await postgresFixture({runtimePoolSize:3}),s=await verifiedStaff(f),x=await invitationResearcher(f,s),i=await x.invitations.create(x.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}),w=workspaceFixture(f,origin,{contactKey:randomBytes(32)});t.after(async()=>{await w.app.close();await f.close();});await fn(f,{...x,i,w});});}
 async function preflight(x){const r=await x.w.app.inject({url:"/api/v2/registration/preflight",headers});assert.equal(r.statusCode,200);return {...headers,cookie:cookie(r,"pedpsy_registration_demo"),"x-pedpsy-csrf":r.json().csrf,"x-pedpsy-invite":x.i.invite_token};}
 async function post(x,h,path,payload){return x.w.app.inject({method:"POST",url:"/api/v2/registration/"+path,headers:h,payload});}

@@ -3,14 +3,14 @@ const {test}=require("node:test"),assert=require("node:assert/strict"),{randomBy
 const {postgresFixture}=require("./postgres-fixture.js"),{verifiedStaff}=require("./mfa-fixture.js"),{invitationResearcher}=require("./group-invitation-fixture.js");
 const {PostgresRegistrationStart}=require("../dist/src/adapters/postgres/registration-start.js"),{ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js");
 const {tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js"),{derive,SCRYPT,equalText}=require("../storage/access.js");
-const body={email:"Demo.Owner+tag@EXAMPLE.test",password:"synthetic contact password",contact_notice_version:"demo-contact-1",accept_contact_notice:true};
+const body={email:"Demo.Owner+tag@EXAMPLE.test",password:"synthetic contact password",contact_notice_version:"demo-contact-2",accept_contact_notice:true};
 const token=()=>randomBytes(32).toString("base64url");
 async function configured(f){const s=await verifiedStaff(f),x=await invitationResearcher(f,s),i=await x.invitations.create(x.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}),vault=new ContactTokenVault(randomBytes(32));return {...x,s,i,vault,registration:new PostgresRegistrationStart(f.runtime,vault),browser:token()};}
 function scenario(name,fn){test("PostgreSQL pending registration: "+name,async t=>{const f=await postgresFixture({runtimePoolSize:2});t.after(()=>f.close());await fn(f,await configured(f));});}
 const counts=async(f,study)=>(await f.admin.query("SELECT (SELECT count(*)::integer FROM pedpsy.registration_pending WHERE study_id=$1) pending,(SELECT count(*)::integer FROM pedpsy.contact_confirmation_outbox) outbox,(SELECT count(*)::integer FROM pedpsy.participants WHERE study_id=$1) participants,(SELECT count(*)::integer FROM pedpsy.stage_enrollments WHERE study_id=$1) enrollments,(SELECT count(*)::integer FROM pedpsy.attempts WHERE study_id=$1) attempts",[study])).rows[0];
 scenario("landing is notice metadata only; no opening or enrollment/session/contact proof on GET",async(f,x)=>{
   const before=await counts(f,x.design.id),a=await x.registration.landing(x.i.invite_token),b=await x.registration.landing(x.i.invite_token);
-  assert.deepEqual(a,b);assert.deepEqual(Object.keys(a).sort(),["contact_notice","group_name","study_title"]);assert.equal(a.contact_notice.version,"demo-contact-1");assert.equal(a.contact_notice.legal_status,"synthetic_only");assert.ok(a.contact_notice.text.includes("вымышленные"));
+  assert.deepEqual(a,b);assert.deepEqual(Object.keys(a).sort(),["contact_notice","group_name","study_title"]);assert.equal(a.contact_notice.version,"demo-contact-2");assert.equal(a.contact_notice.legal_status,"synthetic_only");assert.ok(a.contact_notice.text.includes("вымышленные"));
   assert.deepEqual(await counts(f,x.design.id),before);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.group_stage_access")).rows[0].n,0);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='participants.registration.landing'",[x.design.id])).rows[0].n,2);
 });
@@ -56,7 +56,7 @@ for(const mutation of ["revocation","closure","notice"])scenario(mutation+" comm
   const pending=registration.start(x.i.invite_token,body,x.browser).then(value=>({value}),error=>({error}));await entered;
   try{if(mutation==="revocation")await x.invitations.revoke(x.session.token,x.design.id,x.design.groups[0].id,x.i.id,{expected_revision:0});
     else if(mutation==="closure")await x.studies.lifecycle(x.session.token,x.design.id,{status:"closed",expected_version:x.design.version});
-    else{await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Changed synthetic notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);}
+    else{await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Changed synthetic notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);}
   }finally{release();}
   const result=await pending;assert.equal(result.error?.status,mutation==="notice"?409:404);assert.equal((await counts(f,x.design.id)).outbox,0);assert.equal((await counts(f,x.design.id)).participants,0);
 });
@@ -72,7 +72,7 @@ scenario("runtime table/private helpers closed; pending scope and outbox recipie
 });
 scenario("metadata/live pending caps reject whole operation without hashing or truncation",async(f,x)=>{
   await f.admin.query("UPDATE pedpsy.studies SET title=repeat('x',201) WHERE id=$1",[x.design.id]);await assert.rejects(x.registration.landing(x.i.invite_token),e=>e.status===413);
-  const at=Date.now();await f.admin.query("INSERT INTO pedpsy.registration_pending(id,study_id,group_id,invitation_id,invitation_revision,browser_hash,email_key,contact_notice_version,created_at_ms,expires_at_ms) SELECT gen_random_uuid(),$1,$2,$3,0,$4,'cap'||n::text||'@example.test','demo-contact-1',$5::bigint,$5::bigint+60000 FROM generate_series(1,1000) n",[x.design.id,x.design.groups[0].id,x.i.id,tokenHash(token()),at]);
+  const at=Date.now();await f.admin.query("INSERT INTO pedpsy.registration_pending(id,study_id,group_id,invitation_id,invitation_revision,browser_hash,email_key,contact_notice_version,created_at_ms,expires_at_ms) SELECT gen_random_uuid(),$1,$2,$3,0,$4,'cap'||n::text||'@example.test','demo-contact-2',$5::bigint,$5::bigint+60000 FROM generate_series(1,1000) n",[x.design.id,x.design.groups[0].id,x.i.id,tokenHash(token()),at]);
   let hashes=0;const r=new PostgresRegistrationStart(f.runtime,x.vault,async(...args)=>{hashes++;return derive(...args);});
   await assert.rejects(r.start(x.i.invite_token,body,x.browser),e=>e.code==="REGISTRATION_LIMIT");assert.equal(hashes,0);assert.equal((await counts(f,x.design.id)).outbox,0);
 });
@@ -99,7 +99,7 @@ scenario("full pg_dump restore preserves queued token/binding/policy with separa
       await grantRuntime(c,target.runtimeRole);assert.equal(await migratePostgres(c,path.join(__dirname,"../storage/postgres")),0);
       const restored=(await c.query("SELECT p.*,o.id delivery_id,o.token_envelope FROM pedpsy.registration_pending p JOIN pedpsy.contact_confirmation_outbox o ON o.pending_id=p.id WHERE p.id=$1",[original.id])).rows[0];
       assert.ok(JSON.stringify(restored)===JSON.stringify(original),"operational backup row mismatch");assert.ok(tokenHash(x.vault.open(restored.delivery_id,restored.token_envelope))===restored.confirmation_hash,"retained-key recovery failed");
-      assert.equal((await c.query("SELECT notice_version FROM pedpsy.study_contact_policies WHERE study_id=$1",[x.design.id])).rows[0].notice_version,"demo-contact-1");
+      assert.equal((await c.query("SELECT notice_version FROM pedpsy.study_contact_policies WHERE study_id=$1",[x.design.id])).rows[0].notice_version,"demo-contact-2");
       for(const sql of ["SELECT * FROM pedpsy.registration_pending","SELECT * FROM pedpsy.contact_confirmation_outbox","SELECT pedpsy.lock_registration_invite('x')"])
         await assert.rejects(target.runtime.query(sql),e=>e.code==="42501");
       assert.equal((await c.query("SELECT count(*)::integer n FROM pg_proc p CROSS JOIN LATERAL aclexplode(coalesce(p.proacl,acldefault('f',p.proowner))) a WHERE p.pronamespace='pedpsy'::regnamespace AND a.grantee=0 AND a.privilege_type='EXECUTE'")).rows[0].n,0);

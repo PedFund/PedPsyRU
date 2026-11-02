@@ -14,7 +14,7 @@ async function configured(f){
  design=await r.studies.lifecycle(r.session.token,design.id,{status:"active",expected_version:design.version});
  const invitations=new PostgresGroupInvitations(f.runtime),invite=await invitations.create(r.session.token,design.id,design.groups[0].id,{expires_at:Date.now()+86400000});
  const vault=new ContactTokenVault(randomBytes(32)),registration=new PostgresParticipantRegistration(f.runtime,vault),browser=randomBytes(32).toString("base64url"),email="stage.discovery@example.test",password="synthetic discovery participant password";
- await registration.start(invite.invite_token,{email,password,contact_notice_version:"demo-contact-1",accept_contact_notice:true},browser);
+ await registration.start(invite.invite_token,{email,password,contact_notice_version:"demo-contact-2",accept_contact_notice:true},browser);
  const out=(await f.admin.query("SELECT o.id,o.token_envelope FROM pedpsy.contact_confirmation_outbox o JOIN pedpsy.registration_pending p ON p.id=o.pending_id WHERE p.study_id=$1 AND p.browser_hash=$2 AND p.status='pending'",[design.id,tokenHash(browser)])).rows[0];
  await registration.confirm(invite.invite_token,{confirmation_token:vault.open(out.id,out.token_envelope)},browser);
  const session=await registration.login({study_id:design.id,email,password}),identity=(await f.admin.query("SELECT c.id credential_id,c.participant_id FROM pedpsy.participant_contacts p JOIN pedpsy.participant_credentials c ON (c.study_id,c.participant_id)=(p.study_id,p.participant_id) WHERE p.study_id=$1 AND p.email_key=$2",[design.id,email])).rows[0];
@@ -37,7 +37,7 @@ scenario("opening another group stays invisible; only T1 can appear without fabr
 scenario("completed current passport and explicit study consent set readiness; optional science not required",async(t,f,x)=>{
  await open(x);const draft=await x.passports.read(x.session.token),saved=await x.passports.save(x.session.token,{schema_version:draft.schema_version,expected_revision:draft.revision,values:{sex:"female",age:30}});
  await x.passports.complete(x.session.token,{schema_version:saved.schema_version,expected_revision:saved.revision});assert.equal((await read(x)).passport_completed,true);assert.equal((await read(x)).required_consents_accepted,false);
- await x.consents.accept(x.session.token,{purpose:"study_participation",document_version:"demo-participation-1",expected_policy_revision:0,accept:true});const a=await read(x);assert.equal(a.required_consents_accepted,true);assert.equal(a.passport_completed,true);assert.equal(a.stages.length,1);assert.equal((await x.consents.read(x.session.token)).documents.find(d=>d.purpose==="secondary_research").accepted_at_ms,null);
+ await x.consents.accept(x.session.token,{purpose:"study_participation",document_version:"demo-participation-2",expected_policy_revision:0,accept:true});const a=await read(x);assert.equal(a.required_consents_accepted,true);assert.equal(a.passport_completed,true);assert.equal(a.stages.length,1);assert.equal((await x.consents.read(x.session.token)).documents.find(d=>d.purpose==="secondary_research").accepted_at_ms,null);
  const rotated=await x.registration.login({study_id:x.design.id,email:x.email,password:x.password});assert.deepEqual(await new PostgresParticipantStages(f.runtime).read(rotated.token),a);await assert.rejects(read(x),e=>e.status===401);
 });
 scenario("staff/researcher/legacy/forged scope cannot discover someone else's stages",async(t,f,x)=>{
@@ -46,12 +46,12 @@ scenario("staff/researcher/legacy/forged scope cannot discover someone else's st
 });
 scenario("revoked recruitment does not remove existing identity; current contact/policy requirements still govern",async(t,f,x)=>{
  await open(x);const before=await read(x);await x.invitations.revoke(x.r.session.token,x.design.id,x.design.groups[0].id,x.invite.id,{expected_revision:x.invite.revision});assert.deepEqual(await read(x),before);
- await x.consents.accept(x.session.token,{purpose:"study_participation",document_version:"demo-participation-1",expected_policy_revision:0,accept:true});assert.equal((await read(x)).required_consents_accepted,true);
+ await x.consents.accept(x.session.token,{purpose:"study_participation",document_version:"demo-participation-2",expected_policy_revision:0,accept:true});assert.equal((await read(x)).required_consents_accepted,true);
  await f.admin.query("INSERT INTO pedpsy.consent_documents(purpose,version,body_text) VALUES('study_participation','demo-stage-policy-2','Synthetic changed study policy')");
  await f.admin.query("UPDATE pedpsy.study_consent_policies SET participation_version='demo-stage-policy-2',revision=revision+1 WHERE study_id=$1",[x.design.id]);assert.equal((await read(x)).required_consents_accepted,false);
 });
 scenario("mandatory metadata audit failure rolls back last_seen and exposes no private values",async(t,f,x)=>{
- await read(x);const events=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE action='participants.stages.read'")).rows;assert.equal(events.length,1);assert.equal(events[0].credential_id,x.identity.credential_id);assert.equal(events[0].resource_id,x.identity.participant_id);for(const value of [x.email,x.password,x.session.token,"demo-participation-1"])assert.ok(!JSON.stringify(events).includes(value));
+ await read(x);const events=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE action='participants.stages.read'")).rows;assert.equal(events.length,1);assert.equal(events[0].credential_id,x.identity.credential_id);assert.equal(events[0].resource_id,x.identity.participant_id);for(const value of [x.email,x.password,x.session.token,"demo-participation-2"])assert.ok(!JSON.stringify(events).includes(value));
  const sessions=(await f.admin.query("SELECT * FROM pedpsy.participant_sessions WHERE token_hash=$1",[tokenHash(x.session.token)])).rows;
  await f.admin.query("CREATE FUNCTION pedpsy.synthetic_stage_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.action='participants.stages.read' THEN RAISE EXCEPTION 'synthetic stages audit failure';END IF;RETURN NEW;END $$;CREATE TRIGGER synthetic_stage_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_stage_audit_fail()");await assert.rejects(read(x),/synthetic stages audit failure/);assert.deepEqual((await f.admin.query("SELECT * FROM pedpsy.participant_sessions WHERE token_hash=$1",[tokenHash(x.session.token)])).rows,sessions);
 });
