@@ -4,7 +4,7 @@ import type {GroupInvitations, GroupInvitationRecord, GroupInvitationScope} from
 import type {AccountRole} from "../../ports/accounts.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {requireGroupInvitationManagement} from "../../ports/participant-registration-policy.js";
-import {accountTransaction, tokenHash} from "./account-transaction.js";
+import {accountTransaction, tokenHash, accountWallTime} from "./account-transaction.js";
 interface Actor {credential_id: string; user_id: string; actor_role: AccountRole; credential_version: number;
   expires_at_ms: string; mfa_verified_at_ms: string | null}
 export class PostgresGroupInvitations implements GroupInvitations {
@@ -25,7 +25,7 @@ export class PostgresGroupInvitations implements GroupInvitations {
       requireGroupInvitationManagement({realm: a.actor_role === "researcher" ? "researcher" : "staff",
         userId: a.user_id, credentialId: a.credential_id, role: a.actor_role, sessionVersion: a.credential_version,
         expiresAt: Number(a.expires_at_ms), mfaVerifiedAt: a.mfa_verified_at_ms === null ? null : Number(a.mfa_verified_at_ms)},
-        gate.scope, action, Date.now(), gate.owns);
+        gate.scope, action, await accountWallTime(c), gate.owns);
       return data;
     });
   }

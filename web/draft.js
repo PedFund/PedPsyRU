@@ -6,7 +6,7 @@
   let data,csrf=null,slideIndex=0,showMissing=false,readOnly=false,queue,finishing=false,completionPaused=false;
   el("mode-heading").textContent="Тренировочное прохождение";
   el("mode-note").textContent="Только вымышленные ответы. Восстановятся ответы и слайд, сохранение которых подтвердил сервер. Несохранённые изменения могут потеряться.";
-  el("mode-footer").textContent="ПедПси · тренировочная база · ответы и сырые результаты сохраняются";
+  el("mode-footer").textContent="МетодТест · тренировочная база · ответы и сырые результаты сохраняются";
   el("save-panel").hidden=false;el("result").hidden=true;
   el("reset-note").textContent="Ваш сохранённый черновик будет очищен: ответы удалятся, прохождение вернётся к первой паре. Завершённые протоколы не изменяются.";
   el("submit").textContent="Завершить прохождение";

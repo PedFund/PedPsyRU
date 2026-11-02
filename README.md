@@ -1,4 +1,4 @@
-# PedPsyRU
+# МетодТест
 Информационно-аналитическая платформа организации, проведения и анализа психолого-педагогических исследований
 
 **Фаза3 завершена:8из8 задач/03а–03з в main через#16–#23.** Аккаунты/реальная MFA/recovery/кабинеты/researcher invite-block/super-only roles/обе staff global raw+stored results read/download.195base(Node22/24)+80PG18.6, настоящий Chrome/JSONdownload/all6CI. [Приёмка](PHASE3_ACCEPTANCE.md), [статус](STATUS.md), [следующий конструктор04а–04з](BACKLOG.md); новая фаза пока не начата.

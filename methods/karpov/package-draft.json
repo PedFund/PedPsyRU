@@ -1,0 +1,917 @@
+{
+  "schema_version": "1.0",
+  "method_id": "reflexivity_karpov_27",
+  "package_version": "0.1.0",
+  "title": "Рефлексивность А.В. Карпова",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "owner_form",
+        "citation": "Owner-provided 27 statements and seven answer labels, 2026-10-07",
+        "url": "https://psyjournras.ru/s0205-95920000621-0-1-ru-280"
+      },
+      {
+        "id": "legacy_raw",
+        "citation": "Existing processor raw key/control regression, not independent primary verification",
+        "url": "https://cpd-program.ru/methods/rfk.htm"
+      }
+    ],
+    "missing": [
+      "instruction",
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "0.1.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "integer",
+      "min": 1,
+      "max": 7
+    }
+  ],
+  "scales": [
+    {
+      "id": "reflexivity",
+      "label": "Рефлексивность",
+      "min": 27,
+      "max": 189,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "reverse_sum",
+    "adapter_id": null,
+    "adapter_version": null,
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "all_1",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": 1
+        },
+        {
+          "item_id": "q02",
+          "value": 1
+        },
+        {
+          "item_id": "q03",
+          "value": 1
+        },
+        {
+          "item_id": "q04",
+          "value": 1
+        },
+        {
+          "item_id": "q05",
+          "value": 1
+        },
+        {
+          "item_id": "q06",
+          "value": 1
+        },
+        {
+          "item_id": "q07",
+          "value": 1
+        },
+        {
+          "item_id": "q08",
+          "value": 1
+        },
+        {
+          "item_id": "q09",
+          "value": 1
+        },
+        {
+          "item_id": "q10",
+          "value": 1
+        },
+        {
+          "item_id": "q11",
+          "value": 1
+        },
+        {
+          "item_id": "q12",
+          "value": 1
+        },
+        {
+          "item_id": "q13",
+          "value": 1
+        },
+        {
+          "item_id": "q14",
+          "value": 1
+        },
+        {
+          "item_id": "q15",
+          "value": 1
+        },
+        {
+          "item_id": "q16",
+          "value": 1
+        },
+        {
+          "item_id": "q17",
+          "value": 1
+        },
+        {
+          "item_id": "q18",
+          "value": 1
+        },
+        {
+          "item_id": "q19",
+          "value": 1
+        },
+        {
+          "item_id": "q20",
+          "value": 1
+        },
+        {
+          "item_id": "q21",
+          "value": 1
+        },
+        {
+          "item_id": "q22",
+          "value": 1
+        },
+        {
+          "item_id": "q23",
+          "value": 1
+        },
+        {
+          "item_id": "q24",
+          "value": 1
+        },
+        {
+          "item_id": "q25",
+          "value": 1
+        },
+        {
+          "item_id": "q26",
+          "value": 1
+        },
+        {
+          "item_id": "q27",
+          "value": 1
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 99
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_raw"
+        ]
+      }
+    },
+    {
+      "id": "all_7",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": 7
+        },
+        {
+          "item_id": "q02",
+          "value": 7
+        },
+        {
+          "item_id": "q03",
+          "value": 7
+        },
+        {
+          "item_id": "q04",
+          "value": 7
+        },
+        {
+          "item_id": "q05",
+          "value": 7
+        },
+        {
+          "item_id": "q06",
+          "value": 7
+        },
+        {
+          "item_id": "q07",
+          "value": 7
+        },
+        {
+          "item_id": "q08",
+          "value": 7
+        },
+        {
+          "item_id": "q09",
+          "value": 7
+        },
+        {
+          "item_id": "q10",
+          "value": 7
+        },
+        {
+          "item_id": "q11",
+          "value": 7
+        },
+        {
+          "item_id": "q12",
+          "value": 7
+        },
+        {
+          "item_id": "q13",
+          "value": 7
+        },
+        {
+          "item_id": "q14",
+          "value": 7
+        },
+        {
+          "item_id": "q15",
+          "value": 7
+        },
+        {
+          "item_id": "q16",
+          "value": 7
+        },
+        {
+          "item_id": "q17",
+          "value": 7
+        },
+        {
+          "item_id": "q18",
+          "value": 7
+        },
+        {
+          "item_id": "q19",
+          "value": 7
+        },
+        {
+          "item_id": "q20",
+          "value": 7
+        },
+        {
+          "item_id": "q21",
+          "value": 7
+        },
+        {
+          "item_id": "q22",
+          "value": 7
+        },
+        {
+          "item_id": "q23",
+          "value": 7
+        },
+        {
+          "item_id": "q24",
+          "value": 7
+        },
+        {
+          "item_id": "q25",
+          "value": 7
+        },
+        {
+          "item_id": "q26",
+          "value": 7
+        },
+        {
+          "item_id": "q27",
+          "value": 7
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 117
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_raw"
+        ]
+      }
+    },
+    {
+      "id": "all_4",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": 4
+        },
+        {
+          "item_id": "q02",
+          "value": 4
+        },
+        {
+          "item_id": "q03",
+          "value": 4
+        },
+        {
+          "item_id": "q04",
+          "value": 4
+        },
+        {
+          "item_id": "q05",
+          "value": 4
+        },
+        {
+          "item_id": "q06",
+          "value": 4
+        },
+        {
+          "item_id": "q07",
+          "value": 4
+        },
+        {
+          "item_id": "q08",
+          "value": 4
+        },
+        {
+          "item_id": "q09",
+          "value": 4
+        },
+        {
+          "item_id": "q10",
+          "value": 4
+        },
+        {
+          "item_id": "q11",
+          "value": 4
+        },
+        {
+          "item_id": "q12",
+          "value": 4
+        },
+        {
+          "item_id": "q13",
+          "value": 4
+        },
+        {
+          "item_id": "q14",
+          "value": 4
+        },
+        {
+          "item_id": "q15",
+          "value": 4
+        },
+        {
+          "item_id": "q16",
+          "value": 4
+        },
+        {
+          "item_id": "q17",
+          "value": 4
+        },
+        {
+          "item_id": "q18",
+          "value": 4
+        },
+        {
+          "item_id": "q19",
+          "value": 4
+        },
+        {
+          "item_id": "q20",
+          "value": 4
+        },
+        {
+          "item_id": "q21",
+          "value": 4
+        },
+        {
+          "item_id": "q22",
+          "value": 4
+        },
+        {
+          "item_id": "q23",
+          "value": 4
+        },
+        {
+          "item_id": "q24",
+          "value": 4
+        },
+        {
+          "item_id": "q25",
+          "value": 4
+        },
+        {
+          "item_id": "q26",
+          "value": 4
+        },
+        {
+          "item_id": "q27",
+          "value": 4
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 108
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_raw"
+        ]
+      }
+    },
+    {
+      "id": "minimum",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": 1
+        },
+        {
+          "item_id": "q02",
+          "value": 7
+        },
+        {
+          "item_id": "q03",
+          "value": 1
+        },
+        {
+          "item_id": "q04",
+          "value": 1
+        },
+        {
+          "item_id": "q05",
+          "value": 1
+        },
+        {
+          "item_id": "q06",
+          "value": 7
+        },
+        {
+          "item_id": "q07",
+          "value": 7
+        },
+        {
+          "item_id": "q08",
+          "value": 7
+        },
+        {
+          "item_id": "q09",
+          "value": 1
+        },
+        {
+          "item_id": "q10",
+          "value": 1
+        },
+        {
+          "item_id": "q11",
+          "value": 1
+        },
+        {
+          "item_id": "q12",
+          "value": 7
+        },
+        {
+          "item_id": "q13",
+          "value": 7
+        },
+        {
+          "item_id": "q14",
+          "value": 1
+        },
+        {
+          "item_id": "q15",
+          "value": 1
+        },
+        {
+          "item_id": "q16",
+          "value": 7
+        },
+        {
+          "item_id": "q17",
+          "value": 7
+        },
+        {
+          "item_id": "q18",
+          "value": 1
+        },
+        {
+          "item_id": "q19",
+          "value": 1
+        },
+        {
+          "item_id": "q20",
+          "value": 1
+        },
+        {
+          "item_id": "q21",
+          "value": 7
+        },
+        {
+          "item_id": "q22",
+          "value": 1
+        },
+        {
+          "item_id": "q23",
+          "value": 7
+        },
+        {
+          "item_id": "q24",
+          "value": 1
+        },
+        {
+          "item_id": "q25",
+          "value": 1
+        },
+        {
+          "item_id": "q26",
+          "value": 7
+        },
+        {
+          "item_id": "q27",
+          "value": 7
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 27
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_raw"
+        ]
+      }
+    },
+    {
+      "id": "maximum",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": 7
+        },
+        {
+          "item_id": "q02",
+          "value": 1
+        },
+        {
+          "item_id": "q03",
+          "value": 7
+        },
+        {
+          "item_id": "q04",
+          "value": 7
+        },
+        {
+          "item_id": "q05",
+          "value": 7
+        },
+        {
+          "item_id": "q06",
+          "value": 1
+        },
+        {
+          "item_id": "q07",
+          "value": 1
+        },
+        {
+          "item_id": "q08",
+          "value": 1
+        },
+        {
+          "item_id": "q09",
+          "value": 7
+        },
+        {
+          "item_id": "q10",
+          "value": 7
+        },
+        {
+          "item_id": "q11",
+          "value": 7
+        },
+        {
+          "item_id": "q12",
+          "value": 1
+        },
+        {
+          "item_id": "q13",
+          "value": 1
+        },
+        {
+          "item_id": "q14",
+          "value": 7
+        },
+        {
+          "item_id": "q15",
+          "value": 7
+        },
+        {
+          "item_id": "q16",
+          "value": 1
+        },
+        {
+          "item_id": "q17",
+          "value": 1
+        },
+        {
+          "item_id": "q18",
+          "value": 7
+        },
+        {
+          "item_id": "q19",
+          "value": 7
+        },
+        {
+          "item_id": "q20",
+          "value": 7
+        },
+        {
+          "item_id": "q21",
+          "value": 1
+        },
+        {
+          "item_id": "q22",
+          "value": 7
+        },
+        {
+          "item_id": "q23",
+          "value": 1
+        },
+        {
+          "item_id": "q24",
+          "value": 7
+        },
+        {
+          "item_id": "q25",
+          "value": 7
+        },
+        {
+          "item_id": "q26",
+          "value": 1
+        },
+        {
+          "item_id": "q27",
+          "value": 1
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 189
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_raw"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 132,
+      "sha256": "887761e75585f5eaa1d00d564e36417000e311d75a456fddabc2a328cbb7c155",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 13447,
+      "sha256": "f854d8d6d4ad08c2094edd7d60cd322c8fa9a905bd2b9a055806b1913937703d",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1322,
+      "sha256": "7b2e463e646fe01d4be9e82759ae7b0ecf9ddca17bd7b6190ea8493906ed53c2",
+      "media_type": "application/json"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 131,
+      "sha256": "9564fd6d577c9d9ddd3c1e28e54aabc147dcbfa841e7f2f78995c489a326f90f",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

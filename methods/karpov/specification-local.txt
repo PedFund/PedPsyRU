@@ -1,0 +1,1 @@
+Exactly27 canonical string answers1..7. Direct15 + reverse12 using8-answer. Raw range27..189. Legacy sten and level retained for synthetic local comparison only; no scientific/publication approval.

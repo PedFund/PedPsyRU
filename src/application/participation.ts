@@ -1,5 +1,5 @@
-import type {TkiRequest, TkiResponse, TkiResult} from "../ports/participation.js";
-import {calculatePinnedTki} from "../scoring/tki.js";
+import type {InstrumentRequest,InstrumentResponse,InstrumentResult} from "../ports/instruments.js";
+import {calculatePinnedInstrument} from "../scoring/instruments.js";
 import {ParticipationError} from "../ports/errors.js";
 import {validateDraft, validateRevision} from "../ports/validation.js";
 import type {ParticipantContext, UnitOfWork, StoredResult} from "../ports/participation.js";
@@ -7,11 +7,11 @@ import type {ParticipantContext, UnitOfWork, StoredResult} from "../ports/partic
 export interface ParticipationDependencies {
   readonly newId: () => string;
   readonly now: () => string;
-  readonly digest: (itemIds: readonly string[], responses: readonly TkiResponse[]) => string;
-  readonly score?: (input: TkiRequest) => TkiResult;
+  readonly digest: (itemIds: readonly string[], responses: readonly InstrumentResponse[]) => string;
+  readonly score?: (input: InstrumentRequest) => InstrumentResult;
 }
 export function createParticipationService(uow: UnitOfWork, dependencies: ParticipationDependencies) {
-  const score = dependencies.score ?? calculatePinnedTki;
+  const score = dependencies.score ?? calculatePinnedInstrument;
   return {
     read(context: ParticipantContext, id: string) {
       return uow.run(context, async ports => {
@@ -27,7 +27,7 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
         if (!state) throw new ParticipationError(404, "NOT_AVAILABLE");
         if (state.status !== "draft") throw new ParticipationError(409, "ATTEMPT_COMPLETED");
         const release = await ports.releases.getPinned(state.releaseId);
-        validateDraft(input, release.itemIds);
+        validateDraft(input, release.itemIds,release.choiceValues);
         const result = await ports.attempts.compareAndSave(id, input);
         await ports.audit.appendRequired({event: "draft_saved", resourceId: id});
         return result;

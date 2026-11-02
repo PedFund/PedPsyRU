@@ -1,0 +1,1428 @@
+{
+  "schema_version": "1.0",
+  "method_id": "fras_ru_34_gusarova_2021",
+  "package_version": "1.0.0",
+  "title": "Жизнеспособность семьи (FRAS-RU)",
+  "language": "ru",
+  "provenance": {
+    "origin": "existing_processor",
+    "sources": [
+      {
+        "id": "owner_legacy",
+        "citation": "Форма и ключ из переданной владельцем библиотеки; контроль по прежнему процессору.",
+        "url": "https://psytests.org/family/fras.html"
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "ordinal": 31,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "ordinal": 32,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "ordinal": 33,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "ordinal": 34,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Согласен"
+        },
+        {
+          "value": "4",
+          "label": "Полностью согласен"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "scale_01",
+      "label": "Семейная коммуникация и связность",
+      "min": 15,
+      "max": 60,
+      "direction": "not_specified"
+    },
+    {
+      "id": "scale_02",
+      "label": "Позитивный прогноз и решение проблем",
+      "min": 8,
+      "max": 32,
+      "direction": "not_specified"
+    },
+    {
+      "id": "scale_03",
+      "label": "Принятие и гибкость",
+      "min": 5,
+      "max": 20,
+      "direction": "not_specified"
+    },
+    {
+      "id": "scale_04",
+      "label": "Социальные ресурсы",
+      "min": 6,
+      "max": 24,
+      "direction": "not_specified"
+    },
+    {
+      "id": "scale_05",
+      "label": "Жизнеспособность семьи",
+      "min": 34,
+      "max": 136,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "legacy-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "evidence_supplied",
+    "artifact_id": "norms",
+    "applicability_artifact_id": "applicability",
+    "source_ids": [
+      "owner_legacy"
+    ]
+  },
+  "control_vectors": [
+    {
+      "id": "all_min",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        },
+        {
+          "item_id": "q29",
+          "value": "1"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "1"
+        },
+        {
+          "item_id": "q33",
+          "value": "1"
+        },
+        {
+          "item_id": "q34",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 15
+        },
+        {
+          "scale_id": "scale_02",
+          "value": 8
+        },
+        {
+          "scale_id": "scale_03",
+          "value": 5
+        },
+        {
+          "scale_id": "scale_04",
+          "value": 6
+        },
+        {
+          "scale_id": "scale_05",
+          "value": 34
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "all_max",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "4"
+        },
+        {
+          "item_id": "q02",
+          "value": "4"
+        },
+        {
+          "item_id": "q03",
+          "value": "4"
+        },
+        {
+          "item_id": "q04",
+          "value": "4"
+        },
+        {
+          "item_id": "q05",
+          "value": "4"
+        },
+        {
+          "item_id": "q06",
+          "value": "4"
+        },
+        {
+          "item_id": "q07",
+          "value": "4"
+        },
+        {
+          "item_id": "q08",
+          "value": "4"
+        },
+        {
+          "item_id": "q09",
+          "value": "4"
+        },
+        {
+          "item_id": "q10",
+          "value": "4"
+        },
+        {
+          "item_id": "q11",
+          "value": "4"
+        },
+        {
+          "item_id": "q12",
+          "value": "4"
+        },
+        {
+          "item_id": "q13",
+          "value": "4"
+        },
+        {
+          "item_id": "q14",
+          "value": "4"
+        },
+        {
+          "item_id": "q15",
+          "value": "4"
+        },
+        {
+          "item_id": "q16",
+          "value": "4"
+        },
+        {
+          "item_id": "q17",
+          "value": "4"
+        },
+        {
+          "item_id": "q18",
+          "value": "4"
+        },
+        {
+          "item_id": "q19",
+          "value": "4"
+        },
+        {
+          "item_id": "q20",
+          "value": "4"
+        },
+        {
+          "item_id": "q21",
+          "value": "4"
+        },
+        {
+          "item_id": "q22",
+          "value": "4"
+        },
+        {
+          "item_id": "q23",
+          "value": "4"
+        },
+        {
+          "item_id": "q24",
+          "value": "4"
+        },
+        {
+          "item_id": "q25",
+          "value": "4"
+        },
+        {
+          "item_id": "q26",
+          "value": "4"
+        },
+        {
+          "item_id": "q27",
+          "value": "4"
+        },
+        {
+          "item_id": "q28",
+          "value": "4"
+        },
+        {
+          "item_id": "q29",
+          "value": "4"
+        },
+        {
+          "item_id": "q30",
+          "value": "4"
+        },
+        {
+          "item_id": "q31",
+          "value": "4"
+        },
+        {
+          "item_id": "q32",
+          "value": "4"
+        },
+        {
+          "item_id": "q33",
+          "value": "4"
+        },
+        {
+          "item_id": "q34",
+          "value": "4"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 60
+        },
+        {
+          "scale_id": "scale_02",
+          "value": 32
+        },
+        {
+          "scale_id": "scale_03",
+          "value": 20
+        },
+        {
+          "scale_id": "scale_04",
+          "value": 24
+        },
+        {
+          "scale_id": "scale_05",
+          "value": 136
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "mixed",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "4"
+        },
+        {
+          "item_id": "q03",
+          "value": "3"
+        },
+        {
+          "item_id": "q04",
+          "value": "3"
+        },
+        {
+          "item_id": "q05",
+          "value": "2"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "4"
+        },
+        {
+          "item_id": "q09",
+          "value": "3"
+        },
+        {
+          "item_id": "q10",
+          "value": "3"
+        },
+        {
+          "item_id": "q11",
+          "value": "2"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "4"
+        },
+        {
+          "item_id": "q15",
+          "value": "3"
+        },
+        {
+          "item_id": "q16",
+          "value": "3"
+        },
+        {
+          "item_id": "q17",
+          "value": "2"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "4"
+        },
+        {
+          "item_id": "q21",
+          "value": "3"
+        },
+        {
+          "item_id": "q22",
+          "value": "3"
+        },
+        {
+          "item_id": "q23",
+          "value": "2"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "4"
+        },
+        {
+          "item_id": "q27",
+          "value": "3"
+        },
+        {
+          "item_id": "q28",
+          "value": "3"
+        },
+        {
+          "item_id": "q29",
+          "value": "2"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "4"
+        },
+        {
+          "item_id": "q33",
+          "value": "3"
+        },
+        {
+          "item_id": "q34",
+          "value": "3"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 38
+        },
+        {
+          "scale_id": "scale_02",
+          "value": 23
+        },
+        {
+          "scale_id": "scale_03",
+          "value": 8
+        },
+        {
+          "scale_id": "scale_04",
+          "value": 12
+        },
+        {
+          "scale_id": "scale_05",
+          "value": 81
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 19713,
+      "sha256": "890fcf628a129daec268042b8c0bb621d0ff8deb10d2233d4db9757cb7d9827a",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 5183,
+      "sha256": "10ff739f5aa1d6238ac916ca10964dcbe62647c56277d92a4d77659ffbee4fce",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 144,
+      "sha256": "7b16225f40674e9178289e551d37d2517369a9dbf190dc07c74316a19f120889",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 286,
+      "sha256": "eedd9df0e5215f249f1900179620942ee9219680302e441cb21c95a53345d9f9",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "norms",
+      "path": "norms.json",
+      "bytes": 2822,
+      "sha256": "6aa46051e1c1b4fcd318c6c6abed3b8f2168295c12725936d82e3f71bd66668b",
+      "media_type": "application/json"
+    },
+    {
+      "id": "applicability",
+      "path": "applicability.txt",
+      "bytes": 212,
+      "sha256": "23b9149c6c59dd8ec1e1eace358dae45788f7fc64cd9d54c2773d044739e3394",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

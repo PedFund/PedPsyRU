@@ -1,0 +1,1383 @@
+{
+  "schema_version": "1.0",
+  "method_id": "sspm_2020_28",
+  "package_version": "1.0.0",
+  "title": "Стиль саморегуляции поведения ССПМ-2020",
+  "language": "ru",
+  "provenance": {
+    "origin": "existing_processor",
+    "sources": [
+      {
+        "id": "legacy_key",
+        "citation": "Закреплённый ключ из переданной владельцем библиотеки и контрольный вектор прежнего процессора.",
+        "url": null
+      },
+      {
+        "id": "public_form",
+        "citation": "Русский бланк ССПМ-2020: 28 пунктов и пять вариантов ответа.",
+        "url": "https://psytests.org/emvol/sspm20-bl.html"
+      },
+      {
+        "id": "public_description",
+        "citation": "Описание методики «Стиль саморегуляции поведения — ССПМ-2020».",
+        "url": "https://psytests.org/emvol/sspm20.html"
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Неверно"
+        },
+        {
+          "value": "2",
+          "label": "Пожалуй, неверно"
+        },
+        {
+          "value": "3",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "4",
+          "label": "Пожалуй, верно"
+        },
+        {
+          "value": "5",
+          "label": "Верно"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "scale_01",
+      "label": "Планирование",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_02",
+      "label": "Моделирование",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_03",
+      "label": "Программирование",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_04",
+      "label": "Оценивание результатов",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_05",
+      "label": "Гибкость",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_06",
+      "label": "Надежность",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_07",
+      "label": "Настойчивость",
+      "min": 4,
+      "max": 20,
+      "direction": "higher"
+    },
+    {
+      "id": "scale_08",
+      "label": "Общий уровень саморегуляции",
+      "min": 28,
+      "max": 140,
+      "direction": "higher"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "legacy-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "all_min",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 12
+        },
+        {
+          "scale_id": "scale_02",
+          "value": 16
+        },
+        {
+          "scale_id": "scale_03",
+          "value": 8
+        },
+        {
+          "scale_id": "scale_04",
+          "value": 12
+        },
+        {
+          "scale_id": "scale_05",
+          "value": 4
+        },
+        {
+          "scale_id": "scale_06",
+          "value": 20
+        },
+        {
+          "scale_id": "scale_07",
+          "value": 4
+        },
+        {
+          "scale_id": "scale_08",
+          "value": 76
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "legacy_key",
+          "public_form"
+        ]
+      }
+    },
+    {
+      "id": "all_max",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "5"
+        },
+        {
+          "item_id": "q02",
+          "value": "5"
+        },
+        {
+          "item_id": "q03",
+          "value": "5"
+        },
+        {
+          "item_id": "q04",
+          "value": "5"
+        },
+        {
+          "item_id": "q05",
+          "value": "5"
+        },
+        {
+          "item_id": "q06",
+          "value": "5"
+        },
+        {
+          "item_id": "q07",
+          "value": "5"
+        },
+        {
+          "item_id": "q08",
+          "value": "5"
+        },
+        {
+          "item_id": "q09",
+          "value": "5"
+        },
+        {
+          "item_id": "q10",
+          "value": "5"
+        },
+        {
+          "item_id": "q11",
+          "value": "5"
+        },
+        {
+          "item_id": "q12",
+          "value": "5"
+        },
+        {
+          "item_id": "q13",
+          "value": "5"
+        },
+        {
+          "item_id": "q14",
+          "value": "5"
+        },
+        {
+          "item_id": "q15",
+          "value": "5"
+        },
+        {
+          "item_id": "q16",
+          "value": "5"
+        },
+        {
+          "item_id": "q17",
+          "value": "5"
+        },
+        {
+          "item_id": "q18",
+          "value": "5"
+        },
+        {
+          "item_id": "q19",
+          "value": "5"
+        },
+        {
+          "item_id": "q20",
+          "value": "5"
+        },
+        {
+          "item_id": "q21",
+          "value": "5"
+        },
+        {
+          "item_id": "q22",
+          "value": "5"
+        },
+        {
+          "item_id": "q23",
+          "value": "5"
+        },
+        {
+          "item_id": "q24",
+          "value": "5"
+        },
+        {
+          "item_id": "q25",
+          "value": "5"
+        },
+        {
+          "item_id": "q26",
+          "value": "5"
+        },
+        {
+          "item_id": "q27",
+          "value": "5"
+        },
+        {
+          "item_id": "q28",
+          "value": "5"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 12
+        },
+        {
+          "scale_id": "scale_02",
+          "value": 8
+        },
+        {
+          "scale_id": "scale_03",
+          "value": 16
+        },
+        {
+          "scale_id": "scale_04",
+          "value": 12
+        },
+        {
+          "scale_id": "scale_05",
+          "value": 20
+        },
+        {
+          "scale_id": "scale_06",
+          "value": 4
+        },
+        {
+          "scale_id": "scale_07",
+          "value": 20
+        },
+        {
+          "scale_id": "scale_08",
+          "value": 92
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "legacy_key",
+          "public_form"
+        ]
+      }
+    },
+    {
+      "id": "legacy_alternating",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "2"
+        },
+        {
+          "item_id": "q03",
+          "value": "3"
+        },
+        {
+          "item_id": "q04",
+          "value": "4"
+        },
+        {
+          "item_id": "q05",
+          "value": "5"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "2"
+        },
+        {
+          "item_id": "q08",
+          "value": "3"
+        },
+        {
+          "item_id": "q09",
+          "value": "4"
+        },
+        {
+          "item_id": "q10",
+          "value": "5"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "2"
+        },
+        {
+          "item_id": "q13",
+          "value": "3"
+        },
+        {
+          "item_id": "q14",
+          "value": "4"
+        },
+        {
+          "item_id": "q15",
+          "value": "5"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "2"
+        },
+        {
+          "item_id": "q18",
+          "value": "3"
+        },
+        {
+          "item_id": "q19",
+          "value": "4"
+        },
+        {
+          "item_id": "q20",
+          "value": "5"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "2"
+        },
+        {
+          "item_id": "q23",
+          "value": "3"
+        },
+        {
+          "item_id": "q24",
+          "value": "4"
+        },
+        {
+          "item_id": "q25",
+          "value": "5"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "2"
+        },
+        {
+          "item_id": "q28",
+          "value": "3"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 11
+        },
+        {
+          "scale_id": "scale_02",
+          "value": 12
+        },
+        {
+          "scale_id": "scale_03",
+          "value": 9
+        },
+        {
+          "scale_id": "scale_04",
+          "value": 14
+        },
+        {
+          "scale_id": "scale_05",
+          "value": 16
+        },
+        {
+          "scale_id": "scale_06",
+          "value": 13
+        },
+        {
+          "scale_id": "scale_07",
+          "value": 10
+        },
+        {
+          "scale_id": "scale_08",
+          "value": 85
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_key"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 18663,
+      "sha256": "f88039d0e9be263c1bdfd467fb1c6028f3f01c3d14b4eb6099aa84e15ccb9bbc",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 2299,
+      "sha256": "1df15b381241dbda09e38672fa2bed0bc7b45ab41611ddf537b6b098c69238b5",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 229,
+      "sha256": "0376ca1affd948695070e9cfea204ba01b6da70d9c09bea853a1108cdc287b99",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 501,
+      "sha256": "fde698e45b77110fae5ac9cbfeaf9fb5ac515210f4827150341d4d437df882c1",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

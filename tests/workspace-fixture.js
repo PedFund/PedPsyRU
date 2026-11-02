@@ -1,5 +1,7 @@
+const {methodLibraryBoundary}=require("../dist/src/bootstrap/method-library-boundary.js");
 "use strict";
-const {randomBytes,randomUUID}=require("node:crypto"),{csrfFor,equalText,validToken}=require("../storage/access.js"),{responsesDigest}=require("../storage/releases.js");
+const {researchWorkbenchBoundary}=require("../dist/src/bootstrap/research-workbench-boundary.js");
+const {randomBytes,randomUUID}=require("node:crypto"),{csrfFor,equalText,validToken}=require("../storage/access.js"),{instrumentResponsesDigest}=require("../dist/src/adapters/instrument-digest.js");
 const {createAccountApi}=require("../dist/src/application/account-api.js"),{createParticipantApi}=require("../dist/src/application/participant-api.js"),{createParticipationService}=require("../dist/src/application/participation.js");
 const {PostgresAccountAccess}=require("../dist/src/adapters/postgres/account-access.js"),{PostgresStaffMfa}=require("../dist/src/adapters/postgres/staff-mfa.js");
 const {PostgresResearcherGateway,PostgresResearcherManagement}=require("../dist/src/adapters/postgres/researchers.js"),{PostgresStaffManagement}=require("../dist/src/adapters/postgres/staff-management.js"),{PostgresStaffDiagnostics}=require("../dist/src/adapters/postgres/staff-diagnostics.js");
@@ -17,7 +19,7 @@ const {admissionBoundary}=require("../dist/src/bootstrap/admission-boundary.js")
 function workspaceFixture(f,customOrigin=origin,options={}){const vault=new MfaVault(randomBytes(32)),auth=new PostgresStaffMfa(f.runtime,vault),uow=new PostgresUnitOfWork(f.runtime);
   const account=createAccountApi({access:new PostgresAccountAccess(f.runtime),auth,researchers:new PostgresResearcherGateway(f.runtime),researcherManagement:new PostgresResearcherManagement(f.runtime),staffManagement:new PostgresStaffManagement(f.runtime),diagnostics:new PostgresStaffDiagnostics(f.runtime)},
     {forToken:csrfFor,assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-  const participant=createParticipantApi(new PostgresParticipantGateway(f.runtime,uow),createParticipationService(uow,{newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,v)=>responsesDigest(ids.map(item_id=>({item_id})),v)}));
+  const participant=createParticipantApi(new PostgresParticipantGateway(f.runtime,uow),createParticipationService(uow,{newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,v)=>instrumentResponsesDigest(ids,v)}));
   const studies=createStudyApi(new PostgresStudyConstructor(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
   const invitations=createGroupInvitationApi(new PostgresGroupInvitations(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
   const stageAccess=createStageAccessApi(new PostgresStageAccess(f.runtime),{assert:(t,c)=>{if(!validToken(t)||!equalText(c,csrfFor(t)))throw new ParticipationError(403,"CSRF_REJECTED");}});
@@ -25,7 +27,7 @@ function workspaceFixture(f,customOrigin=origin,options={}){const vault=new MfaV
   const passports=options.passports?passportBoundary(f.runtime):undefined;
   const consents=options.consents?consentBoundary(f.runtime):undefined;
   const admissions=options.admissions?admissionBoundary(f.runtime):undefined;
-  const app=createWorkspaceApp(participant,account,customOrigin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions);
+  const app=createWorkspaceApp(participant,account,customOrigin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,options.workbench?researchWorkbenchBoundary(f.runtime):undefined,options.library?methodLibraryBoundary(f.runtime):undefined);
   return {app,vault,auth,account};}
 function cookie(response,name){const list=response.headers["set-cookie"],all=Array.isArray(list)?list:[list];const found=all.find(x=>x?.startsWith(name+"="));if(!found)throw new Error("EXPECTED_COOKIE_MISSING");return found.split(";")[0];}
 async function staffHttp(f,w,role="superadministrator"){

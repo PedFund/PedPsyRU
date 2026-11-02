@@ -1,0 +1,30 @@
+"use strict";
+const {test}=require('node:test'),assert=require('node:assert/strict');const {postgresFixture}=require('./postgres-fixture.js'),{importKarpovLocal}=require('../scripts/import-karpov-local.js');
+test('PostgreSQL Karpov local release imports idempotently with pinned choices and no scientific publication',async t=>{const f=await postgresFixture();t.after(()=>f.close());const c=await f.admin.connect();try{await c.query('BEGIN');const id=await importKarpovLocal(c);assert.equal(await importKarpovLocal(c),id);await c.query('COMMIT');const r=(await c.query('SELECT * FROM pedpsy.instrument_releases WHERE id=$1',[id])).rows[0];assert.equal(r.verification_state,'legacy_checked');assert.equal(r.publication_state,'draft');assert.equal((await c.query('SELECT count(*)::integer n FROM pedpsy.release_items WHERE release_id=$1',[id])).rows[0].n,27);assert.equal((await c.query('SELECT count(*)::integer n FROM pedpsy.method_library_versions')).rows[0].n,1);}finally{c.release();}});
+
+test('PostgreSQL mixed methods: authorized enrollment, resume/CAS, exact per-release answers, completion and private results',async t=>{
+ const x=await require('./karpov-fixture.js').karpovFixture();t.after(()=>x.close());const {workspaceFixture,headers}=require('./workspace-fixture.js'),{csrfFor}=require('../storage/access.js'),{tokenHash}=require('../dist/src/adapters/postgres/account-transaction.js');
+ const w=workspaceFixture(x.f,undefined,{workbench:true,admissions:true,passports:true,consents:true});t.after(()=>w.app.close());const h={...headers,cookie:'pedpsy_v2_demo='+x.session.token,'x-pedpsy-csrf':csrfFor(x.session.token)};
+ const url=id=>'/api/v2/participant/attempts/'+id;
+ let response=await w.app.inject({url:url(x.karpov)+'/form',headers:h});assert.equal(response.statusCode,200);const form=response.json();assert.equal(form.items.length,27);assert.equal(form.items[0].options.length,7);assert.match(form.title,/Карпов/);assert.equal(JSON.stringify(form).includes('stenTable'),false);
+ assert.equal((await w.app.inject({url:url(x.tki)+'/form',headers:h})).json().items.length,30);
+ const answers=form.items.map(i=>({item_id:i.id,value:'4'}));
+ const save=(id,revision,values)=>w.app.inject({method:'PUT',url:url(id)+'/draft',headers:h,payload:{expected_revision:revision,current_item_id:'q01',responses:values}});
+ assert.equal((await save(x.karpov,0,[{item_id:'q01',value:'A'}])).statusCode,400);assert.equal((await save(x.karpov,0,[{item_id:'q01',value:4}])).statusCode,400);assert.equal((await save(x.tki,0,[{item_id:'q01',value:'4'}])).statusCode,400);
+ assert.equal((await save(x.karpov,0,answers.slice(0,3))).statusCode,200);assert.deepEqual((await w.app.inject({url:url(x.karpov),headers:h})).json().responses,answers.slice(0,3));assert.equal((await save(x.karpov,0,answers)).statusCode,409);
+ assert.equal((await w.app.inject({method:'POST',url:url(x.karpov)+'/complete',headers:h,payload:{expected_revision:1}})).statusCode,422);
+ await assert.rejects(x.f.withSession(c=>c.query("UPDATE pedpsy.responses SET value='A' WHERE attempt_id=$1 AND item_id='q01'",[x.karpov]),tokenHash(x.session.token)),e=>e.code==='42501');
+ await assert.rejects(x.f.admin.query("UPDATE pedpsy.responses SET value='A' WHERE attempt_id=$1 AND item_id='q01'",[x.karpov]),e=>e.code==='23514');
+ await assert.rejects(x.f.withSession(c=>c.query("INSERT INTO pedpsy.responses(study_id,attempt_id,release_id,item_id,value) VALUES($1,$2,$3,'q01','4')",[x.d.id,x.tki,x.f.seed.release_id]),tokenHash(x.session.token)),e=>e.code==='23514');
+ assert.equal((await w.app.inject({url:url(x.karpov)+'/form',headers:{...h,cookie:'pedpsy_v2_demo='+x.f.raw}})).statusCode,404);
+ await x.f.admin.query("CREATE FUNCTION pedpsy.synthetic_karpov_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic audit failed'; END $$;CREATE TRIGGER synthetic_karpov_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_karpov_audit_fail()");
+ assert.equal((await save(x.karpov,1,answers)).statusCode,500);assert.equal((await x.f.admin.query('SELECT revision FROM pedpsy.attempts WHERE id=$1',[x.karpov])).rows[0].revision,'1');await x.f.admin.query('DROP TRIGGER synthetic_karpov_audit_fail ON pedpsy.access_audit_events');
+ assert.equal((await save(x.karpov,1,answers)).statusCode,200);response=await w.app.inject({method:'POST',url:url(x.karpov)+'/complete',headers:h,payload:{expected_revision:2}});assert.equal(response.statusCode,200,JSON.stringify(response.json()));const result=response.json();assert.deepEqual(result.measures.map(m=>m.value),[108,3]);assert.equal(result.classifications[0].value,'низкий');assert.equal(JSON.stringify(result).includes('key_digest'),false);
+ assert.deepEqual((await w.app.inject({url:url(x.karpov)+'/result',headers:h})).json(),result);assert.deepEqual((await w.app.inject({method:'POST',url:url(x.karpov)+'/complete',headers:h,payload:{expected_revision:2}})).json(),result);assert.equal((await save(x.karpov,3,answers)).statusCode,409);
+ assert.equal((await w.app.inject({url:url(x.karpov)+'/result',headers:{...h,cookie:'pedpsy_v2_demo='+x.r.session.token}})).statusCode,401);
+ assert.equal((await x.store.progress(x.r.session.token,x.d.id)).rows[0].status,'in_progress');
+ const tki=Array.from({length:30},(_,i)=>({item_id:'q'+String(i+1).padStart(2,'0'),value:'A'}));assert.equal((await save(x.tki,0,tki)).statusCode,200);assert.equal((await w.app.inject({method:'POST',url:url(x.tki)+'/complete',headers:h,payload:{expected_revision:1}})).statusCode,200);
+ const progress=(await x.store.progress(x.r.session.token,x.d.id)).rows[0];assert.equal(progress.status,'completed');assert.deepEqual(Object.keys(progress).sort(),['email','group_id','participant_id','stage_id','status']);
+ await assert.rejects(x.f.admin.query("UPDATE pedpsy.responses SET value='5' WHERE attempt_id=$1",[x.karpov]),e=>e.code==='23514');
+ assert.equal((await x.f.admin.query('SELECT count(*)::int n FROM pedpsy.attempt_results WHERE attempt_id=$1',[x.karpov])).rows[0].n,1);
+});

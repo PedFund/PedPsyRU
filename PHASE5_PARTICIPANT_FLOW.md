@@ -143,4 +143,4 @@ Email разных исследований не является основан
 - [Qualtrics: общая ссылка](https://www.qualtrics.com/support/survey-platform/distributions-module/web-distribution/anonymous-link/) и [персональные email-приглашения](https://www.qualtrics.com/support/survey-platform/distributions-module/email-distribution/emails-overview/). Наша общая групповая ссылка с обязательной индивидуальной регистрацией не называется анонимным исследованием.
 - [OWASP: подтверждение email](https://cheatsheetseries.owasp.org/cheatsheets/Email_Validation_and_Verification_Cheat_Sheet.html) и [восстановление пароля](https://cheatsheetseries.owasp.org/cheatsheets/Forgot_Password_Cheat_Sheet.html).
 
-Сценарий ПедПси — принятое владельцем проектное решение, не утверждение о точном поведении этих внешних продуктов.
+Сценарий МетодТест — принятое владельцем проектное решение, не утверждение о точном поведении этих внешних продуктов.

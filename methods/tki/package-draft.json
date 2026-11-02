@@ -1,0 +1,1032 @@
+{
+  "schema_version": "1.0",
+  "method_id": "tki_ru_30_pairs",
+  "package_version": "1.0.0",
+  "title": "Тест Томаса—Килманна, TKI",
+  "language": "ru",
+  "provenance": {
+    "origin": "existing_processor",
+    "sources": [
+      {
+        "id": "regression",
+        "citation": "Existing synthetic TKI control vectors, not independent scientific proof",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "0.1.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Иногда я предоставляю возможность другим взять на себя ответственность за решение проблемы."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь подчеркнуть те стороны проблемы, по которым мы согласны друг с другом, а не обсуждать вопросы, по которым у нас согласия нет."
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь найти компромиссное решение."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь заниматься как своими проблемами, так и проблемами партнера."
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Обычно я настойчив/настойчива в достижении своих целей."
+        },
+        {
+          "value": "B",
+          "label": "Я мог/могла бы попытаться успокоить эмоции партнера, чтобы сохранить наши отношения."
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь найти компромиссное решение."
+        },
+        {
+          "value": "B",
+          "label": "Иногда я жертвую своими собственными интересами ради интересов другого человека."
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "В ходе выработки решения проблемы я обязательно обращаюсь ко всем партнерам за помощью."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь сделать всё, что необходимо, чтобы избежать ненужного обострения ситуации."
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь избежать возникновения неприятностей для себя."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь отстоять свою позицию."
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь отложить решение спорного для меня вопроса, чтобы получить некоторое время на обдумывание."
+        },
+        {
+          "value": "B",
+          "label": "Я уступаю по некоторым пунктам в обмен на уступки в других вопросах."
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Обычно я настойчив/настойчива в достижении своих целей."
+        },
+        {
+          "value": "B",
+          "label": "Я в открытую стараюсь определить все проблемы и спорные вопросы."
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я полагаю, что разногласия не всегда настолько значимы, чтобы о них беспокоиться."
+        },
+        {
+          "value": "B",
+          "label": "Я предпринимаю усилия, чтобы добиться своего."
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я настойчив/настойчива в достижении своих целей."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь найти компромиссное решение."
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я в открытую стараюсь определить все проблемы и спорные вопросы."
+        },
+        {
+          "value": "B",
+          "label": "Я мог/могла бы попытаться успокоить эмоции партнера, чтобы сохранить наши отношения."
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Иногда я избегаю занимать позиции, которые могли бы вызвать споры."
+        },
+        {
+          "value": "B",
+          "label": "Я позволю партнеру сохранить часть своих позиций, если он позволит мне сделать то же самое."
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я предлагаю договориться."
+        },
+        {
+          "value": "B",
+          "label": "Я настаиваю, чтобы мои требования были выполнены."
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я высказываю партнеру свои предложения и интересуюсь его предложениями."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь продемонстрировать партнеру логику и выгоды моей позиции."
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я мог/могла бы попытаться успокоить эмоции партнера, чтобы сохранить наши отношения."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь сделать всё, что необходимо, чтобы избежать обострения ситуации."
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь не обижать партнеров."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь убедить партнера в достоинствах моей позиции."
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Обычно я настойчив/настойчива в достижении своих целей."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь сделать всё, что необходимо, чтобы избежать ненужного обострения ситуации."
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Если это сделает другого человека счастливее, я мог/могла бы позволить ему сохранить свое мнение."
+        },
+        {
+          "value": "B",
+          "label": "Я позволю партнеру сохранить часть своих позиций, если он позволит мне сделать то же самое."
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я в открытую пытаюсь определить все проблемы и спорные вопросы."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь отложить решение спорного для меня вопроса, чтобы получить некоторое время на обдумывание."
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я стараюсь незамедлительно преодолевать наши разногласия."
+        },
+        {
+          "value": "B",
+          "label": "Я пытаюсь найти привлекательное для обеих сторон сочетание выигрышей и потерь."
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Перед переговорами я пытаюсь быть внимательным/внимательной к пожеланиям партнера."
+        },
+        {
+          "value": "B",
+          "label": "Я всегда склоняюсь к прямому обсуждению проблемы."
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь найти позицию, которая находится посредине между моей позицией и точкой зрения другого человека."
+        },
+        {
+          "value": "B",
+          "label": "Я настаиваю на выполнении моих пожеланий."
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я очень часто бываю озабочен/озабочена тем, чтобы были удовлетворены все наши пожелания."
+        },
+        {
+          "value": "B",
+          "label": "Иногда я предоставляю возможность другим взять на себя ответственность за решение проблемы."
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Если позиция другого человека кажется ему очень важной, я попытаюсь пойти навстречу его пожеланиям."
+        },
+        {
+          "value": "B",
+          "label": "Я стараюсь убедить другого прийти к компромиссу."
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь продемонстрировать партнеру логику и выгоды моей позиции."
+        },
+        {
+          "value": "B",
+          "label": "Перед переговорами я пытаюсь быть внимательным/внимательной к пожеланиям партнера."
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я предлагаю договориться."
+        },
+        {
+          "value": "B",
+          "label": "Я почти всегда бываю озабочен/озабочена тем, чтобы были удовлетворены все наши пожелания."
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Иногда я избегаю занимать позиции, которые могли бы вызвать споры."
+        },
+        {
+          "value": "B",
+          "label": "Если это сделает другого человека счастливее, я мог/могла бы позволить ему сохранить свое мнение."
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Обычно я настойчив/настойчива в достижении своих целей."
+        },
+        {
+          "value": "B",
+          "label": "В процессе поиска решения проблемы я обычно обращаюсь ко всем партнерам за помощью."
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я предлагаю договориться."
+        },
+        {
+          "value": "B",
+          "label": "Я полагаю, что разногласия не всегда настолько значимы, чтобы о них беспокоиться."
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "A",
+          "label": "Я пытаюсь не обижать партнеров."
+        },
+        {
+          "value": "B",
+          "label": "Я всегда работаю над проблемой совместно с партнером для того, чтобы мы могли ее разрешить."
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "competing",
+      "label": "Соперничество",
+      "min": 0,
+      "max": 12,
+      "direction": "not_specified"
+    },
+    {
+      "id": "collaborating",
+      "label": "Сотрудничество",
+      "min": 0,
+      "max": 12,
+      "direction": "not_specified"
+    },
+    {
+      "id": "compromising",
+      "label": "Компромисс",
+      "min": 0,
+      "max": 12,
+      "direction": "not_specified"
+    },
+    {
+      "id": "avoiding",
+      "label": "Избегание",
+      "min": 0,
+      "max": 12,
+      "direction": "not_specified"
+    },
+    {
+      "id": "accommodating",
+      "label": "Приспособление",
+      "min": 0,
+      "max": 12,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "forced_choice",
+    "adapter_id": "tki-contract",
+    "adapter_version": "0.3.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "all_a",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "A"
+        },
+        {
+          "item_id": "q02",
+          "value": "A"
+        },
+        {
+          "item_id": "q03",
+          "value": "A"
+        },
+        {
+          "item_id": "q04",
+          "value": "A"
+        },
+        {
+          "item_id": "q05",
+          "value": "A"
+        },
+        {
+          "item_id": "q06",
+          "value": "A"
+        },
+        {
+          "item_id": "q07",
+          "value": "A"
+        },
+        {
+          "item_id": "q08",
+          "value": "A"
+        },
+        {
+          "item_id": "q09",
+          "value": "A"
+        },
+        {
+          "item_id": "q10",
+          "value": "A"
+        },
+        {
+          "item_id": "q11",
+          "value": "A"
+        },
+        {
+          "item_id": "q12",
+          "value": "A"
+        },
+        {
+          "item_id": "q13",
+          "value": "A"
+        },
+        {
+          "item_id": "q14",
+          "value": "A"
+        },
+        {
+          "item_id": "q15",
+          "value": "A"
+        },
+        {
+          "item_id": "q16",
+          "value": "A"
+        },
+        {
+          "item_id": "q17",
+          "value": "A"
+        },
+        {
+          "item_id": "q18",
+          "value": "A"
+        },
+        {
+          "item_id": "q19",
+          "value": "A"
+        },
+        {
+          "item_id": "q20",
+          "value": "A"
+        },
+        {
+          "item_id": "q21",
+          "value": "A"
+        },
+        {
+          "item_id": "q22",
+          "value": "A"
+        },
+        {
+          "item_id": "q23",
+          "value": "A"
+        },
+        {
+          "item_id": "q24",
+          "value": "A"
+        },
+        {
+          "item_id": "q25",
+          "value": "A"
+        },
+        {
+          "item_id": "q26",
+          "value": "A"
+        },
+        {
+          "item_id": "q27",
+          "value": "A"
+        },
+        {
+          "item_id": "q28",
+          "value": "A"
+        },
+        {
+          "item_id": "q29",
+          "value": "A"
+        },
+        {
+          "item_id": "q30",
+          "value": "A"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "competing",
+          "value": 6
+        },
+        {
+          "scale_id": "collaborating",
+          "value": 6
+        },
+        {
+          "scale_id": "compromising",
+          "value": 6
+        },
+        {
+          "scale_id": "avoiding",
+          "value": 6
+        },
+        {
+          "scale_id": "accommodating",
+          "value": 6
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "regression"
+        ]
+      }
+    },
+    {
+      "id": "all_b",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "B"
+        },
+        {
+          "item_id": "q02",
+          "value": "B"
+        },
+        {
+          "item_id": "q03",
+          "value": "B"
+        },
+        {
+          "item_id": "q04",
+          "value": "B"
+        },
+        {
+          "item_id": "q05",
+          "value": "B"
+        },
+        {
+          "item_id": "q06",
+          "value": "B"
+        },
+        {
+          "item_id": "q07",
+          "value": "B"
+        },
+        {
+          "item_id": "q08",
+          "value": "B"
+        },
+        {
+          "item_id": "q09",
+          "value": "B"
+        },
+        {
+          "item_id": "q10",
+          "value": "B"
+        },
+        {
+          "item_id": "q11",
+          "value": "B"
+        },
+        {
+          "item_id": "q12",
+          "value": "B"
+        },
+        {
+          "item_id": "q13",
+          "value": "B"
+        },
+        {
+          "item_id": "q14",
+          "value": "B"
+        },
+        {
+          "item_id": "q15",
+          "value": "B"
+        },
+        {
+          "item_id": "q16",
+          "value": "B"
+        },
+        {
+          "item_id": "q17",
+          "value": "B"
+        },
+        {
+          "item_id": "q18",
+          "value": "B"
+        },
+        {
+          "item_id": "q19",
+          "value": "B"
+        },
+        {
+          "item_id": "q20",
+          "value": "B"
+        },
+        {
+          "item_id": "q21",
+          "value": "B"
+        },
+        {
+          "item_id": "q22",
+          "value": "B"
+        },
+        {
+          "item_id": "q23",
+          "value": "B"
+        },
+        {
+          "item_id": "q24",
+          "value": "B"
+        },
+        {
+          "item_id": "q25",
+          "value": "B"
+        },
+        {
+          "item_id": "q26",
+          "value": "B"
+        },
+        {
+          "item_id": "q27",
+          "value": "B"
+        },
+        {
+          "item_id": "q28",
+          "value": "B"
+        },
+        {
+          "item_id": "q29",
+          "value": "B"
+        },
+        {
+          "item_id": "q30",
+          "value": "B"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "competing",
+          "value": 6
+        },
+        {
+          "scale_id": "collaborating",
+          "value": 6
+        },
+        {
+          "scale_id": "compromising",
+          "value": 6
+        },
+        {
+          "scale_id": "avoiding",
+          "value": 6
+        },
+        {
+          "scale_id": "accommodating",
+          "value": 6
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "regression"
+        ]
+      }
+    },
+    {
+      "id": "alternating",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "A"
+        },
+        {
+          "item_id": "q02",
+          "value": "B"
+        },
+        {
+          "item_id": "q03",
+          "value": "A"
+        },
+        {
+          "item_id": "q04",
+          "value": "B"
+        },
+        {
+          "item_id": "q05",
+          "value": "A"
+        },
+        {
+          "item_id": "q06",
+          "value": "B"
+        },
+        {
+          "item_id": "q07",
+          "value": "A"
+        },
+        {
+          "item_id": "q08",
+          "value": "B"
+        },
+        {
+          "item_id": "q09",
+          "value": "A"
+        },
+        {
+          "item_id": "q10",
+          "value": "B"
+        },
+        {
+          "item_id": "q11",
+          "value": "A"
+        },
+        {
+          "item_id": "q12",
+          "value": "B"
+        },
+        {
+          "item_id": "q13",
+          "value": "A"
+        },
+        {
+          "item_id": "q14",
+          "value": "B"
+        },
+        {
+          "item_id": "q15",
+          "value": "A"
+        },
+        {
+          "item_id": "q16",
+          "value": "B"
+        },
+        {
+          "item_id": "q17",
+          "value": "A"
+        },
+        {
+          "item_id": "q18",
+          "value": "B"
+        },
+        {
+          "item_id": "q19",
+          "value": "A"
+        },
+        {
+          "item_id": "q20",
+          "value": "B"
+        },
+        {
+          "item_id": "q21",
+          "value": "A"
+        },
+        {
+          "item_id": "q22",
+          "value": "B"
+        },
+        {
+          "item_id": "q23",
+          "value": "A"
+        },
+        {
+          "item_id": "q24",
+          "value": "B"
+        },
+        {
+          "item_id": "q25",
+          "value": "A"
+        },
+        {
+          "item_id": "q26",
+          "value": "B"
+        },
+        {
+          "item_id": "q27",
+          "value": "A"
+        },
+        {
+          "item_id": "q28",
+          "value": "B"
+        },
+        {
+          "item_id": "q29",
+          "value": "A"
+        },
+        {
+          "item_id": "q30",
+          "value": "B"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "competing",
+          "value": 7
+        },
+        {
+          "scale_id": "collaborating",
+          "value": 9
+        },
+        {
+          "scale_id": "compromising",
+          "value": 7
+        },
+        {
+          "scale_id": "avoiding",
+          "value": 4
+        },
+        {
+          "scale_id": "accommodating",
+          "value": 3
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "regression"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 25672,
+      "sha256": "b7389aefe2282e7a62d10c5379449e2dc035cb96d28f26047cdeceda5f5ac6fc",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1378,
+      "sha256": "d8321c9a01fa6c9cdfddca69702c79264524406f52bfe197813bd89805000afb",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 83,
+      "sha256": "cb47cc41d40b9f582fd22c4f4ec8aa225ea35c564d10fd6e2bfde3df6b692de0",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 61,
+      "sha256": "34ccfc6cd06124b2623d56ceb36b7e65451a802ab3d0aa7dfc835d04b4fd5095",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

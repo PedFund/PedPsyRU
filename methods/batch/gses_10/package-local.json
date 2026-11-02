@@ -1,0 +1,508 @@
+{
+  "schema_version": "1.0",
+  "method_id": "gses_10",
+  "package_version": "1.0.0",
+  "title": "Общая самоэффективность (GSES)",
+  "language": "ru",
+  "provenance": {
+    "origin": "existing_processor",
+    "sources": [
+      {
+        "id": "legacy_key",
+        "citation": "Закреплённый суммарный ключ и контрольный вектор из переданной владельцем библиотеки.",
+        "url": null
+      },
+      {
+        "id": "official_russian_form",
+        "citation": "Официальная русская адаптация General Self-Efficacy Scale: В. Ромек, Р. Шварцер, М. Ерусалем, 1996.",
+        "url": "https://userpage.fu-berlin.de/~health/russian.htm"
+      },
+      {
+        "id": "official_scale_page",
+        "citation": "Официальная страница General Self-Efficacy Scale и перечень языковых версий.",
+        "url": "https://userpage.fu-berlin.de/~health/selfscal.htm"
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Абсолютно неверно"
+        },
+        {
+          "value": "2",
+          "label": "Едва ли это верно"
+        },
+        {
+          "value": "3",
+          "label": "Скорее всего — верно"
+        },
+        {
+          "value": "4",
+          "label": "Совершенно верно"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "scale_01",
+      "label": "Общая самоэффективность",
+      "min": 10,
+      "max": 40,
+      "direction": "higher"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "legacy-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "all_min",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 10
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "legacy_key",
+          "official_russian_form"
+        ]
+      }
+    },
+    {
+      "id": "all_max",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "4"
+        },
+        {
+          "item_id": "q02",
+          "value": "4"
+        },
+        {
+          "item_id": "q03",
+          "value": "4"
+        },
+        {
+          "item_id": "q04",
+          "value": "4"
+        },
+        {
+          "item_id": "q05",
+          "value": "4"
+        },
+        {
+          "item_id": "q06",
+          "value": "4"
+        },
+        {
+          "item_id": "q07",
+          "value": "4"
+        },
+        {
+          "item_id": "q08",
+          "value": "4"
+        },
+        {
+          "item_id": "q09",
+          "value": "4"
+        },
+        {
+          "item_id": "q10",
+          "value": "4"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 40
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "legacy_key",
+          "official_russian_form"
+        ]
+      }
+    },
+    {
+      "id": "legacy_alternating",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "2"
+        },
+        {
+          "item_id": "q03",
+          "value": "3"
+        },
+        {
+          "item_id": "q04",
+          "value": "4"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "2"
+        },
+        {
+          "item_id": "q07",
+          "value": "3"
+        },
+        {
+          "item_id": "q08",
+          "value": "4"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "2"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "scale_01",
+          "value": 23
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "legacy_key"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 6582,
+      "sha256": "eba61665378407e75315dd15f447b75b459105e006d8f0bb2bbc0f6524aa8472",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 487,
+      "sha256": "4a89eab90be1a236a695b22a0f995d409cbf7842de5924de4f9737367fc3380a",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 157,
+      "sha256": "05125e16fc06749efa688f0394f1eff48072a7280bd92cf0fcdc05236b9bdfca",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 360,
+      "sha256": "6983929be02e1d255a1578908fecf21a4073ef6f4ff390ef4d52c35cb777de3a",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

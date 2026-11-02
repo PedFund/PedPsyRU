@@ -1,5 +1,29 @@
 # Зависимости, архитектурные проверки и безопасность
 
+## 2026-10-29: кабинет исследователя
+
+Новое прямое разрешение владельца ограничено собственным исследованием: исследователь читает email и оперативный статус прохождения, без паспортных значений/ответов/баллов. Отдельные fixedSQL проверяют текущую исследовательскую identity и собственное членство; runtime не получает прямого доступа к таблицам контактов, истории анкет или очереди. Логистические счётчики не являются научными агрегатами. Напоминания — только синтетическая локальная очередь@example.test, без реального транспорта; завершившие/выбывшие исключаются, unopened stage запрещён, сутки cooldown/idempotent request/часовой cap, обязательный metadata audit.
+
+История анкет и закреплённая основа прохождений неизменяемы. Новые групповые поля не обходятся через старый адрес паспортички. Проверки времени аккаунта/MFA используют авторитетный wall clock базы, поскольку диагностирован реальный6мс PG/Node skew; clock tolerance и ослабление expiry/MFA не добавлены. См.RESEARCHER_WORKBENCH.md для схемы/тестов/границ. Нормы, scoring, ключи, формаТКИ, scientificpublication, внешний mail и Selectel не изменены. Все существующие обязательные CI gates сохраняются.
+
+
+## 2026-10-29: исправление уязвимостей npm
+
+Обновления сохраняют существующие основные версии и утвержденный состав прямых пакетов:
+
+| Пакет | Было | Стало | Причина |
+|---|---|---|---|
+| fastify | 5.12.5 | 5.12.7 | GHSA-389g-gv7q-r4x8: исправление проверки имён HTTP-заголовков |
+| fast-uri (под ajv) | 3.1.8 | 3.1.9 | Исправления схемы URI, нормализации путей и host |
+| fast-uri | 4.2.1 | 4.2.3 | Те же исправления в совместимой линии 4.x |
+
+Источники: [Fastify advisory](https://github.com/advisories/GHSA-389g-gv7q-r4x8), [fast-uri scheme decoding](https://github.com/advisories/GHSA-w74x-v6f9-j3xg), [path normalization](https://github.com/advisories/GHSA-xhq7-xmqj-769h), [host canonicalization](https://github.com/advisories/GHSA-wjr9-j795-jxcr), [suffix scheme injection](https://github.com/advisories/GHSA-333x-w4r6-6crp).
+
+До обновления npm audit показывал два уязвимых пакета (fast-uri moderate, fastify low); после чистого npm ci — 0. Все npm resolved по-прежнему registry.npmjs.org, SHA-512 integrity закреплены, лицензии Fastify MIT и fast-uri BSD-3-Clause сохранены, install scripts отсутствуют. Проверка зависимости/архитектуры/синтаксиса/типов, сборка и 347 локальных тестов прошли на Node22.17.1 / Windows при последовательном выполнении тестовых файлов. Другие записи lockfile и остальные прямые версии не изменены. npm audit fix --force, overrides и ослабление проверок не применялись.
+
+Это локальная проверка обновления, а не полный аудит или приёмка GitHub CI. Перед merge сохраняется обязательный current-head all-six gate, включая реальный PostgreSQL и браузерные E2E. Исторические результаты и реестры ниже относятся к прежним коммитам.
+
+
 ## 2026-10-07: завершающий 05з — приёмка фазы5
 
 Фаза5/05а–05з реализована:8 основных блоков; runtime#34–#51 в main. [PHASE5_ACCEPTANCE.md](PHASE5_ACCEPTANCE.md) — итоговый сценарий, actual suites/гонки/backup/upgrade/матрица и ограничения. Последний accepted#51 main `5b1f7ea014f9f738b1e376549c607c5c7a1a6d08`, head `f6046181db03822c08cca857723d45d4b1727982` / [run37589156038](https://github.com/PedFund/PedPsyRU/actions/runs/37589156038):all-six success;313base Node22/24,294actualPG18.6,триextraChrome5/5,0fail/cancel/skip. Source/base/preview/parents/all315/298unchanged/43critical+exactone-package exception и actualmain parents/tree/all315 проверены. UI#50/mainae2fd073 тоже принят, не pending. Historical statements below сохранены.

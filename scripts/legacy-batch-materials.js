@@ -1,0 +1,4 @@
+'use strict';
+const fs=require('node:fs'),path=require('node:path'),root=path.resolve(__dirname,'..'),{entries}=require('../core/legacy-batch-data.js');
+function legacyBatchMaterials(){return entries.map(m=>{const folder=path.join(root,'methods/batch',m.id);const load=f=>fs.readFileSync(path.join(folder,f));const pkg=JSON.parse(load('package-local.json'));const files=[['form','form-local.json','form.json'],['key','key-local.json','key.json'],['instruction','instruction-local.txt','instruction.txt'],['specification','specification-local.txt','specification.txt']];if(m.hasNorms)files.push(['norms','norms-local.json','norms.json'],['applicability','norm-applicability.txt','applicability.txt']);return {pkg,contents:files.map(([id,file,artifactPath])=>({id,path:artifactPath,bytes:load(file)}))};});}
+module.exports={legacyBatchMaterials};

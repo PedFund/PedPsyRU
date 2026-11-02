@@ -1,0 +1,748 @@
+{
+  "schema_version": "1.0",
+  "method_id": "umics_pi_ru_13",
+  "package_version": "1.0.0",
+  "title": "Родительская идентичность (U-MICS-PI)",
+  "language": "ru",
+  "provenance": {
+    "origin": "existing_processor",
+    "sources": [
+      {
+        "id": "owner_legacy",
+        "citation": "Бланк и ключ из библиотеки владельца; адаптация Ю. В. Борисенко, 2021, DOI: 10.14529/jpps210202.",
+        "url": "https://jpps.susu.ru/jpps/ru/article/view/686"
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "совершенно неверно"
+        },
+        {
+          "value": "2",
+          "label": "неверно"
+        },
+        {
+          "value": "3",
+          "label": "в чем-то верно, в чем-то неверно"
+        },
+        {
+          "value": "4",
+          "label": "верно"
+        },
+        {
+          "value": "5",
+          "label": "совершенно верно"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "commitment_sum",
+      "label": "Обязательство – сумма",
+      "min": 5,
+      "max": 25,
+      "direction": "not_specified"
+    },
+    {
+      "id": "commitment_mean",
+      "label": "Обязательство – среднее",
+      "min": 1,
+      "max": 5,
+      "direction": "not_specified"
+    },
+    {
+      "id": "exploration_sum",
+      "label": "Углубленное исследование – сумма",
+      "min": 5,
+      "max": 25,
+      "direction": "not_specified"
+    },
+    {
+      "id": "exploration_mean",
+      "label": "Углубленное исследование – среднее",
+      "min": 1,
+      "max": 5,
+      "direction": "not_specified"
+    },
+    {
+      "id": "reconsideration_sum",
+      "label": "Пересмотр обязательства – сумма",
+      "min": 3,
+      "max": 15,
+      "direction": "not_specified"
+    },
+    {
+      "id": "reconsideration_mean",
+      "label": "Пересмотр обязательства – среднее",
+      "min": 1,
+      "max": 5,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "umics-local",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "all_one",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "commitment_sum",
+          "value": 5
+        },
+        {
+          "scale_id": "commitment_mean",
+          "value": 1
+        },
+        {
+          "scale_id": "exploration_sum",
+          "value": 5
+        },
+        {
+          "scale_id": "exploration_mean",
+          "value": 1
+        },
+        {
+          "scale_id": "reconsideration_sum",
+          "value": 3
+        },
+        {
+          "scale_id": "reconsideration_mean",
+          "value": 1
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "all_five",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "5"
+        },
+        {
+          "item_id": "q02",
+          "value": "5"
+        },
+        {
+          "item_id": "q03",
+          "value": "5"
+        },
+        {
+          "item_id": "q04",
+          "value": "5"
+        },
+        {
+          "item_id": "q05",
+          "value": "5"
+        },
+        {
+          "item_id": "q06",
+          "value": "5"
+        },
+        {
+          "item_id": "q07",
+          "value": "5"
+        },
+        {
+          "item_id": "q08",
+          "value": "5"
+        },
+        {
+          "item_id": "q09",
+          "value": "5"
+        },
+        {
+          "item_id": "q10",
+          "value": "5"
+        },
+        {
+          "item_id": "q11",
+          "value": "5"
+        },
+        {
+          "item_id": "q12",
+          "value": "5"
+        },
+        {
+          "item_id": "q13",
+          "value": "5"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "commitment_sum",
+          "value": 25
+        },
+        {
+          "scale_id": "commitment_mean",
+          "value": 5
+        },
+        {
+          "scale_id": "exploration_sum",
+          "value": 25
+        },
+        {
+          "scale_id": "exploration_mean",
+          "value": 5
+        },
+        {
+          "scale_id": "reconsideration_sum",
+          "value": 15
+        },
+        {
+          "scale_id": "reconsideration_mean",
+          "value": 5
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "mixed",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "3"
+        },
+        {
+          "item_id": "q03",
+          "value": "5"
+        },
+        {
+          "item_id": "q04",
+          "value": "3"
+        },
+        {
+          "item_id": "q05",
+          "value": "5"
+        },
+        {
+          "item_id": "q06",
+          "value": "2"
+        },
+        {
+          "item_id": "q07",
+          "value": "5"
+        },
+        {
+          "item_id": "q08",
+          "value": "2"
+        },
+        {
+          "item_id": "q09",
+          "value": "4"
+        },
+        {
+          "item_id": "q10",
+          "value": "2"
+        },
+        {
+          "item_id": "q11",
+          "value": "4"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "4"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "commitment_sum",
+          "value": 17
+        },
+        {
+          "scale_id": "commitment_mean",
+          "value": 3.4
+        },
+        {
+          "scale_id": "exploration_sum",
+          "value": 15
+        },
+        {
+          "scale_id": "exploration_mean",
+          "value": 3
+        },
+        {
+          "scale_id": "reconsideration_sum",
+          "value": 9
+        },
+        {
+          "scale_id": "reconsideration_mean",
+          "value": 3
+        }
+      ],
+      "basis": {
+        "kind": "legacy_regression",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 9376,
+      "sha256": "2bb752f86518482e29c0ec860fffc9b4a3fb4c34ab2b2e31b339130bc9a94752",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1779,
+      "sha256": "493168847a58351b5c77e3866ff3ac372ac41e4387c79dd0bc960348b9e6d37f",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 151,
+      "sha256": "8b2e3d719ed9ea6924ec1e39ebcf559bb3b8026ae2c57c5cfb0926fa03fe43c2",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 286,
+      "sha256": "bae1c8b9a921c9c1eb64f2579d87b4c40e1f7ecd6430c410607c935e8432949b",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

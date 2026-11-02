@@ -21,7 +21,7 @@ export class PostgresStaffMfa implements StaffMfaGateway{
       const envelope=this.vault.seal(credential,secret);
       const created=await accountTransaction(this.pool,async c=>(await c.query<{id:string|null}>("SELECT pedpsy.begin_staff_enrollment($1,$2) id",[tokenHash(challenge),envelope])).rows[0]?.id);
       if(!created)throw new ParticipationError(409,"MFA_ENROLLMENT_EXISTS");
-      return {secret:base32(secret),issuer:"PedPsyRU",account:credential};
+      return {secret:base32(secret),issuer:"МетодТест",account:credential};
     }catch(e){if(e&&typeof e==="object"&&"code"in e&&e.code==="42501")throw new ParticipationError(403,"MFA_ALREADY_ENROLLED");throw e;}
     finally{secret.fill(0);}
   }

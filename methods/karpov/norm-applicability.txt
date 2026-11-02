@@ -1,0 +1,1 @@
+Population applicability is not independently established. Use only in the local synthetic development stand. Legacy conversion is retained for reproducibility, not clinical or scientific interpretation.

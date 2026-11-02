@@ -1,0 +1,1 @@
+Sixteen answers from 1 to 7. Three means: 1,4,7,10,13; 2,5,8,11 reversed,14,16; 3,6,9,12,15. Round to two decimals. Reverse item 11 as 8 minus its answer. Apply legacy stanine and level tables; no total.

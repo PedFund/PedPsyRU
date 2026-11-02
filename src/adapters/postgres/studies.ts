@@ -2,7 +2,7 @@ import {randomUUID} from "node:crypto";
 import type {Pool} from "pg";
 import type {StudyConstructor,StudyDesign,GroupDesign,StudySummary} from "../../ports/studies.js";
 import {ParticipationError} from "../../ports/errors.js";
-import {accountTransaction,tokenHash} from "./account-transaction.js";
+import {accountTransaction,tokenHash,accountWallTime} from "./account-transaction.js";
 import type {AccountOperation,AccountRole} from "../../ports/accounts.js";
 import {requireAccountPermission} from "../../ports/account-policy.js";
 interface Actor{credential_id:string;user_id:string;actor_role:AccountRole;credential_version:number;expires_at_ms:string;mfa_verified_at_ms:string|null}
@@ -18,7 +18,7 @@ export class PostgresStudyConstructor implements StudyConstructor{
       const studyId=typeof args[0]==="string"?args[0]:undefined;
       const own=studyId?(await c.query<{own:boolean}>("SELECT pedpsy.account_owns_study($1) own",[studyId])).rows[0]!.own:false;
       requireAccountPermission({realm:a.actor_role==="researcher"?"researcher":"staff",userId:a.user_id,credentialId:a.credential_id,role:a.actor_role,sessionVersion:a.credential_version,
-        expiresAt:Number(a.expires_at_ms),mfaVerifiedAt:a.mfa_verified_at_ms===null?null:Number(a.mfa_verified_at_ms)},operation,studyId?{studyId}:{},Date.now(),own);
+        expiresAt:Number(a.expires_at_ms),mfaVerifiedAt:a.mfa_verified_at_ms===null?null:Number(a.mfa_verified_at_ms)},operation,studyId?{studyId}:{},await accountWallTime(c),own);
       return data;});
   }
   create(token:string,title:string){return this.call(token,"studies.configure","SELECT pedpsy.create_study($1,$2) data",[randomUUID(),title]);}
