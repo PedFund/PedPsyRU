@@ -7,6 +7,7 @@
 - [CURRENT_STATE.md](CURRENT_STATE.md) — краткое фактическое состояние веток, PR, CI и открытых вопросов.
 - [AGENTS.md](AGENTS.md) — действующие правила работы coding agents.
 - [methods/README.md](methods/README.md) — единая точка входа в библиотеку методик.
+- [PILOT_UI_ACCEPTANCE.md](PILOT_UI_ACCEPTANCE.md) – ручная проверка интерфейса, ролей и обработки перед пилотом.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — архитектурные границы платформы.
 - [STATUS.md](STATUS.md) и [BACKLOG.md](BACKLOG.md) — подробные исторические отчеты и очередь работ; они не заменяют текущую контрольную точку.
 
