@@ -1,14 +1,14 @@
+import {verifyPinnedChoiceRelease} from "../pinned-instrument-releases.js";
+import type {InstrumentResponse,InstrumentResult} from "../../ports/instruments.js";
 import {AsyncLocalStorage} from "node:async_hooks";
 import {createHash, randomUUID} from "node:crypto";
 import type {Pool, PoolClient} from "pg";
-import {canonicalJson, releasePackage} from "../../../storage/releases.js";
-import type {TkiResponse, TkiResult} from "../../../core/tki-contract.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {validateDraft} from "../../ports/validation.js";
 import type {UnitOfWork, ParticipantContext, TransactionPorts, AttemptSnapshot, PinnedRelease, StoredResult} from "../../ports/participation.js";
 interface Actor {credential_id: string; study_id: string; participant_id: string; actor_role: string; credential_version: number}
 interface AttemptRow {id: string; study_id: string; release_id: string; status: "draft" | "completed"; revision: string; current_item_id: string}
-interface ResultRow {id: string; attempt_id: string; input_revision: string; responses_digest: string; calculated_at: Date; payload: TkiResult}
+interface ResultRow {id: string; attempt_id: string; input_revision: string; responses_digest: string; calculated_at: Date; payload: InstrumentResult}
 const uuid = (value: string): boolean => /^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(value);
 export const mapPostgresError = (error: unknown): unknown => {
   const code = error && typeof error === "object" && "code" in error ? error.code : undefined;
@@ -77,21 +77,16 @@ export class PostgresUnitOfWork implements UnitOfWork {
           await ensure();
           const result = await client.query<AttemptRow>("SELECT id,study_id,release_id,status,revision,current_item_id FROM pedpsy.attempts WHERE id=$1", [id]);
           const row = result.rows[0]; if (!row) throw new ParticipationError(404, "NOT_AVAILABLE");
-          const values = await client.query<TkiResponse>("SELECT item_id,value FROM pedpsy.responses WHERE attempt_id=$1 ORDER BY item_id", [id]);
+          const values = await client.query<InstrumentResponse>("SELECT item_id,value FROM pedpsy.responses WHERE attempt_id=$1 ORDER BY item_id", [id]);
           return {id, studyId: row.study_id, participantId: context.participantId, releaseId: row.release_id, status: row.status,
             revision: Number(row.revision), currentItemId: row.current_item_id, responses: values.rows};
         };
         const pinned = async (id: string): Promise<PinnedRelease> => {
           await ensure(); if (!attemptScope || (await get(attemptScope)).releaseId !== id) throw new ParticipationError(404, "NOT_AVAILABLE");
           const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);
-          const row = release.rows[0], pkg = releasePackage();
-          const items = await client.query<{item_id: string; ordinal: number; options: unknown}>("SELECT item_id,ordinal,options FROM pedpsy.release_items WHERE release_id=$1 ORDER BY ordinal", [id]);
-          if (!row || canonicalJson(row.form_snapshot) !== pkg.formSnapshot || row.form_digest !== pkg.formDigest || row.key_digest !== pkg.keyDigest ||
-            row.form_id !== pkg.form.id || row.form_version !== pkg.form.version || row.verification_state !== "key_verified" ||
-            row.contract_version !== "1.0" || row.method_version_id !== "tki_ru_30_pairs@1.0.0" || row.handler_version !== "tki-contract-0.3.0" ||
-            items.rows.length !== 30 || items.rows.some((item, i) => item.item_id !== pkg.form.items[i]?.id || item.ordinal !== i + 1 || canonicalJson(item.options) !== canonicalJson(pkg.form.items[i]?.options)))
-            throw new ParticipationError(503, "RELEASE_UNAVAILABLE");
-          return {id, contractVersion: "1.0", methodVersionId: "tki_ru_30_pairs@1.0.0", handlerVersion: "tki-contract-0.3.0", keyDigest: pkg.keyDigest, itemIds: items.rows.map(i => i.item_id)};
+          const row = release.rows[0];
+          const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.release_items WHERE release_id=$1 ORDER BY ordinal",[id]);
+          return verifyPinnedChoiceRelease(row,items.rows);
         };
         const stored = async (id: string): Promise<StoredResult | null> => {
           await get(id); const result = await client.query<ResultRow>("SELECT id,attempt_id,input_revision,responses_digest,calculated_at,payload FROM pedpsy.attempt_results WHERE attempt_id=$1", [id]);
@@ -102,7 +97,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
           attempts: {
             getAuthorized: get,
             compareAndSave: async (id, input) => {
-              const state = await get(id), release = await pinned(state.releaseId); validateDraft(input, release.itemIds);
+              const state = await get(id), release = await pinned(state.releaseId); validateDraft(input, release.itemIds,release.choiceValues);
               if (state.status !== "draft") throw new ParticipationError(409, "ATTEMPT_COMPLETED");
               if (state.revision !== input.expected_revision) throw new ParticipationError(409, "REVISION_CONFLICT");
               const updated = await client.query("UPDATE pedpsy.attempts SET revision=revision+1,current_item_id=$1,updated_at=clock_timestamp() WHERE id=$2 AND status='draft' AND revision=$3", [input.current_item_id, id, input.expected_revision]);

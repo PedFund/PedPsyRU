@@ -25,3 +25,13 @@ test("offline owner bootstrap has fixed login, validates password, no SQL before
   await assert.rejects(bootstrapFirst(client, "PEDPSY-OWNER", "short"), /INVALID_PASSWORD/);
   assert.equal(queries, 0);
 });
+test("local contact demo needs explicit private opt-in and a distinct retained key; inherited flags cannot activate it",()=>{
+  const key=Buffer.alloc(32,2).toString("base64"), inherited={PEDPSY_CONTACT_DEMO:"1",PEDPSY_CONTACT_KEY:key};
+  assert.equal(runtimeEnvironment(config,inherited).PEDPSY_CONTACT_DEMO,undefined);
+  assert.equal(runtimeEnvironment({...config,contactDemo:false,contactKey:key},inherited).PEDPSY_CONTACT_KEY,undefined);
+  const c={...config,contactDemo:true,contactKey:key},e=runtimeEnvironment(c,inherited);
+  assert.equal(e.PEDPSY_CONTACT_DEMO,"1");assert.equal(e.PEDPSY_CONTACT_KEY,key);assert.equal(e.PEDPSY_MFA_KEY,config.mfaKey);
+  for(const change of [{contactDemo:"true"},{contactKey:undefined},{contactKey:"bad"},{contactKey:config.mfaKey},{contactKey:Buffer.alloc(32).toString("base64")},{contactKey:Buffer.alloc(31,2).toString("base64")}])
+    assert.throws(()=>runtimeEnvironment({...c,...change}),/INVALID_LOCAL_CONTACT_CONFIG/);
+  assert.equal(config.contactDemo,undefined);assert.equal(config.contactKey,undefined);
+});

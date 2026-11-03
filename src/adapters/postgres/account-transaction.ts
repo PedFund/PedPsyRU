@@ -13,6 +13,8 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
     if(e&&typeof e==="object"&&"code"in e&&"message"in e){
       if(e.code==="42501"&&["FORBIDDEN","MFA_RECHECK_REQUIRED","SELF_ROLE_CHANGE_FORBIDDEN","LAST_SUPERADMIN_REQUIRED"].includes(String(e.message)))throw new ParticipationError(403,String(e.message));
       if(e.code==="54000"&&["INVITE_THROTTLED","EXPORT_LIMIT"].includes(String(e.message)))throw new ParticipationError(e.message==="INVITE_THROTTLED"?429:413,String(e.message));
+      if(e.code==="P0001"&&["METHOD_LIBRARY_CONFLICT","METHOD_VERSION_CONFLICT"].includes(String(e.message)))throw new ParticipationError(409,String(e.message));
+      if(e.code==="22023"&&["INVALID_METHOD_PACKAGE","METHOD_ARTIFACT_MISMATCH"].includes(String(e.message)))throw new ParticipationError(400,String(e.message));
       if(e.code==="22023"&&e.message==="INVALID_STUDY_INPUT")throw new ParticipationError(400,"INVALID_STUDY_INPUT");
       if(e.code==="22023"&&e.message==="INVALID_REGISTRATION_INPUT")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
       if(e.code==="22023"&&e.message==="INVALID_PASSPORT_SCHEMA")throw new ParticipationError(400,"INVALID_PASSPORT_SCHEMA");
@@ -31,4 +33,10 @@ export async function accountTransaction<T>(pool:Pool,callback:(client:PoolClien
     }
     throw mapPostgresError(e);
   }finally{client.release();}
+}
+
+// Use the same authoritative clock as persisted session/MFA timestamps.
+export async function accountWallTime(client:PoolClient):Promise<number>{
+  const row=(await client.query<{now_ms:string}>("SELECT floor(extract(epoch FROM clock_timestamp())*1000)::bigint now_ms")).rows[0];
+  const now=Number(row?.now_ms);if(!Number.isSafeInteger(now))throw new Error("INVALID_DATABASE_CLOCK");return now;
 }

@@ -1,4 +1,4 @@
-param([ValidateSet('Setup','Start','Account','Stop')][string]$Action = 'Start')
+param([ValidateSet('Setup','Start','Account','Upgrade','Stop')][string]$Action = 'Start')
 $ErrorActionPreference = 'Stop'
 $projectRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $standDirectory = Join-Path $projectRoot '.local\demo-stand'
@@ -71,5 +71,9 @@ if ($Action -eq 'Stop') {
 if ($LASTEXITCODE -ne 0) {
     & (Join-Path $pgBinDirectory 'pg_ctl.exe') '-D' $clusterDirectory '-l' (Join-Path $standDirectory 'postgres.log') '-w' '-t' '20' 'start'
     if ($LASTEXITCODE -ne 0) { throw 'PostgreSQL startup failed' }
+}
+if ($Action -eq 'Upgrade') {
+    Run-LocalTool 'upgrade'
+    return
 }
 Run-LocalTool 'serve'

@@ -8,7 +8,7 @@ const {migratePostgres,grantRuntime}=require("../dist/src/adapters/postgres/migr
 const extra=[{key:"extra_context",label:"Контекст",kind:"text",required:true,max_length:40},{key:"extra_years",label:"Стаж",kind:"integer",required:false,min:-10,max:50},{key:"extra_setting",label:"Среда",kind:"single_choice",required:false,options:[{value:"school",label:"Школа"}]}];
 const full={sex:"female",age:42,city:"Synthetic town",extra_context:"Synthetic context"};
 async function identity(f,x,email="own@example.test"){
-  const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"demo-contact-1",accept_contact_notice:true};
+  const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"demo-contact-2",accept_contact_notice:true};
   await x.registration.start(x.i.invite_token,body,browser);
   const outbox=(await f.admin.query("SELECT o.id,o.token_envelope FROM pedpsy.contact_confirmation_outbox o JOIN pedpsy.registration_pending p ON p.id=o.pending_id WHERE p.study_id=$1 AND p.browser_hash=$2 AND p.status='pending'",[x.design.id,tokenHash(browser)])).rows[0];
   await x.registration.confirm(x.i.invite_token,{confirmation_token:x.vault.open(outbox.id,outbox.token_envelope)},browser);
@@ -19,7 +19,7 @@ async function identity(f,x,email="own@example.test"){
 async function configured(f){
   const s=await verifiedStaff(f),x=await studyResearcher(f,s),schemas=new PostgresPassportSchemas(f.runtime);let d=await x.studies.create(x.session.token,"Synthetic own passport");
   const p=await schemas.read(x.session.token,d.id);await schemas.configure(x.session.token,d.id,{expected_version:p.study_version,expected_schema_version:p.schema_version,basic_required:{city:true},additional_fields:extra});
-  d=await x.studies.read(x.session.token,d.id);d=await x.studies.group(x.session.token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
+  d=await x.studies.read(x.session.token,d.id);
   d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});d=await x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version});
   const invitations=new PostgresGroupInvitations(f.runtime),i=await invitations.create(x.session.token,d.id,d.groups[0].id,{expires_at:Date.now()+86400000}),vault=new ContactTokenVault(randomBytes(32)),registration=new PostgresParticipantRegistration(f.runtime,vault),base={...x,s,design:d,invitations,i,vault,registration,passports:new PostgresParticipantPassports(f.runtime)};
   return {...base,...await identity(f,base)};
@@ -45,8 +45,8 @@ scenario("mandatory sex/age/city/custom are checked only on explicit saved-value
   const saved=await save(x,full,revision),done=await complete(x,saved.revision);assert.equal(done.status,"completed");assert.equal(done.revision,saved.revision+1);assert.deepEqual(done.values,full);assert.ok(!Object.hasOwn(done.values,"extra_years"));await noClinical(f,x);
 });
 scenario("SQL repeats exact field/type/range/choice/Unicode/blank limits, rejected draft never persists",async(t,f,x)=>{
-  for(const values of [null,[],"text",{age:null},{age:"42"},{age:42.5},{age:-1},{age:131},{sex:"Женский"},{sex:"other"},{city:" "},{city:"\u00a0\u2003\ufeff"},{city:" Town "},{city:"a\n"},{city:"🙂".repeat(101)},{extra_context:"x".repeat(41)},{extra_setting:"other"},{extra_years:51},{extra_unknown:"x"},{role:"participant"},{participant_id:x.own.participant_id},{city:{text:"x"}}])await assert.rejects(save(x,values),e=>e.code==="INVALID_PASSPORT_VALUES");
-  assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_passports")).rows[0].n,"0");assert.equal((await save(x,{city:"🙂".repeat(100),age:0,extra_years:-10})).revision,1);
+  for(const values of [null,[],"text",{age:null},{age:"42"},{age:42.5},{age:-1},{age:17},{age:100},{age:131},{sex:"Женский"},{sex:"other"},{city:" "},{city:"\u00a0\u2003\ufeff"},{city:" Town "},{city:"a\n"},{city:"🙂".repeat(101)},{extra_context:"x".repeat(41)},{extra_setting:"other"},{extra_years:51},{extra_unknown:"x"},{role:"participant"},{participant_id:x.own.participant_id},{city:{text:"x"}}])await assert.rejects(save(x,values),e=>e.code==="INVALID_PASSPORT_VALUES");
+  assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_passports")).rows[0].n,"0");assert.equal((await save(x,{city:"🙂".repeat(100),age:18,extra_years:-10})).revision,1);
 });
 scenario("two tabs CAS commits one snapshot; stale schema/revision cannot overwrite even same values",async(t,f,x)=>{
   const results=await Promise.allSettled([save(x,{city:"A"}),save(x,{city:"B"})]);assert.equal(results.filter(r=>r.status==="fulfilled").length,1);assert.equal(results.find(r=>r.status==="rejected").reason.code,"PASSPORT_CONFLICT");
@@ -80,7 +80,7 @@ scenario("mandatory value-free audit failure rolls back save and completion, inc
 });
 scenario("recruitment revocation preserves accepted own passport access, changed notice blocks it",async(t,f,x)=>{
   await x.invitations.revoke(x.session.token,x.design.id,x.design.groups[0].id,x.i.id,{expected_revision:0});await save(x,full);await complete(x,1);assert.equal((await x.passports.read(x.ownSession.token)).status,"completed");
-  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic changed contact notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await assert.rejects(x.passports.read(x.ownSession.token),e=>e.code==="PARTICIPATION_REQUIREMENTS_CHANGED");await noClinical(f,x);
+  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic changed contact notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);await assert.rejects(x.passports.read(x.ownSession.token),e=>e.code==="PARTICIPATION_REQUIREMENTS_CHANGED");await noClinical(f,x);
 });
 for(const kind of ["credential","group","contact","study"])scenario(kind+" change committed during row lock wait blocks current write",async(t,f,x)=>{
   const c=await f.admin.connect();let pending;const target=kind==="credential"?["participant_credentials","id",x.own.credential_id]:kind==="group"?["research_groups","id",x.design.groups[0].id]:kind==="contact"?["participant_contacts","id",x.own.contact_id]:["studies","id",x.design.id];
@@ -97,7 +97,7 @@ scenario("wall-clock expiry while waiting on profile defeats statement-time stal
 scenario("contact notice changed during policy lock wait denies stale acknowledgement without a profile",async(t,f,x)=>{
   const c=await f.admin.connect();let pending;
   try{await c.query("BEGIN");await c.query("SELECT study_id FROM pedpsy.study_contact_policies WHERE study_id=$1 FOR UPDATE",[x.design.id]);pending=save(x,full).then(value=>({value}),error=>({error}));await wait(f);
-    await c.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic policy race','synthetic_only')");await c.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await c.query("COMMIT");assert.equal((await pending).error?.code,"PARTICIPATION_REQUIREMENTS_CHANGED");
+    await c.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic policy race','synthetic_only')");await c.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);await c.query("COMMIT");assert.equal((await pending).error?.code,"PARTICIPATION_REQUIREMENTS_CHANGED");
   }finally{await c.query("ROLLBACK");c.release();if(pending)await pending;}assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_passports")).rows[0].n,"0");
 });
 scenario("nonempty completed passport full operational backup/restore retains exact data, scope and ACL",async(t,f,x)=>{

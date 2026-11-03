@@ -1,0 +1,1712 @@
+{
+  "schema_version": "1.0",
+  "method_id": "reflexivity_karpov_27",
+  "package_version": "1.0.0",
+  "title": "Рефлексивность А.В. Карпова",
+  "language": "ru",
+  "provenance": {
+    "origin": "existing_processor",
+    "sources": [
+      {
+        "id": "owner_legacy",
+        "citation": "Existing owner processor5.5.0 Karpov27 key/sten conversion; arithmetic controls independently computed from15 direct and12 reverse items.",
+        "url": null
+      }
+    ],
+    "missing": [
+      "instruction",
+      "norms",
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0-draft"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Полностью не согласен/согласна"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен/согласна"
+        },
+        {
+          "value": "3",
+          "label": "Скорее не согласен/согласна"
+        },
+        {
+          "value": "4",
+          "label": "Не могу определиться"
+        },
+        {
+          "value": "5",
+          "label": "Скорее согласен/согласна"
+        },
+        {
+          "value": "6",
+          "label": "Согласен/согласна"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен/согласна"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "reflexivity",
+      "label": "Рефлексивность",
+      "min": 27,
+      "max": 189,
+      "direction": "not_specified"
+    },
+    {
+      "id": "reflexivity_sten",
+      "label": "Рефлексивность — стен",
+      "min": 0,
+      "max": 10,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "reverse_sum",
+    "adapter_id": "karpov-local",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "evidence_supplied",
+    "artifact_id": "norms",
+    "applicability_artifact_id": "applicability",
+    "source_ids": [
+      "owner_legacy"
+    ]
+  },
+  "control_vectors": [
+    {
+      "id": "all_one",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 99
+        },
+        {
+          "scale_id": "reflexivity_sten",
+          "value": 1
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "all_four",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "4"
+        },
+        {
+          "item_id": "q02",
+          "value": "4"
+        },
+        {
+          "item_id": "q03",
+          "value": "4"
+        },
+        {
+          "item_id": "q04",
+          "value": "4"
+        },
+        {
+          "item_id": "q05",
+          "value": "4"
+        },
+        {
+          "item_id": "q06",
+          "value": "4"
+        },
+        {
+          "item_id": "q07",
+          "value": "4"
+        },
+        {
+          "item_id": "q08",
+          "value": "4"
+        },
+        {
+          "item_id": "q09",
+          "value": "4"
+        },
+        {
+          "item_id": "q10",
+          "value": "4"
+        },
+        {
+          "item_id": "q11",
+          "value": "4"
+        },
+        {
+          "item_id": "q12",
+          "value": "4"
+        },
+        {
+          "item_id": "q13",
+          "value": "4"
+        },
+        {
+          "item_id": "q14",
+          "value": "4"
+        },
+        {
+          "item_id": "q15",
+          "value": "4"
+        },
+        {
+          "item_id": "q16",
+          "value": "4"
+        },
+        {
+          "item_id": "q17",
+          "value": "4"
+        },
+        {
+          "item_id": "q18",
+          "value": "4"
+        },
+        {
+          "item_id": "q19",
+          "value": "4"
+        },
+        {
+          "item_id": "q20",
+          "value": "4"
+        },
+        {
+          "item_id": "q21",
+          "value": "4"
+        },
+        {
+          "item_id": "q22",
+          "value": "4"
+        },
+        {
+          "item_id": "q23",
+          "value": "4"
+        },
+        {
+          "item_id": "q24",
+          "value": "4"
+        },
+        {
+          "item_id": "q25",
+          "value": "4"
+        },
+        {
+          "item_id": "q26",
+          "value": "4"
+        },
+        {
+          "item_id": "q27",
+          "value": "4"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 108
+        },
+        {
+          "scale_id": "reflexivity_sten",
+          "value": 3
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "all_seven",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "7"
+        },
+        {
+          "item_id": "q02",
+          "value": "7"
+        },
+        {
+          "item_id": "q03",
+          "value": "7"
+        },
+        {
+          "item_id": "q04",
+          "value": "7"
+        },
+        {
+          "item_id": "q05",
+          "value": "7"
+        },
+        {
+          "item_id": "q06",
+          "value": "7"
+        },
+        {
+          "item_id": "q07",
+          "value": "7"
+        },
+        {
+          "item_id": "q08",
+          "value": "7"
+        },
+        {
+          "item_id": "q09",
+          "value": "7"
+        },
+        {
+          "item_id": "q10",
+          "value": "7"
+        },
+        {
+          "item_id": "q11",
+          "value": "7"
+        },
+        {
+          "item_id": "q12",
+          "value": "7"
+        },
+        {
+          "item_id": "q13",
+          "value": "7"
+        },
+        {
+          "item_id": "q14",
+          "value": "7"
+        },
+        {
+          "item_id": "q15",
+          "value": "7"
+        },
+        {
+          "item_id": "q16",
+          "value": "7"
+        },
+        {
+          "item_id": "q17",
+          "value": "7"
+        },
+        {
+          "item_id": "q18",
+          "value": "7"
+        },
+        {
+          "item_id": "q19",
+          "value": "7"
+        },
+        {
+          "item_id": "q20",
+          "value": "7"
+        },
+        {
+          "item_id": "q21",
+          "value": "7"
+        },
+        {
+          "item_id": "q22",
+          "value": "7"
+        },
+        {
+          "item_id": "q23",
+          "value": "7"
+        },
+        {
+          "item_id": "q24",
+          "value": "7"
+        },
+        {
+          "item_id": "q25",
+          "value": "7"
+        },
+        {
+          "item_id": "q26",
+          "value": "7"
+        },
+        {
+          "item_id": "q27",
+          "value": "7"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 117
+        },
+        {
+          "scale_id": "reflexivity_sten",
+          "value": 4
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "minimum",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "7"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "7"
+        },
+        {
+          "item_id": "q07",
+          "value": "7"
+        },
+        {
+          "item_id": "q08",
+          "value": "7"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "7"
+        },
+        {
+          "item_id": "q13",
+          "value": "7"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "7"
+        },
+        {
+          "item_id": "q17",
+          "value": "7"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "7"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "7"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "7"
+        },
+        {
+          "item_id": "q27",
+          "value": "7"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 27
+        },
+        {
+          "scale_id": "reflexivity_sten",
+          "value": 0
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    },
+    {
+      "id": "maximum",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "7"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "7"
+        },
+        {
+          "item_id": "q04",
+          "value": "7"
+        },
+        {
+          "item_id": "q05",
+          "value": "7"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "7"
+        },
+        {
+          "item_id": "q10",
+          "value": "7"
+        },
+        {
+          "item_id": "q11",
+          "value": "7"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "7"
+        },
+        {
+          "item_id": "q15",
+          "value": "7"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "7"
+        },
+        {
+          "item_id": "q19",
+          "value": "7"
+        },
+        {
+          "item_id": "q20",
+          "value": "7"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "7"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "7"
+        },
+        {
+          "item_id": "q25",
+          "value": "7"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "reflexivity",
+          "value": 189
+        },
+        {
+          "scale_id": "reflexivity_sten",
+          "value": 10
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "owner_legacy"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 28295,
+      "sha256": "82a11233c17bbd8eb33040dc7e6d7ef7c813e9de2342fd62ddef50769d6a2c13",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1204,
+      "sha256": "22cb4a1df373644fe2e0b4b8430041f77c3e4aeb4027d81623a9a292086261ca",
+      "media_type": "application/json"
+    },
+    {
+      "id": "norms",
+      "path": "norms.json",
+      "bytes": 673,
+      "sha256": "71ed9cead956236a0b1769dad37ae2cbe36051675978261e0cb12d75008c88a6",
+      "media_type": "application/json"
+    },
+    {
+      "id": "applicability",
+      "path": "applicability.txt",
+      "bytes": 203,
+      "sha256": "3878d1324995131fd6ddb2b0681ab16dfe8e2c55e96d0a86e2ca5787fa19b7ed",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 132,
+      "sha256": "887761e75585f5eaa1d00d564e36417000e311d75a456fddabc2a328cbb7c155",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 197,
+      "sha256": "f55945cf8549daae87d99fb20dea76d2e8194d7573373912fcbb33edcf38422e",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

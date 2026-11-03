@@ -1,0 +1,383 @@
+{
+  "schema_version": 1,
+  "files": [
+    {
+      "path": "methods/legacy/materials/methods.js.txt",
+      "source_path": "methods.js",
+      "bytes": 20967,
+      "sha256": "72fd0fb109745345e746be10290e356176d696cff1a86a9adb0eb677986fe912"
+    },
+    {
+      "path": "methods/legacy/materials/methods/builtin.js.txt",
+      "source_path": "methods/builtin.js",
+      "bytes": 43633,
+      "sha256": "e70eacbb8ea58cffdc382a7cbd7cc1681ff023d619cbdd93a199f36217b72a7d"
+    },
+    {
+      "path": "methods/legacy/materials/processor.js.txt",
+      "source_path": "processor.js",
+      "bytes": 41663,
+      "sha256": "59c4b92425ca277ecaa0e7215ffaa0b24cfa44465bfafecfd4f84f3f2eb449dd"
+    },
+    {
+      "path": "methods/legacy/materials/analytics.js.txt",
+      "source_path": "analytics.js",
+      "bytes": 80678,
+      "sha256": "af277ec2494e2f714470974e5a0c9063aff1bbe57cc64df37328a94371fac514"
+    },
+    {
+      "path": "methods/legacy/materials/README.md",
+      "source_path": "README.md",
+      "bytes": 29731,
+      "sha256": "d367be3a935dd34c50e85359229bb0399a7703234c29f47f3542e5e8b6aff2e4"
+    },
+    {
+      "path": "methods/legacy/materials/CONTROL_REPORT.md",
+      "source_path": "CONTROL_REPORT.md",
+      "bytes": 28441,
+      "sha256": "520fe3a300722a11d89ad1bb8ae46fe51285ca8e5343920878330347d0dcf0e6"
+    },
+    {
+      "path": "methods/legacy/materials/ИСТОЧНИКИ_И_РЕШЕНИЯ.md",
+      "source_path": "ИСТОЧНИКИ_И_РЕШЕНИЯ.md",
+      "bytes": 5384,
+      "sha256": "7e88399e344f3667d249ce019f33d90640e77ba2e6c0c25d93103525c9627b36"
+    },
+    {
+      "path": "methods/legacy/materials/method-packages/pepsi_standard_methods_25_38.json",
+      "source_path": "method-packages/pepsi_standard_methods_25_38.json",
+      "bytes": 41461,
+      "sha256": "8f54f887ec637e0b011859e29740723fb9d2c65f86939a0478d840e42db3e8fb"
+    },
+    {
+      "path": "methods/legacy/materials/method-packages/tanit_final.json",
+      "source_path": "method-packages/tanit_final.json",
+      "bytes": 53163,
+      "sha256": "db0938a4eea14b6f8dfc69cc376c1758c0cbef1ed4d8a922162652d265686e01"
+    },
+    {
+      "path": "methods/legacy/materials/method-packages/special_handlers_32_33.md",
+      "source_path": "method-packages/special_handlers_32_33.md",
+      "bytes": 8544,
+      "sha256": "6662bbd9d89ebfd0aad23fef1f4b5d3b95472be5b2e68f7e5182eebce203cc3c"
+    },
+    {
+      "path": "methods/legacy/materials/keys/01_uvlk_shipilov.md",
+      "source_path": "keys/01_uvlk_shipilov.md",
+      "bytes": 2038,
+      "sha256": "03e964b61ca4f3d51323364cd407cc4f969cc497e1b7ff894d3233d18af8ca0a"
+    },
+    {
+      "path": "methods/legacy/materials/keys/02_mbi.md",
+      "source_path": "keys/02_mbi.md",
+      "bytes": 1954,
+      "sha256": "f3b4f5a31bd7d4ce801815dfcb0b6715b6ef7c33797ffa08097cb578a75cb56a"
+    },
+    {
+      "path": "methods/legacy/materials/keys/03_usk.md",
+      "source_path": "keys/03_usk.md",
+      "bytes": 2489,
+      "sha256": "99398e418a05f760f4157114c88678c1dd1a45955e4eca162fc783f57069def0"
+    },
+    {
+      "path": "methods/legacy/materials/keys/04_maas.md",
+      "source_path": "keys/04_maas.md",
+      "bytes": 1206,
+      "sha256": "1f3b775198e1d8c60012271b60e40540aa1d431560cce2ae37a71db96815a0ce"
+    },
+    {
+      "path": "methods/legacy/materials/keys/05_sjo.md",
+      "source_path": "keys/05_sjo.md",
+      "bytes": 2759,
+      "sha256": "1f8c5bee4a212c7743b5eee38c7dfb5331d87e8d63098690aa6c038b898015c5"
+    },
+    {
+      "path": "methods/legacy/materials/keys/06_csi.md",
+      "source_path": "keys/06_csi.md",
+      "bytes": 1623,
+      "sha256": "f8aea3b116b63d574ffd4f56cded1007445ab1caddbdd2a93ebe83e6bf1aa5ae"
+    },
+    {
+      "path": "methods/legacy/materials/keys/07_oso.md",
+      "source_path": "keys/07_oso.md",
+      "bytes": 1945,
+      "sha256": "49b23de755cde8d8f18a874a5374bb82fed2cdc9543463df519454e1b592985b"
+    },
+    {
+      "path": "methods/legacy/materials/keys/08_boyko_burnout.md",
+      "source_path": "keys/08_boyko_burnout.md",
+      "bytes": 2555,
+      "sha256": "81e98603b8658d417acad7333907e388c4e5981e5a81a69e916bb9cf83eb5595"
+    },
+    {
+      "path": "methods/legacy/materials/keys/09_psi.md",
+      "source_path": "keys/09_psi.md",
+      "bytes": 1442,
+      "sha256": "2ce3b440111402fdfd4e62365aac4ff956f158e00236520add76f3a262a626d3"
+    },
+    {
+      "path": "methods/legacy/materials/keys/10_role_competence.md",
+      "source_path": "keys/10_role_competence.md",
+      "bytes": 885,
+      "sha256": "ac55030e1f22862c6c1e078a34558fb7dd5f586827883dd7fc4ac48a0bbfe4fe"
+    },
+    {
+      "path": "methods/legacy/materials/keys/11_spa_rogers_diamond.md",
+      "source_path": "keys/11_spa_rogers_diamond.md",
+      "bytes": 2416,
+      "sha256": "7dd89da9deefa50c93d30fcd97e7706b6757d54a8683ee4bee7f764d3599a499"
+    },
+    {
+      "path": "methods/legacy/materials/keys/12_role_self_efficacy.md",
+      "source_path": "keys/12_role_self_efficacy.md",
+      "bytes": 1166,
+      "sha256": "8f2a6135010632f93c6834ea3505ff855eb708add3ac3d0806bb0383cc8791a8"
+    },
+    {
+      "path": "methods/legacy/materials/keys/13_tki_r.md",
+      "source_path": "keys/13_tki_r.md",
+      "bytes": 1576,
+      "sha256": "d1be9a3ad61dc3c443159b294f7195916222caefdefba34dd7141d1d7fe48640"
+    },
+    {
+      "path": "methods/legacy/materials/keys/14_reflexivity_karpov.md",
+      "source_path": "keys/14_reflexivity_karpov.md",
+      "bytes": 613,
+      "sha256": "bff7799aa3ab97b67ae2c2aba3f57241624d3e98beffdd4a3b69a47a400a1379"
+    },
+    {
+      "path": "methods/legacy/materials/keys/15_leary_dmo.md",
+      "source_path": "keys/15_leary_dmo.md",
+      "bytes": 1997,
+      "sha256": "fca4a4cb30af26d87c228a5c05e5955617c2d90ce0cc38368c685df83bbe1aee"
+    },
+    {
+      "path": "methods/legacy/materials/keys/16_mlo_adaptability.md",
+      "source_path": "keys/16_mlo_adaptability.md",
+      "bytes": 2078,
+      "sha256": "01b80f0758083408878bfea619de2b0ce6da9805a5f9b2eafd09b8cfbb2bec37"
+    },
+    {
+      "path": "methods/legacy/materials/keys/17_sspm_2020.md",
+      "source_path": "keys/17_sspm_2020.md",
+      "bytes": 1112,
+      "sha256": "a6221f347df856d19991033a7d5e917856c2d41ba972ea870c9f4629f6278e12"
+    },
+    {
+      "path": "methods/legacy/materials/keys/18_sherer_maddux.md",
+      "source_path": "keys/18_sherer_maddux.md",
+      "bytes": 1450,
+      "sha256": "cb0b4a3bf68e531f63f488a00c82fc5ab368ed50d1334bf4c23ae781ee147c9d"
+    },
+    {
+      "path": "methods/legacy/materials/keys/19_gses.md",
+      "source_path": "keys/19_gses.md",
+      "bytes": 985,
+      "sha256": "56c4baa9064d7622c073529d91c3454866db120917ab5b1d50531118846027c0"
+    },
+    {
+      "path": "methods/legacy/materials/keys/20_hardiness.md",
+      "source_path": "keys/20_hardiness.md",
+      "bytes": 1304,
+      "sha256": "88f2834ad0bbb20e4c7b1c6932b399844bdcbe91e7f4a515ab3f56cb73d9a3fe"
+    },
+    {
+      "path": "methods/legacy/materials/keys/21_wcq.md",
+      "source_path": "keys/21_wcq.md",
+      "bytes": 2101,
+      "sha256": "5564da116bb5ddd3ea87c8c0777c8024c5775c51c07e2b59af3477a7f2987b79"
+    },
+    {
+      "path": "methods/legacy/materials/keys/22_uncertainty_tolerance.md",
+      "source_path": "keys/22_uncertainty_tolerance.md",
+      "bytes": 1307,
+      "sha256": "1cf7a1408e2f3202e8fa3a70f72eb364f30ddc132d2b2fec374cde8c13e0cbee"
+    },
+    {
+      "path": "methods/legacy/materials/keys/23_sat.md",
+      "source_path": "keys/23_sat.md",
+      "bytes": 2949,
+      "sha256": "bc5fbbb087046133a2abb7a949001fe9b5c746f48fbceaa5c9d57033a9d81b3d"
+    },
+    {
+      "path": "methods/legacy/materials/keys/24_vgrk.md",
+      "source_path": "keys/24_vgrk.md",
+      "bytes": 2693,
+      "sha256": "f666757b8092186e7e08d16e725bc47bd54b90d652ccb63bbbc8240b0409e424"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/00_LIBRARY_STATUS.md",
+      "source_path": "Bases_Handlers/00_LIBRARY_STATUS.md",
+      "bytes": 1275,
+      "sha256": "7088412a214542c5caa0f9718e0539442d25918bb3ddefb83952a8ab2bb6051f"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_01_uvlk_shipilov(1).md",
+      "source_path": "Bases_Handlers/legacy_01_uvlk_shipilov(1).md",
+      "bytes": 2038,
+      "sha256": "03e964b61ca4f3d51323364cd407cc4f969cc497e1b7ff894d3233d18af8ca0a"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_02_mbi(1).md",
+      "source_path": "Bases_Handlers/legacy_02_mbi(1).md",
+      "bytes": 1954,
+      "sha256": "f3b4f5a31bd7d4ce801815dfcb0b6715b6ef7c33797ffa08097cb578a75cb56a"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_03_usk(1).md",
+      "source_path": "Bases_Handlers/legacy_03_usk(1).md",
+      "bytes": 2489,
+      "sha256": "99398e418a05f760f4157114c88678c1dd1a45955e4eca162fc783f57069def0"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_04_maas(1).md",
+      "source_path": "Bases_Handlers/legacy_04_maas(1).md",
+      "bytes": 1206,
+      "sha256": "1f3b775198e1d8c60012271b60e40540aa1d431560cce2ae37a71db96815a0ce"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_05_sjo(1).md",
+      "source_path": "Bases_Handlers/legacy_05_sjo(1).md",
+      "bytes": 2759,
+      "sha256": "1f8c5bee4a212c7743b5eee38c7dfb5331d87e8d63098690aa6c038b898015c5"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_06_csi.md",
+      "source_path": "Bases_Handlers/legacy_06_csi.md",
+      "bytes": 1623,
+      "sha256": "f8aea3b116b63d574ffd4f56cded1007445ab1caddbdd2a93ebe83e6bf1aa5ae"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_07_oso.md",
+      "source_path": "Bases_Handlers/legacy_07_oso.md",
+      "bytes": 1945,
+      "sha256": "49b23de755cde8d8f18a874a5374bb82fed2cdc9543463df519454e1b592985b"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_08_boyko_burnout(1).md",
+      "source_path": "Bases_Handlers/legacy_08_boyko_burnout(1).md",
+      "bytes": 2555,
+      "sha256": "81e98603b8658d417acad7333907e388c4e5981e5a81a69e916bb9cf83eb5595"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_09_psi(1).md",
+      "source_path": "Bases_Handlers/legacy_09_psi(1).md",
+      "bytes": 1442,
+      "sha256": "2ce3b440111402fdfd4e62365aac4ff956f158e00236520add76f3a262a626d3"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_10_role_competence(1).md",
+      "source_path": "Bases_Handlers/legacy_10_role_competence(1).md",
+      "bytes": 885,
+      "sha256": "ac55030e1f22862c6c1e078a34558fb7dd5f586827883dd7fc4ac48a0bbfe4fe"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/legacy_11_spa_rogers_diamond(1).md",
+      "source_path": "Bases_Handlers/legacy_11_spa_rogers_diamond(1).md",
+      "bytes": 2416,
+      "sha256": "7dd89da9deefa50c93d30fcd97e7706b6757d54a8683ee4bee7f764d3599a499"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_01_co36_parents_READY.md",
+      "source_path": "Bases_Handlers/tanit_01_co36_parents_READY.md",
+      "bytes": 5567,
+      "sha256": "d5493190399ed987e89dd5f32f9c08071a39f721f12c9aaf14b0a24d1c73b0f1"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_02_co36_no_children_READY.md",
+      "source_path": "Bases_Handlers/tanit_02_co36_no_children_READY.md",
+      "bytes": 5597,
+      "sha256": "5daa9da8beae085c91d29c4e8fc6d0e587a2e5891f7098261f3ed574b13d1ee7"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_03_fhs_lf_32.md",
+      "source_path": "Bases_Handlers/tanit_03_fhs_lf_32.md",
+      "bytes": 4646,
+      "sha256": "a531c7634f493e6104f3e1af7c5530a61a373ee32b4dd1e501c1ad5608b47152"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_04_parenthood_motivation_NEEDS_KEY.md",
+      "source_path": "Bases_Handlers/tanit_04_parenthood_motivation_NEEDS_KEY.md",
+      "bytes": 4351,
+      "sha256": "4ed5f0ee77be110dc737b88e673ff45f6adf544f962248662eaac273a3814b96"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_05_fras_ru_34.md",
+      "source_path": "Bases_Handlers/tanit_05_fras_ru_34.md",
+      "bytes": 5875,
+      "sha256": "f4696e2c4a2ca9d23c5325f6984b63337d2ec2a00e8ef23727a55f98987fb4d5"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_06_ffmq_parents_39.md",
+      "source_path": "Bases_Handlers/tanit_06_ffmq_parents_39.md",
+      "bytes": 4709,
+      "sha256": "6c23a6d77689983976cc629d6b26bb0ab839e99f262f6153be286f4aa127b149"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_07_fad_r_53_READY.md",
+      "source_path": "Bases_Handlers/tanit_07_fad_r_53_READY.md",
+      "bytes": 5536,
+      "sha256": "81415c48f914a9d39954f8b5e673fc348e42405bbb19e5f9cfd461686fd1a633"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_08_parental_anxiety_40.md",
+      "source_path": "Bases_Handlers/tanit_08_parental_anxiety_40.md",
+      "bytes": 3302,
+      "sha256": "0d171ab2340b0fc0495b4cb1321a5408723995376b09238977afd271b17771d2"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_09_prfq_ru_16.md",
+      "source_path": "Bases_Handlers/tanit_09_prfq_ru_16.md",
+      "bytes": 6661,
+      "sha256": "c0184f3f9e0ddd38e3f2f9a8a8a6c3b6c57994eb6f5737dea53a5b121d6fb8b3"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_10_odrev_zakharova_66.md",
+      "source_path": "Bases_Handlers/tanit_10_odrev_zakharova_66.md",
+      "bytes": 7530,
+      "sha256": "a3884e49057e3f29bfd628009b1c3cbe28e19ab338fb9fbf42bf4509503682ca"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_11_ffmq_no_children_39.md",
+      "source_path": "Bases_Handlers/tanit_11_ffmq_no_children_39.md",
+      "bytes": 4709,
+      "sha256": "6c23a6d77689983976cc629d6b26bb0ab839e99f262f6153be286f4aa127b149"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_12_umics_pi_13.md",
+      "source_path": "Bases_Handlers/tanit_12_umics_pi_13.md",
+      "bytes": 5439,
+      "sha256": "8d1da8f28dccfdd0ff9eb8b6aacd950c05e5c88c58eacf8bbe303b10e9d34dfb"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_13_pss_parent_satisfaction_NEEDS_KEY.md",
+      "source_path": "Bases_Handlers/tanit_13_pss_parent_satisfaction_NEEDS_KEY.md",
+      "bytes": 3963,
+      "sha256": "4935aa7623b7942acd7cf8c803c22f26b68ebc314156f3fb28837c8a97f4ccbe"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_14_faces_iii_40_real_ideal.md",
+      "source_path": "Bases_Handlers/tanit_14_faces_iii_40_real_ideal.md",
+      "bytes": 5583,
+      "sha256": "731c588180b4db86a37da9128cdfb839589d454f383753de86b89ba009fe4b6a"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_15_family_longevity_NEEDS_KEY.md",
+      "source_path": "Bases_Handlers/tanit_15_family_longevity_NEEDS_KEY.md",
+      "bytes": 3497,
+      "sha256": "d4ebb8a4afb3d98b088fd364de9766465834d5d1aa5a6e8370f2f3e5c320d7a7"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_16_faces_iv_62.md",
+      "source_path": "Bases_Handlers/tanit_16_faces_iv_62.md",
+      "bytes": 5954,
+      "sha256": "2bc4256ca3d7f689904a3dc6e613f1334dd9bbb40f710a36c07f7930dbe8d6ff"
+    },
+    {
+      "path": "methods/legacy/materials/Bases_Handlers/tanit_15_family_longevity_READY.md",
+      "source_path": "Bases_Handlers/tanit_15_family_longevity_READY.md",
+      "bytes": 2955,
+      "sha256": "a353e34bd5bfe08eabae32f2ee359ca41374c9e642e03d15da04b86e10a9614b"
+    }
+  ]
+}

@@ -32,7 +32,7 @@ scenario("same-study CAS race commits one new version; stale study/schema indepe
   assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.passport_schema_versions WHERE study_id=$1",[x.d.id])).rows[0].n,"2");
 });
 scenario("active/closed/attempt-bearing designs cannot change even unused passport questions",async(t,f,x)=>{
-  let d=await x.studies.group(x.session.token,x.d.id,undefined,{name:"КГ",kind:"control",expected_version:0});d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
+  let d=x.d;
   d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});d=await x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version});
   let p=await x.schemas.read(x.session.token,d.id);assert.equal(p.frozen,true);await assert.rejects(x.schemas.configure(x.session.token,d.id,input(p)),e=>e.code==="DESIGN_FROZEN");
   d=await x.studies.lifecycle(x.session.token,d.id,{status:"closed",expected_version:d.version});p=await x.schemas.read(x.session.token,d.id);await assert.rejects(x.schemas.configure(x.s.session.token,d.id,input(p)),e=>e.code==="DESIGN_FROZEN");

@@ -1,7 +1,7 @@
+import {pinnedParticipantForm} from "../pinned-instrument-releases.js";
 import {createHash, randomBytes} from "node:crypto";
 import type {Pool, PoolClient} from "pg";
 import {derive, SCRYPT, validLogin, validPassword, validToken, csrfFor, equalText} from "../../../storage/access.js";
-import {releasePackage} from "../../../storage/releases.js";
 import {ParticipationError} from "../../ports/errors.js";
 import type {ParticipantGateway, ParticipantForm, PublicAttempt} from "../../ports/identity.js";
 import type {ParticipantContext} from "../../ports/participation.js";
@@ -69,12 +69,9 @@ export class PostgresParticipantGateway implements ParticipantGateway {
     const context = await this.uow.context(token);
     return this.uow.run(context,async ports => {
       const state = await ports.attempts.getAuthorized(id); if (!state) throw new ParticipationError(404,"NOT_AVAILABLE");
-      await ports.releases.getPinned(state.releaseId);
+      const pinned=await ports.releases.getPinned(state.releaseId);
       await ports.audit.appendRequired({event:"draft_read",resourceId:id});
-      const form = releasePackage().form;
-      return {id:form.id,version:form.version,items:form.items.map(i => ({id:i.id,number:i.number,options:i.options.map(o => {
-        const option=o as {value:"A"|"B";text:string}; return {value:option.value,text:option.text};
-      })}))};
+      return pinnedParticipantForm(pinned);
     });
   }
   async denied(token: string, reason: string): Promise<void> {

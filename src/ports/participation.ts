@@ -1,4 +1,4 @@
-import type {TkiResponse, TkiResult} from "../../core/tki-contract.js";
+import type {InstrumentResponse,InstrumentResult} from "./instruments.js";
 export type {TkiRequest, TkiResponse, TkiResult} from "../../core/tki-contract.js";
 
 // Internal context, created from a verified server session, never a request DTO.
@@ -14,7 +14,7 @@ export interface ParticipantContext {
 export interface DraftInput {
   readonly expected_revision: number;
   readonly current_item_id: string;
-  readonly responses: readonly TkiResponse[];
+  readonly responses: readonly InstrumentResponse[];
 }
 export interface AttemptSnapshot {
   readonly id: string;
@@ -24,13 +24,14 @@ export interface AttemptSnapshot {
   readonly status: "draft" | "completed";
   readonly revision: number;
   readonly currentItemId: string;
-  readonly responses: readonly TkiResponse[];
+  readonly responses: readonly InstrumentResponse[];
 }
 export interface PinnedRelease {
   readonly id: string;
   readonly contractVersion: "1.0";
-  readonly methodVersionId: "tki_ru_30_pairs@1.0.0";
-  readonly handlerVersion: "tki-contract-0.3.0";
+  readonly methodVersionId: string;
+  readonly handlerVersion: string;
+  readonly choiceValues?:readonly string[];
   readonly keyDigest: string;
   readonly itemIds: readonly string[];
 }
@@ -40,7 +41,7 @@ export interface StoredResult {
   readonly inputRevision: number;
   readonly responsesDigest: string;
   readonly calculatedAt: string;
-  readonly payload: TkiResult;
+  readonly payload: InstrumentResult;
 }
 export interface AttemptRepository {
   getAuthorized(id: string): Promise<AttemptSnapshot | null>;

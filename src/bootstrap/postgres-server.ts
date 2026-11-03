@@ -1,7 +1,9 @@
+import {methodLibraryBoundary} from "./method-library-boundary.js";
+import {researchWorkbenchBoundary} from "./research-workbench-boundary.js";
 import {Pool} from "pg";
 import {randomUUID} from "node:crypto";
 import {csrfFor,equalText,validToken} from "../../storage/access.js";
-import {responsesDigest} from "../../storage/releases.js";
+import {instrumentResponsesDigest} from "../adapters/instrument-digest.js";
 import {PostgresUnitOfWork} from "../adapters/postgres/unit-of-work.js";
 import {PostgresParticipantGateway} from "../adapters/postgres/identity.js";
 import {createParticipationService} from "../application/participation.js";
@@ -33,7 +35,7 @@ async function main(): Promise<void> {
   try {
     pool=new Pool(demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
     const api=createParticipantApi(new PostgresParticipantGateway(pool,uow),createParticipationService(uow,
-      {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>responsesDigest(ids.map(item_id=>({item_id})),values)}));
+      {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>instrumentResponsesDigest(ids,values)}));
     const encoded=process.env.PEDPSY_MFA_KEY;
     if(!encoded||Buffer.from(encoded,"base64").length!==32||Buffer.from(encoded,"base64").toString("base64")!==encoded)throw new Error("EXPLICIT_MFA_KEY_REQUIRED");
     const key=Buffer.from(encoded,"base64");const vault=new MfaVault(key);key.fill(0);
@@ -48,7 +50,7 @@ async function main(): Promise<void> {
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;
-    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions);
+    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool));
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}

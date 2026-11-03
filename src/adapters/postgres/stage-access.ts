@@ -3,7 +3,7 @@ import type {GroupStageAccess,StageAccess} from "../../ports/stage-access.js";
 import type {AccountRole} from "../../ports/accounts.js";
 import {requireAccountPermission} from "../../ports/account-policy.js";
 import {ParticipationError} from "../../ports/errors.js";
-import {accountTransaction,tokenHash} from "./account-transaction.js";
+import {accountTransaction,tokenHash,accountWallTime} from "./account-transaction.js";
 interface Actor{credential_id:string;user_id:string;actor_role:AccountRole;credential_version:number;expires_at_ms:string;mfa_verified_at_ms:string|null}
 export class PostgresStageAccess implements StageAccess {
   constructor(private readonly pool:Pool){}
@@ -18,7 +18,7 @@ export class PostgresStageAccess implements StageAccess {
       // transaction's central commit gate; no client role or cached membership.
       requireAccountPermission({realm:a.actor_role==="researcher"?"researcher":"staff",role:a.actor_role,userId:a.user_id,
         credentialId:a.credential_id,sessionVersion:a.credential_version,expiresAt:Number(a.expires_at_ms),
-        mfaVerifiedAt:a.mfa_verified_at_ms===null?null:Number(a.mfa_verified_at_ms)},write?"studies.configure":"studies.read",{studyId:study},Date.now(),own);
+        mfaVerifiedAt:a.mfa_verified_at_ms===null?null:Number(a.mfa_verified_at_ms)},write?"studies.configure":"studies.read",{studyId:study},await accountWallTime(c),own);
       return data;
     });
   }

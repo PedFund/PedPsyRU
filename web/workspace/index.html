@@ -1,31 +1,127 @@
 <!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ПедПси — кабинет</title><link rel="stylesheet" href="/workspace/styles.css"><script src="/workspace/qr.js" defer></script><script src="/workspace/participant.js" defer></script><script src="/workspace/app.js" defer></script></head>
-<body><div class="shell"><aside><a class="brand" href="/workspace">ПедПси<span>Исследовательская платформа</span></a><div class="stage">Фаза 5 · участие в исследовании</div><p>От исследования —<br>к проверенным данным.</p><div class="note">Учебный контур<br>Только синтетические данные</div></aside>
-<main><header><div><span class="eyebrow">ПЛАТФОРМА ПЕДПСИ</span><h1 id="heading">Ваш рабочий кабинет</h1></div><div id="identity" class="badge">Вход в платформу</div></header>
-<p id="message" role="status" aria-live="polite"></p>
-<section id="participant-screen" hidden></section>
-<section id="login-screen" class="card narrow"><h2>Добро пожаловать</h2><p class="muted">Используйте выданный код доступа. Административный вход защищён вторым фактором.</p>
-<form id="login-form" method="post"><label>Войти как<select id="realm"><option value="researcher">Исследователь</option><option value="staff">Администратор / суперадминистратор</option></select></label><label>Код доступа<input id="login-id" autocomplete="username" required maxlength="80" spellcheck="false"></label><label>Пароль<input id="password" type="password" autocomplete="current-password" required minlength="12" maxlength="256"></label><button type="submit" disabled>Продолжить</button></form>
-<details><summary>У меня приглашение исследователя</summary><form id="accept-form" method="post"><label>Код приглашения<input id="invite-code" required autocomplete="off" maxlength="43" spellcheck="false"></label><label>Новый пароль<input id="invite-password" type="password" autocomplete="new-password" required minlength="12" maxlength="256"></label><button type="submit" disabled>Принять приглашение</button></form><p class="muted">После принятия войдите с кодом доступа, который выдал администратор.</p></details></section>
-<section id="mfa-screen" class="card narrow" hidden><h2>Подтвердите вход</h2><p>Введите код из приложения-аутентификатора или одноразовый резервный код.</p><form id="mfa-form" method="post"><label>Способ подтверждения<select id="mfa-type"><option value="totp">Код аутентификатора</option><option value="recovery">Резервный код</option></select></label><label>Код<input id="mfa-code" required autocomplete="one-time-code" maxlength="32" spellcheck="false"></label><button type="submit">Открыть кабинет</button></form><button id="enroll" class="secondary" type="button">Настроить второй фактор при первом входе</button><div id="secret-box" hidden><p>Добавьте этот секрет в аутентификатор: TOTP, 6 цифр, 30 секунд.</p><code id="mfa-secret"></code><p class="muted">Секрет показан один раз. Затем подтвердите код выше.</p></div><button id="cancel-mfa" class="text" type="button">Вернуться ко входу</button></section>
-<section id="recovery-screen" class="card narrow" hidden><h2>Сохраните резервные коды</h2><p>Каждый код используется один раз вместе с паролем. После закрытия они больше не будут показаны.</p><pre id="recovery-codes"></pre><button id="dismiss-recovery" type="button">Коды сохранены — продолжить</button></section>
-<section id="workspace-screen" hidden><div class="toolbar"><button id="refresh" class="secondary">Обновить</button><button id="reauth" class="secondary">Подтвердить MFA заново</button><button id="logout" class="text">Выйти</button></div>
-<section id="researcher-home" class="card" hidden><h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div><details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details><p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку. Пока доступны только учебные данные @example.test, без настоящих писем.</p></section>
-<div id="staff-home" hidden><nav class="tabs" aria-label="Разделы кабинета"><button data-tab="researchers-panel">Исследователи</button><button data-tab="study-directory-panel">Исследования</button><button data-tab="protocols-panel">Протоколы и результаты</button><button id="staff-tab" data-tab="staff-panel" hidden>Административные роли</button></nav>
-<section id="study-directory-panel" class="card panel" hidden><h2>Все исследования</h2><p class="muted">В MVP администратор и суперадминистратор могут вести исследования за исследователя. Действия записываются от имени сотрудника; квота остаётся у владельца. Активный дизайн не редактируется.</p><details><summary>Создать исследование для исследователя</summary><form id="staff-create-study-form"><fieldset id="staff-create-fields"><label>Владелец исследования<select id="study-owner" required></select></label><label>Название<input id="staff-study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик для исследователя</button></fieldset></form></details><div id="staff-studies"></div></section>
-<section id="researchers-panel" class="card panel"><div class="section-top"><h2>Исследователи</h2><button id="invite">Пригласить исследователя</button></div><div id="invite-preview" class="callout" hidden><h3>Одноразовое учебное приглашение</h3><p>Передайте эти данные исследователю. Email не отправляется.</p><pre id="invite-details"></pre><button id="clear-invite" class="secondary">Скрыть данные</button></div><div id="researchers"></div></section>
-<section id="protocols-panel" class="card panel" hidden><div class="section-top"><h2>Протоколы и результаты</h2><button id="export-all">Скачать все в JSON</button></div><p class="muted">Область: все исследования. Ответы и сохранённые результаты доступны обеим административным ролям. Не более 500 протоколов / 4 МБ за выгрузку.</p><div id="protocols"></div><section id="protocol-view" hidden><h3>Сохранённый протокол</h3><div id="result-view"></div><pre id="answers-view"></pre><button id="export-one" class="secondary">Скачать этот протокол</button><button id="clear-protocol" class="text">Закрыть</button></section></section>
-<section id="staff-panel" class="card panel" hidden><h2>Административные роли</h2><p class="muted">Назначение доступно только суперадминистратору после свежей MFA. Прежние сессии будут отозваны; свою роль менять нельзя.</p><form id="role-form"><label>Аккаунт<select id="target-user" required></select></label><label>Новая роль<select id="target-role"><option value="administrator">Администратор</option><option value="superadministrator">Суперадминистратор</option></select></label><button type="submit">Назначить роль</button></form><div id="staff-directory"></div></section></div>
-<section id="design-screen" class="card" hidden><div class="section-top"><h2 id="design-title"></h2><div class="row-actions"><button id="reload-design" class="secondary">Перечитать дизайн</button><button id="close-design" class="text">Закрыть просмотр</button></div></div><p id="design-meta" class="muted"></p><p id="design-warning" class="callout">Учебный TKI: исправленный ключ проверен, полное методическое утверждение ещё не завершено. Выпуск и результаты не публикуются.</p><div id="design-matrix" class="matrix"></div><p id="design-lock-note" class="error" hidden>Запись остановлена: состояние изменилось или ответ сервера не подтверждён. Перечитайте дизайн перед продолжением. Автоматической перезаписи нет.</p>
-<section id="stage-access-panel" hidden><h3>Открыть этап для группы</h3><p class="muted">Этапы открываются вручную и независимо для каждой группы. Это не меняет закреплённый дизайн и не создаёт прохождения автоматически.</p><label>Группа<select id="stage-access-group"></select></label><button id="reload-stage-access" class="secondary" type="button">Перечитать доступ к этапам</button><div id="stage-access-list"></div></section>
-<section id="group-invitations-panel" hidden><h3>Приглашение участников</h3><p class="muted">Одна ссылка для группы. Участники регистрируются индивидуально; группа определяется сервером. Ссылка показывается только при создании, email не отправляется.</p><label>Группа<select id="invitation-group"></select></label><label>Срок действия, дней<input id="invitation-days" type="number" min="1" max="30" step="1" value="7"></label><div class="toolbar"><button id="create-group-invitation" type="button">Создать групповую ссылку</button><button id="reload-group-invitations" type="button" class="secondary">Перечитать приглашения</button></div><div id="group-link-box" class="callout" hidden><label>Ссылка для группы<input id="group-invitation-link" readonly autocomplete="off"></label><div id="group-invitation-qr"></div><p id="group-qr-note" class="muted"></p><button id="hide-group-link" type="button" class="text">Скрыть ссылку и QR</button></div><div id="group-invitation-list"></div></section>
-<section id="passport-schema-panel"><h3>Паспортичка участника</h3><p id="passport-schema-meta" class="muted"></p><p>Пол и возраст обязательны. Пока основной каталог: пол, возраст, город; полный каталог будет расширен позже. Дополнительных вопросов — не более пяти.</p><fieldset id="passport-schema-fields" disabled><label class="check-label"><input id="passport-city-required" type="checkbox">Город обязателен</label><div id="passport-extra-list"></div><div class="toolbar"><button id="passport-add-field" type="button" class="secondary">Добавить вопрос</button><button id="passport-save-schema" type="button">Сохранить паспортичку</button></div></fieldset></section>
-<div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
-<section><h3>Название исследования</h3><form id="rename-study-form"><label>Название<input id="rename-title" required maxlength="200"></label><button type="submit" class="secondary">Сохранить название</button></form></section>
-<section><h3>Группы</h3><form id="group-form"><label>Группа<select id="group-edit"><option value="">Новая группа</option></select></label><label>Название<input id="group-name" required maxlength="100"></label><label>Тип<select id="group-kind"><option value="control">КГ — контрольная</option><option value="experimental">ЭГ — экспериментальная</option><option value="other">Другая</option></select></label><button type="submit">Сохранить группу</button></form></section>
-<section><h3>Этапы</h3><form id="stage-form"><label>Этап<select id="stage-edit"><option value="">Новый этап</option></select></label><label>Название / код<input id="stage-code" required maxlength="40" placeholder="T0, T1, T2 или своё название"></label><label>Порядок<input id="stage-ordinal" type="number" min="0" max="9999" step="1" required></label><button type="submit">Сохранить этап</button></form></section>
-<section><h3>Назначения методик</h3><form id="assignment-form"><label>Группа<select id="assignment-group" required></select></label><label>Этап<select id="assignment-stage" required></select></label><div id="release-options"></div><p class="muted">Набор сохраняется только для выбранной группы и этапа. В черновике он может быть пустым.</p><button type="submit">Сохранить набор</button></form></section>
-<section><h3>Копировать настройки этапа</h3><form id="copy-stage-form"><label>Исходный этап<select id="copy-source" required></select></label><label>Новый код<input id="copy-code" required maxlength="40" placeholder="T1"></label><label>Порядок нового этапа<input id="copy-ordinal" type="number" min="0" max="9999" step="1" required></label><p class="muted">Новый этап наследует наборы по группам. Участники, ответы и результаты не копируются.</p><button type="submit">Создать копию настроек</button></form></section>
-</div></fieldset></div><div class="toolbar"><button id="activate-study">Активировать исследование</button><button id="archive-study" class="secondary">Закрыть исследование</button></div><p class="muted">Перед активацией заполните назначения всех групп и этапов. Активный дизайн закрепляется; закрытие сохраняет записи и освобождает квоту. Возобновление закрытого исследования пока не предусмотрено.</p></section></section>
-<footer>Учебная платформа · Данные не размещены в Selectel · Полная методическая и эксплуатационная приёмка впереди</footer>
-</main></div></body></html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>МетодТест — кабинет</title>
+  <link rel="stylesheet" href="/workspace/styles.css">
+  <script src="/workspace/qr.js" defer></script>
+  <script src="/workspace/participant.js" defer></script>
+  <script src="/workspace/app.js" defer></script>
+</head>
+<body>
+<div class="shell">
+  <aside>
+    <a class="brand" href="/workspace">МетодТест<span>Исследовательская платформа</span></a>
+    <div class="stage">Кабинет исследователя</div>
+    <p>От исследования —<br>к проверенным данным</p>
+    <div class="note">Учебный контур<br>Только синтетические данные</div>
+  </aside>
+  <main>
+    <header><div><span class="eyebrow">ПЛАТФОРМА МЕТОДТЕСТ</span><h1 id="heading">Ваш рабочий кабинет</h1></div><div id="identity" class="badge">Вход в платформу</div></header>
+    <p id="message" role="status" aria-live="polite"></p>
+    <section id="participant-screen" hidden></section>
+
+    <section id="login-screen" class="card narrow">
+      <h2>Добро пожаловать</h2>
+      <p class="muted">Выберите роль и введите имя пользователя и пароль. Административный вход защищён вторым фактором.</p>
+      <form id="login-form" method="post">
+        <label>Роль<select id="realm"><option value="researcher">Исследователь</option><option value="staff">Администратор / суперадминистратор</option></select></label>
+        <label>Имя пользователя<input id="login-id" autocomplete="username" required maxlength="80" spellcheck="false"></label>
+        <label>Пароль<input id="password" type="password" autocomplete="current-password" required minlength="12" maxlength="256"></label>
+        <button type="submit" disabled>Продолжить</button>
+      </form>
+      <details><summary>У меня приглашение исследователя</summary>
+        <form id="accept-form" method="post"><label>Код приглашения<input id="invite-code" required autocomplete="off" maxlength="43" spellcheck="false"></label><label>Новый пароль<input id="invite-password" type="password" autocomplete="new-password" required minlength="12" maxlength="256"></label><button type="submit" disabled>Принять приглашение</button></form>
+        <p class="muted">После принятия войдите с именем пользователя, которое выдал администратор.</p>
+      </details>
+    </section>
+
+    <section id="mfa-screen" class="card narrow" hidden><h2>Подтвердите вход</h2><p>Введите код из приложения-аутентификатора или одноразовый резервный код.</p><form id="mfa-form" method="post"><label>Способ подтверждения<select id="mfa-type"><option value="totp">Код аутентификатора</option><option value="recovery">Резервный код</option></select></label><label>Код<input id="mfa-code" required autocomplete="one-time-code" maxlength="32" spellcheck="false"></label><button type="submit">Открыть кабинет</button></form><button id="enroll" class="secondary" type="button">Настроить второй фактор при первом входе</button><div id="secret-box" hidden><p>Добавьте этот секрет в аутентификатор: TOTP, 6 цифр, 30 секунд.</p><code id="mfa-secret"></code><p class="muted">Секрет показан один раз. Затем подтвердите код выше.</p></div><button id="cancel-mfa" class="text" type="button">Вернуться ко входу</button></section>
+    <section id="recovery-screen" class="card narrow" hidden><h2>Сохраните резервные коды</h2><p>Каждый код используется один раз вместе с паролем. После закрытия они больше не будут показаны.</p><pre id="recovery-codes"></pre><button id="dismiss-recovery" type="button">Коды сохранены — продолжить</button></section>
+
+    <section id="workspace-screen" hidden>
+      <div class="toolbar"><button id="refresh" class="secondary">Обновить</button><button id="reauth" class="secondary">Подтвердить MFA заново</button><button id="logout" class="text">Выйти</button></div>
+      <section id="researcher-home" class="card" hidden>
+        <h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div>
+        <details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
+        <p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку. Пока доступны только учебные данные @example.test, без настоящих писем.</p>
+      </section>
+
+      <div id="staff-home" hidden>
+        <nav class="tabs" aria-label="Разделы кабинета"><button data-tab="researchers-panel">Исследователи</button><button data-tab="study-directory-panel">Исследования</button><button data-tab="protocols-panel">Протоколы и результаты</button><button id="method-transfer-tab" data-tab="method-transfer-panel" hidden>Перенос методик</button><button id="staff-tab" data-tab="staff-panel" hidden>Административные роли</button></nav>
+        <section id="study-directory-panel" class="card panel" hidden><h2>Все исследования</h2><p class="muted">В MVP администратор и суперадминистратор могут вести исследования за исследователя. Действия записываются от имени сотрудника; квота остаётся у владельца. Активный дизайн не редактируется.</p><details><summary>Создать исследование для исследователя</summary><form id="staff-create-study-form"><fieldset id="staff-create-fields"><label>Владелец исследования<select id="study-owner" required></select></label><label>Название<input id="staff-study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик для исследователя</button></fieldset></form></details><div id="staff-studies"></div></section>
+        <section id="researchers-panel" class="card panel"><div class="section-top"><h2>Исследователи</h2><button id="invite">Пригласить исследователя</button></div><div id="invite-preview" class="callout" hidden><h3>Одноразовое учебное приглашение</h3><p>Передайте эти данные исследователю. Email не отправляется.</p><pre id="invite-details"></pre><button id="clear-invite" class="secondary">Скрыть данные</button></div><div id="researchers"></div></section>
+        <section id="protocols-panel" class="card panel" hidden><div class="section-top"><h2>Протоколы и результаты</h2><button id="export-all">Скачать все в JSON</button></div><p class="muted">Область: все исследования. Ответы и сохранённые результаты доступны обеим административным ролям. Не более 500 протоколов / 4 МБ за выгрузку.</p><div id="protocols"></div><section id="protocol-view" hidden><h3>Сохранённый протокол</h3><div id="result-view"></div><pre id="answers-view"></pre><button id="export-one" class="secondary">Скачать этот протокол</button><button id="clear-protocol" class="text">Закрыть</button></section></section>
+        <section id="method-transfer-panel" class="card panel" hidden><div class="section-top"><h2>Перенос методик</h2><button id="reload-method-transfer" class="secondary" type="button">Перечитать состояние</button></div><p class="muted">Постоянный раздел суперадминистратора. Здесь виден контролируемый перенос исходной библиотеки в назначаемые версии. Платформа принимает только заранее подготовленные пакеты с закреплёнными формой, ключом и контрольными расчётами; произвольный код и файлы респондентов не исполняются и не загружаются.</p><div id="method-transfer-counts" class="measures"></div><p id="method-transfer-note" class="callout"></p></section>
+        <section id="staff-panel" class="card panel" hidden><h2>Административные роли</h2><p class="muted">Назначение доступно только суперадминистратору после свежей MFA. Прежние сессии будут отозваны; свою роль менять нельзя.</p><form id="role-form"><label>Аккаунт<select id="target-user" required></select></label><label>Новая роль<select id="target-role"><option value="administrator">Администратор</option><option value="superadministrator">Суперадминистратор</option></select></label><button type="submit">Назначить роль</button></form><div id="staff-directory"></div></section>
+      </div>
+    </section>
+
+    <section id="design-screen" hidden>
+      <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><button id="back-study-hub" class="text" type="button" hidden>← К разделам исследования</button></nav>
+      <section id="study-hub" class="card">
+        <h2 id="design-title"></h2><p id="design-meta" class="muted"></p>
+        <div class="study-section-grid">
+          <button type="button" class="study-section-card" data-study-section-open="design"><strong>Дизайн исследования</strong><span>Название, группы и этапы исследования</span></button>
+          <button type="button" class="study-section-card" data-study-section-open="participants"><strong>Сведения об участниках</strong><span>Поля анкеты, приглашения и ход исследования</span></button>
+          <button type="button" class="study-section-card" data-study-section-open="methods"><strong>Методики</strong><span>Выбор методик и назначение группам</span></button>
+        </div>
+      </section>
+
+      <section id="study-design-section" class="card study-section" hidden>
+        <h2>Дизайн исследования</h2>
+        <p id="design-warning" class="callout">Учебный контур: результаты не публикуются.</p>
+        <div id="design-matrix" class="matrix"></div>
+        <p id="design-lock-note" class="error" hidden>Запись остановлена: состояние исследования изменилось. Вернитесь в «Мои исследования» и откройте его снова.</p>
+        <div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
+          <section><h3>Название исследования</h3><form id="rename-study-form"><label>Название<input id="rename-title" required maxlength="200"></label><button type="submit" class="secondary">Сохранить название</button></form></section>
+          <section><h3>Группы</h3><div id="group-cards"></div><button id="add-group" type="button" class="secondary">Добавить группу</button><form id="group-form" hidden><input id="group-edit" type="hidden"><label>Название группы<input id="group-name" required maxlength="100" placeholder="Например, Контрольная"></label><label>Тип группы<select id="group-kind"><option value="experimental">Экспериментальная</option><option value="control">Контрольная</option><option value="other">Другая</option></select></label><label>Примечание (необязательно)<input id="group-note" maxlength="500"></label><div class="toolbar"><button type="submit">Сохранить группу</button><button id="cancel-group" type="button" class="text">Отмена</button></div></form></section>
+          <section><h3>Этапы</h3><div id="stage-cards"></div><button id="add-stage" type="button" class="secondary">Добавить этап</button><form id="stage-form" hidden><input id="stage-edit" type="hidden"><label>Этап<input id="stage-code" readonly></label><label>Пояснение (необязательно)<input id="stage-note" maxlength="500" placeholder="Например, до начала программы"></label><input id="stage-ordinal" type="hidden"><div class="toolbar"><button type="submit">Сохранить этап</button><button id="cancel-stage" type="button" class="text">Отмена</button></div></form></section>
+          <section hidden><form id="copy-stage-form"><select id="copy-source"></select><input id="copy-code"><input id="copy-ordinal" type="number"></form></section>
+        </div></fieldset></div>
+        <div class="toolbar"><button id="activate-study">Активировать исследование</button><button id="archive-study" class="secondary">Закрыть исследование</button></div>
+        <p class="muted">Перед активацией заполните назначения всех групп и этапов. Активный дизайн закрепляется; закрытие сохраняет записи и освобождает квоту.</p>
+      </section>
+
+      <section id="study-participants-section" class="card study-section" hidden>
+        <h2>Сведения об участниках</h2>
+        <section id="passport-schema-panel">
+          <p id="passport-schema-meta" class="muted"></p>
+          <p>Отметьте сведения, которые участник увидит в анкете. Можно добавить до пяти своих вопросов.</p>
+          <label class="check-label"><input id="passport-all-groups" type="checkbox" checked>Применить ко всем группам</label>
+          <label id="passport-group-label" hidden>Группа<select id="passport-group"></select></label>
+          <fieldset id="passport-schema-fields" disabled>
+            <div class="profile-field-grid">
+              <label class="check-label"><input id="passport-field-sex" type="checkbox">Пол</label>
+              <label class="check-label"><input id="passport-field-age" type="checkbox">Возраст</label>
+              <label class="check-label"><input id="passport-field-city" type="checkbox">Населенный пункт</label>
+              <label class="check-label"><input id="passport-field-organization" type="checkbox">Организация</label>
+              <label class="check-label"><input id="passport-field-education" type="checkbox">Образование</label>
+            </div>
+            <div id="passport-extra-list"></div>
+            <div class="toolbar"><button id="passport-add-field" type="button" class="secondary">Добавить вопрос</button><button id="passport-save-schema" type="button">Сохранить сведения</button></div>
+          </fieldset>
+          <p class="muted">Изменения действуют для нового заполнения. Прежние анкеты сохраняются; участник может обновить сведения сам.</p>
+        </section>
+        <section id="stage-access-panel" hidden><h3>Открыть этап для группы</h3><p class="muted">Этапы открываются вручную и независимо для каждой группы.</p><label>Группа<select id="stage-access-group"></select></label><button id="reload-stage-access" class="secondary" type="button">Обновить этапы</button><div id="stage-access-list"></div></section>
+        <section id="group-invitations-panel" hidden><h3>Приглашение участников</h3><p class="muted">Одна ссылка для группы. Участники регистрируются индивидуально; группа определяется сервером.</p><label>Группа<select id="invitation-group"></select></label><label>Срок действия, дней<input id="invitation-days" type="number" min="1" max="30" step="1" value="7"></label><div class="toolbar"><button id="create-group-invitation" type="button">Создать групповую ссылку</button><button id="reload-group-invitations" type="button" class="secondary">Обновить приглашения</button></div><div id="group-link-box" class="callout" hidden><label>Ссылка для группы<input id="group-invitation-link" readonly autocomplete="off"></label><div id="group-invitation-qr"></div><p id="group-qr-note" class="muted"></p><button id="hide-group-link" type="button" class="text">Скрыть ссылку и QR</button></div><div id="group-invitation-list"></div></section>
+        <section id="research-progress-panel" hidden><h3>Ход исследования</h3><p class="muted">По группам и этапам: зарегистрировались, не начали, проходят, завершили. Ответы и индивидуальные баллы здесь недоступны.</p><div class="toolbar"><label>Группа<select id="progress-group"></select></label><label>Этап<select id="progress-stage"></select></label><button id="reload-progress" class="secondary" type="button">Обновить</button></div><p id="progress-stage-note" class="muted"></p><div id="progress-counts" class="measures"></div><div id="progress-people"></div><button id="preview-reminder" type="button">Напомнить о прохождении</button><section id="reminder-preview" class="callout" hidden><h4>Проверьте напоминание</h4><p id="reminder-count"></p><p id="reminder-text">Пожалуйста, завершите прохождение этапа исследования. Если вы уже завершили его, повторное заполнение не требуется.</p><p class="muted">Учебный режим: запись в локальную очередь, без отправки настоящих писем.</p><button id="confirm-reminder" type="button">Записать учебные напоминания</button><button id="cancel-reminder" class="text" type="button">Отмена</button></section></section>
+      </section>
+
+      <section id="study-methods-section" class="card study-section" hidden>
+        <h2>Методики</h2>
+        <p id="method-library-count" class="muted"></p>
+        <label>Поиск по названию, автору или показателю<input id="method-search" type="search" placeholder="Например, тревожность"></label>
+        <div class="toolbar"><label>Группа<select id="method-target-group"></select></label><label>Этап<select id="method-target-stage"></select></label><button id="save-method-selection" type="button">Сохранить выбранные методики</button></div>
+        <p class="muted">Отметьте несколько методик и сохраните набор для выбранной группы и этапа.</p>
+        <div id="method-catalog-list"></div>
+        <dialog id="copy-assignments-dialog"><form id="copy-assignments-form"><h3>Скопировать методики с предыдущего этапа?</h3><p id="copy-assignments-summary"></p><p class="error">Текущий набор выбранного этапа будет заменён.</p><div class="toolbar"><button type="submit">Заменить набор</button><button id="cancel-copy-assignments" type="button" class="text">Отмена</button></div></form></dialog>
+      </section>
+    </section>
+
+    <footer>Учебная платформа · Данные не размещены в Selectel · Полная методическая и эксплуатационная приёмка впереди</footer>
+  </main>
+</div>
+</body>
+</html>

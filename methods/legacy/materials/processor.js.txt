@@ -1,0 +1,421 @@
+(function (root, factory) {
+  const dep = typeof module === "object" && module.exports ? require("./methods.js") : root.PsyMethods;
+  const api = factory(dep);
+  if (typeof module === "object" && module.exports) module.exports = api;
+  else root.PsyProcessor = api;
+})(typeof globalThis !== "undefined" ? globalThis : this, function ({ methods, byId }) {
+  const clean = (v) => String(v ?? "").toLowerCase().replace(/ё/g,"е").replace(/[_–—-]+/g," ").replace(/\s+/g," ").trim();
+  const isBlank = (v) => v === null || v === undefined || String(v).trim() === "";
+  const round = (n, d=2) => Number.isFinite(n) ? Number(n.toFixed(d)) : null;
+  const sumItems = (x, ids) => ids.reduce((s,i) => s + x[i-1], 0);
+  const lookup = (value, table) => {
+    for (const [lo,hi,out] of table || []) if ((lo == null || value >= lo) && (hi == null || value <= hi)) return out;
+    return null;
+  };
+  const level = (value, table) => lookup(value, table);
+  const normalizeHeader = value => String(value ?? "").normalize("NFKC").replace(/\r\n?/g,"\n").replace(/\s+/g," ").trim().toLowerCase().replace(/ё/g,"е");
+  const fnv1a = value => {
+    let hash=0x811c9dc5;
+    for(let index=0;index<value.length;index++){hash^=value.charCodeAt(index);hash=Math.imul(hash,0x01000193)>>>0;}
+    return hash.toString(16).padStart(8,"0");
+  };
+  const headerFingerprint = headers => fnv1a(headers.map(header=>fnv1a(normalizeHeader(header))).join("|"));
+  const WCQ_NORMS = {
+    "Конфронтационный копинг":[[22,22,15,14,16,22,17,19],[26,25,19,18,20,26,21,23],[29,28,23,22,24,29,24,26],[32,32,27,26,28,32,28,29],[35,35,31,30,32,35,32,33],[38,38,36,34,36,39,35,36],[41,42,40,38,39,42,39,40],[45,45,44,42,43,45,43,43],[48,48,48,46,47,48,46,46],[51,51,52,50,51,52,50,50],[54,55,56,53,55,55,54,53],[57,58,60,57,59,58,57,57],[60,61,64,61,63,61,61,60],[63,64,68,65,67,64,65,64],[67,68,72,69,71,68,68,67],[70,71,76,73,75,71,72,70],[73,74,80,77,78,74,76,74],[76,77,84,81,82,77,79,77],[79,81,89,85,86,81,83,81]],
+    "Дистанцирование":[[24,22,14,21,21,24,19,19],[27,26,18,24,24,27,22,23],[30,29,21,27,28,30,26,26],[33,32,25,31,31,33,29,29],[37,35,29,34,34,36,32,32],[40,38,33,38,38,39,36,36],[43,41,37,41,41,42,39,39],[46,44,41,44,45,45,43,42],[49,48,45,48,48,48,46,45],[52,51,49,51,51,52,50,49],[56,54,53,54,55,55,53,52],[59,57,56,58,58,58,57,55],[62,60,60,61,61,61,60,59],[65,63,64,64,65,64,64,62],[68,67,68,68,68,67,67,65],[71,70,72,71,72,70,71,68],[75,73,76,74,75,73,74,72],[78,76,80,78,78,76,78,75],[81,79,84,81,82,79,81,78]],
+    "Самоконтроль":[[7,8,3,9,4,6,1,8],[10,11,7,12,8,9,4,11],[13,14,10,15,11,12,8,14],[16,17,14,18,15,15,12,17],[19,20,17,21,18,19,15,20],[22,23,21,24,21,22,19,24],[25,26,24,27,25,25,23,27],[28,29,28,30,28,28,27,30],[31,32,31,33,32,31,30,33],[34,35,35,36,35,34,34,36],[37,38,39,39,38,37,38,39],[41,41,42,42,42,40,41,42],[44,44,46,45,45,43,45,45],[47,47,49,48,49,46,49,49],[50,50,53,51,52,49,53,52],[53,52,56,54,55,52,56,55],[56,55,60,57,59,55,60,58],[59,58,63,60,62,58,64,61],[62,61,67,63,66,62,67,64],[65,64,70,66,69,65,71,67],[68,67,74,69,72,68,75,70],[71,70,77,72,76,71,78,73]],
+    "Поиск социальной поддержки":[[18,10,12,19,15,13,12,20],[21,14,15,22,19,16,15,22],[24,17,19,25,22,19,19,25],[27,21,22,28,25,22,21,28],[30,24,25,31,28,25,25,31],[33,28,29,34,31,29,28,33],[36,31,32,37,34,32,31,36],[39,35,36,40,37,35,34,39],[42,38,39,43,40,38,37,41],[45,42,43,46,43,41,40,44],[48,45,46,48,46,44,44,47],[51,49,49,51,49,47,47,49],[54,52,53,54,52,51,50,52],[57,56,56,57,55,54,53,55],[60,59,60,60,58,57,56,57],[63,63,63,63,62,60,59,60],[66,66,67,66,65,63,63,63],[69,70,70,69,68,66,66,66],[72,76,73,72,71,69,69,68]],
+    "Принятие ответственности":[[20,20,18,22,17,18,16,19],[24,24,22,25,21,22,20,23],[28,28,27,29,25,26,25,27],[31,31,31,33,30,30,30,31],[35,35,35,36,34,34,34,35],[39,39,39,40,39,38,39,39],[43,43,43,44,43,42,43,43],[47,46,48,47,47,46,48,47],[51,50,52,51,52,50,52,51],[55,54,56,55,56,54,57,55],[59,58,60,58,61,58,61,59],[63,61,65,62,65,62,66,63],[67,65,69,66,60,66,70,67]],
+    "Бегство–избегание":[[27,27,23,21,21,25,16,23],[29,29,25,24,24,28,19,25],[31,31,28,26,26,30,22,28],[35,35,31,29,29,32,25,30],[36,36,33,32,31,35,28,32],[38,38,36,35,34,37,31,35],[40,41,38,37,37,39,34,37],[43,43,41,40,39,42,37,40],[45,45,44,43,42,44,40,42],[47,48,46,46,45,46,43,44],[49,50,49,49,47,48,46,47],[52,52,51,51,50,51,49,49],[54,54,54,54,53,53,52,52],[56,57,57,57,55,55,55,54],[58,59,59,60,58,58,58,57],[61,61,62,62,61,60,61,59],[63,64,65,65,63,62,64,61],[65,66,67,68,66,65,67,64],[67,68,70,71,68,67,70,66],[69,71,72,73,71,69,73,69],[72,73,75,76,74,71,75,71],[74,75,78,79,76,74,78,74],[76,77,80,82,79,76,81,76],[78,80,83,85,82,78,84,78],[81,82,85,87,84,81,87,81]],
+    "Планирование решения проблемы":[[11,7,9,9,13,11,6,12],[14,11,13,12,16,14,9,15],[17,14,16,15,19,18,13,18],[20,17,19,19,22,21,16,21],[24,21,22,22,25,24,20,24],[27,24,25,25,28,27,24,28],[30,28,29,28,32,31,27,31],[33,31,32,32,35,35,31,34],[37,34,35,35,38,38,35,37],[40,38,38,38,41,42,38,40],[43,41,42,42,44,45,42,43],[46,45,45,45,47,49,45,46],[49,48,48,48,50,53,49,49],[53,51,51,51,53,56,53,52],[56,55,55,55,57,60,56,56],[59,58,58,58,60,63,60,59],[62,62,61,61,63,67,63,62],[66,65,64,65,66,71,67,65],[69,68,68,68,69,68,71,68]],
+    "Положительная переоценка":[[18,14,13,20,18,14,13,17],[21,17,16,22,21,17,16,20],[24,20,19,25,24,20,19,22],[26,23,22,27,26,23,22,25],[29,26,26,30,29,25,24,27],[32,29,29,33,32,28,27,30],[34,31,32,35,34,31,30,32],[37,34,35,38,37,34,33,35],[40,37,38,40,40,36,36,37],[42,40,41,43,42,39,39,40],[45,43,45,45,45,42,42,42],[48,46,48,48,48,45,45,45],[51,49,51,50,50,47,47,47],[53,52,54,53,53,50,50,50],[56,54,57,55,56,53,53,52],[59,57,61,58,58,56,56,55],[61,60,64,60,61,58,58,57],[64,63,67,63,64,61,61,60],[67,66,70,65,66,64,64,62],[69,69,73,68,69,67,67,65],[72,72,76,70,72,69,69,67],[75,75,80,73,74,72,72,70]]
+  };
+  const SAT_NORMS = {
+    "Компетентность во времени":[8.44,3.13],"Поддержка":[46.51,7.94],"Ценностные ориентации":[11.78,2.83],
+    "Гибкость поведения":[12.64,3.77],"Сензитивность":[7.30,2.18],"Спонтанность":[7.70,2.46],
+    "Самоуважение":[8.89,2.58],"Самопринятие":[10.45,3.45],"Представления о природе человека":[6.51,2.13],
+    "Синергия":[4.52,1.59],"Принятие агрессии":[7.70,2.61],"Контактность":[9.25,3.47],
+    "Познавательные потребности":[6.19,1.82],"Креативность":[7.27,2.48]
+  };
+
+  function detectMethod(filename, headers=[]) {
+    const structural=methods.filter(method=>method.forms?.length&&!chooseColumns(method,headers).fatal);
+    if(structural.length===1)return structural[0];
+    const hay = clean(filename + " " + headers.slice(0,10).join(" "));
+    const ranked = methods.map(m => ({m, score: Math.max(0, ...m.aliases.map(a => hay.includes(clean(a)) ? clean(a).length : 0))})).filter(x=>x.score>0).sort((a,b)=>b.score-a.score);
+    return ranked.length ? ranked[0].m : null;
+  }
+
+  function extractQuestionNumber(header) {
+    const s = String(header ?? "").replace(/\u00a0/g," ");
+    const plain=s.match(/^\s*(\d{1,3})\s*$/);if(plain)return Number(plain[1]);
+    const matches = [...s.matchAll(/(?:^|\/|\s)(\d{1,3})\s*[.\)\t]/g)];
+    return matches.length ? Number(matches[matches.length-1][1]) : null;
+  }
+
+  function learyListColumns(headers){
+    const specific=headers.map((h,i)=>({h:clean(h),i})).filter(x=>/отметьте.*суждени|представлен.*себе.*(?:реаль|идеаль)/i.test(x.h)).map(x=>x.i);
+    return specific.slice(0,2);
+  }
+
+  function chooseColumns(method, headers) {
+    if(method.forms?.length){
+      const fingerprints=new Map(method.forms.map(form=>[String(form.headerFingerprint).toLowerCase(),form]));
+      for(let start=0;start<=headers.length-method.items;start++){
+        const indexes=Array.from({length:method.items},(_,offset)=>start+offset);
+        const fingerprint=headerFingerprint(indexes.map(index=>headers[index]));
+        const form=fingerprints.get(fingerprint);
+        if(form){
+          const warnings=(method.limitations||[]).map(text=>`Ограничение паспорта: ${text}`);
+          return {indexes,blocks:1,warnings,fatal:false,passportIndexes:headers.map((_,index)=>index).filter(index=>!indexes.includes(index)),formId:form.id,headerFingerprint:fingerprint};
+        }
+      }
+      return {indexes:[],blocks:1,warnings:[`Структура вопросов не совпадает с контрольной формой ${method.items} пунктов: изменены тексты, порядок или состав диагностических колонок`],fatal:true,passportIndexes:[]};
+    }
+    const learyExpanded=method.id==="leary_dmo_128"&&headers.some(h=>/^\s*(?:Я-(?:реальное|идеальное)|Профиль)\s*\/\s*1\.\s*$/i.test(String(h??"")));
+    const nonStageCount=headers.filter(h=>!/^\s*(этап|волна|t0[–-]t1)\s*$/i.test(String(h??""))).length;
+    if(method.id==="leary_dmo_128"&&!learyExpanded&&nonStageCount<method.items){
+      const listIndexes=learyListColumns(headers);
+      if(listIndexes.length)return {indexes:listIndexes,blocks:listIndexes.length,warnings:[`Списочная форма Лири: найдено профилей ${listIndexes.length}; ответы будут автоматически развернуты в 128 пунктов`],fatal:false,passportIndexes:headers.map((_,i)=>i).filter(i=>!listIndexes.includes(i)),listForm:true};
+    }
+    let blocks = method.blocks || 1;
+    if (method.id === "leary_dmo_128" && headers.length < method.items * 2) blocks = 1;
+    if (method.id === "psi_russian_dzukaeva_sadovnikova" && headers.length >= method.items * 2) blocks = 2;
+    const needed = method.items * blocks;
+    const usable=headers.map((h,i)=>({h,i})).filter(x=>!/^\s*(этап|волна|t0[–-]t1)\s*$/i.test(String(x.h??""))).map(x=>x.i);
+    if (usable.length < needed) return {indexes:[], blocks, warnings:[`Недостаточно столбцов: найдено ${usable.length}, требуется не менее ${needed}`], fatal:true};
+    const indexes = usable.slice(-needed),start=indexes[0];
+    const warnings=[];
+    const nums=indexes.map(i=>extractQuestionNumber(headers[i]));
+    if (method.id === "tki_ru_30_pairs") {
+      const expected=Array.from({length:method.items},(_,i)=>i+1);
+      if (nums.some((n,i)=>n!==expected[i])) warnings.push("Нумерация заголовков нарушена; применена позиционная нумерация 1–30");
+    } else if (method.id === "sat_126") {
+      if (new Set(nums.filter(Boolean)).size < 100) warnings.push("Групповые заголовки САТ; применена позиционная нумерация 1–126");
+    } else if (method.id !== "leary_dmo_128") {
+      const complete=nums.every((n,i)=>n===((i%method.items)+1));
+      if (!complete) warnings.push(`Заголовки вопросов неполные или сбиты; применена позиционная нумерация 1–${method.items}`);
+    }
+    return {indexes, blocks, warnings, fatal:false, passportIndexes:headers.map((_,i)=>i).filter(i=>!indexes.includes(i))};
+  }
+
+  function normalizeBinary(v, blankAsNo=false, oneTwo=false) {
+    if (isBlank(v)) return blankAsNo ? 0 : null;
+    if (oneTwo && Number(v) === 1) return 1;
+    if (oneTwo && Number(v) === 2) return 0;
+    if (typeof v === "number") return v === 1 ? 1 : v === 0 ? 0 : null;
+    const s=clean(v);
+    if (["да","yes","true","1","верно","согласен","согласна"].includes(s)) return 1;
+    if (["нет","no","false","0","неверно","не согласен","не согласна"].includes(s)) return 0;
+    return blankAsNo ? 1 : null;
+  }
+
+  function normalizeForced(v) {
+    if (isBlank(v)) return null;
+    const s=String(v).trim();
+    if (/^[aа](?:\)|\.|\s|$)/i.test(s)) return "A";
+    if (/^[bб](?:\)|\.|\s|$)/i.test(s)) return "B";
+    const c=s[0]?.toUpperCase();
+    if (c==="A" || c==="А") return "A";
+    if (c==="B" || c==="Б") return "B";
+    return null;
+  }
+
+  function buildContext(method, rows, indexes) {
+    let shift=0, binaryOneTwo=false, sjoSigned=false;
+    if (method.inputShiftIfOneBased) {
+      const vals=[];
+      for (const row of rows.slice(0,200)) for (const i of indexes) if (!isBlank(row[i]) && Number.isFinite(Number(row[i]))) vals.push(Number(row[i]));
+      const lo=Math.min(...vals), hi=Math.max(...vals), vlo=Math.min(...method.valid), vhi=Math.max(...method.valid);
+      if (vals.length && !vals.includes(vlo) && lo>=vlo+1 && hi<=vhi+1 && (lo===vlo+1 || hi===vhi+1)) shift=-1;
+    }
+    if (method.binary || ["binary_plusminus","boyko","mlo"].includes(method.type)) {
+      const nums=[];
+      for (const row of rows.slice(0,200)) for (const i of indexes) if (!isBlank(row[i]) && Number.isFinite(Number(row[i]))) nums.push(Number(row[i]));
+      const unique=new Set(nums);
+      binaryOneTwo=unique.has(1)&&unique.has(2)&&!unique.has(0)&&[...unique].every(v=>v===1||v===2);
+    }
+    if(method.type==="sjo"){
+      const nums=[];for(const row of rows.slice(0,200))for(const i of indexes)if(!isBlank(row[i])&&Number.isFinite(Number(row[i])))nums.push(Number(row[i]));
+      sjoSigned=nums.length>0&&nums.some(v=>v<=0)&&nums.every(v=>Number.isInteger(v)&&v>=-3&&v<=3);
+    }
+    return {shift,binaryOneTwo,sjoSigned};
+  }
+
+  function normalizeValue(method, v, context) {
+    if (method.type === "forced") return normalizeForced(v);
+    if (method.type === "leary") return normalizeBinary(v,true);
+    if (method.binary || method.type === "binary_plusminus" || method.type === "boyko" || method.type === "mlo") return normalizeBinary(v,false,context.binaryOneTwo);
+    if (isBlank(v)) return null;
+    if(method.responsePrefixMap){
+      const prefix=String(v).trim().toLowerCase().replace(/\u00a0/g," ").match(/^([a-zа-яё])\s*[).]/iu)?.[1];
+      if(prefix!=null&&Object.prototype.hasOwnProperty.call(method.responsePrefixMap,prefix)){
+        const mapped=Number(method.responsePrefixMap[prefix]);
+        return method.valid&&!method.valid.includes(mapped)?null:mapped;
+      }
+    }
+    let n=Number(String(v).replace(",","."));
+    if (!Number.isFinite(n)) return null;
+    if (method.type === "uvlk") return ({1:0,2:1,3:0,4:2,5:3,0:0})[n] ?? null;
+    if (method.type === "sjo" && context.sjoSigned) return n+4;
+    n += context.shift || 0;
+    if(method.valid&&!method.valid.includes(n))return null;
+    if(method.type==="passport"&&method.inputTransform?.op==="reverse")n=Number(method.inputTransform.max)-n;
+    return n;
+  }
+
+  function scorePassport(method,x){
+    const metrics={},warnings=[];
+    const set=(name,value)=>{metrics[name]=round(value);};
+    if(method.missing?.mode==="complete"&&x.some(value=>value===null))return {metrics,warnings,status:"Неполные или некорректные ответы"};
+    for(const constraint of method.responseConstraints||[]){
+      const actual=x.filter(value=>value===Number(constraint.value)).length;
+      if(actual!==Number(constraint.count))return {metrics:{},warnings:[`Нарушено ограничение ответов: значение ${constraint.value} должно встречаться ${constraint.count}, фактически ${actual}`],status:"Нарушены ограничения ответов"};
+    }
+    for(const [name,scale] of Object.entries(method.scales||{})){
+      const direct=scale.items||scale.direct||[],reverse=scale.reverse||[],positive=scale.positive||[],negative=scale.negative||[];
+      const ids=[...direct,...reverse,...positive,...negative],missing=ids.filter(item=>x[item-1]===null).length;
+      if(missing){
+        const fraction=missing/ids.length,threshold=Number(method.missing?.invalidateScaleIfMissingFractionGte);
+        if(method.missing?.mode!=="scale"||!Number.isFinite(threshold)||fraction>=threshold){warnings.push(`${name}: шкала не рассчитана, пропущено ${missing} из ${ids.length} пунктов`);continue;}
+        warnings.push(`${name}: среднее рассчитано по валидным пунктам, пропущено ${missing} из ${ids.length}`);
+      }
+      const directValues=direct.map(item=>x[item-1]).filter(Number.isFinite);
+      const reverseValues=reverse.map(item=>x[item-1]).filter(Number.isFinite).map(value=>Number(scale.reverseMax??method.reverseMax)-value);
+      const values=[...directValues,...reverseValues];let value=null;
+      if(scale.aggregate==="sum")value=values.reduce((sum,item)=>sum+item,0);
+      if(scale.aggregate==="mean")value=values.length?values.reduce((sum,item)=>sum+item,0)/values.length:null;
+      if(scale.aggregate==="difference_affine"){
+        const pos=positive.map(item=>x[item-1]).filter(Number.isFinite),neg=negative.map(item=>x[item-1]).filter(Number.isFinite);
+        if(pos.length+neg.length)value=(pos.reduce((sum,item)=>sum+item,0)-neg.reduce((sum,item)=>sum+item,0)+Number(scale.offset))/Number(scale.divisor);
+      }
+      if(Number.isFinite(value))set(name,value);
+    }
+    for(const [name,definition] of Object.entries(method.derived||{})){
+      let value=null;
+      if(definition.op==="sum"||definition.op==="mean"){
+        const values=(definition.inputs||[]).map(input=>metrics[input]).filter(Number.isFinite);
+        if(values.length===(definition.inputs||[]).length&&values.length){
+          value=values.reduce((sum,item)=>sum+item,0)/(definition.op==="mean"?values.length:1);
+          if(definition.factor!=null)value*=Number(definition.factor);
+        }
+      }else if(definition.op==="abs_difference"){
+        const [a,b]=(definition.inputs||[]).map(input=>metrics[input]);if(Number.isFinite(a)&&Number.isFinite(b))value=Math.abs(a-b);
+      }else if(definition.op==="ratio_to_mean"){
+        const numerator=metrics[definition.numerator],denominators=(definition.denominatorInputs||[]).map(input=>metrics[input]);
+        if(Number.isFinite(numerator)&&denominators.length&&denominators.every(Number.isFinite)){const denominator=denominators.reduce((sum,item)=>sum+item,0)/denominators.length;if(denominator!==0)value=numerator/denominator;}
+      }
+      if(Number.isFinite(value))set(name,value);
+    }
+    for(const [name,range] of Object.entries(method.ranges||{}))if(Number.isFinite(metrics[name])&&(metrics[name]<Number(range[0])||metrics[name]>Number(range[1])))return {metrics:{},warnings:[`SANITY_RANGE: ${name}=${metrics[name]} вне допустимого диапазона ${range[0]}–${range[1]}`],status:"Ошибка диапазона результата"};
+    for(const [name,norm] of Object.entries(method.norms||{}))if(Number.isFinite(metrics[name])){
+      if((norm.ambiguous||[]).includes(metrics[name]))warnings.push(`${name}: нормативное преобразование неоднозначно для значения ${metrics[name]} и не рассчитано`);
+      else {const lookupValue=Number.isInteger(norm.round)?round(metrics[name],norm.round):metrics[name],converted=lookup(lookupValue,norm.ranges);if(converted!=null)metrics[name+(norm.suffix||" – уровень")]=converted;}
+    }
+    for(const [name,ranges] of Object.entries(method.levels||{}))if(Number.isFinite(metrics[name])){const converted=lookup(metrics[name],ranges);if(converted!=null)metrics[name+" – уровень"]=converted;}
+    for(const [name,criterion] of Object.entries(method.criteria||{}))if(Number.isFinite(metrics[name])){
+      if(method.criteriaRule==="below_deficit")metrics[name+" – относительно критерия"]=metrics[name]<criterion?"дефицит характеристики":"не ниже критериального значения";
+      if(method.criteriaRule==="higher_or_equal_problem")metrics[name+" – относительно cut-off"]=metrics[name]>=criterion?"проблемная область":"ниже клинического cut-off";
+    }
+    return {metrics,warnings,status:Object.keys(metrics).length?"Обработано":"Неполные или некорректные ответы"};
+  }
+
+  function scoreComplete(method, x, extra={}) {
+    const metrics={}, warnings=[];
+    const set=(k,v)=>{metrics[k]=round(v)};
+    if (method.type === "unavailable") return {metrics, warnings:["SCORING_KEY_REQUIRED: в переданном паспорте нет исполняемого ключа"], status:"Нужен ключ"};
+    if (method.type === "passport") return scorePassport(method,x);
+    if (method.type === "sum" || method.type === "mean") {
+      for (const [name,ids] of Object.entries(method.scales)) {
+        const vals=ids.map(i=>x[i-1]).filter(Number.isFinite);
+        set(name, method.type === "mean" ? vals.reduce((a,b)=>a+b,0)/vals.length : vals.reduce((a,b)=>a+b,0));
+      }
+      if (method.id === "mbi_hss_22") set("Редукция профессиональных достижений",48-metrics["Профессиональные достижения"]);
+    }
+    if (method.type === "plusminus") {
+      for (const [name,s] of Object.entries(method.scales)) {
+        const raw=sumItems(x,s.plus)-sumItems(x,s.minus); set(name+" – сырой балл",raw);
+        if (method.sten?.[name]) set(name+" – стен",lookup(raw,method.sten[name]));
+      }
+    }
+    if (method.type === "binary_plusminus") {
+      let total=0;
+      for (const [name,s] of Object.entries(method.scales)) {const raw=s.plus.reduce((a,i)=>a+(x[i-1]===1?1:0),0)+s.minus.reduce((a,i)=>a+(x[i-1]===0?1:0),0);set(name+" – сырой балл",raw);total+=raw;}
+      if(method.totalName)set(method.totalName,total);
+      if (method.incompleteNorms) warnings.push("Процентили ОСО не рассчитаны: таблицы накопленных частот не включены в переданный ключ");
+    }
+    if (method.type === "directreverse" || method.type === "signedreverse") {
+      let total=0;
+      for (const [name,s] of Object.entries(method.scales)) {
+        const raw=s.direct.reduce((a,i)=>a+x[i-1],0)+s.reverse.reduce((a,i)=>a+(method.type==="signedreverse"?-x[i-1]:method.reverseMax-x[i-1]),0);
+        set(name,raw); total+=raw;
+      }
+      if (method.totalName) set(method.totalName,total);
+      if (method.id === "reflexivity_karpov_27") {
+        const raw=metrics["Рефлексивность"], sten=lookup(raw,method.stenTable); set("Рефлексивность – стен",sten);
+        metrics["Уровень рефлексивности"]=sten==null?null:(sten<4?"низкий":sten<7?"средний":"высокий");
+      }
+    }
+    if (method.type === "signedreverse" && method.totalName) set(method.totalName,Object.keys(method.scales).reduce((a,k)=>a+metrics[k],0));
+    if (method.type === "sjo") {
+      const scored=x.map((v,i)=>method.ascending.includes(i+1)?v:8-v);
+      for (const [name,ids] of Object.entries(method.scales)) set(name,sumItems(scored,ids));
+      const age=Number(extra.ageValue),sex=clean(extra.sexValue);let normKey=null,normLabel=null;
+      if(age>=18&&age<=29&&sex.includes("муж")){normKey="young_male";normLabel="18–29 лет, мужчины";}
+      else if(age>=18&&age<=29&&sex.includes("жен")){normKey="young_female";normLabel="18–29 лет, женщины";}
+      else if(age>=30&&age<=55){normKey="adult_30_55";normLabel="30–55 лет, оба пола";}
+      if(normKey){metrics["Нормативная группа СЖО"]=normLabel;for(const [name,[mean,sd]] of Object.entries(method.norms[normKey]))set(name+" – z",(metrics[name]-mean)/sd);}
+      else warnings.push("Нормативная группа СЖО не определена по возрасту и полу; сырые баллы рассчитаны");
+      warnings.push("Процентили СЖО не рассчитаны: таблица преобразования сырого балла в процентили не предоставлена");
+    }
+    if (method.type === "psi") {
+      for(const [name,ids] of Object.entries(method.scales))set(name,(144-sumItems(x,ids))/24);
+    }
+    if (method.type === "uvlk") {
+      for (const [name,ids] of Object.entries(method.scales)) set(name,sumItems(x,ids));
+      set("Мотивационная сфера",metrics["Мотивационный конфликт"]+metrics["Моральный конфликт"]+metrics["Конфликт нереализованного желания"]);
+      set("Сфера долженствования",metrics["Моральный конфликт"]+metrics["Ролевой конфликт"]+metrics["Адаптационный конфликт"]);
+      set("Сфера самооценки",metrics["Конфликт нереализованного желания"]+metrics["Адаптационный конфликт"]+metrics["Конфликт неадекватной самооценки"]);
+      set("Общий уровень внутриличностной конфликтности",Object.keys(method.scales).reduce((a,k)=>a+metrics[k],0));
+      const t=metrics["Общий уровень внутриличностной конфликтности"];
+      metrics["Интерпретация общего уровня"]=t<=6?"крайне низкий":t<=29?"низкий":t<=49?"средний":t<=74?"высокий":"очень высокий";
+    }
+    if (method.type === "boyko") {
+      const names=Object.keys(method.symptoms);
+      for (const [name,keys] of Object.entries(method.symptoms)) {
+        let raw=0; for (const key of keys) {const m=key.match(/^([+-])(\d+):(\d+)$/); const yes=m[1]==="+",i=Number(m[2]),w=Number(m[3]); if ((yes&&x[i-1]===1)||(!yes&&x[i-1]===0)) raw+=w;}
+        set(name,raw); metrics[name+" – состояние симптома"]=raw<=9?"симптом не сформирован":raw<=15?"симптом формируется":"симптом сформирован";
+      }
+      const phases={"Напряжение":names.slice(0,4),"Резистенция":names.slice(4,8),"Истощение":names.slice(8,12)};
+      for (const [p,ns] of Object.entries(phases)) {const v=ns.reduce((a,n)=>a+metrics[n],0);set(p,v);metrics[p+" – состояние фазы"]=v<=36?"фаза не сформирована":v<=60?"фаза формируется":"фаза сформирована";}
+      set("Общий показатель выгорания",names.reduce((a,n)=>a+metrics[n],0));
+    }
+    if (method.type === "spa") {
+      for (const [name,ids] of Object.entries(method.primary)) set(name+" – сырой балл",sumItems(x,ids));
+      const A=metrics["Адаптивность – сырой балл"],B=metrics["Дезадаптивность – сырой балл"]; set("Адаптация – интегральный показатель",A+B===0?null:100*A/(A+B));
+      for (const [name,s] of Object.entries(method.pairs)) {const p=sumItems(x,s.p),n=sumItems(x,s.n);set(name+" +",p);set(name+" −",n);const den=s.k[0]*p+s.k[1]*n;set(name+" – интегральный показатель",den===0?null:100*s.k[0]*p/den);}
+    }
+    if (method.type === "forced") {
+      for (const [name,key] of Object.entries(method.scales)) {
+        let score=0;
+        if (typeof key === "string") for (const token of key.split(/\s+/)) {const m=token.match(/(\d+)([AB])/);if(m&&x[Number(m[1])-1]===m[2]) score++;}
+        else {for(const i of key.A||[])if(x[i-1]==="A")score++;for(const i of key.B||[])if(x[i-1]==="B")score++;}
+        set(name,score);
+      }
+      if (method.id === "sat_126") for(const [name,[m,sdv]] of Object.entries(SAT_NORMS)) set(name+" – T-балл",50+10*(metrics[name]-m)/sdv);
+    }
+    if (method.type === "leary") {
+      const blockLabel=extra.blockLabel||"Профиль";
+      for (const [name,ids] of Object.entries(method.octants)) set(`${blockLabel}: октант ${name}`,sumItems(x,ids));
+      const g=(n)=>metrics[`${blockLabel}: октант ${n}`];
+      set(`${blockLabel}: доминирование`,(g("I")-g("V"))+0.7*(g("VIII")+g("II")-g("IV")-g("VI")));
+      set(`${blockLabel}: дружелюбие`,(g("VII")-g("III"))+0.7*(g("VIII")-g("II")-g("IV")+g("VI")));
+    }
+    if (method.type === "mlo") {
+      for (const [name,s] of Object.entries(method.scales)) {const raw=s.yes.reduce((a,i)=>a+(x[i-1]===1?1:0),0)+s.no.reduce((a,i)=>a+(x[i-1]===0?1:0),0);set(name+" – сырой балл",raw);if(method.ten[name])set(name+" – стен",lookup(raw,method.ten[name]));}
+      const as=metrics["Астенические реакции и состояния – сырой балл"],ps=metrics["Психотические реакции и состояния – сырой балл"],dan=as+ps;set("Дезадаптационные нарушения – сырой балл",dan);
+      const age=Number(extra.ageValue);
+      set("Дезадаптационные нарушения – стен",lookup(dan,method.ten["Дезадаптационные нарушения"]));
+      metrics["Нормативная база АС, ПС и ДАН"]="мужчины 20–25 лет (основная для всех респондентов)";
+      const lap=metrics["Личностный адаптационный потенциал – сырой балл"],lapTable=age>=17&&age<=20?method.lapTen.age17_20:age>=27&&age<=35?method.lapTen.age27_35:null;
+      if(lapTable)set("Личностный адаптационный потенциал – стен",lookup(lap,lapTable));else warnings.push("Возрастная норма ЛАП отсутствует: стен не рассчитан");
+      metrics["Профиль достоверен"]=metrics["Достоверность – сырой балл"]>10?"нет":"да";
+      if(metrics["Профиль достоверен"]==="нет")warnings.push("Недостоверный протокол МЛО: строка исключена из основного результата и дальнейшей аналитики");
+    }
+    if (method.type === "wcq") {
+      const age=Number(extra.ageValue),sex=clean(extra.sexValue),sexOffset=sex.includes("муж")?0:sex.includes("жен")?4:null,ageOffset=age<=20?0:age<=30?1:age<=45?2:age<=60?3:null;
+      for (const [name,ids] of Object.entries(method.scales)) {const raw=sumItems(x,ids),pct=100*raw/(3*ids.length);set(name+" – сырой балл",raw);set(name+" – напряженность, %",pct);const table=WCQ_NORMS[name];if(sexOffset!=null&&ageOffset!=null&&table?.[raw]){const t=table[raw][sexOffset+ageOffset];set(name+" – T-балл",t);metrics[name+" – уровень"]=t<40?"редкое использование":t<=60?"умеренное использование":"выраженное предпочтение";}else metrics[name+" – уровень"]=pct<=20?"низкий":pct<=40?"пониженный":pct<=60?"средний":pct<=80?"повышенный":"высокий";}
+      if(sexOffset==null||ageOffset==null)warnings.push(age>60?"Для WCQ нет возрастной нормы старше 60 лет: сохранены сырые баллы и напряженность":"Для WCQ не определены пол или возраст: T-баллы не рассчитаны");
+    }
+    if (method.type === "vgrk") {
+      for (const [name,s] of Object.entries(method.scales)) {const v=s.direct.reduce((a,i)=>a+x[i-1]+3,0)+s.reverse.reduce((a,i)=>a-x[i-1]+3,0);set(name,v);}
+      const sex=clean(extra.sexValue),sexKey=sex.includes("жен")?"female":sex.includes("муж")?"male":null;
+      const N={
+        male:{"Гендерная шкала":[[0,12,"низкий"],[13,19,"ниже среднего"],[20,26,"средний"],[27,32,"выше среднего"],[33,60,"высокий"]],"Профессиональная шкала":[[0,15,"низкий"],[16,22,"ниже среднего"],[23,29,"средний"],[30,37,"выше среднего"],[38,60,"высокий"]],"Родительская шкала":[[0,19,"низкий"],[20,24,"ниже среднего"],[25,29,"средний"],[30,35,"выше среднего"],[36,60,"высокий"]],"Супружеская шкала":[[0,21,"низкий"],[22,26,"ниже среднего"],[27,31,"средний"],[32,38,"выше среднего"],[39,60,"высокий"]],"Хозяйственная шкала":[[0,19,"низкий"],[20,25,"ниже среднего"],[26,31,"средний"],[32,38,"выше среднего"],[39,60,"высокий"]],"Общий уровень ВГРК":[[0,105,"низкий"],[106,125,"ниже среднего"],[126,143,"средний"],[144,160,"выше среднего"],[161,300,"высокий"]]},
+        female:{"Гендерная шкала":[[0,11,"низкий"],[12,22,"ниже среднего"],[23,32,"средний"],[33,47,"выше среднего"],[48,60,"высокий"]],"Профессиональная шкала":[[0,14,"низкий"],[15,23,"ниже среднего"],[24,33,"средний"],[34,44,"выше среднего"],[45,60,"высокий"]],"Родительская шкала":[[0,19,"низкий"],[20,27,"ниже среднего"],[28,36,"средний"],[37,47,"выше среднего"],[48,60,"высокий"]],"Супружеская шкала":[[0,19,"низкий"],[20,26,"ниже среднего"],[27,32,"средний"],[33,39,"выше среднего"],[40,60,"высокий"]],"Хозяйственная шкала":[[0,22,"низкий"],[23,29,"ниже среднего"],[30,38,"средний"],[39,47,"выше среднего"],[48,60,"высокий"]],"Общий уровень ВГРК":[[0,104,"низкий"],[105,130,"ниже среднего"],[131,174,"средний"],[175,207,"выше среднего"],[208,300,"высокий"]]}
+      };
+      const oldNames={"Гендерное Я":"Гендерная шкала","Профессиональное Я":"Профессиональная шкала","Я как отец/мать":"Родительская шкала","Я как муж/жена":"Супружеская шкала","Я как хозяин/хозяйка":"Хозяйственная шкала"};
+      if(sexKey)for(const [name,oldName] of Object.entries(oldNames))metrics[name+" – уровень"]=level(metrics[name],N[sexKey][oldName]);
+      else warnings.push("Пол не распознан: уровни ВГРК не рассчитаны, сырые баллы сохранены");
+    }
+    if (method.levels) for (const [name,t] of Object.entries(method.levels)) if (metrics[name]!=null) metrics[name+" – уровень"]=level(metrics[name],t);
+    return {metrics,warnings,status:metrics["Профиль достоверен"]==="нет"?"Недостоверный протокол":"Обработано"};
+  }
+
+  function blockLabel(method, headers, indexes, block) {
+    if (method.id !== "leary_dmo_128") return "Профиль";
+    const h=clean(headers[indexes[block*method.items]]);
+    if (h.includes("идеаль")) return "Я-идеальное";
+    if (h.includes("реаль")) return "Я-реальное";
+    return block===0?"Я-реальное":"Я-идеальное";
+  }
+
+  function expandLearyLists(headers,rows){
+    const nonStageCount=headers.filter(h=>!/^\s*(этап|волна|t0[–-]t1)\s*$/i.test(String(h??""))).length;if(nonStageCount>=128)return {headers,rows,expanded:false};
+    const indexes=learyListColumns(headers);if(!indexes.length)return {headers,rows,expanded:false};
+    const selected=v=>{const out=new Set(),s=String(v??"");for(const m of s.matchAll(/(?:^|[\n,])\s*(\d{1,3})\s*[.\)\t]/g)){const n=Number(m[1]);if(n>=1&&n<=128)out.add(n);}return out;};
+    const label=index=>/идеаль/i.test(clean(headers[index]))?"Я-идеальное":/реаль/i.test(clean(headers[index]))?"Я-реальное":indexes.length===1?"Профиль":index===indexes[0]?"Я-реальное":"Я-идеальное";
+    const extraHeaders=indexes.flatMap(index=>Array.from({length:128},(_,i)=>`${label(index)} / ${i+1}.`));
+    return {headers:[...headers,...extraHeaders],rows:rows.map(r=>[...r,...indexes.flatMap(index=>{const answers=selected(r[index]);return Array.from({length:128},(_,i)=>answers.has(i+1)?1:0);})]),expanded:true};
+  }
+
+  function processTable({filename, headers:inputHeaders, rows:inputRows, methodId}) {
+    let headers=inputHeaders,rows=inputRows;
+    const method=methodId?byId[methodId]:detectMethod(filename,headers);
+    if (!method) return {fatal:true,method:null,warnings:["Методика не распознана. Выберите ее вручную."],outputRows:[]};
+    if(method.id==="leary_dmo_128"){const expanded=expandLearyLists(headers,rows);headers=expanded.headers;rows=expanded.rows;}
+    const layout=chooseColumns(method,headers);
+    if(layout.fatal)return {fatal:true,method,warnings:layout.warnings,outputRows:[]};
+    const context=buildContext(method,rows,layout.indexes);
+    const sexIndex=headers.findIndex(h=>/укажите\s+ваш\s+пол|^\s*пол\s*$/i.test(String(h??"")));
+    const ageIndex=headers.findIndex(h=>/возраст/i.test(String(h??"")));
+    const stageIndex=headers.findIndex(h=>/^\s*(?:этап|волна|t0[–-]t1)\s*$/i.test(String(h??"")));
+    const idIndex=headers.findIndex(h=>/код.*(?:участник|респондент)|идентификатор.*(?:участник|респондент)|^\s*(?:id|ид)\s+(?:ответа|участника|респондента)\s*$|^\s*(?:e-?mail|email|фио|id|ид)\s*$|электронн.*почт/i.test(String(h??"")));
+    const resultHeaders=[...headers]; const outputRows=[]; const allMetricNames=[]; const rowResults=[];
+    for (const row of rows) {
+      const blocks=[]; let validTotal=0; const rowWarnings=[]; let rowStatus="Обработано"; const combined={};
+      for(let b=0;b<layout.blocks;b++){
+        const idx=layout.indexes.slice(b*method.items,(b+1)*method.items);
+        const raw=idx.map(i=>row[i]),x=raw.map(value=>normalizeValue(method,value,context));
+        const valid=x.filter(v=>v!==null).length; validTotal+=valid;
+        const unknown=raw.filter((value,index)=>!isBlank(value)&&x[index]===null).length;
+        if(method.type==="passport"&&unknown){rowStatus="Неизвестные значения ответов";rowWarnings.push(`блок ${b+1}: неизвестных или недопустимых значений ${unknown}`);continue;}
+        const passportPartial=method.type==="passport"&&method.missing?.mode==="scale";
+        const required=passportPartial?0:method.type==="mean"?(method.minValid||method.items):method.items;
+        if(valid<required){rowStatus="Неполные или некорректные ответы";rowWarnings.push(`блок ${b+1}: валидных ответов ${valid} из ${method.items}`);continue;}
+        const scored=scoreComplete(method,x,{blockLabel:blockLabel(method,headers,layout.indexes,b),sexValue:sexIndex>=0?row[sexIndex]:null,ageValue:ageIndex>=0?row[ageIndex]:null});
+        Object.assign(combined,scored.metrics); rowWarnings.push(...scored.warnings); if(scored.status!=="Обработано")rowStatus=scored.status;
+      }
+      for(const k of Object.keys(combined))if(!allMetricNames.includes(k))allMetricNames.push(k);
+      rowResults.push({combined,validTotal,rowStatus,rowWarnings:[...new Set(rowWarnings)]});
+    }
+    const metaHeaders=["Методика","Статус обработки","Валидных ответов","Предупреждения"];
+    resultHeaders.push(...metaHeaders,...allMetricNames);
+    const excludedRows=[],allOutputRows=[];
+    for(let r=0;r<rows.length;r++){
+      const rr=rowResults[r],out=[...rows[r],method.name,rr.rowStatus,rr.validTotal,[...new Set([...layout.warnings,...rr.rowWarnings])].join("; "),...allMetricNames.map(k=>rr.combined[k]??null)];
+      allOutputRows.push(out);
+      if(rr.rowStatus==="Обработано")outputRows.push(out);
+      else excludedRows.push({
+        sourceRow:r+2,
+        participantId:idIndex>=0?rows[r][idIndex]??"":"",
+        stage:stageIndex>=0?rows[r][stageIndex]??"":"",
+        reason:rr.rowStatus,
+        missingAnswers:Math.max(0,method.items*layout.blocks-rr.validTotal),
+        validityScore:rr.combined["Достоверность – сырой балл"]??"",
+        warnings:[...new Set([...layout.warnings,...rr.rowWarnings])].join("; ")
+      });
+    }
+    const counts={
+      total:rowResults.length,
+      included:outputRows.length,
+      excluded:excludedRows.length,
+      incomplete:rowResults.filter(r=>r.rowStatus==="Неполные или некорректные ответы").length,
+      unreliable:rowResults.filter(r=>r.rowStatus==="Недостоверный протокол").length,
+      processed:outputRows.length,
+      problems:excludedRows.length
+    };
+    return {fatal:false,method,headers:resultHeaders,outputRows,allOutputRows,excludedRows,warnings:layout.warnings,counts,passportColumns:layout.passportIndexes.length,responseColumns:layout.indexes.length,source:method.source};
+  }
+  return {methods,byId,detectMethod,chooseColumns,processTable,scoreComplete,extractQuestionNumber,normalizeForced,normalizeBinary};
+});

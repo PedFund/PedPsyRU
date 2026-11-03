@@ -3,7 +3,7 @@ import type {PassportSchemas,PassportSchema,PassportSchemaInput} from "../../por
 import {ParticipationError} from "../../ports/errors.js";
 import {requireAccountPermission} from "../../ports/account-policy.js";
 import type {AccountRole,AccountOperation} from "../../ports/accounts.js";
-import {accountTransaction,tokenHash} from "./account-transaction.js";
+import {accountTransaction,tokenHash,accountWallTime} from "./account-transaction.js";
 interface Actor{credential_id:string;user_id:string;actor_role:AccountRole;credential_version:number;expires_at_ms:string;mfa_verified_at_ms:string|null}
 export class PostgresPassportSchemas implements PassportSchemas {
   constructor(private readonly pool:Pool){}
@@ -17,7 +17,7 @@ export class PostgresPassportSchemas implements PassportSchemas {
       const a=(await c.query<Actor>("SELECT * FROM pedpsy.account_actor()")).rows[0];if(!a)throw new ParticipationError(401,"AUTH_REQUIRED");
       const own=(await c.query<{own:boolean}>("SELECT pedpsy.account_owns_study($1) own",[study])).rows[0]!.own;
       requireAccountPermission({realm:a.actor_role==="researcher"?"researcher":"staff",userId:a.user_id,credentialId:a.credential_id,role:a.actor_role,sessionVersion:a.credential_version,
-        expiresAt:Number(a.expires_at_ms),mfaVerifiedAt:a.mfa_verified_at_ms===null?null:Number(a.mfa_verified_at_ms)},operation,{studyId:study},Date.now(),own);
+        expiresAt:Number(a.expires_at_ms),mfaVerifiedAt:a.mfa_verified_at_ms===null?null:Number(a.mfa_verified_at_ms)},operation,{studyId:study},await accountWallTime(c),own);
       return data;
     });
   }

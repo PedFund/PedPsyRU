@@ -4,7 +4,7 @@ const {postgresFixture}=require("./postgres-fixture.js"),{verifiedStaff}=require
 const {PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/participant-registration.js"),{ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js");
 const {PostgresParticipantGateway}=require("../dist/src/adapters/postgres/identity.js"),{PostgresUnitOfWork}=require("../dist/src/adapters/postgres/unit-of-work.js");
 const {tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js"),{derive}=require("../storage/access.js");
-const body={email:"Confirmed.Owner+tag@EXAMPLE.test",password:"synthetic participant password",contact_notice_version:"demo-contact-1",accept_contact_notice:true};
+const body={email:"Confirmed.Owner+tag@EXAMPLE.test",password:"synthetic participant password",contact_notice_version:"demo-contact-2",accept_contact_notice:true};
 const token=()=>randomBytes(32).toString("base64url");
 async function configured(f){const s=await verifiedStaff(f),x=await invitationResearcher(f,s),i=await x.invitations.create(x.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}),vault=new ContactTokenVault(randomBytes(32));return {...x,s,i,vault,registration:new PostgresParticipantRegistration(f.runtime,vault),browser:token()};}
 function scenario(name,fn){test("PostgreSQL participant registration: "+name,async t=>{const f=await postgresFixture({runtimePoolSize:3});t.after(()=>f.close());await fn(f,await configured(f));});}
@@ -20,7 +20,7 @@ scenario("one-time proof creates salted credential/fixed group/private contact a
   const proof=await requested(f,x);assert.deepEqual(await confirm(x,proof),{status:"sign_in_required"});const c=await identity(f,x.design.id);
   assert.equal(c.group_id,x.design.groups[0].id);assert.equal(c.email_key,"Confirmed.Owner+tag@example.test");assert.equal(c.source_pending_id,proof.row.id);assert.equal(c.status,"active");assert.ok(c.salt===proof.row.salt&&c.password_hash===proof.row.password_hash,"pending material changed");assert.match(c.display_code,/^P-[A-F0-9]{32}$/);
   assert.equal((await f.admin.query("SELECT status FROM pedpsy.registration_pending WHERE id=$1",[proof.row.id])).rows[0].status,"confirmed");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,0);
-  assert.equal((await f.admin.query("SELECT notice_version FROM pedpsy.participant_contact_acceptances WHERE pending_id=$1",[proof.row.id])).rows[0].notice_version,"demo-contact-1");
+  assert.equal((await f.admin.query("SELECT notice_version FROM pedpsy.participant_contact_acceptances WHERE pending_id=$1",[proof.row.id])).rows[0].notice_version,"demo-contact-2");
   const a=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='participants.registration.confirmed'",[x.design.id])).rows[0];assert.equal(a.resource_id,proof.row.id);for(const v of [body.email,body.password,proof.code,proof.browser,proof.invite])assert.ok(!JSON.stringify(a).includes(v));
   await assert.rejects(confirm(x,proof),e=>e.status===404);await noClinical(f,x.design.id);
 });
@@ -51,7 +51,7 @@ scenario("same email in separate study creates separate identity/password scope,
 for(const mutation of ["revocation","closure","notice","expiry"])scenario(mutation+" before confirmation is rechecked, does not create identity or consume valid proof",async(f,x)=>{
   const p=await requested(f,x);if(mutation==="revocation")await x.invitations.revoke(x.session.token,x.design.id,x.design.groups[0].id,x.i.id,{expected_revision:0});
   else if(mutation==="closure")await x.studies.lifecycle(x.session.token,x.design.id,{status:"closed",expected_version:x.design.version});
-  else if(mutation==="notice"){await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic changed notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);}
+  else if(mutation==="notice"){await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic changed notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);}
   else{const fixtureOwner=await f.admin.connect();try{await fixtureOwner.query("BEGIN;SET LOCAL session_replication_role=replica");await fixtureOwner.query("UPDATE pedpsy.registration_pending SET expires_at_ms=ready_at_ms+1 WHERE id=$1",[p.row.id]);await fixtureOwner.query("COMMIT");}catch(e){await fixtureOwner.query("ROLLBACK");throw e;}finally{fixtureOwner.release();}}
   await assert.rejects(confirm(x,p),e=>e.status===(mutation==="notice"?409:404));assert.equal(await identity(f,x.design.id),undefined);
   assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE id=$1",[p.row.id])).rows[0].attempts_remaining,5);
@@ -91,7 +91,7 @@ for(const mutation of ["credential","contact","participant","group","study","not
     else if(mutation==="participant")await f.admin.query("UPDATE pedpsy.participants SET status='excluded' WHERE id=$1",[c.participant_id]);
     else if(mutation==="group")await f.admin.query("UPDATE pedpsy.research_groups SET status='closed' WHERE id=$1",[c.group_id]);
     else if(mutation==="study")await x.studies.lifecycle(x.session.token,x.design.id,{status:"closed",expected_version:x.design.version});
-    else{await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic new notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);}
+    else{await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic new notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);}
   }finally{release();}assert.equal((await pending).error?.code,"INVALID_LOGIN");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,0);
 });
 scenario("current contact withdrawal committed after confirmed SQL lock wait denies session, not only stale JS/pre-read",async(f,x)=>{
@@ -117,14 +117,14 @@ scenario("required login audit failure rolls back both new session and revocatio
 });
 scenario("new current notice needs explicit reconfirmation, stores another contact acknowledgement without replacing password or clinical consent",async(f,x)=>{
   await confirm(x,await requested(f,x));const original=await identity(f,x.design.id),input={study_id:x.design.id,email:body.email,password:body.password};
-  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic changed notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await assert.rejects(x.registration.login(input),e=>e.code==="INVALID_LOGIN");
-  await confirm(x,await requested(f,x,{browser:token(),input:{...body,password:"another new attempted password",contact_notice_version:"demo-contact-2"}}));assert.ok(JSON.stringify(await identity(f,x.design.id))===JSON.stringify(original),"reconfirmation changed identity");
+  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic changed notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);await assert.rejects(x.registration.login(input),e=>e.code==="INVALID_LOGIN");
+  await confirm(x,await requested(f,x,{browser:token(),input:{...body,password:"another new attempted password",contact_notice_version:"test-contact-change"}}));assert.ok(JSON.stringify(await identity(f,x.design.id))===JSON.stringify(original),"reconfirmation changed identity");
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_contact_acceptances WHERE study_id=$1",[x.design.id])).rows[0].n,2);await x.registration.login(input);await noClinical(f,x.design.id);
 });
 scenario("contact-linked internal display/login code cannot bypass the new email/current notice route, even with correct password",async(f,x)=>{
   await confirm(x,await requested(f,x));const c=await identity(f,x.design.id),gateway=new PostgresParticipantGateway(f.runtime,new PostgresUnitOfWork(f.runtime)),input={login_id:c.login_id,password:body.password};
   await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,0);
   await x.registration.login({study_id:x.design.id,email:body.email,password:body.password});
-  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('demo-contact-2','Synthetic changed current notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='demo-contact-2' WHERE study_id=$1",[x.design.id]);await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");
+  await f.admin.query("INSERT INTO pedpsy.contact_notices VALUES('test-contact-change','Synthetic changed current notice','synthetic_only')");await f.admin.query("UPDATE pedpsy.study_contact_policies SET notice_version='test-contact-change' WHERE study_id=$1",[x.design.id]);await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");
   await f.admin.query("UPDATE pedpsy.participant_contacts SET status='withdrawn' WHERE id=$1",[c.id]);await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,1);
 });

@@ -8,7 +8,7 @@ export function validateRevision(input: unknown): asserts input is {expected_rev
     !Number.isSafeInteger(input.expected_revision) || (input.expected_revision as number) < 0 ||
     (input.expected_revision as number) >= Number.MAX_SAFE_INTEGER) throw new ParticipationError(400, "INVALID_COMPLETION");
 }
-export function validateDraft(input: unknown, itemIds: readonly string[]): asserts input is DraftInput {
+export function validateDraft(input: unknown, itemIds: readonly string[],choiceValues:readonly string[]=["A","B"]): asserts input is DraftInput {
   const fail = (): never => {throw new ParticipationError(400, "INVALID_DRAFT");};
   if (!object(input) || Object.keys(input).sort().join(",") !== "current_item_id,expected_revision,responses" ||
     !Number.isSafeInteger(input.expected_revision) || (input.expected_revision as number) < 0 ||
@@ -20,7 +20,7 @@ export function validateDraft(input: unknown, itemIds: readonly string[]): asser
   for (const response of value.responses as unknown[]) {
     if (!object(response) || Object.keys(response).sort().join(",") !== "item_id,value" ||
       typeof response.item_id !== "string" || !itemIds.includes(response.item_id) || seen.has(response.item_id) ||
-      response.value !== "A" && response.value !== "B") fail();
+      typeof response.value!=="string" || !choiceValues.includes(response.value)) fail();
     seen.add((response as Record<string, unknown>).item_id as string);
   }
 }

@@ -11,6 +11,13 @@ function validateConfig(c, realm) {
     c.user !== "pedpsy_" + realm + "_" + c.database.slice(-16) ||
     !/^[a-f0-9]{64}$/.test(c.password || "") ||
     realm === "runtime" && (!/^[A-Za-z0-9+/]{43}=$/.test(c.mfaKey || "") || Buffer.from(c.mfaKey, "base64").toString("base64") !== c.mfaKey)) throw new Error("INVALID_LOCAL_CONFIG");
+  if (realm === "runtime" && c.contactDemo !== undefined && c.contactDemo !== true && c.contactDemo !== false) throw new Error("INVALID_LOCAL_CONTACT_CONFIG");
+  if (realm === "runtime" && c.contactDemo === true) {
+    const {contactDemoKey} = require("../dist/src/bootstrap/registration-config.js");
+    const contact = contactDemoKey({PEDPSY_CONTACT_DEMO:"1",PEDPSY_CONTACT_KEY:c.contactKey,PEDPSY_MFA_KEY:c.mfaKey});
+    if (!contact) throw new Error("INVALID_LOCAL_CONTACT_CONFIG");
+    contact.fill(0);
+  }
   return c;
 }
 function readConfig(realm) {return validateConfig(JSON.parse(fs.readFileSync(path.join(directory, realm + ".json"), "utf8")), realm);}
@@ -64,6 +71,11 @@ async function prepareOwnedDatabase(client, runtimeRole) {
     try {migrate(sqlite); seedTraining(sqlite, importTkiRelease(sqlite)); await importDemoSnapshot(client, exportDemoSnapshot(sqlite));}
     finally {sqlite.close();}
 }
+async function upgradeOwnedDatabase(client, runtimeRole) {
+    const {migratePostgres, grantRuntime} = require("../dist/src/adapters/postgres/migrate.js");
+    await migratePostgres(client, path.join(root, "storage", "postgres"));
+    await grantRuntime(client, runtimeRole);
+}
 async function bootstrapFirst(client, login, password) {
   if (login !== "PEDPSY-OWNER") throw new Error("INVALID_OWNER_LOGIN");
   const {passwordRecord} = require("../storage/access.js"), record = await passwordRecord(password);
@@ -74,7 +86,8 @@ function runtimeEnvironment(c, inherited = process.env) {
   validateConfig(c, "runtime");
   const env = Object.fromEntries(Object.entries(inherited).filter(([key]) => !/^PG|^PEDPSY_/i.test(key)));
   return {...env, PEDPSY_PG_DEMO: "1", PGHOST: c.host, PGPORT: String(c.port), PGDATABASE: c.database, PGUSER: c.user,
-    PGPASSWORD: c.password, PEDPSY_MFA_KEY: c.mfaKey};
+    PGPASSWORD: c.password, PEDPSY_MFA_KEY: c.mfaKey,
+    ...(c.contactDemo === true ? {PEDPSY_CONTACT_DEMO:"1",PEDPSY_CONTACT_KEY:c.contactKey} : {})};
 }
 async function main(command) {
   if (command === "secrets") {initializeSecrets(); return;}
@@ -97,6 +110,13 @@ async function main(command) {
     try {await bootstrapFirst(client, "PEDPSY-OWNER", request.password); console.log("PEDPSY-OWNER created. Password alone is not a session; complete MFA at http://127.0.0.1:4174/workspace");}
     finally {request.password = ""; request = null; client.release(); await pool.end();} return;
   }
+  if (command === "upgrade") {
+    const owner = readConfig("owner"), runtime = readConfig("runtime");
+    if (owner.database !== runtime.database) throw new Error("CONFIG_DATABASE_MISMATCH");
+    const pool = new Pool(pgConfig(owner)), client = await pool.connect();
+    try {await upgradeOwnedDatabase(client, runtime.user); console.log("Local synthetic database upgraded; existing data preserved.");}
+    finally {client.release(); await pool.end();} return;
+  }
   if (command === "serve") {
     const child = spawn(process.execPath, [path.join(root, "dist", "src", "bootstrap", "postgres-server.js")],
       {cwd: root, env: runtimeEnvironment(readConfig("runtime")), stdio: "inherit", windowsHide: true});
@@ -110,4 +130,4 @@ if (require.main === module) main(process.argv[2]).catch(error => {
   // SQL errors may include bound credentials. Do not print message/detail/cause.
   console.error("Local operation failed; existing data preserved.", /^[A-Z0-9_]{2,64}$/.test(error.code || "") ? error.code : "CHECK_LOCAL_SETUP"); process.exitCode = 1;
 });
-module.exports = {validateConfig, createDemoDatabase, prepareOwnedDatabase, bootstrapFirst, runtimeEnvironment};
+module.exports = {validateConfig, createDemoDatabase, prepareOwnedDatabase, upgradeOwnedDatabase, bootstrapFirst, runtimeEnvironment};

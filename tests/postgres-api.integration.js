@@ -14,13 +14,13 @@ const {createParticipationService}=require("../dist/src/application/participatio
 const {createParticipantApi}=require("../dist/src/application/participant-api.js");
 const {createParticipantApp}=require("../dist/src/http/participant-app.js");
 const origin="http://127.0.0.1:4174",headers={host:"127.0.0.1:4174",origin};
-async function fixture(t,derivePassword) {
+async function fixture(t,derivePassword,appOrigin=origin) {
   const f=await postgresFixture({runtimePoolSize:2});t.after(()=>f.close());
   const password=randomBytes(32).toString("base64url"),record=await passwordRecord(password);
   await f.admin.query("UPDATE pedpsy.participant_credentials SET salt=$1,password_hash=$2 WHERE id=$3",[record.salt,record.password_hash,f.credential]);
   let calculations=0;const uow=new PostgresUnitOfWork(f.runtime),identity=new PostgresParticipantGateway(f.runtime,uow,derivePassword);
   const service=createParticipationService(uow,{newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>responsesDigest(ids.map(item_id=>({item_id})),values),score:input=>{calculations++;return scoreTki(input);}});
-  const api=createParticipantApi(identity,service),app=createParticipantApp(api,origin);t.after(()=>app.close());
+  const api=createParticipantApi(identity,service),app=createParticipantApp(api,appOrigin);t.after(()=>app.close());
   const attemptId=f.seed.studies[0].attempts[0].id;
   const login=async(payload={login_id:"SYNTHETIC-RLS",password})=>{
     const r=await app.inject({method:"POST",url:"/api/v2/participant/login",headers,payload});
@@ -128,7 +128,7 @@ test("PostgreSQL API: idle/absolute expiry and pool context isolation remain fai
   }finally{a.release();b.release();}
 });
 test("PostgreSQL API: actual loopback HTTP login/save/complete/result persists original TKI",async t=>{
-  const f=await fixture(t);await f.app.listen({host:"127.0.0.1",port:4174});
+  const reservation=require("node:net").createServer();await new Promise(resolve=>reservation.listen(0,"127.0.0.1",resolve));const port=reservation.address().port;await new Promise(resolve=>reservation.close(resolve));const origin="http://127.0.0.1:"+port;const f=await fixture(t,undefined,origin);await f.app.listen({host:"127.0.0.1",port});
   const login=await fetch(origin+"/api/v2/participant/login",{method:"POST",headers:{origin,"content-type":"application/json"},body:JSON.stringify({login_id:"SYNTHETIC-RLS",password:f.password})});assert.equal(login.status,200);
   const session=await login.json(),cookie=login.headers.get("set-cookie").split(";")[0],h={origin,cookie,"content-type":"application/json","x-pedpsy-csrf":session.csrf};
   const base=origin+"/api/v2/participant/attempts/"+f.attemptId;

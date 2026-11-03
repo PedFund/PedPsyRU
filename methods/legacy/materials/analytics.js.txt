@@ -1,0 +1,425 @@
+(function(root,factory){const dep=typeof module==="object"&&module.exports?require("./methods.js"):root.PsyMethods;const api=factory(dep);if(typeof module==="object"&&module.exports)module.exports=api;else root.PsyAnalytics=api;})(typeof globalThis!=="undefined"?globalThis:this,function(PsyMethods){
+  const clean=v=>String(v??"").toLowerCase().replace(/ё/g,"е").replace(/[_–—-]+/g," ").replace(/\s+/g," ").trim();
+  const round=(v,d=3)=>Number.isFinite(v)?Number(v.toFixed(d)):null;
+  const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
+  const median=a=>{if(!a.length)return null;const b=[...a].sort((x,y)=>x-y),m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
+  const quantile=(a,p)=>{if(!a.length)return null;const b=[...a].sort((x,y)=>x-y),i=(b.length-1)*p,lo=Math.floor(i),hi=Math.ceil(i);return lo===hi?b[lo]:b[lo]+(b[hi]-b[lo])*(i-lo)};
+  const variance=a=>a.length>1?a.reduce((s,v)=>s+(v-mean(a))**2,0)/(a.length-1):null;
+  const sd=a=>{const v=variance(a);return v==null?null:Math.sqrt(v)};
+  const methodCode=name=>PsyMethods?.methodProfile(name)?.code||String(name||"Методика").split(/\s+/).slice(0,2).join(" ");
+  const metricLabel=(method,metric)=>`${methodCode(method)} · ${metric}`;
+  function stageFromFilename(name){
+    const base=String(name||"").replace(/\.xlsx$/i,"").toUpperCase(),generatedSuffix=base.match(/_(T[01])$/);if(generatedSuffix)return generatedSuffix[1];
+    const tokens=base.match(/(?:^|[^A-ZА-Я0-9])(T[01])(?=[^A-ZА-Я0-9]|$)/g)||[],stages=[...new Set(tokens.map(x=>x.match(/T[01]/)?.[0]).filter(Boolean))];
+    return stages.length===1?stages[0]:null;
+  }
+  function ensureStageColumn(name,table){
+    const headers=[...(table?.headers||[])],rows=(table?.rows||[]).map(r=>[...r]);
+    if(headers.some(h=>/^\s*(этап|волна|t0[–-]t1)\s*$/i.test(String(h??""))))return {headers,rows,stageAdded:false,stage:null};
+    const stage=stageFromFilename(name);if(!stage)return {headers,rows,stageAdded:false,stage:null};
+    headers.push("Этап");for(const row of rows)row.push(stage);return {headers,rows,stageAdded:true,stage};
+  }
+  function withStageColumn(table,stageValue){
+    const stage=parseStage(stageValue);if(!stage)throw new Error("Этап должен быть T0 или T1");
+    const headers=[...(table?.headers||[])],rows=(table?.rows||[]).map(r=>[...r]);
+    let stageIndex=findIndex(headers,[/^\s*этап\s*$/i,/^\s*волна\s*$/i,/^\s*t0[–-]t1\s*$/i]);
+    if(stageIndex<0){stageIndex=headers.length;headers.push("Этап");}
+    else headers[stageIndex]="Этап";
+    for(const row of rows){while(row.length<=stageIndex)row.push("");row[stageIndex]=stage;}
+    return {headers,rows,stageIndex,stage};
+  }
+  const DEEP = {
+    uvlk_shipilov:/^(?:Мотивационный|Моральный|Конфликт нереализованного|Ролевой|Адаптационный|Конфликт неадекватной|Мотивационная сфера|Сфера долженствования|Сфера самооценки)/i,
+    usk_44:/^(?:Ид|Ин|Ис|Ип|Им|Из)$/i,
+    sjo_20:/^(?:Цели в жизни|Процесс жизни|Результативность жизни|Локус контроля)/i,
+    oso_57:/^(?!Глобальное самоотношение)/i,
+    boyko_burnout_84:/^(?!Общий показатель выгорания)/i,
+    spa_rogers_diamond_osnitsky_101:/^(?:Адаптивность|Дезадаптивность|Принятие себя [+−-]|Принятие других [+−-]|Эмоциональный комфорт [+−-]|Интернальность [+−-]|Доминирование [+−-]|Эскапизм)/i,
+    leary_dmo_128:/октант/i,
+    mlo_am_165:/^(?:Поведенческая регуляция|Коммуникативный потенциал|Моральная нормативность|Астенические реакции|Психотические реакции)/i,
+    sat_126:/^(?!Компетентность во времени$|Поддержка$)/i
+  };
+  function metricTier(methodRef,metric){
+    const method=PsyMethods?.resolveMethod(methodRef),id=method?.id,name=String(metric||"");
+    if(method?.external){
+      const rules=Object.values(method.analytics?.metrics||{}),rule=rules.find(value=>value.name===name);
+      return rule?.tier||"brief";
+    }
+    return DEEP[id]?.test(name)?"deep":"brief";
+  }
+  function dashboardMetricVisible(row){
+    return row.tier!=="deep";
+  }
+  function canonicalMetric(methodRef,metric,isNumeric){
+    const method=PsyMethods?.resolveMethod(methodRef),id=method?.id,name=String(metric||"");
+    if(method?.external){
+      const rule=method.analytics?.metrics?.[name];
+      if(rule)return {include:rule.include,name:rule.name};
+      if(!isNumeric){const base=name.replace(/\s*[–-]\s*(?:уровень|относительно критерия|относительно cut-off)\s*$/i,""),baseRule=method.analytics?.metrics?.[base];if(baseRule)return {include:baseRule.include,name:baseRule.name};}
+      return {include:false,name};
+    }
+    if(id==="reflexivity_karpov_27"){
+      if(isNumeric)return {include:/Рефлексивность\s*[–-]\s*стен$/i.test(name),name:"Рефлексивность"};
+      return {include:/уровень рефлексивности/i.test(name),name:"Рефлексивность"};
+    }
+    if(id==="wcq_50_vasserman"){
+      const base=name.replace(/\s*[–-]\s*(?:сырой балл|напряженность,?\s*%|T-балл|уровень)\s*$/i,"");
+      if(isNumeric)return {include:/T-балл\s*$/i.test(name),name:base};
+      return {include:/[–-]\s*уровень\s*$/i.test(name),name:base};
+    }
+    if(id==="usk_44"){
+      if(!isNumeric)return {include:false,name};
+      const m=name.match(/^(Ио|Ид|Ин|Ис|Ип|Им|Из)\s*[–-]\s*стен$/i);return {include:!!m,name:m?.[1]||name};
+    }
+    if(id==="leary_dmo_128"){
+      const m=name.match(/^Я-(реальное|идеальное):\s*(доминирование|дружелюбие)$/i);
+      if(m)return {include:true,name:`${m[1].toLowerCase()==="реальное"?"РЯ":"ИЯ"} · ${m[2][0].toUpperCase()+m[2].slice(1).toLowerCase()}`};
+      const o=name.match(/^Я-(реальное|идеальное):\s*октант\s+([IVX]+)$/i);if(o)return {include:true,name:`${o[1].toLowerCase()==="реальное"?"РЯ":"ИЯ"} · Октант ${o[2]}`};
+      return {include:false,name};
+    }
+    if(id==="mlo_am_165"){
+      const raw=name.match(/^(Личностный адаптационный потенциал|Астенические реакции и состояния|Психотические реакции и состояния|Дезадаптационные нарушения)\s*[–-]\s*сырой балл$/i);if(raw)return {include:true,name:raw[1]};
+      const sten=name.match(/^(Поведенческая регуляция|Коммуникативный потенциал|Моральная нормативность)\s*[–-]\s*стен$/i);return {include:!!sten,name:sten?.[1]||name};
+    }
+    if(id==="sat_126"){
+      const m=name.match(/^(.*?)\s*[–-]\s*T-балл$/i);return {include:!!m,name:m?.[1]||name};
+    }
+    if(id==="role_competence_gornostai")return {include:isNumeric&&/сырой балл$/i.test(name),name:name.replace(/\s*[–-]\s*сырой балл$/i,"")};
+    if(id==="sspm_2020_28"&&/Общий уровень саморегуляции/i.test(name))return {include:false,name};
+    if(id==="sherer_maddux_boyarintseva_23"&&/Общая самоэффективность/i.test(name))return {include:false,name};
+    if(id==="vgrk_50"&&/уровень$/i.test(name))return {include:false,name};
+    if(id==="spa_rogers_diamond_osnitsky_101"){
+      if(/интегральный показатель$/i.test(name))return {include:true,name:name.replace(/\s*[–-]\s*интегральный показатель$/i,"")};
+      if(/^(Адаптивность|Дезадаптивность|Эскапизм)\s*[–-]\s*сырой балл$/i.test(name))return {include:true,name:name.replace(/\s*[–-]\s*сырой балл$/i,"")};
+      if(/^[^–]+ [+−-]$/.test(name))return {include:true,name};
+      return {include:false,name};
+    }
+    return {include:true,name};
+  }
+  function levelDisplay(method,metric,category){
+    if(!/бойко/i.test(String(method)))return {metricLabel:metricLabel(method,metric),category:String(category)};
+    const base=String(metric).replace(/\s*[–-]\s*уровень$/i,"").replace(/\s*[–-]\s*состояние (?:фазы|симптома)$/i,"");const phase=["Напряжение","Резистенция","Истощение"].includes(base),kind=phase?"фазы":"симптома",c=clean(category);
+    const state=c.includes("не сформ")?`${phase?"Фаза":"Симптом"} не сформирован${phase?"а":""}`:c.includes("формирует")?`${phase?"Фаза":"Симптом"} формируется`:`${phase?"Фаза":"Симптом"} сформирован${phase?"а":""}`;
+    return {metricLabel:`Бойко · ${base} – состояние ${kind}`,category:state};
+  }
+  function parseDate(v){
+    if(v instanceof Date&&!isNaN(v))return v;
+    if(typeof v==="number"&&v>20000){const d=new Date(new Date(1899,11,30).getTime()+v*86400000);return isNaN(d)?null:d;}
+    const s=String(v??"").trim();if(!s)return null;
+    let m=s.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T](\d{2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(Number(m[1]),Number(m[2])-1,Number(m[3]),Number(m[4]||0),Number(m[5]||0),Number(m[6]||0));
+    m=s.match(/^(\d{2})[.\/]([0-1]?\d)[.\/](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?/);if(m)return new Date(Number(m[3]),Number(m[2])-1,Number(m[1]),Number(m[4]||0),Number(m[5]||0),Number(m[6]||0));
+    const d=new Date(s);return isNaN(d)?null:d;
+  }
+  function detectGroup(filename){const s=clean(filename);return s.includes("контрольн")?"Контрольная":"Экспериментальная";}
+  function parseStage(v){const s=clean(v).replace(/^т/,"t");if(/^(?:t\s*[-–—]?\s*)?0(?:\s|[-–—:.(]|$)/.test(s)||s==="до")return "T0";if(/^(?:t\s*[-–—]?\s*)?1(?:\s|[-–—:.(]|$)/.test(s)||s==="после")return "T1";return null;}
+  const stageValueKey=v=>String(v??"").trim()||"__EMPTY__";
+  const findIndex=(headers,patterns)=>headers.findIndex(h=>patterns.some(p=>p.test(String(h??""))));
+  function inspectFile(file){
+    const h=file.table.headers||[],rows=file.table.rows||[];
+    const dateIndex=findIndex(h,[/^время создания$/i,/дата.*создан/i,/дата.*заполн/i]);
+    const stageIndex=findIndex(h,[/^\s*этап\s*$/i,/^\s*волна\s*$/i,/^\s*t0[–-]t1\s*$/i,/выберите\s+вид\s+диагностики/i,/вид\s+диагностики/i]);
+    const ageIndex=findIndex(h,[/возраст/i]);
+    const sexIndex=findIndex(h,[/укажите\s+ваш\s+пол/i,/^\s*пол\s*$/i]);
+    const participantIdIndex=findIndex(h,[/^\s*(?:id|ид)\s*$/i,/код.*участник/i,/код.*респондент/i,/идентификатор.*участник/i,/идентификатор.*респондент/i,/^\s*e-?mail\s*$/i,/электронн.*почт/i,/^\s*телефон\s*$/i,/^\s*фио\s*$/i]);
+    const methodIndex=h.indexOf("Методика"),statusIndex=h.indexOf("Статус обработки"),warningIndex=h.indexOf("Предупреждения");
+    const method=methodIndex>=0?(rows.find(r=>r[methodIndex])?.[methodIndex]||file.name):file.name;
+    const dates=rows.map(r=>dateIndex>=0?parseDate(r[dateIndex]):null).filter(Boolean);
+    const errors=[];if(methodIndex<0||statusIndex<0||warningIndex<0)errors.push("Файл не является результатом обработчика");
+    return {name:file.name,method,group:file.group||detectGroup(file.name),headers:h,rows,dateIndex,stageIndex,stageMappings:file.stageMappings||{},ageIndex,sexIndex,participantIdIndex,methodIndex,statusIndex,warningIndex,metricStart:warningIndex+1,minDate:dates.length?new Date(Math.min(...dates)):null,maxDate:dates.length?new Date(Math.max(...dates)):null,errors};
+  }
+  function mappedStage(f,value){const direct=parseStage(value);if(direct)return direct;const mapped=f.stageMappings?.[stageValueKey(value)];return mapped==="T0"||mapped==="T1"||mapped==="EXCLUDE"?mapped:null;}
+  function stageAudit(f,cutoff=null){
+    if(f.stageIndex<0)return {entries:[],unresolved:0,excluded:0};
+    const known={T0:[],T1:[]},unknown=new Map();
+    for(const row of f.rows){const raw=row[f.stageIndex],direct=parseStage(raw),date=f.dateIndex>=0?parseDate(row[f.dateIndex]):null;if(direct){if(date)known[direct].push(date.getTime());continue;}const key=stageValueKey(raw),entry=unknown.get(key)||{key,value:key==="__EMPTY__"?"(пусто)":String(raw),count:0,dates:[]};entry.count++;if(date)entry.dates.push(date.getTime());unknown.set(key,entry);}
+    const centers={T0:median(known.T0),T1:median(known.T1)};
+    let unresolved=0,excluded=0;
+    const entries=[...unknown.values()].map(entry=>{const decision=f.stageMappings?.[entry.key]||"";if(!decision)unresolved++;if(decision==="EXCLUDE")excluded+=entry.count;let suggestion=null,basis="";const center=median(entry.dates);if(center!=null&&centers.T0!=null&&centers.T1!=null){const d0=Math.abs(center-centers.T0),d1=Math.abs(center-centers.T1);if(d0!==d1)suggestion=d0<d1?"T0":"T1";basis=`медианная дата ближе к ${suggestion}`;}else if(center!=null&&cutoff){suggestion=center<=cutoff.getTime()?"T0":"T1";basis=`по выбранной границе дат это ${suggestion}`;}return {...entry,decision,suggestion,basis};});
+    return {entries,unresolved,excluded,centers};
+  }
+  function mergeStageFiles(inputFiles){
+    const passthrough=[],groups=new Map();
+    for(const file of inputFiles){const x=inspectFile(file);if(x.errors.length||x.stageIndex<0){passthrough.push(file);continue;}const key=`${x.group}\u0001${x.method}`;(groups.get(key)||groups.set(key,[]).get(key)).push({file,x});}
+    const merged=[...passthrough];
+    for(const entries of groups.values()){
+      if(entries.length<2){merged.push(entries[0].file);continue;}
+      const stageSets=entries.map(({x})=>new Set(x.rows.map(r=>mappedStage(x,r[x.stageIndex])).filter(v=>v==="T0"||v==="T1"))),allStages=new Set(stageSets.flatMap(s=>[...s]));
+      if(stageSets.some(s=>s.size!==1)||allStages.size<2){merged.push(...entries.map(e=>e.file));continue;}
+      const headers=[];for(const {x} of entries)for(let i=0;i<x.headers.length;i++){const h=x.headers[i];if(i!==x.stageIndex&&!headers.includes(h))headers.push(h);}headers.push("Этап");
+      const rows=[];for(const {x} of entries){const index=new Map(x.headers.map((h,i)=>[h,i]));for(const row of x.rows){const stage=mappedStage(x,row[x.stageIndex]);if(stage!=="T0"&&stage!=="T1")continue;rows.push([...headers.slice(0,-1).map(h=>index.has(h)?row[index.get(h)]:""),stage]);}}
+      const first=entries[0].x;merged.push({name:`${first.method} · ${first.group} · T0-T1.xlsx`,group:first.group,mergedFrom:entries.map(e=>e.file.name),table:{headers,rows}});
+    }
+    return merged;
+  }
+  function rowWave(f,row,cutoff){if(f.stageIndex>=0)return mappedStage(f,row[f.stageIndex]);if(f.dateIndex>=0&&cutoff){const d=parseDate(row[f.dateIndex]);if(d)return d<=cutoff?"T0":"T1";}return null;}
+  const cutoffKey=f=>`${f.group}|||${f.method}`;
+  function cutoffFor(f,globalCutoff,methodCutoffs={}){return parseDate(methodCutoffs[cutoffKey(f)])||globalCutoff;}
+  function previewSplit(files,author,cutoffInput,methodCutoffs={}){
+    const inspected=files.map(inspectFile),cutoff=parseDate(cutoffInput),missing=inspected.filter(f=>!f.errors.length&&f.stageIndex<0&&!cutoffFor(f,cutoff,methodCutoffs));if(missing.length)throw new Error("Укажите общую дату границы T0/T1 или отдельную дату для каждой методики");const fileSummaries=[],stageIssues=[];
+    for(const [fileIndex,f] of inspected.entries()){if(f.errors.length)continue;const fileCutoff=cutoffFor(f,cutoff,methodCutoffs),audit=stageAudit(f,fileCutoff);for(const entry of audit.entries)stageIssues.push({...entry,fileIndex,file:f.name,method:f.method});let n0=0,n1=0,badDate=0,excluded=0;for(const row of f.rows){const wave=rowWave(f,row,fileCutoff);if(wave==="EXCLUDE")excluded++;else if(!wave)badDate++;else if(wave==="T0")n0++;else n1++;}fileSummaries.push({file:f.name,method:f.method,group:f.group,n0,n1,badDate,excluded,cutoff:fileCutoff,cutoffKey:cutoffKey(f),splitMode:f.stageIndex>=0?"Столбец Этап":"Дата"});}
+    const researchSummaries=[];for(const group of [...new Set(fileSummaries.map(s=>s.group))]){const groupRows=fileSummaries.filter(s=>s.group===group),methods=[...new Set(groupRows.map(s=>s.method))],methodCounts=methods.map(method=>{const rows=groupRows.filter(s=>s.method===method),stage=rows.every(r=>r.splitMode==="Столбец Этап");return {method,methodCode:methodCode(method),n0:rows.reduce((a,s)=>a+s.n0,0),n1:rows.reduce((a,s)=>a+s.n1,0),cutoffKey:rows[0]?.cutoffKey,cutoff:rows[0]?.cutoff,splitMode:stage?"stage":"date"};});researchSummaries.push({author,group,methodCount:methods.length,methodCounts});}
+    return {author,cutoff,methodCutoffs:{...methodCutoffs},splitMode:inspected.every(f=>f.errors.length||f.stageIndex>=0)?"stage":"date",files:inspected,fileSummaries,researchSummaries,stageIssues,unresolvedStages:stageIssues.filter(x=>!x.decision).length};
+  }
+  function previewSingle(files,author){
+    const inspected=files.map(inspectFile),fileSummaries=[];
+    for(const f of inspected){if(f.errors.length)continue;fileSummaries.push({file:f.name,method:f.method,group:f.group,n:f.rows.length,n0:f.rows.length,n1:0,splitMode:"single"});}
+    const researchSummaries=[];for(const group of [...new Set(fileSummaries.map(s=>s.group))]){const groupRows=fileSummaries.filter(s=>s.group===group),methods=[...new Set(groupRows.map(s=>s.method))],methodCounts=methods.map(method=>{const n=groupRows.filter(s=>s.method===method).reduce((sum,s)=>sum+s.n,0);return {method,methodCode:methodCode(method),n,n0:n,n1:0,splitMode:"single"};});researchSummaries.push({author,group,methodCount:methods.length,cohort:Math.max(0,...methodCounts.map(x=>x.n)),methodCounts});}
+    return {author,cutoff:null,methodCutoffs:{},splitMode:"single",singlePeriod:true,files:inspected,fileSummaries,researchSummaries,stageIssues:[],unresolvedStages:0};
+  }
+  function gammln(x){const c=[76.18009172947146,-86.50532032941677,24.01409824083091,-1.231739572450155,.001208650973866,-.000005395239384953];let y=x,tmp=x+5.5;tmp-=(x+.5)*Math.log(tmp);let ser=1.000000000190015;for(let j=0;j<6;j++)ser+=c[j]/++y;return -tmp+Math.log(2.5066282746310005*ser/x);}
+  function betacf(a,b,x){const max=120,eps=3e-10,fpmin=1e-30;let qab=a+b,qap=a+1,qam=a-1,c=1,d=1-qab*x/qap;if(Math.abs(d)<fpmin)d=fpmin;d=1/d;let h=d;for(let m=1;m<=max;m++){let m2=2*m,aa=m*(b-m)*x/((qam+m2)*(a+m2));d=1+aa*d;if(Math.abs(d)<fpmin)d=fpmin;c=1+aa/c;if(Math.abs(c)<fpmin)c=fpmin;d=1/d;h*=d*c;aa=-(a+m)*(qab+m)*x/((a+m2)*(qap+m2));d=1+aa*d;if(Math.abs(d)<fpmin)d=fpmin;c=1+aa/c;if(Math.abs(c)<fpmin)c=fpmin;d=1/d;const del=d*c;h*=del;if(Math.abs(del-1)<eps)break;}return h;}
+  function ibeta(x,a,b){if(x<=0)return 0;if(x>=1)return 1;const bt=Math.exp(gammln(a+b)-gammln(a)-gammln(b)+a*Math.log(x)+b*Math.log(1-x));return x<(a+1)/(a+b+2)?bt*betacf(a,b,x)/a:1-bt*betacf(b,a,1-x)/b;}
+  function welch(a,b){if(a.length<2||b.length<2)return {t:null,df:null,p:null};const ma=mean(a),mb=mean(b),va=variance(a),vb=variance(b),se2=va/a.length+vb/b.length;if(!se2)return {t:ma===mb?0:(mb>ma?Infinity:-Infinity),df:a.length+b.length-2,p:ma===mb?1:0};const t=(mb-ma)/Math.sqrt(se2),df=se2**2/((va/a.length)**2/(a.length-1)+(vb/b.length)**2/(b.length-1)),x=df/(df+t*t),p=ibeta(x,df/2,.5);return {t,df,p};}
+  function pairedT(a,b){if(a.length!==b.length||a.length<2)return {t:null,df:null,p:null,effect:null};const d=a.map((v,i)=>b[i]-v),md=mean(d),s=sd(d),df=d.length-1;if(!s)return {t:md===0?0:(md>0?Infinity:-Infinity),df,p:md===0?1:0,effect:md===0?0:null};const t=md/(s/Math.sqrt(d.length)),p=ibeta(df/(df+t*t),df/2,.5);return {t,df,p,effect:md/s};}
+  function hedgesG(a,b){if(a.length<2||b.length<2)return null;const va=variance(a),vb=variance(b),df=a.length+b.length-2,sp=Math.sqrt(((a.length-1)*va+(b.length-1)*vb)/df);if(!sp)return 0;const d=(mean(b)-mean(a))/sp,J=1-3/(4*df-1);return J*d;}
+  function pairedMetricValues(rows0,rows1,idIndex,metricIndex){
+    if(idIndex<0)return null;const collect=rows=>{const map=new Map();for(const row of rows){const id=clean(row[idIndex]);if(!id)continue;const value=Number(row[metricIndex]);if(!Number.isFinite(value))continue;const list=map.get(id)||[];list.push(value);map.set(id,list);}return map;},m0=collect(rows0),m1=collect(rows1),a=[],b=[];let ambiguous=0;
+    for(const [id,v0] of m0){const v1=m1.get(id);if(!v1)continue;if(v0.length!==1||v1.length!==1){ambiguous++;continue;}a.push(v0[0]);b.push(v1[0]);}
+    return {a,b,ambiguous};
+  }
+  function bh(rows){const valid=rows.map((r,i)=>({i,p:Number.isFinite(r.pRaw)?r.pRaw:r.p})).filter(x=>Number.isFinite(x.p)).sort((a,b)=>a.p-b.p),m=valid.length;let prev=1;for(let k=m-1;k>=0;k--){const q=Math.min(prev,valid[k].p*m/(k+1));rows[valid[k].i].qRaw=q;rows[valid[k].i].q=round(q,6);prev=q;}for(const r of rows)r.significant=Number.isFinite(r.qRaw)&&r.qRaw<.05?"да":"нет";return rows;}
+  function sexValue(v){const s=clean(v);return s.includes("муж")?"Мужчины":s.includes("жен")?"Женщины":"Не указан";}
+  function values(rows,index){return rows.map(r=>Number(r[index])).filter(Number.isFinite);}
+  function weightedSummary(values,weights){
+    const pairs=values.map((v,i)=>({v:Number(v),w:Number(weights[i])})).filter(x=>Number.isFinite(x.v)&&Number.isFinite(x.w)&&x.w>0),sw=pairs.reduce((s,x)=>s+x.w,0),sw2=pairs.reduce((s,x)=>s+x.w*x.w,0);
+    if(!pairs.length||!sw)return {n:0,neff:0,mean:null,variance:null,sd:null,min:null,max:null,q1:null,median:null,q3:null};
+    const m=pairs.reduce((s,x)=>s+x.v*x.w,0)/sw,den=sw-sw2/sw,v=den>0?pairs.reduce((s,x)=>s+x.w*(x.v-m)**2,0)/den:0,sorted=[...pairs].sort((a,b)=>a.v-b.v);
+    const wq=p=>{const target=p*sw;let acc=0;for(const x of sorted){acc+=x.w;if(acc>=target)return x.v;}return sorted.at(-1).v;};
+    return {n:pairs.length,neff:sw2?sw*sw/sw2:0,mean:m,variance:v,sd:Math.sqrt(Math.max(0,v)),min:sorted[0].v,max:sorted.at(-1).v,q1:wq(.25),median:wq(.5),q3:wq(.75)};
+  }
+  function calibrationWeights(t0,t1,sexIndex,ageIndex){
+    const weights=Array(t1.length).fill(1),warnings=[],dimensions=[];
+    const addDimension=(name,target,current)=>{const targetCounts=new Map(),currentCounts=new Map();for(const x of target)targetCounts.set(x,(targetCounts.get(x)||0)+1);for(const x of current)currentCounts.set(x,(currentCounts.get(x)||0)+1);if(targetCounts.size<2)return;const missing=[...targetCounts.keys()].filter(x=>!currentCounts.get(x));if(missing.length){warnings.push(`${name}: в T1 отсутствуют категории ${missing.join(", ")}; калибровка по этому признаку пропущена`);return;}dimensions.push({name,target:targetCounts,current});};
+    if(sexIndex>=0)addDimension("Пол",t0.map(r=>sexValue(r[sexIndex])),t1.map(r=>sexValue(r[sexIndex])));
+    if(ageIndex>=0){const nums=[...t0,...t1].map(r=>Number(r[ageIndex])).filter(Number.isFinite),unique=[...new Set(nums.map(x=>Math.round(x)))];const ageCat=v=>{const n=Number(v);if(!Number.isFinite(n))return "Не указан";if(unique.length<=8)return String(Math.round(n));if(n<20)return "до 20";if(n<25)return "20–24";if(n<30)return "25–29";if(n<40)return "30–39";if(n<50)return "40–49";return "50+";};addDimension("Возраст",t0.map(r=>ageCat(r[ageIndex])),t1.map(r=>ageCat(r[ageIndex])));}
+    if(!dimensions.length)return {available:false,weights,neff:t1.length,minWeight:1,maxWeight:1,dimensions:[],warnings:[...warnings,"Нет вариативных общих признаков для калибровки"]};
+    const total=t1.length,lower=.25,upper=4;for(let iteration=0;iteration<60;iteration++){let change=0;for(const d of dimensions){const current=new Map();for(let i=0;i<t1.length;i++){const cat=d.current[i];current.set(cat,(current.get(cat)||0)+weights[i]);}for(const [cat,count0] of d.target){const desired=total*count0/t0.length,have=current.get(cat)||0,factor=have?desired/have:1;for(let i=0;i<t1.length;i++)if(d.current[i]===cat){const before=weights[i],after=Math.min(upper,Math.max(lower,before*factor));weights[i]=after;change=Math.max(change,Math.abs(after-before));}}}const sum=weights.reduce((a,b)=>a+b,0);if(sum)for(let i=0;i<weights.length;i++)weights[i]*=total/sum;if(change<1e-8)break;}
+    const sw=weights.reduce((a,b)=>a+b,0),sw2=weights.reduce((a,b)=>a+b*b,0),neff=sw2?sw*sw/sw2:0;return {available:true,weights,neff,minWeight:Math.min(...weights),maxWeight:Math.max(...weights),dimensions:dimensions.map(d=>d.name),warnings};
+  }
+  function outcome(delta,guide){if(delta===0)return "без изменения";if(guide.type==="positive")return delta>0?"положительный":"отрицательный";if(guide.type==="negative")return delta>0?"отрицательный":"положительный";return "без однозначной оценки";}
+  function dashboardSignificance(row){
+    const q=Number.isFinite(row?.qRaw)?row.qRaw:Number(row?.q);
+    if(!Number.isFinite(q))return "no";
+    if(q<.05)return "significant";
+    if(q<.1)return "near";
+    return "no";
+  }
+  function dashboardConfirmed(row){
+    const category=row?.dashboardCategory??row?.category;
+    if(category)return category!=="unsupported";
+    return dashboardSignificance(row)!=="no";
+  }
+  function dashboardStatusLabel(row){return dashboardConfirmed(row)?"Подтверждено":"Не подтверждено";}
+  function dashboardMethodCounts(analysis,method){
+    const countsFor=group=>{
+      const summary=(analysis?.researchSummaries||[]).find(s=>s.group===group),counts=summary?.methodCounts?.find(m=>m.method===method);
+      return counts?{n0:counts.n0,n1:counts.n1}:null;
+    };
+    return {experimental:countsFor("Экспериментальная"),control:countsFor("Контрольная")};
+  }
+  function dashboardContentSummary(rows=[]){
+    const indicators=new Map();
+    for(const row of rows){
+      const method=PsyMethods?.resolveMethod(row.method),metric=method?.id==="leary_dmo_128"?String(row.metric??"").replace(/^(?:РЯ|ИЯ)\s*·\s*/,""):String(row.metric??"");
+      const key=`${row.method}\u0001${metric}`;
+      indicators.set(key,(indicators.get(key)||false)||dashboardConfirmed(row));
+    }
+    const confirmed=[...indicators.values()].filter(Boolean).length;
+    return {indicators:indicators.size,confirmed,notConfirmed:indicators.size-confirmed};
+  }
+  function trendArrow(row){
+    const delta=Number(row?.delta);
+    if(!Number.isFinite(delta)||delta===0)return "flat";
+    return delta>0?"up":"down";
+  }
+  function effectMagnitude(value){
+    if(value==null||value==="")return "не рассчитано";
+    const magnitude=Math.abs(Number(value));
+    if(!Number.isFinite(magnitude))return "не рассчитано";
+    if(magnitude<.2)return "отсутствует";
+    if(magnitude<.5)return "малое";
+    if(magnitude<.8)return "умеренное";
+    return "крупное";
+  }
+  function changeMeaningLabel(row){if(row?.trend==="положительный")return "↑ Позитивное изменение";if(row?.trend==="отрицательный")return "↓ Негативное изменение";return "↕ Требует интерпретации";}
+  function safePercent(base,delta,spread){const floor=Math.max(1e-9,Math.abs(spread||0)*.1);return Math.abs(base)<=floor?null:100*delta/Math.abs(base);}
+  function descriptiveRow(base,metric,a){const guide=PsyMethods?.guidanceFor(base.method,metric)||{type:"context",label:"требуется интерпретация",note:""};return {...base,metric,metricLabel:metricLabel(base.method,metric),tier:metricTier(base.method,metric),direction:guide.type,directionLabel:guide.label,directionNote:guide.note,trend:"без сравнения",n:a.length,n0:a.length,n1:null,min0:round(Math.min(...a)),q10:round(quantile(a,.25)),median0:round(median(a)),mean0:round(mean(a)),q30:round(quantile(a,.75)),max0:round(Math.max(...a)),sd0:round(sd(a)),min1:null,q11:null,median1:null,mean1:null,q31:null,max1:null,sd1:null,delta:null,percentChange:null,t:null,df:null,pRaw:null,p:null,q:null,hedgesG:null,effectSize:null,effectName:"Не применяется",testName:"Не применяется",pairingMode:"Одна выборка",significant:"не применяется"};}
+  function comparisonRow(base,metric,a,b,design="independent"){const paired=design==="paired",test=paired?pairedT(a,b):welch(a,b),m0=mean(a),m1=mean(b),delta=m1-m0,s0=sd(a),pct=safePercent(m0,delta,s0),effect=paired?test.effect:hedgesG(a,b),guide=PsyMethods?.guidanceFor(base.method,metric)||{type:"context",label:"требуется интерпретация",note:""};return {...base,metric,metricLabel:metricLabel(base.method,metric),tier:metricTier(base.method,metric),direction:guide.type,directionLabel:guide.label,directionNote:guide.note,trend:outcome(delta,guide),n0:a.length,n1:b.length,min0:round(Math.min(...a)),q10:round(quantile(a,.25)),median0:round(median(a)),mean0:round(m0),q30:round(quantile(a,.75)),max0:round(Math.max(...a)),min1:round(Math.min(...b)),q11:round(quantile(b,.25)),median1:round(median(b)),mean1:round(m1),q31:round(quantile(b,.75)),max1:round(Math.max(...b)),sd0:round(s0),sd1:round(sd(b)),delta:round(delta),percentChange:round(pct,1),t:round(test.t),df:round(test.df,1),pRaw:test.p,p:round(test.p,6),q:null,hedgesG:round(effect),effectSize:round(effect),effectName:paired?"Cohen dz":"Hedges g",testName:paired?"Парный t-критерий":"t-критерий Уэлча",pairingMode:paired?"По устойчивому ID":"Независимые выборки",matchedPairs:paired?a.length:null,significant:"нет"};}
+  function weightedComparisonRow(base,metric,a,b,bWeights){
+    const s0={n:a.length,neff:a.length,mean:mean(a),variance:variance(a),sd:sd(a),min:Math.min(...a),max:Math.max(...a),q1:quantile(a,.25),median:median(a),q3:quantile(a,.75)},s1=weightedSummary(b,bWeights),se2=s0.variance/s0.neff+s1.variance/s1.neff;
+    let t=null,df=null,p=null;if(se2===0){t=s1.mean===s0.mean?0:(s1.mean>s0.mean?Infinity:-Infinity);df=Math.max(1,s0.neff+s1.neff-2);p=s1.mean===s0.mean?1:0;}else{t=(s1.mean-s0.mean)/Math.sqrt(se2);df=se2**2/((s0.variance/s0.neff)**2/(s0.neff-1)+(s1.variance/s1.neff)**2/(s1.neff-1));p=ibeta(df/(df+t*t),df/2,.5);}
+    const pooledDf=s0.neff+s1.neff-2,pooled=pooledDf>0?Math.sqrt(((s0.neff-1)*s0.variance+(s1.neff-1)*s1.variance)/pooledDf):0,J=pooledDf>1?1-3/(4*pooledDf-1):1,g=pooled?J*(s1.mean-s0.mean)/pooled:0,delta=s1.mean-s0.mean,guide=PsyMethods?.guidanceFor(base.method,metric)||{type:"context",label:"требуется интерпретация",note:""};
+    return {...base,metric,metricLabel:metricLabel(base.method,metric),tier:metricTier(base.method,metric),direction:guide.type,directionLabel:guide.label,directionNote:guide.note,trend:outcome(delta,guide),n0:s0.n,n1:s1.n,effectiveN1:round(s1.neff,2),min0:round(s0.min),q10:round(s0.q1),median0:round(s0.median),mean0:round(s0.mean),q30:round(s0.q3),max0:round(s0.max),sd0:round(s0.sd),min1:round(s1.min),q11:round(s1.q1),median1:round(s1.median),mean1:round(s1.mean),q31:round(s1.q3),max1:round(s1.max),sd1:round(s1.sd),delta:round(delta),percentChange:round(safePercent(s0.mean,delta,s0.sd),1),t:round(t),df:round(df,1),pRaw:p,p:round(p,6),q:null,hedgesG:round(g),significant:"нет",weighted:true};
+  }
+  function interactionRow(base,metric,c0,c1,e0,e1){
+    if([c0,c1,e0,e1].some(a=>a.length<2))return null;const cells=[c0,c1,e0,e1],means=cells.map(mean),vars=cells.map(variance),ns=cells.map(a=>a.length),deltaControl=means[1]-means[0],deltaExperimental=means[3]-means[2],difference=deltaExperimental-deltaControl,terms=vars.map((v,i)=>v/ns[i]),se2=terms.reduce((a,b)=>a+b,0);let t=null,df=null,p=null;if(se2===0){t=0;df=ns.reduce((a,b)=>a+b,0)-4;p=difference===0?1:0;}else{t=difference/Math.sqrt(se2);df=se2**2/terms.reduce((s,v,i)=>s+v**2/(ns[i]-1),0);p=ibeta(df/(df+t*t),df/2,.5);}const pooledDf=ns.reduce((a,b)=>a+b,0)-4,pooled=Math.sqrt(vars.reduce((s,v,i)=>s+(ns[i]-1)*v,0)/pooledDf),J=pooledDf>1?1-3/(4*pooledDf-1):1,effect=pooled?J*difference/pooled:0,guide=PsyMethods?.guidanceFor(base.method,metric)||{type:"context",label:"требуется интерпретация",note:""};return {...base,metric,metricLabel:metricLabel(base.method,metric),tier:metricTier(base.method,metric),direction:guide.type,directionLabel:guide.label,directionNote:guide.note,nControlT0:ns[0],nControlT1:ns[1],nExperimentalT0:ns[2],nExperimentalT1:ns[3],meanControlT0:round(means[0]),meanControlT1:round(means[1]),meanExperimentalT0:round(means[2]),meanExperimentalT1:round(means[3]),deltaControl:round(deltaControl),deltaExperimental:round(deltaExperimental),difference:round(difference),percentExperimental:round(safePercent(means[2],deltaExperimental,sd(e0)),1),trend:outcome(difference,guide),t:round(t),df:round(df,1),pRaw:p,p:round(p,6),q:null,interactionEffect:round(effect),significant:"нет"};
+  }
+  function nestedCoverage(counts){
+    const sorted=[...counts].map(Number).filter(Number.isFinite).sort((a,b)=>b-a),m=sorted.length,out=[];if(!m)return out;
+    for(let k=m;k>=1;k--){const atLeast=sorted[k-1]||0,next=k===m?0:(sorted[k]||0);out.push({methodsCompleted:k,count:Math.max(0,atLeast-next)});}
+    return out;
+  }
+  function exactCoverage(methodSets){
+    const people=new Map();for(const [method,ids] of methodSets)for(const id of ids){if(!people.has(id))people.set(id,new Set());people.get(id).add(method);}
+    const counts={};for(const methods of people.values())counts[methods.size]=(counts[methods.size]||0)+1;
+    return {cohort:people.size,distribution:Object.entries(counts).map(([k,count])=>({methodsCompleted:Number(k),count})).sort((a,b)=>b.methodsCompleted-a.methodsCompleted),people};
+  }
+  function analyze(files,author,cutoffInput,methodCutoffs={}){
+    const inspected=files.map(inspectFile),cutoff=parseDate(cutoffInput),missing=inspected.filter(f=>!f.errors.length&&f.stageIndex<0&&!cutoffFor(f,cutoff,methodCutoffs));if(missing.length)throw new Error("Укажите общую дату границы T0/T1 или отдельную дату для каждой методики");const unresolved=inspected.flatMap(f=>f.errors.length?[]:stageAudit(f,cutoffFor(f,cutoff,methodCutoffs)).entries.filter(x=>!x.decision).map(x=>`${f.name}: ${x.value}`));if(unresolved.length)throw new Error(`Сначала решите, что делать с нераспознанными этапами: ${unresolved.join("; ")}`);const fileSummaries=[],scaleRows=[],weightedScaleRows=[],weightSummaries=[],levelRows=[],issues=[],pairingWarnings=new Set();
+    for(const f of inspected){if(f.errors.length){issues.push(...f.errors.map(x=>({file:f.name,issue:x})));continue;}
+      const fileCutoff=cutoffFor(f,cutoff,methodCutoffs),t0=f.rows.filter(r=>rowWave(f,r,fileCutoff)==="T0"),t1=f.rows.filter(r=>rowWave(f,r,fileCutoff)==="T1"),excluded=f.rows.filter(r=>rowWave(f,r,fileCutoff)==="EXCLUDE").length,badDate=f.rows.length-t0.length-t1.length-excluded;
+      const sexCounts=(rows,label)=>{const out={Мужчины:0,Женщины:0,"Не указан":0};for(const r of rows)out[sexValue(f.sexIndex>=0?r[f.sexIndex]:null)]++;return out;};
+      const s0=sexCounts(t0),s1=sexCounts(t1),n0=t0.length,n1=t1.length,miss=Math.max(0,n0-n1),ret=n0?100*n1/n0:null;
+      const age0=f.ageIndex>=0?values(t0,f.ageIndex):[],age1=f.ageIndex>=0?values(t1,f.ageIndex):[];
+      fileSummaries.push({file:f.name,method:f.method,group:f.group,cutoff:fileCutoff,cutoffKey:cutoffKey(f),splitMode:f.stageIndex>=0?"stage":"date",n0,n1,excluded,notCompleted:miss,completionRate:round(ret,1),nonCompletionRate:n0?round(100*miss/n0,1):null,male0:s0.Мужчины,male1:s1.Мужчины,maleNotCompleted:Math.max(0,s0.Мужчины-s1.Мужчины),maleCompletionRate:s0.Мужчины?round(100*s1.Мужчины/s0.Мужчины,1):null,female0:s0.Женщины,female1:s1.Женщины,femaleNotCompleted:Math.max(0,s0.Женщины-s1.Женщины),femaleCompletionRate:s0.Женщины?round(100*s1.Женщины/s0.Женщины,1):null,ageN0:age0.length,ageN1:age1.length,ageMean0:round(mean(age0),1),ageMean1:round(mean(age1),1),ageMedian0:round(median(age0),1),ageMedian1:round(median(age1),1),badDate,phrase:`T0 прошли ${n0}; T1 прошли ${n1} (${ret==null?"–":round(ret,1)+"%"}); не прошли T1 ${miss}${excluded?`; исключено по решению: ${excluded}`:""}${n1>n0?". Внимание: T1 больше T0":""}`});
+      if(n1>n0)issues.push({file:f.name,issue:`T1 (${n1}) больше T0 (${n0}), хотя новые участники не предполагаются`});if(badDate)issues.push({file:f.name,issue:`Не определен этап T0/T1: ${badDate}`});if(excluded)issues.push({file:f.name,issue:`Исключено строк по решению об этапе: ${excluded}`});
+      if(s1.Мужчины>s0.Мужчины)issues.push({file:f.name,issue:`Мужчин в T1 (${s1.Мужчины}) больше, чем в T0 (${s0.Мужчины}). Проверьте границу или значения пола`});
+      if(s1.Женщины>s0.Женщины)issues.push({file:f.name,issue:`Женщин в T1 (${s1.Женщины}) больше, чем в T0 (${s0.Женщины}). Проверьте границу или значения пола`});
+      const ok0=t0.filter(r=>r[f.statusIndex]==="Обработано"),ok1=t1.filter(r=>r[f.statusIndex]==="Обработано"),weighting=calibrationWeights(ok0,ok1,f.sexIndex,f.ageIndex);weighting.warnings.push(f.participantIdIndex<0?"Исходные шкалы не включены: нет устойчивого идентификатора T0–T1":"Исходные шкалы не включены в автоматическую калибровку; используются пол и возраст");
+      weightSummaries.push({file:f.name,method:f.method,methodCode:methodCode(f.method),group:f.group,n0:ok0.length,n1:ok1.length,effectiveN1:round(weighting.neff,2),minWeight:round(weighting.minWeight,3),maxWeight:round(weighting.maxWeight,3),dimensions:weighting.dimensions.join(", ")||"нет",available:weighting.available?"да":"нет",warning:weighting.warnings.join("; ")});
+      for(let i=f.metricStart;i<f.headers.length;i++){
+        const metric=String(f.headers[i]??"");if(!metric)continue;const raw0=ok0.map(r=>r[i]).filter(v=>v!==null&&v!==undefined&&v!==""),raw1=ok1.map(r=>r[i]).filter(v=>v!==null&&v!==undefined&&v!=="");
+        const numeric0=raw0.map(Number).filter(Number.isFinite),numeric1=raw1.map(Number).filter(Number.isFinite),isNumeric=(numeric0.length===raw0.length&&numeric1.length===raw1.length&&(raw0.length+raw1.length)>0);
+        const canonical=canonicalMetric(f.method,metric,isNumeric);if(!canonical.include)continue;
+        if(isNumeric){if(numeric0.length&&numeric1.length){const pairs=pairedMetricValues(ok0,ok1,f.participantIdIndex,i),usePairs=pairs?.a.length>=2;scaleRows.push(comparisonRow({author,method:f.method,group:f.group,comparison:"T0 и T1 внутри группы"},canonical.name,usePairs?pairs.a:numeric0,usePairs?pairs.b:numeric1,usePairs?"paired":"independent"));if(pairs?.ambiguous&&!pairingWarnings.has(f.name)){issues.push({file:f.name,issue:`Неоднозначные повторения ID исключены из парного сопоставления: ${pairs.ambiguous}`});pairingWarnings.add(f.name);}if(weighting.available){const pairs1=ok1.map((r,ri)=>({v:Number(r[i]),w:weighting.weights[ri]})).filter(x=>Number.isFinite(x.v)&&Number.isFinite(x.w)&&x.w>0);if(pairs1.length>1)weightedScaleRows.push(weightedComparisonRow({author,method:f.method,group:f.group,comparison:"T0 и T1 с калибровочными весами T1"},canonical.name,numeric0,pairs1.map(x=>x.v),pairs1.map(x=>x.w)));}}}
+        else {const cats=[...new Set([...raw0,...raw1].map(String))].sort();for(const category of cats){const c0=raw0.filter(v=>String(v)===category).length,c1=raw1.filter(v=>String(v)===category).length,display=levelDisplay(f.method,canonical.name,category);levelRows.push({author,method:f.method,methodCode:methodCode(f.method),group:f.group,metric:canonical.name,metricLabel:display.metricLabel,category:display.category,countT0:c0,percentT0:raw0.length?round(100*c0/raw0.length,1):null,countT1:c1,percentT1:raw1.length?round(100*c1/raw1.length,1):null});}}
+      }
+    }
+    const warnedMissingMethods=new Set();
+    for(const summary of fileSummaries){
+      const method=PsyMethods?.resolveMethod(summary.method),key=`${summary.group}|${summary.method}`;
+      if(method?.id==="usk_44"&&!scaleRows.some(r=>r.group===summary.group&&r.method===summary.method)&&!warnedMissingMethods.has(key)){
+        issues.push({file:"УСК",issue:"УСК: показатели не рассчитаны"});
+        warnedMissingMethods.add(key);
+      }
+    }
+    const groups={};for(const r of scaleRows){const k=`${r.method}|${r.group}|${r.comparison}`;(groups[k]??=[]).push(r);}for(const arr of Object.values(groups))bh(arr);const weightedGroups={};for(const r of weightedScaleRows){const k=`${r.method}|${r.group}|${r.comparison}`;(weightedGroups[k]??=[]).push(r);}for(const arr of Object.values(weightedGroups))bh(arr);
+    const researchSummaries=[];
+    for(const group of [...new Set(fileSummaries.map(s=>s.group))]){
+      const summaries=fileSummaries.filter(s=>s.group===group),methodNames=[...new Set(summaries.map(s=>s.method))],methodCounts=methodNames.map(method=>{const x=summaries.filter(s=>s.method===method);return {method,methodCode:methodCode(method),n0:x.reduce((a,s)=>a+s.n0,0),n1:x.reduce((a,s)=>a+s.n1,0)};});
+      const groupFiles=inspected.filter(f=>f.group===group&&!f.errors.length),canMatch=groupFiles.length>0&&groupFiles.every(f=>f.participantIdIndex>=0);
+      let cohort0,cohort1,coverage0,coverage1,coverageMode;
+      if(canMatch){
+        const maps=[new Map(),new Map()];for(const f of groupFiles){const fileCutoff=cutoffFor(f,cutoff,methodCutoffs);for(const wave of [0,1]){const label=wave===0?"T0":"T1",rows=f.rows.filter(r=>rowWave(f,r,fileCutoff)===label);const ids=new Set(rows.map(r=>clean(r[f.participantIdIndex])).filter(Boolean));if(!maps[wave].has(f.method))maps[wave].set(f.method,new Set());for(const id of ids)maps[wave].get(f.method).add(id);}}
+        const e0=exactCoverage(maps[0]),e1=exactCoverage(maps[1]);cohort0=e0.cohort;cohort1=e1.cohort;coverage0=e0.distribution;coverage1=e1.distribution;coverageMode="Точный расчет по идентификатору";
+        const newInT1=[...e1.people.keys()].filter(id=>!e0.people.has(id)).length;if(newInT1)issues.push({file:group,issue:`В T1 найдено участников без записи в T0: ${newInT1}`});
+      }else{
+        cohort0=Math.max(0,...methodCounts.map(x=>x.n0));cohort1=Math.max(0,...methodCounts.map(x=>x.n1));coverage0=nestedCoverage(methodCounts.map(x=>x.n0));coverage1=nestedCoverage(methodCounts.map(x=>x.n1));coverageMode="Оценка по вложенной модели, без общего кода участника";
+      }
+      for(const row of coverage0)row.percent=cohort0?round(100*row.count/cohort0,1):null;for(const row of coverage1)row.percent=cohort1?round(100*row.count/cohort1,1):null;
+      researchSummaries.push({author,group,methodCount:methodNames.length,cohort0,cohort1,notCompleted:Math.max(0,cohort0-cohort1),completionRate:cohort0?round(100*cohort1/cohort0,1):null,totalAdministrations0:methodCounts.reduce((a,x)=>a+x.n0,0),totalAdministrations1:methodCounts.reduce((a,x)=>a+x.n1,0),coverageMode,coverage0,coverage1,methodCounts});
+    }
+    return {author,cutoff,methodCutoffs:{...methodCutoffs},splitMode:inspected.every(f=>f.errors.length||f.stageIndex>=0)?"stage":"date",files:inspected,fileSummaries,researchSummaries,scaleRows,weightedScaleRows,weightSummaries,levelRows,issues};
+  }
+  function analyzeSingle(files,author){
+    const inspected=files.map(inspectFile),fileSummaries=[],issues=[],numericBuckets=new Map(),categoryBuckets=new Map();
+    for(const f of inspected){
+      if(f.errors.length){issues.push(...f.errors.map(issue=>({file:f.name,issue})));continue;}
+      const ok=f.rows.filter(r=>r[f.statusIndex]==="Обработано"),rejected=f.rows.length-ok.length;
+      fileSummaries.push({file:f.name,method:f.method,group:f.group,n:f.rows.length,nProcessed:ok.length,nRejected:rejected,n0:f.rows.length,n1:0,splitMode:"single",phrase:`Строк: ${f.rows.length}; обработано: ${ok.length}${rejected?`; без расчета: ${rejected}`:""}`});
+      if(rejected)issues.push({file:f.name,issue:`Без расчета оставлено строк: ${rejected}. Причины сохранены в столбце «Предупреждения».`});
+      for(let i=f.metricStart;i<f.headers.length;i++){
+        const metric=String(f.headers[i]??"");if(!metric)continue;const raw=ok.map(r=>r[i]).filter(v=>v!==null&&v!==undefined&&v!==""),numeric=raw.map(Number).filter(Number.isFinite),isNumeric=raw.length>0&&numeric.length===raw.length,canonical=canonicalMetric(f.method,metric,isNumeric);if(!canonical.include||!raw.length)continue;
+        const key=`${f.method}\u0001${f.group}\u0001${canonical.name}`,base={author,method:f.method,group:f.group,comparison:"Один период",period:"Один период"};
+        if(isNumeric){const bucket=numericBuckets.get(key)||{...base,metric:canonical.name,values:[]};bucket.values.push(...numeric);numericBuckets.set(key,bucket);}
+        else {const bucket=categoryBuckets.get(key)||{...base,metric:canonical.name,values:[]};bucket.values.push(...raw.map(String));categoryBuckets.set(key,bucket);}
+      }
+    }
+    const scaleRows=[...numericBuckets.values()].filter(b=>b.values.length).map(b=>descriptiveRow(b,b.metric,b.values)),levelRows=[];
+    for(const b of categoryBuckets.values())for(const category of [...new Set(b.values)].sort()){const count=b.values.filter(v=>v===category).length,display=levelDisplay(b.method,b.metric,category);levelRows.push({author,method:b.method,methodCode:methodCode(b.method),group:b.group,metric:b.metric,metricLabel:display.metricLabel,category:display.category,count,percent:b.values.length?round(100*count/b.values.length,1):null,countT0:count,percentT0:b.values.length?round(100*count/b.values.length,1):null,countT1:null,percentT1:null});}
+    const warnedMissingMethods=new Set();for(const summary of fileSummaries){const method=PsyMethods?.resolveMethod(summary.method),key=`${summary.group}|${summary.method}`;if(method?.id==="usk_44"&&!scaleRows.some(r=>r.group===summary.group&&r.method===summary.method)&&!warnedMissingMethods.has(key)){issues.push({file:"УСК",issue:"УСК: показатели не рассчитаны"});warnedMissingMethods.add(key);}}
+    const researchSummaries=[];for(const group of [...new Set(fileSummaries.map(s=>s.group))]){const summaries=fileSummaries.filter(s=>s.group===group),methodNames=[...new Set(summaries.map(s=>s.method))],methodCounts=methodNames.map(method=>{const x=summaries.filter(s=>s.method===method),n=x.reduce((sum,s)=>sum+s.n,0);return {method,methodCode:methodCode(method),n,n0:n,n1:0};}),cohort=Math.max(0,...methodCounts.map(x=>x.n)),coverage=nestedCoverage(methodCounts.map(x=>x.n));for(const row of coverage)row.percent=cohort?round(100*row.count/cohort,1):null;researchSummaries.push({author,group,methodCount:methodNames.length,cohort,cohort0:cohort,cohort1:0,notCompleted:0,completionRate:null,totalAdministrations:methodCounts.reduce((sum,x)=>sum+x.n,0),totalAdministrations0:methodCounts.reduce((sum,x)=>sum+x.n,0),totalAdministrations1:0,coverageMode:"Один период, оценка по вложенной модели",coverage,coverage0:coverage,coverage1:[],methodCounts});}
+    return {author,cutoff:null,methodCutoffs:{},splitMode:"single",singlePeriod:true,analysisType:"single",files:inspected,fileSummaries,researchSummaries,scaleRows,weightedScaleRows:[],weightSummaries:[],levelRows,issues};
+  }
+  function analyzeBetweenSingle(files,author){
+    const base=analyzeSingle(files,author),buckets=new Map(),issues=[...base.issues];
+    for(const f of base.files){if(f.errors.length)continue;const rows=f.rows.filter(r=>r[f.statusIndex]==="Обработано");for(let i=f.metricStart;i<f.headers.length;i++){const metric=String(f.headers[i]??"");if(!metric)continue;const raw=rows.map(r=>r[i]).filter(v=>v!==null&&v!==undefined&&v!==""),numeric=raw.map(Number).filter(Number.isFinite);if(!raw.length||numeric.length!==raw.length)continue;const canonical=canonicalMetric(f.method,metric,true);if(!canonical.include)continue;const key=`${f.method}\u0001${canonical.name}`,bucket=buckets.get(key)||{method:f.method,metric:canonical.name,groups:{}};(bucket.groups[f.group]??=[]).push(...numeric);buckets.set(key,bucket);}}
+    const scaleRows=[];for(const item of buckets.values()){const control=item.groups["Контрольная"],experimental=item.groups["Экспериментальная"];if(!control?.length||!experimental?.length)continue;scaleRows.push(comparisonRow({author,method:item.method,group:"ЭГ–КГ",comparison:"ЭГ и КГ, один период",sample0:"Контрольная",sample1:"Экспериментальная",wave:"Один период",period:"Один период"},item.metric,control,experimental));}
+    const grouped={};for(const r of scaleRows)(grouped[r.method]??=[]).push(r);for(const arr of Object.values(grouped))bh(arr);
+    const methodsExp=new Set(base.fileSummaries.filter(s=>s.group==="Экспериментальная").map(s=>s.method)),methodsCtrl=new Set(base.fileSummaries.filter(s=>s.group==="Контрольная").map(s=>s.method));for(const method of methodsExp)if(!methodsCtrl.has(method))issues.push({file:method,issue:"Нет соответствующего файла контрольной группы: межгрупповое сравнение пропущено"});for(const method of methodsCtrl)if(!methodsExp.has(method))issues.push({file:method,issue:"Нет соответствующего файла экспериментальной группы: межгрупповое сравнение пропущено"});
+    return {...base,analysisType:"between-single",scaleRows,interactionRows:[],levelRows:[],issues};
+  }
+  function analyzeBetween(files,author,cutoffInput,methodCutoffs={}){
+    const base=analyze(files,author,cutoffInput,methodCutoffs),cutoff=base.cutoff,buckets={},issues=[...base.issues];
+    for(const f of base.files){if(f.errors.length)continue;const fileCutoff=cutoffFor(f,cutoff,methodCutoffs);for(const wave of ["T0","T1"]){const rows=f.rows.filter(r=>rowWave(f,r,fileCutoff)===wave&&r[f.statusIndex]==="Обработано");for(let i=f.metricStart;i<f.headers.length;i++){const metric=String(f.headers[i]??"");if(!metric)continue;const raw=rows.map(r=>r[i]).filter(v=>v!==null&&v!==undefined&&v!==""),numeric=raw.map(Number).filter(Number.isFinite);if(!raw.length||numeric.length!==raw.length)continue;const canonical=canonicalMetric(f.method,metric,true);if(!canonical.include)continue;const key=`${f.method}\u0001${wave}\u0001${canonical.name}`;(buckets[key]??={method:f.method,wave,metric:canonical.name,groups:{}});(buckets[key].groups[f.group]??=[]).push(...numeric);}}}
+    const scaleRows=[];for(const item of Object.values(buckets)){const control=item.groups["Контрольная"],experimental=item.groups["Экспериментальная"];if(!control?.length||!experimental?.length)continue;scaleRows.push(comparisonRow({author,method:item.method,group:"ЭГ–КГ",comparison:`ЭГ и КГ на этапе ${item.wave}`,sample0:"Контрольная",sample1:"Экспериментальная",wave:item.wave},item.metric,control,experimental));}
+    const grouped={};for(const r of scaleRows){const k=`${r.method}|${r.wave}`;(grouped[k]??=[]).push(r);}for(const arr of Object.values(grouped))bh(arr);
+    const interactionRows=[],pairs={};for(const item of Object.values(buckets)){const key=`${item.method}\u0001${item.metric}`;(pairs[key]??={method:item.method,metric:item.metric,waves:{}}).waves[item.wave]=item.groups;}
+    for(const item of Object.values(pairs)){const t0=item.waves.T0,t1=item.waves.T1;if(!t0||!t1)continue;const row=interactionRow({author,method:item.method,group:"ЭГ–КГ",comparison:"Взаимодействие группа × время"},item.metric,t0["Контрольная"]||[],t1["Контрольная"]||[],t0["Экспериментальная"]||[],t1["Экспериментальная"]||[]);if(row)interactionRows.push(row);}
+    const interactionGroups={};for(const r of interactionRows)(interactionGroups[r.method]??=[]).push(r);for(const arr of Object.values(interactionGroups))bh(arr);
+    const baselineDifferences=scaleRows.filter(r=>r.wave==="T0"&&r.significant==="да");if(baselineDifferences.length)issues.push({file:"T0",issue:`На исходном этапе обнаружены скорректированные значимые различия по ${baselineDifferences.length} шкал(ам). Группы нельзя считать полностью эквивалентными до воздействия.`});
+    const methodsExp=new Set(base.fileSummaries.filter(s=>s.group==="Экспериментальная").map(s=>s.method)),methodsCtrl=new Set(base.fileSummaries.filter(s=>s.group==="Контрольная").map(s=>s.method));for(const method of methodsExp)if(!methodsCtrl.has(method))issues.push({file:method,issue:"Нет соответствующего файла контрольной группы: межгрупповое сравнение пропущено"});for(const method of methodsCtrl)if(!methodsExp.has(method))issues.push({file:method,issue:"Нет соответствующего файла экспериментальной группы: межгрупповое сравнение пропущено"});
+    if(!methodsCtrl.size)issues.push({file:"Исследование",issue:"Контрольная группа отсутствует: аналитика ЭГ–КГ недоступна"});
+    return {...base,analysisType:"between",scaleRows,interactionRows,levelRows:[],issues};
+  }
+  function synthesize(within,between=null){
+    const methods=[...new Set(within.scaleRows.map(r=>r.method))],rows=[];
+    const find=(arr,method,metric,pred=()=>true)=>arr?.find(r=>r.method===method&&r.metric===metric&&pred(r));
+    for(const method of methods){const metrics=[...new Set(within.scaleRows.filter(r=>r.method===method).map(r=>r.metric))];for(const metric of metrics){
+      const experimental=find(within.scaleRows,method,metric,r=>r.group==="Экспериментальная"),control=find(within.scaleRows,method,metric,r=>r.group==="Контрольная"),baseline=find(between?.scaleRows,method,metric,r=>r.wave==="T0"),endline=find(between?.scaleRows,method,metric,r=>r.wave==="T1"),interaction=find(between?.interactionRows,method,metric),hasControl=!!(control&&baseline&&interaction);
+      if(!experimental)continue;const sig=r=>r?.significant==="да",expSig=sig(experimental),ctrlStable=!control||!sig(control),baselineComparable=!baseline||(!sig(baseline)&&Math.abs(baseline.hedgesG||0)<.2),interactionSig=sig(interaction),expectedExp=experimental.trend==="положительный",expectedInteraction=!interaction||interaction.trend==="положительный",opposite=(expSig&&experimental.trend==="отрицательный")||(interactionSig&&interaction.trend==="отрицательный"),interactionMeaningful=!!interaction&&Math.abs(interaction.interactionEffect||0)>=.2,expMeaningful=Math.abs(experimental.hedgesG||0)>=.2;
+      let category="unsupported",reason="Статистических и практически заметных подтверждений недостаточно.";
+      if(hasControl&&baselineComparable&&expSig&&ctrlStable&&interactionSig&&expectedExp&&expectedInteraction&&interactionMeaningful){category="strong";reason="Группы сопоставимы на T0; в ЭГ есть ожидаемое изменение; КГ стабильна; взаимодействие группа × время значимо.";}
+      else if(!opposite&&expectedExp&&((hasControl&&(expSig||interactionSig||Math.abs(interaction?.interactionEffect||0)>=.3||Math.abs(experimental.hedgesG||0)>=.3))||(!hasControl&&(expSig&&expMeaningful||Math.abs(experimental.hedgesG||0)>=.3)))){category="promising";reason=hasControl?"Есть ожидаемое изменение, но не все критерии строгого вывода выполнены.":"Есть ожидаемое изменение, но без контрольной группы причинный вывод невозможен.";}
+      else if(opposite)reason="Обнаружено значимое изменение в направлении, противоположном ожидаемому.";
+      rows.push({author:within.author,method,methodCode:methodCode(method),metric,metricLabel:metricLabel(method,metric),tier:experimental.tier||metricTier(method,metric),direction:experimental.direction,directionLabel:experimental.directionLabel,directionNote:experimental.directionNote,category,opposite,reason,hasControl,baselineComparable,experimentalSignificant:expSig,controlStable:ctrlStable,interactionSignificant:interactionSig,expectedDirection:expectedExp&&expectedInteraction,experimentalPercent:experimental.percentChange,experimentalQ:experimental.q,experimentalEffect:experimental.hedgesG,controlQ:control?.q??null,baselineQ:baseline?.q??null,baselineEffect:baseline?.hedgesG??null,endlineQ:endline?.q??null,interactionQ:interaction?.q??null,interactionEffect:interaction?.interactionEffect??null});
+    }}
+    const counts={strong:0,promising:0,unsupported:0,opposite:0};for(const r of rows){counts[r.category]++;if(r.opposite)counts.opposite++;}return {author:within.author,rows,counts,hasControl:!!between,methodCount:new Set(rows.map(r=>r.method)).size,issues:[...(within.issues||[]),...(between?.issues||[])]};
+  }
+  function briefSheets(analysis,options={}){
+    const rows=(analysis.scaleRows||[]).filter(r=>options.tier==="all"||r.tier!=="deep"),recognizedMethods=new Set((analysis.researchSummaries||[]).flatMap(s=>s.methodCounts.map(m=>m.method))),single=analysis.singlePeriod,between=/^between/.test(analysis.analysisType||""),title=options.title||"Краткая статистическая сводка",summary=[[title],["Автор",analysis.author],["Тип",single?(between?"ЭГ–КГ, один период":"Один период"):(between?"ЭГ–КГ":"T0–T1")],["Методик",recognizedMethods.size||new Set(rows.map(r=>r.method)).size],["Показателей",rows.length]];
+    if(between||!single){const waves=between&&!single?["T0","T1"]:[null];for(const wave of waves){const selected=wave?rows.filter(r=>r.wave===wave):rows,label=wave?`Сила различия ${wave}`:"Сила изменения",counts={"отсутствует":0,"малое":0,"умеренное":0,"крупное":0,"не рассчитано":0};for(const r of selected){const key=effectMagnitude(r.effectSize??r.hedgesG);counts[key]++;}for(const key of Object.keys(counts))summary.push([`${label}: ${key}`,counts[key]]);}summary.push(["Статистическая значимость","Только в подробном Excel"]);}else summary.push(["Статистическая значимость","Не рассчитывается без второй выборки"]);
+    for(const warning of (analysis.issues||[]).filter(i=>i.issue==="УСК: показатели не рассчитаны"))summary.push(["Предупреждение",warning.issue]);
+    const stats=single&&!between?[["№","Код","Методика","Показатель","Направление показателя","N","Минимум","Q1","Медиана","Среднее","Q3","Максимум","SD"]]:[["№","Код","Методика","Показатель","Смысл изменения","Изменение / различие, %","Размер эффекта","Тип эффекта","Сила изменения"]];for(const [mi,method] of [...new Set(rows.map(r=>r.method))].entries()){let j=0;for(const r of rows.filter(x=>x.method===method)){j++;stats.push(single&&!between?[`${mi+1}.${j}`,methodCode(method),method,r.metric,r.directionLabel,r.n0,r.min0,r.q10,r.median0,r.mean0,r.q30,r.max0,r.sd0]:[`${mi+1}.${j}`,methodCode(method),method,r.metric,changeMeaningLabel(r),r.percentChange,r.effectSize??r.hedgesG,r.effectName,effectMagnitude(r.effectSize??r.hedgesG)]);}}
+    return [{name:"Сводка",rows:summary},{name:"Краткая статистика",rows:stats}];
+  }
+  function betweenBriefSheets(analysis){
+    if(analysis.singlePeriod)return briefSheets(analysis,{title:"Краткая сводка ЭГ–КГ: один период"});
+    const rows=(analysis.scaleRows||[]).filter(r=>r.tier!=="deep"),pairs=new Map();for(const row of rows){const key=`${row.method}\u0001${row.metric}`,pair=pairs.get(key)||{method:row.method,metric:row.metric};pair[row.wave==="T1"?"t1":"t0"]=row;pairs.set(key,pair);}const values=[...pairs.values()],summary=[["Краткая сводка ЭГ–КГ: T0 и T1"],["Автор",analysis.author],["Методик",new Set(values.map(p=>p.method)).size],["Показателей",values.length]],addCounts=(label,list)=>{const counts={"отсутствует":0,"малое":0,"умеренное":0,"крупное":0,"не рассчитано":0};for(const row of list){const key=effectMagnitude(row?.hedgesG);counts[key]++;}for(const key of Object.keys(counts))summary.push([`${label}: ${key}`,counts[key]]);};addCounts("Сила различия T0",values.map(p=>p.t0));addCounts("Сила различия T1",values.map(p=>p.t1));summary.push(["Статистическая значимость","Только в подробном Excel"]);
+    const stats=[["№","Код","Методика","Показатель","T0: ЭГ−КГ, %","T0: Hedges g","T0: сила различия","T1: ЭГ−КГ, %","T1: Hedges g","T1: сила различия","Изменение разрыва","Сила изменения разрыва"]],methods=[...new Set(values.map(p=>p.method))];for(const [methodIndex,method] of methods.entries()){let indicator=0;for(const pair of values.filter(p=>p.method===method)){indicator++;const interaction=(analysis.interactionRows||[]).find(r=>r.method===method&&r.metric===pair.metric);stats.push([`${methodIndex+1}.${indicator}`,methodCode(method),method,pair.metric,pair.t0?.percentChange??null,pair.t0?.hedgesG??null,effectMagnitude(pair.t0?.hedgesG),pair.t1?.percentChange??null,pair.t1?.hedgesG??null,effectMagnitude(pair.t1?.hedgesG),interaction?.interactionEffect??null,effectMagnitude(interaction?.interactionEffect)]);}}
+    return [{name:"Сводка",rows:summary},{name:"Сравнение T0 и T1",rows:stats}];
+  }
+  function synthesisSheets(synthesis,detailed=false){const labels={strong:"Убедительно подтверждено",promising:"Есть основания считать перспективным",unsupported:"Не подтверждено"},summary=[["Итог исследования"],["Автор",synthesis.author],["Методик",synthesis.methodCount],[labels.strong,synthesis.counts.strong],[labels.promising,synthesis.counts.promising],[labels.unsupported,synthesis.counts.unsupported],["Противоположный результат",synthesis.counts.opposite],["Примечание",synthesis.hasControl?"Строгая оценка использует взаимодействие группа × время.":"Контрольной группы нет: причинные выводы не формируются."]],head=["Категория","Код","Методика","Шкала","Направление","Изменение ЭГ, %","q ЭГ","Эффект ЭГ","Сопоставимы T0","КГ стабильна","q взаимодействия","Эффект взаимодействия","Противоположный результат","Основание"],body=synthesis.rows.map(r=>[labels[r.category],r.methodCode,r.method,r.metric,r.directionLabel,r.experimentalPercent,r.experimentalQ,r.experimentalEffect,r.hasControl?(r.baselineComparable?"да":"нет"):"н/д",r.hasControl?(r.controlStable?"да":"нет"):"н/д",r.interactionQ,r.interactionEffect,r.opposite?"да":"нет",r.reason]);const out=[{name:"Итог",rows:summary},{name:"Выводы",rows:[head,...body]}];if(detailed)out.push({name:"Матрица доказательств",rows:[["Код","Методика","Шкала","Есть КГ","q T0 ЭГ-КГ","Эффект T0","q T0-T1 ЭГ","q T0-T1 КГ","q группа×время","Эффект группа×время","Ожидаемое направление"],...synthesis.rows.map(r=>[r.methodCode,r.method,r.metric,r.hasControl?"да":"нет",r.baselineQ,r.baselineEffect,r.experimentalQ,r.controlQ,r.interactionQ,r.interactionEffect,r.expectedDirection?"да":"нет"]) ]});return out;}
+  function researcherSummarySheets(synthesis){
+    const rows=synthesis.rows.filter(dashboardMetricVisible),confirmed=rows.filter(r=>r.category!=="unsupported").length,unsupported=rows.length-confirmed;
+    const summary=[["Итог исследования"],["Автор",synthesis.author],["Методик",new Set(rows.map(r=>r.method)).size],["Подтверждено",confirmed],["Не подтверждено",unsupported]];
+    const conclusions=[["Категория","Кратко","Методика","Шкала","Изменение ЭГ, %","Значимость изменения"],...rows.map(r=>[r.category==="unsupported"?"Не подтверждено":"Подтверждено",r.methodCode,r.method,r.metric,r.experimentalPercent,r.experimentalQ])];
+    return [
+      {name:"Итог",rows:summary,freeze:false,format:"researcher-summary",columnWidths:[20.3,16]},
+      {name:"Выводы",rows:conclusions,freeze:false,format:"researcher-summary",columnWidths:[18.1,9.1,37.3,33,22,15.6]}
+    ];
+  }
+  function reportSheets(analysis){
+    if(analysis.singlePeriod){
+      const between=analysis.analysisType==="between-single",params=[["Параметр","Значение"],["Автор",analysis.author],["Режим",between?"Один период: сравнение экспериментальной и контрольной групп":"Один период: описательная статистика"],["Статистическая значимость",between?"t-критерий Уэлча для независимых выборок; поправка Бенджамини–Хохберга":"Не рассчитывается без второй выборки"]],overview=[["Автор","Группа","Методик","Участников / наблюдений","Заполнений методик"],...analysis.researchSummaries.map(s=>[s.author,s.group,s.methodCount,s.cohort,s.totalAdministrations])],methods=[["Автор","Группа","Код","Методика","N"],...analysis.researchSummaries.flatMap(s=>s.methodCounts.map(m=>[s.author,s.group,m.methodCode,m.method,m.n]))],scales=between?[["Автор","Методика","Шкала","Смысл высокого балла","N КГ","Среднее КГ","SD КГ","N ЭГ","Среднее ЭГ","SD ЭГ","Различие","Различие, %","t","df","p","p скорр.","Hedges g","Значимо"],...analysis.scaleRows.map(r=>[r.author,r.method,r.metricLabel,r.directionLabel,r.n0,r.mean0,r.sd0,r.n1,r.mean1,r.sd1,r.delta,r.percentChange,r.t,r.df,r.p,r.q,r.hedgesG,r.significant])]:[["Автор","Методика","Группа","Шкала","Смысл высокого балла","N","Минимум","Q1","Медиана","Среднее","Q3","Максимум","SD"],...analysis.scaleRows.map(r=>[r.author,r.method,r.group,r.metricLabel,r.directionLabel,r.n0,r.min0,r.q10,r.median0,r.mean0,r.q30,r.max0,r.sd0])],levels=[["Автор","Методика","Группа","Показатель","Уровень / состояние","Количество","%"],...analysis.levelRows.map(r=>[r.author,r.method,r.group,r.metricLabel,r.category,r.count??r.countT0,r.percent??r.percentT0])],issues=[["Файл","Предупреждение"],...analysis.issues.map(i=>[i.file,i.issue])];return [{name:"Параметры",rows:params},{name:"Сводка исследования",rows:overview},{name:"Методики",rows:methods},{name:between?"Сравнение ЭГ-КГ":"Описательная статистика",rows:scales},{name:"Уровни",rows:levels},{name:"Предупреждения",rows:issues}];
+    }
+    const cutoff=analysis.cutoff?analysis.cutoff.toLocaleString("ru-RU",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
+    const dateText=d=>d?d.toLocaleString("ru-RU",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"}):"";
+    const design=analysis.analysisType==="between"?"Экспериментальная и контрольная группы не объединяются; независимые группы сравниваются отдельно на T0 и T1; взаимодействие группа × время рассчитано как разность независимых изменений":"T1 трактуется как часть T0; шкалы сравниваются без индивидуального сопоставления";
+    const splitRule=analysis.splitMode==="stage"?"T0/T1 взяты из явного столбца Этап":"T0 до границы включительно; T1 после границы";
+    const params=[["Параметр","Значение"],["Автор",analysis.author],["Граница T0/T1",cutoff],["Правило",splitRule],["Дизайн",design]];
+    const cutoffs=[["Группа","Методика","Граница T0/T1","Источник"],...[...new Map(analysis.fileSummaries.map(s=>[s.cutoffKey,[s.group,s.method,dateText(s.cutoff),s.splitMode==="stage"?"Столбец Этап":analysis.methodCutoffs?.[s.cutoffKey]?"Индивидуальная дата":"Общая дата"]])).values()]];
+    const overview=[["Автор","Группа","Методик","Когорта T0","Когорта T1","Не прошли T1","Прошли T1, %","Заполнений методик T0","Заполнений методик T1","Режим расчета охвата"],...analysis.researchSummaries.map(s=>[s.author,s.group,s.methodCount,s.cohort0,s.cohort1,s.notCompleted,s.completionRate,s.totalAdministrations0,s.totalAdministrations1,s.coverageMode])];
+    const methodOverview=[["Автор","Группа","Код методики","Методика","T0","T0, % от когорты","T1","T1, % от когорты","Не прошли T1","Не прошли T1, %"],...analysis.researchSummaries.flatMap(s=>s.methodCounts.map(m=>{const miss=Math.max(0,m.n0-m.n1);return [s.author,s.group,m.methodCode,m.method,m.n0,s.cohort0?round(100*m.n0/s.cohort0,1):null,m.n1,s.cohort1?round(100*m.n1/s.cohort1,1):null,miss,m.n0?round(100*miss/m.n0,1):null]}))];
+    const coverage=[["Автор","Группа","Этап","Пройдено методик","Человек","% когорты","Режим расчета"],...analysis.researchSummaries.flatMap(s=>[["T0",s.coverage0],["T1",s.coverage1]].flatMap(([wave,rows])=>rows.map(r=>[s.author,s.group,wave,r.methodsCompleted,r.count,r.percent,s.coverageMode])))];
+    const completion=[["Файл","Методика","Группа","T0","T1","Не прошли T1","Прошли T1, %","Не прошли T1, %","Мужчины T0","Мужчины T1","Мужчины не прошли","Мужчины прошли, %","Женщины T0","Женщины T1","Женщины не прошли","Женщины прошли, %","Возраст N T0","Возраст N T1","Средний возраст T0","Средний возраст T1","Медиана возраста T0","Медиана возраста T1","Некорректные даты","Вывод"],...analysis.fileSummaries.map(s=>[s.file,s.method,s.group,s.n0,s.n1,s.notCompleted,s.completionRate,s.nonCompletionRate,s.male0,s.male1,s.maleNotCompleted,s.maleCompletionRate,s.female0,s.female1,s.femaleNotCompleted,s.femaleCompletionRate,s.ageN0,s.ageN1,s.ageMean0,s.ageMean1,s.ageMedian0,s.ageMedian1,s.badDate,s.phrase])];
+    const scales=[["Автор","Методика","Группа","Сравнение","Шкала с кодом методики","Смысл высокого балла","Интерпретация направления","Тренд","N T0 / КГ","Мин. T0 / КГ","Q1 T0 / КГ","Медиана T0 / КГ","Среднее T0 / КГ","Q3 T0 / КГ","Макс. T0 / КГ","SD T0 / КГ","N T1 / ЭГ","Мин. T1 / ЭГ","Q1 T1 / ЭГ","Медиана T1 / ЭГ","Среднее T1 / ЭГ","Q3 T1 / ЭГ","Макс. T1 / ЭГ","SD T1 / ЭГ","Разница","Изменение, %","Критерий","Сопоставление","t","df","p","p скорр.","Размер эффекта","Тип эффекта","Значимо p<0,05"],...analysis.scaleRows.map(r=>[r.author,r.method,r.group,r.comparison,r.metricLabel,r.directionLabel,r.directionNote,r.trend,r.n0,r.min0,r.q10,r.median0,r.mean0,r.q30,r.max0,r.sd0,r.n1,r.min1,r.q11,r.median1,r.mean1,r.q31,r.max1,r.sd1,r.delta,r.percentChange,r.testName||"t-критерий Уэлча",r.pairingMode||"Независимые выборки",r.t,r.df,r.p,r.q,r.effectSize??r.hedgesG,r.effectName||"Hedges g",r.significant])];
+    const weights=[["Файл","Код","Методика","Группа","N T0","N T1","Эффективный N T1","Минимальный вес","Максимальный вес","Признаки калибровки","Вес доступен","Предупреждение"],...(analysis.weightSummaries||[]).map(r=>[r.file,r.methodCode,r.method,r.group,r.n0,r.n1,r.effectiveN1,r.minWeight,r.maxWeight,r.dimensions,r.available,r.warning])];
+    const weightedScales=[["Автор","Методика","Группа","Шкала с кодом методики","Смысл высокого балла","Тренд","N T0","N T1","Эффективный N T1","Среднее T0","Взвешенное среднее T1","SD T0","Взвешенное SD T1","Разница","Изменение, %","t","df","p","p скорр.","Хеджес g","Значимо p<0,05"],...(analysis.weightedScaleRows||[]).map(r=>[r.author,r.method,r.group,r.metricLabel,r.directionLabel,r.trend,r.n0,r.n1,r.effectiveN1,r.mean0,r.mean1,r.sd0,r.sd1,r.delta,r.percentChange,r.t,r.df,r.p,r.q,r.hedgesG,r.significant])];
+    const levels=[["Автор","Методика","Группа","Показатель с кодом методики","Уровень / состояние","Количество T0","% T0","Количество T1","% T1"],...analysis.levelRows.map(r=>[r.author,r.method,r.group,r.metricLabel,r.category,r.countT0,r.percentT0,r.countT1,r.percentT1])];
+    const interactions=[["Автор","Методика","Шкала","N КГ T0","N КГ T1","N ЭГ T0","N ЭГ T1","Среднее КГ T0","Среднее КГ T1","Среднее ЭГ T0","Среднее ЭГ T1","Изменение КГ","Изменение ЭГ","Разность изменений","t","df","p","p скорр.","Эффект взаимодействия","Значимо"],...(analysis.interactionRows||[]).map(r=>[r.author,r.method,r.metricLabel,r.nControlT0,r.nControlT1,r.nExperimentalT0,r.nExperimentalT1,r.meanControlT0,r.meanControlT1,r.meanExperimentalT0,r.meanExperimentalT1,r.deltaControl,r.deltaExperimental,r.difference,r.t,r.df,r.p,r.q,r.interactionEffect,r.significant])];
+    const issues=[["Файл","Предупреждение"],...analysis.issues.map(i=>[i.file,i.issue])];
+    const out=[{name:"Параметры",rows:params},{name:"Границы T0-T1",rows:cutoffs},{name:"Сводка исследования",rows:overview},{name:"Методики T0-T1",rows:methodOverview},{name:"Охват батареи",rows:coverage},{name:"Прохождение",rows:completion},{name:"Шкалы",rows:scales}];if(weights.length>1)out.push({name:"Веса T1",rows:weights,columnWidths:[34,10,34,18,8,8,16,14,14,22,12,54]});if(weightedScales.length>1)out.push({name:"Взвешенные шкалы",rows:weightedScales,columnWidths:[12,34,18,38,25,16,8,8,15,12,18,10,18,10,12,10,8,10,12,10,14]});out.push({name:"Уровни",rows:levels});if(analysis.interactionRows?.length)out.push({name:"Взаимодействие",rows:interactions});out.push({name:"Предупреждения",rows:issues});return out;
+  }
+  function selectMethod(analysis,method,group){
+    const fileSummaries=analysis.fileSummaries.filter(s=>s.method===method&&s.group===group),files=analysis.files.filter(f=>f.method===method&&f.group===group),names=new Set(fileSummaries.map(s=>s.file));
+    const source=analysis.researchSummaries.find(s=>s.group===group),mc=source?.methodCounts.find(m=>m.method===method),n0=mc?.n0||0,n1=mc?.n1||0,miss=Math.max(0,n0-n1);
+    const researchSummaries=mc?[analysis.singlePeriod?{author:analysis.author,group,methodCount:1,cohort:mc.n??n0,cohort0:mc.n??n0,cohort1:0,totalAdministrations:mc.n??n0,totalAdministrations0:mc.n??n0,totalAdministrations1:0,coverageMode:"Один период, одна выбранная методика",coverage:[{methodsCompleted:1,count:mc.n??n0,percent:100}],coverage0:[{methodsCompleted:1,count:mc.n??n0,percent:100}],coverage1:[],methodCounts:[mc]}:{author:analysis.author,group,methodCount:1,cohort0:n0,cohort1:n1,notCompleted:miss,completionRate:n0?round(100*n1/n0,1):null,totalAdministrations0:n0,totalAdministrations1:n1,coverageMode:"Одна выбранная методика",coverage0:[{methodsCompleted:1,count:n0,percent:n0?100:null}],coverage1:[{methodsCompleted:1,count:n1,percent:n1?100:null}],methodCounts:[mc]}]:[];
+    return {...analysis,files,fileSummaries,researchSummaries,scaleRows:analysis.scaleRows.filter(r=>r.method===method&&r.group===group),weightedScaleRows:(analysis.weightedScaleRows||[]).filter(r=>r.method===method&&r.group===group),weightSummaries:(analysis.weightSummaries||[]).filter(r=>r.method===method&&r.group===group),levelRows:analysis.levelRows.filter(r=>r.method===method&&r.group===group),issues:analysis.issues.filter(i=>names.has(i.file)||i.file===group)};
+  }
+  function selectGroup(analysis,group){
+    const fileSummaries=analysis.fileSummaries.filter(s=>s.group===group),files=analysis.files.filter(f=>f.group===group),names=new Set(fileSummaries.map(s=>s.file));
+    return {...analysis,files,fileSummaries,researchSummaries:analysis.researchSummaries.filter(s=>s.group===group),scaleRows:analysis.scaleRows.filter(r=>r.group===group),weightedScaleRows:(analysis.weightedScaleRows||[]).filter(r=>r.group===group),weightSummaries:(analysis.weightSummaries||[]).filter(r=>r.group===group),levelRows:analysis.levelRows.filter(r=>r.group===group),issues:analysis.issues.filter(i=>names.has(i.file)||i.file===group)};
+  }
+  return {parseDate,parseStage,rowWave,stageAudit,cutoffKey,cutoffFor,detectGroup,stageFromFilename,ensureStageColumn,withStageColumn,inspectFile,mergeStageFiles,previewSplit,previewSingle,analyze,analyzeSingle,analyzeBetween,analyzeBetweenSingle,synthesize,briefSheets,betweenBriefSheets,synthesisSheets,researcherSummarySheets,reportSheets,selectMethod,selectGroup,welch,pairedT,hedgesG,effectMagnitude,metricTier,canonicalMetric,dashboardMetricVisible,dashboardSignificance,dashboardConfirmed,dashboardStatusLabel,dashboardMethodCounts,dashboardContentSummary,trendArrow};
+});

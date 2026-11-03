@@ -27,10 +27,10 @@ export function passportAdditionalFields(input:unknown):PassportField[]{
       const min=integer(b.min,-1000000,1000000),max=integer(b.max,-1000000,1000000);if(min>max)invalid();return {...base,kind,min,max};
     }
     if(kind==="single_choice"){
-      if(!Array.isArray(b.options)||b.options.length<1||b.options.length>20)invalid();const seen=new Set<string>();
+      if(!Array.isArray(b.options)||b.options.length<1||b.options.length>20)invalid();const seen=new Set<string>(),labels=new Set<string>();
       const options=b.options.map(v=>{const o=object(v,["value","label"]);
-        if(typeof o.value!=="string"||!/^([a-z][a-z0-9_]{0,39})$/.test(o.value)||seen.has(o.value))invalid();seen.add(o.value);
-        return {value:o.value,label:label(o.label,80)};});return {...base,kind,options};
+        if(typeof o.value!=="string"||!/^([a-z][a-z0-9_]{0,39})$/.test(o.value)||seen.has(o.value))invalid();seen.add(o.value);const text=label(o.label,80),folded=text.toLocaleLowerCase("ru-RU");if(labels.has(folded))invalid();labels.add(folded);
+        return {value:o.value,label:text};});return {...base,kind,options};
     }return invalid();
   });
 }

@@ -4,7 +4,7 @@ import type {AccountAccess,AccountOperation,AccountPrincipal,AccountResource,Acc
 import {requireAccountPermission} from "../../ports/account-policy.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {assertRuntimeClient,mapPostgresError} from "./unit-of-work.js";
-import {accountTransaction,tokenHash} from "./account-transaction.js";
+import {accountTransaction,tokenHash,accountWallTime} from "./account-transaction.js";
 interface ActorRow {credential_id:string;user_id:string;actor_role:AccountRole;credential_version:number;expires_at_ms:string;mfa_verified_at_ms:string|null}
 export class PostgresAccountAccess implements AccountAccess {
   constructor(private readonly pool:Pool) {}
@@ -24,7 +24,7 @@ export class PostgresAccountAccess implements AccountAccess {
           const study=resource.studyId;
           const owns=typeof study==="string" && /^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(study)?
             Boolean((await client.query<{allowed:boolean}>("SELECT pedpsy.account_owns_study($1) allowed",[study])).rows[0]?.allowed):false;
-          requireAccountPermission(principal,operation,resource,Date.now(),owns);
+          requireAccountPermission(principal,operation,resource,await accountWallTime(client),owns);
         }catch(e){if(!(e instanceof ParticipationError))throw e;error=e;}
         await client.query("SELECT pedpsy.record_account_check($1,$2,$3)",[operation,!error,error?.code??"CURRENT_POLICY"]);
         await client.query("COMMIT");
