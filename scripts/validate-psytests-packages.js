@@ -6,7 +6,7 @@ const path = require("node:path");
 
 const REQUIRED_SECTIONS = [1,2,3,4,5,6,7,8,9];
 function section(text, number) {
-  const pattern = new RegExp("^##\\s+"+number+"\\.\\s+[^\\r\\n]*[\\r\\n]([\\s\\S]*?)(?=^##\\s+[1-9]\\.|\\s*$)", "m");
+  const pattern = new RegExp("^##\\s+"+number+"\\.\\s+[^\\r\\n]*[\\r\\n]([\\s\\S]*?)(?=^##\\s+[1-9]\\.|$(?![\\s\\S]))", "m");
   return (text.match(pattern)||[])[1] || "";
 }
 function declaredItems(text) {
