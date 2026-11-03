@@ -2,6 +2,7 @@ import type {InstrumentRequest,InstrumentResult} from "../ports/instruments.js";
 import type {MethodData,MethodRuntimeModule} from "../ports/method-runtime.js";
 import {createMethodRuntimeRegistry} from "./method-runtime.js";
 import {scoreTki} from "../../core/tki-contract.js";
+import {scoreQlesq,KEY_DIGEST as QLESQ_DIGEST} from "../../core/qlesq-contract.js";
 import {scoreKarpov,KEY_DIGEST as KARPOV_DIGEST} from "../../core/karpov-contract.js";
 import {scorePrfq,KEY_DIGEST as PRFQ_DIGEST} from "../../core/prfq-contract.js";
 import {scoreUmics,KEY_DIGEST as UMICS_DIGEST} from "../../core/umics-contract.js";
@@ -27,6 +28,7 @@ function choices(options:{method:string;handler:string;digest:string;title:strin
 }
 export const builtinInstrumentRegistry=createMethodRuntimeRegistry([
   choices({method:"tki_ru_30_pairs@1.0.0",handler:"tki-contract-0.3.0",digest:TKI_DIGEST,title:"Томас—Килманн",authors:["К. Томас","Р. Килманн"],count:30,values:["A","B"],score:scoreTki,outputs:[{id:"conflict_profile",label:"Пять стратегий поведения в конфликте",kind:"numeric-profile"}]}),
+  choices({method:"qlesq_36_vodopyanova@1.0.0-draft",handler:"qlesq-draft-1.0.0",digest:QLESQ_DIGEST,title:"Шкала оценки качества жизни (Q-LES-Q)",authors:["Н. Е. Водопьянова"],count:36,values:["1","2","3","4","5","6","7","8","9","10"],score:scoreQlesq,outputs:[{id:"quality_of_life_index",label:"Индекс качества жизни",kind:"raw"},{id:"quality_of_life_level",label:"Уровень качества жизни",kind:"category"},{id:"quality_of_life_percent",label:"Индекс качества жизни (%)",kind:"percent"}]}),
   choices({method:"reflexivity_karpov_27@1.0.0-local",handler:"karpov-local-1.0.0",digest:KARPOV_DIGEST,title:"Рефлексивность — Карпов",authors:["А.В. Карпов","В.В. Пономарева"],count:27,values:["1","2","3","4","5","6","7"],score:scoreKarpov,outputs:[{id:"reflexivity",label:"Рефлексивность",kind:"raw"},{id:"reflexivity_sten",label:"Рефлексивность — стен",kind:"sten"},{id:"reflexivity_level",label:"Уровень рефлексивности",kind:"category"}]}),
   choices({method:"umics_pi_ru_13@1.0.0-local",handler:"umics-local-1.0.0",digest:UMICS_DIGEST,title:"Родительская идентичность",authors:["К. Пиотровски","Ю.В. Борисенко"],count:13,values:["1","2","3","4","5"],score:scoreUmics,outputs:[{id:"commitment",label:"Обязательство",kind:"raw"},{id:"exploration",label:"Углублённое исследование",kind:"raw"},{id:"reconsideration",label:"Пересмотр обязательства",kind:"raw"}]}),
   choices({method:"prfq_ru_16_kamskaya_2023@1.0.0-local",handler:"prfq-local-1.0.0",digest:PRFQ_DIGEST,title:"Родительское рефлексивное функционирование",authors:["О.А. Камская","М.А. Одинцова","Н.П. Радчикова","Е.В. Гурова"],count:16,values:["1","2","3","4","5","6","7"],score:scorePrfq,outputs:[{id:"prementalizing",label:"Предрефлексия",kind:"raw"},{id:"certainty",label:"Уверенность",kind:"raw"},{id:"interest",label:"Интерес и любопытство",kind:"raw"}]}) ,
