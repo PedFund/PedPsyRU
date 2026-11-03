@@ -40,6 +40,14 @@ test("order independence and allowed only complete integer responses",()=>{
  const duplicate=structuredClone(input);duplicate.responses[0]=duplicate.responses[1];assert.equal(scoreQlesq(duplicate).status,"invalid");
  const extra=structuredClone(input);extra.responses.push({item_id:"q37",value:"5"});assert.equal(scoreQlesq(extra).status,"invalid");
 });
+test("changed contract, method or handler versions fail closed",()=>{
+ const input=make(()=>5);
+ for(const field of ["contract_version","method_version_id","handler_version"]){
+  const changed={...input,[field]:input[field]+"-changed"};
+  const result=scoreQlesq(changed);assert.equal(result.status,"invalid",field);
+  assert.equal(result.quality.usable_for_aggregation,false,field);
+ }
+});
 test("no scientific or legal publication approval inferred",()=>{
  const r=scoreQlesq(make(()=>5));
  assert.equal(r.warnings[0].code,"DRAFT_RESEARCH_ONLY");

@@ -26,6 +26,11 @@ test("Q-LES-Q 36: participant form, saved draft, resume and server scoring",asyn
  assert.deepEqual((await w.app.inject({url:endpoint+"/result",headers:h})).json(),result);
  assert.deepEqual((await w.app.inject({method:"POST",url:endpoint+"/complete",headers:h,payload:{expected_revision:2}})).json(),result);
  assert.equal((await save(3,answers)).statusCode,409);
+ const researcher={...h,cookie:"pedpsy_v2_demo="+x.r.session.token};
+ assert.equal((await w.app.inject({url:endpoint,headers:researcher})).statusCode,401);
+ const progress=await x.store.progress(x.r.session.token,x.d.id),row=progress.rows[0];
+ assert.deepEqual(Object.keys(row).sort(),["email","group_id","participant_id","stage_id","status"]);
+ assert.equal(JSON.stringify(progress).includes("q01"),false);
  const outsider={...h,cookie:"pedpsy_v2_demo="+x.f.raw};
  assert.equal((await w.app.inject({url:endpoint+"/form",headers:outsider})).statusCode,404);
 });
