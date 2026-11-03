@@ -20,7 +20,7 @@ function qlesqLocalMaterials(){
  };
  const vectors=[1,10].map((n,j)=>({id:j?"all_max":"all_min",data_origin:"synthetic",responses:form.items.map(i=>({item_id:i.id,value:String(n)})),expected:expectedFor(n),basis:{kind:"independent",source_ids:["nikiforov_2005"]}}));
  const pkg={schema_version:"1.0",method_id:form.method_id,package_version:"1.0.0",title:form.title,language:form.language,
- provenance:{origin:"owner_supplied",sources:[{id:"nikiforov_2005",citation:"Г. С. Никифоров (ред.). Практикум по психологии здоровья. 2005, приложение 21.1",url:"https://studfile.net/preview/8837964/"}],missing:["rights"]},
+ provenance:{origin:"owner_materials",sources:[{id:"nikiforov_2005",citation:"Г. С. Никифоров (ред.). Практикум по психологии здоровья. 2005, приложение 21.1",url:"https://studfile.net/preview/8837964/"}],missing:["rights"]},
  rights:{status:"unknown",source_ids:[]},instruction:{artifact_id:"instruction"},form:{artifact_id:"form",version:form.version},items,scales,
  calculation:{kind:"special",adapter_id:"qlesq-draft",adapter_version:"1.0.0",specification_artifact_id:"specification",key_artifact_id:"key"},
  norms:{status:"absent",artifact_id:null,applicability_artifact_id:null,source_ids:[]},
