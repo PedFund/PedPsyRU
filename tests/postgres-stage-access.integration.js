@@ -4,8 +4,7 @@ const {postgresFixture}=require("./postgres-fixture.js"),{verifiedStaff}=require
 const {workspaceFixture,headers}=require("./workspace-fixture.js"),{csrfFor}=require("../storage/access.js"),{tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
 const {PostgresStageAccess}=require("../dist/src/adapters/postgres/stage-access.js");
 async function configured(f,s,active=true){const x=await studyResearcher(f,s);let d=await x.studies.create(x.session.token,"Synthetic stage access");
-  for(const name of ["КГ","ЭГ"])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind:"other",expected_version:d.version});
-  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
+  d=await x.studies.group(x.session.token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});
   for(const g of d.groups)d=await x.studies.assign(x.session.token,d.id,{group_id:g.id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});
   for(const [code,ordinal] of [["T1",1],["T2",2]])d=await x.studies.copy(x.session.token,d.id,{source_stage_id:d.stages[0].id,code,ordinal,expected_version:d.version});
   if(active)d=await x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version});

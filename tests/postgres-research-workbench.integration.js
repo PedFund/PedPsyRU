@@ -6,7 +6,7 @@ const {PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/p
 const {PostgresGroupInvitations}=require("../dist/src/adapters/postgres/group-invitations.js"),{PostgresStageAccess}=require("../dist/src/adapters/postgres/stage-access.js");
 const {PostgresParticipantStages}=require("../dist/src/adapters/postgres/participant-stages.js"),{PostgresParticipantConsents}=require("../dist/src/adapters/postgres/participant-consents.js"),{PostgresParticipantEnrollment}=require("../dist/src/adapters/postgres/participant-enrollment.js");
 const {tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
-async function setup(t){const f=await postgresFixture({runtimePoolSize:3});t.after(()=>f.close());const staff=await verifiedStaff(f),r=await studyResearcher(f,staff),store=new PostgresResearchWorkbench(f.runtime);let d=await r.studies.create(r.session.token,"Research UX synthetic");d=await store.change(r.session.token,d.id,d.version,"initialize",{});return {f,staff,r,store,d};}
+async function setup(t){const f=await postgresFixture({runtimePoolSize:3});t.after(()=>f.close());const staff=await verifiedStaff(f),r=await studyResearcher(f,staff),store=new PostgresResearchWorkbench(f.runtime),d=await r.studies.create(r.session.token,"Research UX synthetic");return {f,staff,r,store,d};}
 async function change(x,action,data){x.d=await x.store.change(x.r.session.token,x.d.id,x.d.version,action,data);return x.d;}
 async function participant(x,email="workbench@example.test"){
   const {f,r,d}=x;const invitation=await new PostgresGroupInvitations(f.runtime).create(r.session.token,d.id,d.groups[0].id,{expires_at:Date.now()+86400000});
@@ -17,14 +17,15 @@ async function participant(x,email="workbench@example.test"){
   await registration.confirm(invitation.invite_token,{confirmation_token:vault.open(out.id,out.token_envelope)},browser);
   const session=await registration.login({study_id:d.id,email,password});return {session,profile:new PostgresParticipantProfiles(f.runtime)};
 }
-test("PostgreSQL workbench: experimental default, notes, automatic stage order, atomic bulk assignment and owner-only DTO",async t=>{
-  const x=await setup(t);assert.equal(x.d.groups.length,1);assert.equal(x.d.groups[0].name,"Экспериментальная");
+test("PostgreSQL workbench: experimental/T0 defaults, notes, automatic stage order, atomic bulk assignment and owner-only DTO",async t=>{
+  const x=await setup(t);assert.equal(x.d.groups.length,1);assert.equal(x.d.groups[0].name,"Экспериментальная");assert.deepEqual(x.d.stages.map(s=>s.code),["T0"]);
   await change(x,"group",{id:null,name:"Контрольная",kind:"control",note:"Сравнение"});assert.equal(x.d.groups.length,2);
-  for(const code of ["T0","T1","T2"])await change(x,"stage",{id:null,code,note:"Измерение "+code});
+  for(const code of ["T1","T2"])await change(x,"stage",{id:null,code,note:"Измерение "+code});
   assert.deepEqual(x.d.stages.map(s=>s.ordinal),[0,1,2]);assert.equal(Object.values(x.d.group_notes)[0],"Сравнение");
   await change(x,"assign",{all:true,group_id:null,stage_id:null,release_ids:[x.f.seed.release_id]});assert.equal(x.d.assignments.length,6);
   await change(x,"schema",{all:false,group_id:x.d.groups[0].id,schema_version:1,basic_fields:["sex","age","city","organization"],fields:[]});
   assert.deepEqual(x.d.profile_schemas[x.d.groups[0].id].fields.map(f=>f.key),["sex","age","city","organization"]);assert.deepEqual(x.d.profile_schemas[x.d.groups[1].id].fields.map(f=>f.key),["sex","age","city"]);
+  assert.deepEqual(x.d.profile_schemas[x.d.groups[0].id].fields.find(f=>f.key==="age"),{key:"age",label:"Возраст",required:true,kind:"integer",min:18,max:99});assert.equal(x.d.profile_schemas[x.d.groups[0].id].fields.find(f=>f.key==="city").label,"Населенный пункт");
   const before=x.d.version;await assert.rejects(x.store.change(x.r.session.token,x.d.id,before,"assign",{all:true,release_ids:[randomUUID()]}));assert.equal((await x.store.read(x.r.session.token,x.d.id)).version,before);
   const other=await studyResearcher(x.f,x.staff);await assert.rejects(x.store.read(other.session.token,x.d.id),e=>e.status===404);await assert.rejects(x.store.read(x.staff.session.token,x.d.id),e=>e.status===401);
   for(const table of ["research_profile_history","research_reminder_outbox","attempt_profile_basis"])await assert.rejects(x.f.runtime.query("SELECT * FROM pedpsy."+table),e=>e.code==="42501");
@@ -33,9 +34,20 @@ test("PostgreSQL workbench: experimental default, notes, automatic stage order, 
   await assert.rejects(x.store.change(x.r.session.token,x.d.id,x.d.version,"group",{id:null,name:"Rollback",kind:"other",note:""}));
   assert.equal((await x.f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[x.d.id])).rows[0].n,2);
 });
+test("PostgreSQL workbench: T1 through T5 inherit independent assignment rows and explicit copy replaces only the target",async t=>{
+  const x=await setup(t),group=x.d.groups[0],t0=x.d.stages[0];
+  await change(x,"assign",{all:false,group_id:group.id,stage_id:t0.id,release_ids:[x.f.seed.release_id]});
+  await change(x,"stage",{id:null,code:"T1",note:"После первого измерения"});const t1=x.d.stages[1];
+  assert.equal(x.d.assignments.filter(a=>a.stage_id===t1.id).length,1);assert.notEqual(x.d.assignments.find(a=>a.stage_id===t0.id).id,x.d.assignments.find(a=>a.stage_id===t1.id).id);
+  await change(x,"assign",{all:false,group_id:group.id,stage_id:t1.id,release_ids:[]});assert.equal(x.d.assignments.filter(a=>a.stage_id===t0.id).length,1);
+  await change(x,"stage",{id:null,code:"T2",note:""});assert.equal(x.d.assignments.filter(a=>a.stage_id===x.d.stages[2].id).length,0,"T2 gets the current T1 set");
+  for(const code of ["T3","T4","T5"])await change(x,"stage",{id:null,code,note:""});assert.deepEqual(x.d.stages.map(s=>s.code),["T0","T1","T2","T3","T4","T5"]);
+  const beforeT0=x.d.assignments.filter(a=>a.stage_id===t0.id).map(a=>a.id);await change(x,"copy_assignments",{stage_id:t1.id});assert.equal(x.d.assignments.filter(a=>a.stage_id===t1.id).length,1);assert.deepEqual(x.d.assignments.filter(a=>a.stage_id===t0.id).map(a=>a.id),beforeT0);
+  assert.equal((await x.f.admin.query("SELECT count(*)::integer n FROM pedpsy.attempts WHERE study_id=$1",[x.d.id])).rows[0].n,0);
+});
 test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned attempt basis, reminder deduplication and no scores",async t=>{
   const x=await setup(t),extra={key:"extra_position",label:"Должность",kind:"text",required:false,max_length:100};
-  await change(x,"stage",{id:null,code:"T0",note:"До программы"});await change(x,"stage",{id:null,code:"T1",note:"После программы"});
+  await change(x,"stage",{id:x.d.stages[0].id,code:"T0",note:"До программы"});await change(x,"stage",{id:null,code:"T1",note:"После программы"});
   await change(x,"assign",{all:true,release_ids:[x.f.seed.release_id]});
   await change(x,"schema",{all:true,group_id:null,schema_version:1,basic_fields:["sex","age","city"],fields:[extra]});
   x.d=await x.r.studies.lifecycle(x.r.session.token,x.d.id,{expected_version:x.d.version,status:"active"});x.d=await x.store.read(x.r.session.token,x.d.id);

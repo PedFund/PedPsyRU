@@ -25,7 +25,7 @@ test("passport schema: integer boundaries/no floating/string coercion",()=>{
   assert.equal(passportAdditionalFields([{...number,min:-1000000,max:1000000}])[0].min,-1000000);
 });
 test("passport schema: stable choice identifiers/labels/limits/strict union",()=>{
-  for(const options of [[],[{value:"x",label:" "}],[{value:"X",label:"X"}],[{value:"x",label:"X",score:1}],[{value:"x",label:"X"},{value:"x",label:"Y"}],Array.from({length:21},(_,i)=>({value:"x"+i,label:"X"}))])invalid(()=>passportAdditionalFields([{...choice,options}]));
+  for(const options of [[],[{value:"x",label:" "}],[{value:"X",label:"X"}],[{value:"x",label:"X",score:1}],[{value:"x",label:"X"},{value:"x",label:"Y"}],[{value:"x",label:"Да"},{value:"y",label:"да"}],Array.from({length:21},(_,i)=>({value:"x"+i,label:"X"}))])invalid(()=>passportAdditionalFields([{...choice,options}]));
   invalid(()=>passportAdditionalFields([{...choice,max_length:20}]));invalid(()=>passportAdditionalFields([{...number,options:[]}]))
 });
 test("passport schema API: strict CAS/schema/scope DTO before port",async()=>{

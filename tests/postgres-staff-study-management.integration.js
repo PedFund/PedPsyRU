@@ -10,8 +10,6 @@ function scenario(name,fn){test("PostgreSQL staff researcher workflow: "+name,as
 const staffHeaders=s=>({...headers,cookie:"pedpsy_staff_demo="+s.session.token,"x-pedpsy-csrf":csrfFor(s.session.token)});
 async function waitForManager(f){const until=Date.now()+2000;while(Date.now()<until){if((await f.admin.query("SELECT EXISTS(SELECT 1 FROM pg_stat_activity WHERE datname=$1 AND wait_event_type='Lock' AND query LIKE '%rename_study%') waiting",[f.database])).rows[0].waiting)return;await new Promise(r=>setTimeout(r,10));}assert.fail("staff manager never reached lock wait");}
 async function configured(f,x,token,owner){let d=owner?await x.studies.createFor(token,owner,"Synthetic managed"):await x.studies.create(token,"Synthetic owned");
-  d=await x.studies.group(token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});
-  d=await x.studies.stage(token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
   return x.studies.assign(token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});
 }
 for(const role of ["administrator","superadministrator"])scenario(role+" executes full HTTP workflow globally; real actor and owner preserved",async(f,w,x,s)=>{
@@ -20,9 +18,7 @@ for(const role of ["administrator","superadministrator"])scenario(role+" execute
   let d=await send("",{title:"Staff managed",owner_credential_id:x.row.id});
   assert.ok((await x.gateway.home(x.session.token)).studies.some(y=>y.id===d.id));
   assert.deepEqual((await f.admin.query("SELECT user_id,role FROM pedpsy.study_memberships WHERE study_id=$1",[d.id])).rows,[{user_id:x.row.user_id,role:"researcher"}]);
-  d=await send("/"+d.id+"/groups",{name:"КГ",kind:"control",expected_version:d.version});
   d=await send("/"+d.id+"/groups/"+d.groups[0].id,{name:"ЭГ",kind:"experimental",expected_version:d.version},"PATCH");
-  d=await send("/"+d.id+"/stages",{code:"T0",ordinal:0,expected_version:d.version});
   d=await send("/"+d.id+"/stages/"+d.stages[0].id,{code:"Baseline",ordinal:0,expected_version:d.version},"PATCH");
   d=await send("/"+d.id+"/assignments",{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});
   d=await send("/"+d.id+"/stages/copy",{source_stage_id:d.stages[0].id,code:"T1",ordinal:1,expected_version:d.version});assert.equal(d.assignments.length,2);

@@ -9,7 +9,7 @@ const {DOMAIN_TABLES}=require("../dist/src/adapters/postgres/snapshot.js");
 async function configured(f){
  const staff=await verifiedStaff(f),r=await studyResearcher(f,staff);let design=await r.studies.create(r.session.token,"Synthetic stage discovery");
  for(const name of ["КГ","ЭГ"])design=await r.studies.group(r.session.token,design.id,undefined,{name,kind:"other",expected_version:design.version});
- for(const [code,ordinal] of [["T0",0],["T1",1]])design=await r.studies.stage(r.session.token,design.id,undefined,{code,ordinal,expected_version:design.version});
+ design=await r.studies.stage(r.session.token,design.id,undefined,{code:"T1",ordinal:1,expected_version:design.version});
  for(const g of design.groups)for(const s of design.stages)design=await r.studies.assign(r.session.token,design.id,{group_id:g.id,stage_id:s.id,release_ids:[f.seed.release_id],expected_version:design.version});
  design=await r.studies.lifecycle(r.session.token,design.id,{status:"active",expected_version:design.version});
  const invitations=new PostgresGroupInvitations(f.runtime),invite=await invitations.create(r.session.token,design.id,design.groups[0].id,{expires_at:Date.now()+86400000});

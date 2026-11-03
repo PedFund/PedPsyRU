@@ -3,7 +3,7 @@ const {test}=require("node:test"),assert=require("node:assert/strict"),{randomUU
 const {postgresFixture}=require("./postgres-fixture.js"),{verifiedStaff}=require("./mfa-fixture.js"),{studyResearcher}=require("./study-fixture.js"),{PostgresStudyConstructor}=require("../dist/src/adapters/postgres/studies.js");
 function scenario(name,fn){test("PostgreSQL constructor: "+name,async t=>{const f=await postgresFixture({runtimePoolSize:2});t.after(()=>f.close());const staff=await verifiedStaff(f),x=await studyResearcher(f,staff);await fn(f,x,staff);});}
 scenario("create draft/membership/version/audit atomically; only own metadata and both staff global read",async(f,x,s)=>{
-  const d=await x.studies.create(x.session.token,"Синтетическое исследование");assert.equal(d.version,0);assert.equal(d.status,"draft");assert.deepEqual(d.groups,[]);assert.equal(d.dataset_kind,"demo");assert.equal((await x.gateway.home(x.session.token)).studies[0].id,d.id);
+  const d=await x.studies.create(x.session.token,"Синтетическое исследование");assert.equal(d.version,0);assert.equal(d.status,"draft");assert.equal(d.groups.length,1);assert.equal(d.groups[0].kind,"experimental");assert.deepEqual(d.stages.map(s=>s.code),["T0"]);assert.equal(d.dataset_kind,"demo");assert.equal((await x.gateway.home(x.session.token)).studies[0].id,d.id);
   assert.deepEqual(await x.studies.read(x.session.token,d.id),d);assert.deepEqual(await x.studies.read(s.session.token,d.id),d);
   const admin=await verifiedStaff(f,"administrator");assert.deepEqual(await x.studies.read(admin.session.token,d.id),d);
   await assert.rejects(x.studies.create(s.session.token,"Staff may not configure"),e=>e.status===401);
@@ -27,16 +27,16 @@ scenario("mandatory audit failure rolls back creation and membership",async(f,x)
 scenario("group kinds, uniqueness, scope and concurrent compare-and-swap",async(f,x,s)=>{
   let d=await x.studies.create(x.session.token,"Groups");
   for(const [name,kind] of [["КГ","control"],["ЭГ","experimental"],["Другая","other"]])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind,expected_version:d.version});
-  assert.equal(d.groups.length,3);assert.equal(d.version,3);
+  assert.equal(d.groups.length,4);assert.equal(d.version,3);
   const result=await Promise.allSettled(["Первое","Второе"].map(name=>x.studies.group(x.session.token,d.id,d.groups[0].id,{name,kind:"control",expected_version:3})));
   assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"DESIGN_CONFLICT");
   d=await x.studies.read(x.session.token,d.id);await assert.rejects(x.studies.group(x.session.token,d.id,undefined,{name:"ЭГ",kind:"other",expected_version:d.version}),e=>e.code==="DESIGN_DUPLICATE");
   const foreign=f.seed.studies[0].groups[0].id;await assert.rejects(x.studies.group(x.session.token,d.id,foreign,{name:"Foreign",kind:"control",expected_version:d.version}),e=>e.status===404);
-  d=await x.studies.group(s.session.token,d.id,undefined,{name:"Staff",kind:"other",expected_version:d.version});assert.equal(d.groups.length,4);
+  d=await x.studies.group(s.session.token,d.id,undefined,{name:"Staff",kind:"other",expected_version:d.version});assert.equal(d.groups.length,5);
   const y=await studyResearcher(f,s);await assert.rejects(y.studies.group(y.session.token,d.id,undefined,{name:"Foreign",kind:"other",expected_version:d.version}),e=>e.status===404);
 });
 scenario("T0/T1/T2/custom stage ordering and duplicate/cross-study/version denial",async(f,x)=>{
-  let d=await x.studies.create(x.session.token,"Stages");for(const [ordinal,code] of ["T0","T1","T2","Отсроченный этап"].entries())d=await x.studies.stage(x.session.token,d.id,undefined,{code,ordinal,expected_version:d.version});
+  let d=await x.studies.create(x.session.token,"Stages");for(const [index,code] of ["T1","T2","Отсроченный этап"].entries())d=await x.studies.stage(x.session.token,d.id,undefined,{code,ordinal:index+1,expected_version:d.version});
   assert.deepEqual(d.stages.map(s=>s.ordinal),[0,1,2,3]);assert.equal(d.stages.length,4);
   for(const input of [{code:"t0",ordinal:4},{code:"Other",ordinal:2}])await assert.rejects(x.studies.stage(x.session.token,d.id,undefined,{...input,expected_version:d.version}),e=>e.code==="DESIGN_DUPLICATE");
   await assert.rejects(x.studies.stage(x.session.token,d.id,f.seed.studies[0].stages[0].id,{code:"Other",ordinal:4,expected_version:d.version}),e=>e.status===404);
@@ -45,8 +45,6 @@ scenario("T0/T1/T2/custom stage ordering and duplicate/cross-study/version denia
 });
 scenario("each group/stage has its own pinned synthetic method set, not science approval",async(f,x)=>{
   let d=await x.studies.create(x.session.token,"Methods");assert.equal(d.catalog.length,1);assert.equal(d.catalog[0].publication_state,"draft");assert.equal(d.catalog[0].verification_state,"key_verified");
-  for(const name of ["КГ","ЭГ"])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind:name==="КГ"?"control":"experimental",expected_version:d.version});
-  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
   const cell={group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id]};
   d=await x.studies.assign(x.session.token,d.id,{...cell,expected_version:d.version});assert.equal(d.assignments.length,1);assert.equal(d.assignments[0].group_id,cell.group_id);assert.equal(d.assignments[0].release_id,f.seed.release_id);
   const preserved=d.assignments[0].id;d=await x.studies.assign(x.session.token,d.id,{...cell,expected_version:d.version});assert.equal(d.assignments[0].id,preserved);
@@ -57,8 +55,7 @@ scenario("each group/stage has its own pinned synthetic method set, not science 
 scenario("copy settings per group only, independent IDs and no participants/answers/results",async(f,x)=>{
   const {participantService}=require("./participation-fixture.js"),p=await participantService(f);await p.complete();
   const counts=async()=>{const out={};for(const table of ["participants","stage_enrollments","attempts","responses","attempt_results"])out[table]=(await f.admin.query("SELECT count(*)::integer n FROM pedpsy."+table)).rows[0].n;return out;},before=await counts();
-  let d=await x.studies.create(x.session.token,"Copy");for(const name of ["КГ","ЭГ"])d=await x.studies.group(x.session.token,d.id,undefined,{name,kind:"other",expected_version:d.version});
-  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});const source=d.stages[0].id;
+  let d=await x.studies.create(x.session.token,"Copy");const source=d.stages[0].id;
   d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:source,release_ids:[f.seed.release_id],expected_version:d.version});const sourceAssignment=d.assignments[0].id;
   d=await x.studies.copy(x.session.token,d.id,{source_stage_id:source,code:"T1",ordinal:1,expected_version:d.version});const copied=d.stages[1].id;assert.equal(d.stages[1].based_on_stage_id,source);
   assert.equal(d.assignments.filter(a=>a.stage_id===copied).length,1);assert.notEqual(d.assignments.find(a=>a.stage_id===copied).id,sourceAssignment);assert.equal(d.assignments.find(a=>a.stage_id===copied).group_id,d.groups[0].id);assert.deepEqual(await counts(),before);
@@ -70,7 +67,7 @@ scenario("copy settings per group only, independent IDs and no participants/answ
   await assert.rejects(x.studies.copy(x.session.token,d.id,{source_stage_id:copied,code:"T2",ordinal:2,expected_version:d.version}),/synthetic copy audit failure/);
   assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,d.version);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_stages WHERE study_id=$1",[d.id])).rows[0].n,2);assert.deepEqual(await counts(),before);
 });
-async function readyStudy(x,f,title){let d=await x.studies.create(x.session.token,title);d=await x.studies.group(x.session.token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});return x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});}
+async function readyStudy(x,f,title){const d=await x.studies.create(x.session.token,title);return x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});}
 scenario("activation completeness, atomic active quota race, closed frees quota but never rewrites design",async(f,x,s)=>{
   const incomplete=await x.studies.create(x.session.token,"Incomplete");await assert.rejects(x.studies.lifecycle(x.session.token,incomplete.id,{status:"active",expected_version:0}),e=>e.code==="DESIGN_INCOMPLETE");
   const drafts=await Promise.all(["One","Two"].map(title=>readyStudy(x,f,title)));const result=await Promise.allSettled(drafts.map(d=>x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version})));
@@ -104,7 +101,7 @@ scenario("credential revocation committed during a lock wait prevents mutation a
     await waitForConstructorLock(f);await owner.query("UPDATE pedpsy.researcher_credentials SET status='revoked',version=version+1 WHERE id=$1",[x.row.id]);await owner.query("COMMIT");
     assert.equal((await pending).error?.status,401);
   }finally{await owner.query("ROLLBACK");owner.release();if(pending)await pending;}
-  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,0);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,1);
   assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,0);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE resource_id=$1 AND action='studies.groups' AND outcome='allow'",[d.id])).rows[0].n,0);
 });
@@ -115,13 +112,13 @@ scenario("membership revocation committed while waiting for study lock is unifor
     await waitForConstructorLock(f);await owner.query("UPDATE pedpsy.study_memberships SET status='revoked' WHERE study_id=$1 AND user_id=$2",[d.id,x.row.user_id]);await owner.query("COMMIT");
     assert.equal((await pending).error?.status,404);
   }finally{await owner.query("ROLLBACK");owner.release();if(pending)await pending;}
-  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,0);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,1);
   assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,0);
 });
 scenario("bounded groups/stages/owned studies and saturated version fail without partial writes",async(f,x)=>{
   let d=await x.studies.create(x.session.token,"Limits");
-  await f.admin.query("INSERT INTO pedpsy.research_groups(id,study_id,name,kind) SELECT gen_random_uuid(),$1,'G'||n,'other' FROM generate_series(1,50) n",[d.id]);
-  await f.admin.query("INSERT INTO pedpsy.research_stages(id,study_id,code,ordinal) SELECT gen_random_uuid(),$1,'T'||n,n FROM generate_series(0,49) n",[d.id]);
+  await f.admin.query("INSERT INTO pedpsy.research_groups(id,study_id,name,kind) SELECT gen_random_uuid(),$1,'G'||n,'other' FROM generate_series(1,49) n",[d.id]);
+  await f.admin.query("INSERT INTO pedpsy.research_stages(id,study_id,code,ordinal) SELECT gen_random_uuid(),$1,'T'||n,n FROM generate_series(1,49) n",[d.id]);
   d=await x.studies.read(x.session.token,d.id);assert.equal(d.groups.length,50);assert.equal(d.stages.length,50);
   for(const mutate of [()=>x.studies.group(x.session.token,d.id,undefined,{name:"51",kind:"other",expected_version:0}),
     ()=>x.studies.stage(x.session.token,d.id,undefined,{code:"T50",ordinal:50,expected_version:0}),

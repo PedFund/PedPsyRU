@@ -9,8 +9,7 @@ async function researcherHttp(f,w,s){const invite=(await w.app.inject({method:"P
 const send=(w,r,path,payload,method="POST")=>w.app.inject({method,url:"/api/v2/researcher/studies"+path,headers:r.headers,payload});
 scenario("actual cookie/CSRF full constructor persists and both staff see globally without diagnostics",async(f,w,s)=>{
   const r=await researcherHttp(f,w,s);let response=await send(w,r,"",{title:"Синтетическое исследование"});assert.equal(response.statusCode,200);let d=response.json();
-  for(const [name,kind] of [["КГ","control"],["ЭГ","experimental"]]){response=await send(w,r,"/"+d.id+"/groups",{name,kind,expected_version:d.version});assert.equal(response.statusCode,200);d=response.json();}
-  d=(await send(w,r,"/"+d.id+"/stages",{code:"T0",ordinal:0,expected_version:d.version})).json();
+  for(const [name,kind] of [["КГ","control"]]){response=await send(w,r,"/"+d.id+"/groups",{name,kind,expected_version:d.version});assert.equal(response.statusCode,200);d=response.json();}
   for(const group of d.groups)d=(await send(w,r,"/"+d.id+"/assignments",{group_id:group.id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version})).json();
   d=(await send(w,r,"/"+d.id+"/stages/copy",{source_stage_id:d.stages[0].id,code:"T1",ordinal:1,expected_version:d.version})).json();assert.equal(d.assignments.length,4);
   d=(await send(w,r,"/"+d.id,{title:"Новое название",expected_version:d.version},"PATCH")).json();assert.equal(d.title,"Новое название");
@@ -31,11 +30,11 @@ scenario("scope/role/CSRF/origin/input/CAS failures are neutral and never partia
   for(const path of ["staff/studies","staff/studies/"+d.id+"/groups"])assert.equal((await w.app.inject({method:"POST",url:"/api/v2/"+path,headers:s.headers,payload:{}})).statusCode,400);
   for(const path of ["staff/methods","staff/processing"])assert.equal((await w.app.inject({method:"POST",url:"/api/v2/"+path,headers:s.headers,payload:{}})).statusCode,404);
   assert.equal((await w.app.inject({url:"/api/v2/staff/studies",headers:{...x.headers,cookie:x.headers.cookie.replace("researcher","staff")}})).statusCode,401);
-  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,0);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,1);
 });
 scenario("mandatory audit failure rolls back groups, version and UI sees only a neutral 500",async(f,w,s)=>{
   const r=await researcherHttp(f,w,s),d=(await send(w,r,"",{title:"Rollback"})).json();await f.admin.query("CREATE FUNCTION pedpsy.synthetic_design_http_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'private SQL detail'; END $$;CREATE TRIGGER synthetic_design_http_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_design_http_audit_fail()");
-  const failed=await send(w,r,"/"+d.id+"/groups",{name:"КГ",kind:"control",expected_version:0});assert.equal(failed.statusCode,500);assert.deepEqual(failed.json(),{error:"INTERNAL_ERROR"});assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,0);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,0);
+  const failed=await send(w,r,"/"+d.id+"/groups",{name:"КГ",kind:"control",expected_version:0});assert.equal(failed.statusCode,500);assert.deepEqual(failed.json(),{error:"INTERNAL_ERROR"});assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,0);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_groups WHERE study_id=$1",[d.id])).rows[0].n,1);
 });
 scenario("global directory and metadata size caps refuse instead of truncating",async(f,w,s)=>{
   const id=f.studyId;await f.admin.query("UPDATE pedpsy.studies SET title=repeat('x',4194305) WHERE id=$1",[id]);for(const path of ["staff/studies","staff/studies/"+id])assert.equal((await w.app.inject({url:"/api/v2/"+path,headers:s.headers})).statusCode,413);

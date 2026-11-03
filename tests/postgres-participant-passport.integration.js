@@ -19,7 +19,7 @@ async function identity(f,x,email="own@example.test"){
 async function configured(f){
   const s=await verifiedStaff(f),x=await studyResearcher(f,s),schemas=new PostgresPassportSchemas(f.runtime);let d=await x.studies.create(x.session.token,"Synthetic own passport");
   const p=await schemas.read(x.session.token,d.id);await schemas.configure(x.session.token,d.id,{expected_version:p.study_version,expected_schema_version:p.schema_version,basic_required:{city:true},additional_fields:extra});
-  d=await x.studies.read(x.session.token,d.id);d=await x.studies.group(x.session.token,d.id,undefined,{name:"КГ",kind:"control",expected_version:d.version});d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T0",ordinal:0,expected_version:d.version});
+  d=await x.studies.read(x.session.token,d.id);
   d=await x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});d=await x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version});
   const invitations=new PostgresGroupInvitations(f.runtime),i=await invitations.create(x.session.token,d.id,d.groups[0].id,{expires_at:Date.now()+86400000}),vault=new ContactTokenVault(randomBytes(32)),registration=new PostgresParticipantRegistration(f.runtime,vault),base={...x,s,design:d,invitations,i,vault,registration,passports:new PostgresParticipantPassports(f.runtime)};
   return {...base,...await identity(f,base)};
@@ -45,8 +45,8 @@ scenario("mandatory sex/age/city/custom are checked only on explicit saved-value
   const saved=await save(x,full,revision),done=await complete(x,saved.revision);assert.equal(done.status,"completed");assert.equal(done.revision,saved.revision+1);assert.deepEqual(done.values,full);assert.ok(!Object.hasOwn(done.values,"extra_years"));await noClinical(f,x);
 });
 scenario("SQL repeats exact field/type/range/choice/Unicode/blank limits, rejected draft never persists",async(t,f,x)=>{
-  for(const values of [null,[],"text",{age:null},{age:"42"},{age:42.5},{age:-1},{age:131},{sex:"Женский"},{sex:"other"},{city:" "},{city:"\u00a0\u2003\ufeff"},{city:" Town "},{city:"a\n"},{city:"🙂".repeat(101)},{extra_context:"x".repeat(41)},{extra_setting:"other"},{extra_years:51},{extra_unknown:"x"},{role:"participant"},{participant_id:x.own.participant_id},{city:{text:"x"}}])await assert.rejects(save(x,values),e=>e.code==="INVALID_PASSPORT_VALUES");
-  assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_passports")).rows[0].n,"0");assert.equal((await save(x,{city:"🙂".repeat(100),age:0,extra_years:-10})).revision,1);
+  for(const values of [null,[],"text",{age:null},{age:"42"},{age:42.5},{age:-1},{age:17},{age:100},{age:131},{sex:"Женский"},{sex:"other"},{city:" "},{city:"\u00a0\u2003\ufeff"},{city:" Town "},{city:"a\n"},{city:"🙂".repeat(101)},{extra_context:"x".repeat(41)},{extra_setting:"other"},{extra_years:51},{extra_unknown:"x"},{role:"participant"},{participant_id:x.own.participant_id},{city:{text:"x"}}])await assert.rejects(save(x,values),e=>e.code==="INVALID_PASSPORT_VALUES");
+  assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_passports")).rows[0].n,"0");assert.equal((await save(x,{city:"🙂".repeat(100),age:18,extra_years:-10})).revision,1);
 });
 scenario("two tabs CAS commits one snapshot; stale schema/revision cannot overwrite even same values",async(t,f,x)=>{
   const results=await Promise.allSettled([save(x,{city:"A"}),save(x,{city:"B"})]);assert.equal(results.filter(r=>r.status==="fulfilled").length,1);assert.equal(results.find(r=>r.status==="rejected").reason.code,"PASSPORT_CONFLICT");
