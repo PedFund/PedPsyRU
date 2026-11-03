@@ -1,2 +1,2 @@
 "use strict";
-module.exports=require("../core/qlesq-local-materials.js");
+module.exports=require("../storage/qlesq-local-materials.js");
