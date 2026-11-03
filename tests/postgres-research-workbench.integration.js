@@ -5,6 +5,7 @@ const {PostgresResearchWorkbench,PostgresParticipantProfiles}=require("../dist/s
 const {PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/participant-registration.js"),{ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js");
 const {PostgresGroupInvitations}=require("../dist/src/adapters/postgres/group-invitations.js"),{PostgresStageAccess}=require("../dist/src/adapters/postgres/stage-access.js");
 const {PostgresParticipantStages}=require("../dist/src/adapters/postgres/participant-stages.js"),{PostgresParticipantConsents}=require("../dist/src/adapters/postgres/participant-consents.js"),{PostgresParticipantEnrollment}=require("../dist/src/adapters/postgres/participant-enrollment.js");
+const {PostgresMethodLibrary}=require("../dist/src/adapters/postgres/method-library.js");
 const {tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
 async function setup(t){const f=await postgresFixture({runtimePoolSize:3});t.after(()=>f.close());const staff=await verifiedStaff(f),r=await studyResearcher(f,staff),store=new PostgresResearchWorkbench(f.runtime),d=await r.studies.create(r.session.token,"Research UX synthetic");return {f,staff,r,store,d};}
 async function change(x,action,data){x.d=await x.store.change(x.r.session.token,x.d.id,x.d.version,action,data);return x.d;}
@@ -19,6 +20,7 @@ async function participant(x,email="workbench@example.test"){
 }
 test("PostgreSQL workbench: experimental/T0 defaults, notes, automatic stage order, atomic bulk assignment and owner-only DTO",async t=>{
   const x=await setup(t);assert.equal(x.d.groups.length,1);assert.equal(x.d.groups[0].name,"Экспериментальная");assert.deepEqual(x.d.stages.map(s=>s.code),["T0"]);
+  const methods=new PostgresMethodLibrary(x.f.runtime),available=await methods.catalog(x.r.session.token),planned=await methods.planning(x.r.session.token),release=x.d.catalog.find(r=>r.id===x.f.seed.release_id);assert.equal(available.length,0,"metadata binding is optional in the synthetic TKI-only fixture");assert.equal(release.method_id,"tki_ru_30_pairs");assert.equal(planned.find(m=>m.method_id===release.method_id),undefined,"the allowed release must remain usable without optional planning metadata");
   await change(x,"group",{id:null,name:"Контрольная",kind:"control",note:"Сравнение"});assert.equal(x.d.groups.length,2);
   for(const code of ["T1","T2"])await change(x,"stage",{id:null,code,note:"Измерение "+code});
   assert.deepEqual(x.d.stages.map(s=>s.ordinal),[0,1,2]);assert.equal(Object.values(x.d.group_notes)[0],"Сравнение");
