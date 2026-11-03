@@ -1,5 +1,6 @@
 "use strict";
 const {randomUUID}=require("node:crypto");
+const fs=require("node:fs"),path=require("node:path"),{Pool}=require("pg"),{validateConfig}=require("./local-demo.js");
 const {qlesqLocalMaterials}=require("./qlesq-local-materials.js");
 const {qlesqReleasePackage}=require("../storage/qlesq-release.js");
 const {canonicalJson}=require("../storage/releases.js");
@@ -31,4 +32,11 @@ async function importQlesqLocal(client){
  if(!(await client.query("SELECT pedpsy.constructor_release_allowed($1) allowed",[r.id])).rows[0].allowed)throw Error("QLESQ_RELEASE_NOT_ALLOWED");
  return r.id;
 }
+async function main(){
+ const root=path.resolve(__dirname,".."),owner=validateConfig(JSON.parse(fs.readFileSync(path.join(root,".local/demo-stand/owner.json"),"utf8")),"owner");
+ const pool=new Pool({...owner,max:1,ssl:false}),client=await pool.connect();
+ try{await client.query("BEGIN");const id=await importQlesqLocal(client);await client.query("COMMIT");console.log("Synthetic QLESQ draft release imported:",id);}
+ catch(e){await client.query("ROLLBACK");throw e;}finally{client.release();await pool.end();}
+}
+if(require.main===module)main().catch(e=>{console.error("QLESQ local import stopped:",/^[A-Z_]+$/.test(e.message)?e.message:"CHECK_LOCAL_PACKAGE");process.exitCode=1;});
 module.exports={importQlesqLocal};
