@@ -1,5 +1,5 @@
 import {canonicalJson} from "../../storage/releases.js";
-import {qlesqLocalMaterials} from "../../scripts/qlesq-local-materials.js";
+import {qlesqLocalMaterials} from "../../core/qlesq-local-materials.js";
 import {qlesqReleasePackage} from "../../storage/qlesq-release.js";
 import {scoreQlesq,CONTRACT_VERSION,METHOD_VERSION_ID,HANDLER_VERSION} from "../../core/qlesq-contract.js";
 import type {MethodHandlerRegistry} from "../ports/method-handlers.js";
