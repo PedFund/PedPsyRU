@@ -39,7 +39,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   if (membership.rowCount || owner.rowCount) throw new Error("UNSAFE_RUNTIME_ROLE");
   // Validated role identifier, never HTTP input; no GRANT ALL/table ownership.
   await client.query(`GRANT USAGE ON SCHEMA pedpsy TO "${role}"`);
-  await client.query(`GRANT SELECT ON pedpsy.attempts,pedpsy.responses,pedpsy.attempt_results,pedpsy.instrument_releases,pedpsy.release_items TO "${role}"`);
+  await client.query(`GRANT SELECT ON pedpsy.attempts,pedpsy.responses,pedpsy.attempt_results,pedpsy.release_presentation_corrections,pedpsy.instrument_releases,pedpsy.release_items TO "${role}"`);
   await client.query(`GRANT UPDATE(revision,current_item_id,status,completion_result_id,completed_at,updated_at) ON pedpsy.attempts TO "${role}"`);
   await client.query(`GRANT INSERT,DELETE ON pedpsy.responses TO "${role}"`);
   await client.query(`GRANT INSERT ON pedpsy.attempt_results,pedpsy.access_audit_events TO "${role}"`);

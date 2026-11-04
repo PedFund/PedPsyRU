@@ -86,7 +86,10 @@ export class PostgresUnitOfWork implements UnitOfWork {
           const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);
           const row = release.rows[0];
           const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.release_items WHERE release_id=$1 ORDER BY ordinal",[id]);
-          return verifyPinnedChoiceRelease(row,items.rows);
+          const pinned=verifyPinnedChoiceRelease(row,items.rows);
+          const correction=await client.query<{title:string|null;instruction:string|null}>("SELECT title,instruction FROM pedpsy.release_presentation_corrections WHERE release_id=$1 ORDER BY created_at_ms DESC, id DESC LIMIT 1",[id]);
+          const c=correction.rows[0];
+          return c?{...pinned,presentation:{...(c.title?{title:c.title}:{}),...(c.instruction?{instruction:c.instruction}:{})}}:pinned;
         };
         const stored = async (id: string): Promise<StoredResult | null> => {
           await get(id); const result = await client.query<ResultRow>("SELECT id,attempt_id,input_revision,responses_digest,calculated_at,payload FROM pedpsy.attempt_results WHERE attempt_id=$1", [id]);
