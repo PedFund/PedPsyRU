@@ -1,0 +1,511 @@
+{
+  "schema_version": "1.0",
+  "method_id": "ttf_atf_10",
+  "package_version": "1.0.0",
+  "title": "Тенденция к прощению / отношение к прощению",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "ttf_atf_10_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Совершенно не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "В чем-то не согласен"
+        },
+        {
+          "value": "4",
+          "label": "Затрудняюсь ответить"
+        },
+        {
+          "value": "5",
+          "label": "В чем-то согласен"
+        },
+        {
+          "value": "6",
+          "label": "Согласен"
+        },
+        {
+          "value": "7",
+          "label": "Полностью согласен"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "ttf",
+      "label": "TTF",
+      "min": 4,
+      "max": 28,
+      "direction": "not_specified"
+    },
+    {
+      "id": "atf",
+      "label": "ATF",
+      "min": 6,
+      "max": 42,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "ttf",
+          "value": 16
+        },
+        {
+          "scale_id": "atf",
+          "value": 24
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "ttf_atf_10_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 9119,
+      "sha256": "03f3766fe0148e3468cf544dda82c6c92e7a5c3c0aeb71cb203aef83bbd2d01a",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 552,
+      "sha256": "80834f4ea3c5a9ee1ac497acea05f1c0bb482056c4894ee812563fa46e1d0453",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 1,
+      "sha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 263,
+      "sha256": "447b4b3b412244ffe241fa878fa25369a51b63acdc7128223837230f12fa4423",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

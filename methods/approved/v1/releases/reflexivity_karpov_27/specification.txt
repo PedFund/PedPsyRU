@@ -1,0 +1,4 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4,5,6,7, 27 items, all required.
+Scales: reflexivity.
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.
