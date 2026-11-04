@@ -27,7 +27,7 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
         if (!state) throw new ParticipationError(404, "NOT_AVAILABLE");
         if (state.status !== "draft") throw new ParticipationError(409, "ATTEMPT_COMPLETED");
         const release = await ports.releases.getPinned(state.releaseId);
-        validateDraft(input, release.itemIds,release.choiceValues);
+        validateDraft(input, release.itemIds,release.choiceValues,release.quota);
         const result = await ports.attempts.compareAndSave(id, input);
         await ports.audit.appendRequired({event: "draft_saved", resourceId: id});
         return result;

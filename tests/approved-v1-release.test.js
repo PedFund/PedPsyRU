@@ -7,9 +7,8 @@ const {approvedV1Releases} = require("../storage/approved-v1-release.js");
 
 test("only packages with a pinned option set become releases", () => {
   const {releases, unsupported} = approvedV1Releases();
-  assert.deepEqual(releases.map(r => r.id).sort(), ["hardiness_leontiev_rasskazova_45", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
+  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
   const reasons = Object.fromEntries(unsupported.map(item => [item.method_id, item.reason]));
-  assert.equal(reasons.co36_kunitsyna_36, "NO_RESPONSE_OPTIONS");
   assert.equal(reasons.pvq_rr_57, "UNSUPPORTED_OPTION_SHAPE");
 });
 

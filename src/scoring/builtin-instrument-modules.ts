@@ -37,7 +37,7 @@ export const builtinInstrumentRegistry=createMethodRuntimeRegistry([
   // Approved-library packages (Issue #69 content, draft publication state). CO-36 is
   // deliberately absent: its required answer quotas need a ranking screen, not a
   // single-choice form, and must not become assignable as if it were one.
-  ...approvedV1Entries.filter(entry=>entry.id!=="co36_kunitsyna_36").map(entry=>{
+  ...approvedV1Entries.map(entry=>{
     const key=entry.key as {scales?:Record<string,unknown>;derived?:Record<string,unknown>;levels?:Record<string,unknown>};
     const names=[...Object.keys(key.scales||{}),...Object.keys(key.derived||{}),...Object.keys(key.levels||{})];
     const unique=names.filter((name,index)=>names.indexOf(name)===index);
@@ -51,7 +51,7 @@ export const builtinInstrumentRegistry=createMethodRuntimeRegistry([
       const ruLabels=entry.labels||{};const cut=name.indexOf(" – ");const stem=cut<0?name:name.slice(0,cut);const tail=cut<0?"":name.slice(cut);const ru=ruLabels[stem]||ruLabels[stem.toLowerCase()]||ruLabels[name];return {id,label:ru?ru+tail:name,kind:"raw"};
     });
     return choices({method:entry.methodVersionId,handler:APPROVED_NUMERIC_HANDLER,digest:entry.pins.key,title:entry.title,
-      authors:entry.authors.length?[...entry.authors]:[entry.title],count:entry.itemCount,values:[...entry.valid],
+      authors:entry.authors.length?[...entry.authors]:[entry.title],count:entry.itemCount,values:[...entry.valid].map(String),
       score:scoreApprovedNumeric,outputs});
   })
 ]);

@@ -15,14 +15,16 @@ interface ChoiceRelease {
   form:ParticipantForm;formSnapshot:string;formDigest:string;keyDigest:string;
   itemSnapshots:readonly unknown[];
   choiceValues:readonly string[];
+  quota?:Readonly<Record<string,number>>;
 }
 // Explicit host composition. Adding a choice method changes this list, not the
 // transaction, access checks, retry protocol, enrollment or participant gateway.
-type FormShape={id:string;version:string;title?:string;instruction?:string;items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
+type FormShape={id:string;version:string;title?:string;instruction?:string;presentation?:{id:string;version:string};rules?:{require_all?:boolean;quota?:Record<string,number>};items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
 function installed():ChoiceRelease[]{
   const t=releasePackage(),k=karpovReleasePackage(),p=prfqReleasePackage(),u=umicsReleasePackage();
   const asForm=(f:FormShape):ParticipantForm=>({id:f.id,version:f.version,
     ...(f.title!==undefined?{title:f.title}:{}),...(f.instruction!==undefined?{instruction:f.instruction}:{}),
+    ...(f.presentation!==undefined?{presentation:f.presentation}:{}),...(f.rules!==undefined?{rules:f.rules}:{}),
     items:f.items.map(item=>({id:item.id,number:item.number,...(item.text!==undefined?{text:item.text}:{}),
       options:item.options.map(option=>({value:String(option.value),text:option.text}))}))});
   const asRelease=(form:FormShape,base:Omit<ChoiceRelease,"itemSnapshots"|"choiceValues"|"form">):ChoiceRelease=>({...base,
@@ -33,7 +35,7 @@ function installed():ChoiceRelease[]{
     asRelease(p.form as FormShape,{methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,verificationState:p.verificationState,formSnapshot:p.formSnapshot,formDigest:p.formDigest,keyDigest:p.keyDigest}),
     asRelease(u.form as FormShape,{methodVersionId:u.methodVersionId,handlerVersion:u.handlerVersion,verificationState:u.verificationState,formSnapshot:u.formSnapshot,formDigest:u.formDigest,keyDigest:u.keyDigest}),
     ...legacyBatchReleases().map(b=>asRelease(b.form as FormShape,{methodVersionId:b.methodVersionId,handlerVersion:b.handlerVersion,verificationState:b.verificationState,formSnapshot:b.formSnapshot,formDigest:b.formDigest,keyDigest:b.keyDigest})),
-    ...approvedV1Releases().releases.map(a=>asRelease(a.form as unknown as FormShape,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest}))
+    ...approvedV1Releases().releases.map(a=>{const rules=(a.form as {rules?:{quota?:Record<string,number>}}).rules;return asRelease(a.form as unknown as FormShape,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest,...(rules&&rules.quota?{quota:rules.quota}:{})});})
   ];
 }
 function resolve(methodVersionId:string,handlerVersion:string):ChoiceRelease {
@@ -44,7 +46,7 @@ export function verifyPinnedChoiceRelease(row:ReleaseRow|undefined,items:readonl
   if(!row)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
   const p=resolve(row.method_version_id,row.handler_version);
   if(row.contract_version!=="1.0"||row.form_id!==p.form.id||row.form_version!==p.form.version||canonicalJson(row.form_snapshot)!==p.formSnapshot||row.form_digest!==p.formDigest||row.key_digest!==p.keyDigest||row.verification_state!==p.verificationState||row.publication_state!=="draft"||items.length!==p.form.items.length||items.some((i,n)=>i.item_id!==p.form.items[n]?.id||i.ordinal!==n+1||canonicalJson(i.options)!==canonicalJson(p.itemSnapshots[n])))throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
-  return {id:row.id,contractVersion:"1.0",methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,keyDigest:p.keyDigest,itemIds:items.map(i=>i.item_id),choiceValues:p.choiceValues};
+  return {id:row.id,contractVersion:"1.0",methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,keyDigest:p.keyDigest,itemIds:items.map(i=>i.item_id),choiceValues:p.choiceValues,...(p.quota?{quota:p.quota}:{})};
 }
 export function pinnedParticipantForm(release:PinnedRelease):ParticipantForm {
   const p=resolve(release.methodVersionId,release.handlerVersion);

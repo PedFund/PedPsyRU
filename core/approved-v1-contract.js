@@ -36,7 +36,7 @@ function createApprovedNumericScorer(entries) {
           Object.keys(response).sort().join(',') !== 'item_id,value' ||
           !Number.isInteger(index) || index < 1 || index > method.itemCount ||
           response.item_id !== 'q' + String(index).padStart(2, '0') ||
-          typeof response.value !== 'string' || !method.valid.includes(response.value) ||
+          typeof response.value !== 'string' || !method.valid.map(String).includes(response.value) ||
           values.has(response.item_id)) return invalid();
       values.set(response.item_id, Number(response.value));
     }

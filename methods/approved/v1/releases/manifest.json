@@ -34,6 +34,12 @@
       "artifacts": 4
     },
     {
+      "id": "co36_kunitsyna_36",
+      "package_version": "1.0.0-staging",
+      "scales": 12,
+      "artifacts": 4
+    },
+    {
       "id": "ttf_atf_10",
       "package_version": "1.0.0-staging",
       "scales": 2,

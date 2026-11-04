@@ -13,15 +13,15 @@ const answers = (entry, value) => Array.from({length: entry.itemCount}, (_, inde
 const requestFor = (entry, value) => ({contract_version: "1.0", method_version_id: entry.methodVersionId,
   handler_version: "approved-numeric-1.0.0", responses: answers(entry, value)});
 
-test("the registry exposes seven approved packages and deliberately omits CO-36", () => {
+test("the registry exposes every approved package, CO-36 included", () => {
   const descriptors = builtinInstrumentRegistry.descriptors();
   const approved = descriptors.filter(d => d.handler_version === "approved-numeric-1.0.0");
-  assert.equal(approved.length, 8);
+  assert.equal(approved.length, 9);
   assert.deepEqual(approved.map(d => d.method_version_id).sort(), [
-    "hardiness_leontiev_rasskazova_45@1.0.0-staging", "pvq_rr_57@1.0.0-staging",
+    "co36_kunitsyna_36@1.0.0-staging", "hardiness_leontiev_rasskazova_45@1.0.0-staging", "pvq_rr_57@1.0.0-staging",
     "qlesq_36_vodopyanova@1.1.0-staging", "reflexivity_karpov_27@1.1.0-staging", "ryff_pwb_84_shevelenkova_fesenko@1.0.0-staging",
     "sjo_20@1.0.0-staging", "ttf_atf_10@1.0.0-staging", "uvlk_shipilov@1.0.0-staging"]);
-  assert.equal(descriptors.some(d => d.method_version_id.startsWith("co36_kunitsyna_36")), false);
+  assert.equal(descriptors.filter(d => d.method_version_id.startsWith("co36_kunitsyna_36")).length, 1);
 });
 
 test("Shipilov scores through the registry with the approved numbers", () => {

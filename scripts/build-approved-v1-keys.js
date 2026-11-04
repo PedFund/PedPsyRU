@@ -99,7 +99,40 @@ const PACKAGE_SCALE_IDS = {
   ryff_pwb_84_shevelenkova_fesenko: ['positive_relations', 'autonomy', 'environment_mastery', 'personal_growth', 'purpose_in_life', 'self_acceptance']
 };
 
+// CO-36 describes its scales as an object map with 3 items each, a quota policy and
+// three composite means. The key is built from that description verbatim.
+const CO36_PLAN = {
+  id: 'co36_kunitsyna_36',
+  derived: {
+    family_values: ['family_safety', 'family_traditions', 'family_interpersonal_relations', 'family_normative_conformity'],
+    individual_values: ['individual_achievement', 'individual_power_influence', 'individual_hedonism', 'individual_activity_stimulation'],
+    universal_moral_values: ['universal_independence', 'universal_moral_orientation', 'universal_tolerance', 'universal_spiritual']
+  }
+};
+
+function co36Key(pkg) {
+  if (pkg.id !== CO36_PLAN.id) return null;
+  const source = pkg.scoring || {};
+  const scales = source.scales || {};
+  const ids = Object.keys(scales);
+  if (ids.length !== 12) throw new Error(pkg.id + ':SCALE_COUNT_MISMATCH');
+  const built = {};
+  for (const id of ids) {
+    const items = (scales[id].items || []).slice().sort((a, b) => a - b);
+    if (items.length !== 3) throw new Error(pkg.id + ':SCALE_ITEM_COUNT');
+    built[id] = {direct: items, reverse: [], aggregate: 'mean', label: scales[id].label || id};
+  }
+  const derived = {};
+  for (const [name, inputs] of Object.entries(CO36_PLAN.derived)) derived[name] = {op: 'mean', inputs};
+  const quota = source.approved_quota || undefined;
+  return {id: pkg.id, key_version: '1.0.0-staging', type: 'passport', items: pkg.items.length,
+    valid: source.response.valid.map(Number), scales: built, derived,
+    ...(quota ? {quota} : {})};
+}
+
 function keyFromPackage(pkg) {
+  const co36 = co36Key(pkg);
+  if (co36) return co36;
   const ids = PACKAGE_SCALE_IDS[pkg.id];
   if (!ids) return null;
   if (!Array.isArray(pkg.items) || !Array.isArray(pkg.scales) || pkg.scales.length !== ids.length) {
