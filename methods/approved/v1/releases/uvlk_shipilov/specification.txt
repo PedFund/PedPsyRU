@@ -1,0 +1,5 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4,5,6, 36 items, all required.
+Scales: motivational, moral, unrealized_desire, role, adaptation, inadequate_self_esteem.
+Derived: motivational_sphere=sum(motivational+moral+unrealized_desire); obligation_sphere=sum(moral+role+adaptation); self_esteem_sphere=sum(unrealized_desire+adaptation+inadequate_self_esteem); total=sum(motivational+moral+unrealized_desire+role+adaptation+inadequate_self_esteem).
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.

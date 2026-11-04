@@ -6,6 +6,7 @@ import {prfqReleasePackage} from "../../storage/prfq-release.js";
 import {umicsReleasePackage} from "../../storage/umics-release.js";
 import {legacyBatchReleases} from "../../storage/legacy-batch-release.js";
 import {karpovReleasePackage} from "../../storage/karpov-release.js";
+import {approvedV1Releases} from "../../storage/approved-v1-release.js";
 
 interface ReleaseRow {id:string;method_version_id:string;handler_version:string;contract_version:string;form_id:string;form_version:string;form_snapshot:unknown;form_digest:string;key_digest:string;verification_state:string;publication_state:string}
 interface ItemRow {item_id:string;ordinal:number;options:unknown}
@@ -17,13 +18,23 @@ interface ChoiceRelease {
 }
 // Explicit host composition. Adding a choice method changes this list, not the
 // transaction, access checks, retry protocol, enrollment or participant gateway.
+type FormShape={id:string;version:string;title?:string;instruction?:string;items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
 function installed():ChoiceRelease[]{
   const t=releasePackage(),k=karpovReleasePackage(),p=prfqReleasePackage(),u=umicsReleasePackage();
-  return [{...t,itemSnapshots:t.form.items.map(i=>i.options),methodVersionId:"tki_ru_30_pairs@1.0.0",handlerVersion:"tki-contract-0.3.0",verificationState:"key_verified",choiceValues:["A","B"],form:{id:t.form.id,version:t.form.version,items:t.form.items.map(i=>({id:i.id,number:i.number,options:i.options.map(o=>{const option=o as {value:string;text:string};return {value:option.value,text:option.text};})}))}},
-    {...k,itemSnapshots:k.form.items.map(i=>i.options),choiceValues:["1","2","3","4","5","6","7"],form:{id:k.form.id,version:k.form.version,title:k.form.title,instruction:k.form.instruction,items:k.form.items.map(i=>({id:i.id,number:i.number,text:i.text,options:i.options.map(o=>({value:o.value,text:o.text}))}))}},
-    {...p,itemSnapshots:p.form.items.map(i=>i.options),choiceValues:["1","2","3","4","5","6","7"],form:{id:p.form.id,version:p.form.version,title:p.form.title,instruction:p.form.instruction,items:p.form.items.map(i=>({id:i.id,number:i.number,text:i.text,options:i.options.map(o=>({value:o.value,text:o.text}))}))}},
-    {...u,itemSnapshots:u.form.items.map(i=>i.options),choiceValues:["1","2","3","4","5"],form:{id:u.form.id,version:u.form.version,title:u.form.title,instruction:u.form.instruction,items:u.form.items.map(i=>({id:i.id,number:i.number,text:i.text,options:i.options.map(o=>({value:o.value,text:o.text}))}))}},
-    ...legacyBatchReleases().map(b=>({...b,itemSnapshots:b.form.items.map(i=>i.options),choiceValues:b.valid,form:{id:b.form.id,version:b.form.version,title:b.form.title,instruction:b.form.instruction,items:b.form.items.map(i=>({id:i.id,number:i.number,text:i.text,options:i.options.map(o=>({value:o.value,text:o.text}))}))}}))];
+  const asForm=(f:FormShape):ParticipantForm=>({id:f.id,version:f.version,
+    ...(f.title!==undefined?{title:f.title}:{}),...(f.instruction!==undefined?{instruction:f.instruction}:{}),
+    items:f.items.map(item=>({id:item.id,number:item.number,...(item.text!==undefined?{text:item.text}:{}),
+      options:item.options.map(option=>({value:String(option.value),text:option.text}))}))});
+  const asRelease=(form:FormShape,base:Omit<ChoiceRelease,"itemSnapshots"|"choiceValues"|"form">):ChoiceRelease=>({...base,
+    itemSnapshots:form.items.map(item=>item.options),choiceValues:form.items[0]!.options.map(option=>String(option.value)),form:asForm(form)});
+  return [
+    asRelease(t.form as FormShape,{methodVersionId:"tki_ru_30_pairs@1.0.0",handlerVersion:"tki-contract-0.3.0",verificationState:"key_verified",formSnapshot:t.formSnapshot,formDigest:t.formDigest,keyDigest:t.keyDigest}),
+    asRelease(k.form as FormShape,{methodVersionId:k.methodVersionId,handlerVersion:k.handlerVersion,verificationState:k.verificationState,formSnapshot:k.formSnapshot,formDigest:k.formDigest,keyDigest:k.keyDigest}),
+    asRelease(p.form as FormShape,{methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,verificationState:p.verificationState,formSnapshot:p.formSnapshot,formDigest:p.formDigest,keyDigest:p.keyDigest}),
+    asRelease(u.form as FormShape,{methodVersionId:u.methodVersionId,handlerVersion:u.handlerVersion,verificationState:u.verificationState,formSnapshot:u.formSnapshot,formDigest:u.formDigest,keyDigest:u.keyDigest}),
+    ...legacyBatchReleases().map(b=>asRelease(b.form as FormShape,{methodVersionId:b.methodVersionId,handlerVersion:b.handlerVersion,verificationState:b.verificationState,formSnapshot:b.formSnapshot,formDigest:b.formDigest,keyDigest:b.keyDigest})),
+    ...approvedV1Releases().releases.map(a=>asRelease(a.form as unknown as FormShape,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest}))
+  ];
 }
 function resolve(methodVersionId:string,handlerVersion:string):ChoiceRelease {
   const entry=installed().find(p=>p.methodVersionId===methodVersionId&&p.handlerVersion===handlerVersion);

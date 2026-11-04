@@ -12,7 +12,19 @@ function scoreNumericPassport(def, responses) {
     throw new Error('Questionnaire requires a specialized adapter');
   }
   let scoringResponses = responses;
-  if (def.inputTransform) {
+  if (def.quota) {
+    for (const [value, expected] of Object.entries(def.quota)) {
+      if (!Number.isInteger(expected) || expected < 0) throw new Error('Invalid quota');
+      if (responses.filter(x => x === Number(value)).length !== expected) throw new Error('Quota violated');
+    }
+  }
+  if (def.answerMap) {
+    scoringResponses = responses.map(value => {
+      const mapped = def.answerMap[String(value)];
+      if (!Number.isFinite(mapped)) throw new Error('Unmapped answer value');
+      return mapped;
+    });
+  } else if (def.inputTransform) {
     const transform = def.inputTransform;
     if (!transform || Object.keys(transform).sort().join(',') !== 'max,op' ||
         transform.op !== 'reverse' || !Number.isFinite(transform.max)) {
@@ -21,7 +33,7 @@ function scoreNumericPassport(def, responses) {
     scoringResponses = responses.map(value => transform.max - value);
   }
   const metrics = Object.create(null), warnings = [];
-  const rounded = (value, digits = 2) => Number(value.toFixed(digits));
+  const rounded = (value, digits = 2) => def.fullPrecision === true ? value : Number(value.toFixed(digits));
   const getItems = ids => {
     if (!Array.isArray(ids) || ids.some(i => !Number.isInteger(i) || i < 1 || i > def.items)) throw new Error('Invalid scale items');
     return ids.map(i => scoringResponses[i - 1]);
@@ -72,9 +84,15 @@ function scoreNumericPassport(def, responses) {
   for (const [name, range] of Object.entries(def.ranges || {})) {
     if (!Number.isFinite(metrics[name]) || metrics[name] < range[0] || metrics[name] > range[1]) throw new Error('Score outside declared range');
   }
+  const inRange = (value, row) => {
+    const [lo, hi, , mode] = row;
+    if (lo != null && value < lo) return false;
+    if (hi == null) return true;
+    return mode === 'max_exclusive' ? value < hi : value <= hi;
+  };
   const lookup = (value, ranges) => {
     if (!Array.isArray(ranges)) throw new Error('Invalid conversion table');
-    const row = ranges.find(([lo, hi]) => (lo == null || value >= lo) && (hi == null || value <= hi));
+    const row = ranges.find(candidate => inRange(value, candidate));
     return row ? row[2] : null;
   };
   for (const [name, norm] of Object.entries(def.norms || {})) {

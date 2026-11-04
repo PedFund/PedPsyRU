@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0.0",
+  "generated_by": "scripts/build-approved-v1-packages.js",
+  "note": "Draft packages for the pinned releases. Not a publication or a scientific approval.",
+  "packages": [
+    {
+      "id": "uvlk_shipilov",
+      "package_version": "1.0.0-staging",
+      "scales": 10,
+      "artifacts": 4
+    },
+    {
+      "id": "reflexivity_karpov_27",
+      "package_version": "1.1.0-staging",
+      "scales": 1,
+      "artifacts": 4
+    },
+    {
+      "id": "sjo_20",
+      "package_version": "1.0.0-staging",
+      "scales": 6,
+      "artifacts": 4
+    },
+    {
+      "id": "hardiness_leontiev_rasskazova_45",
+      "package_version": "1.0.0-staging",
+      "scales": 4,
+      "artifacts": 4
+    },
+    {
+      "id": "qlesq_36_vodopyanova",
+      "package_version": "1.1.0-staging",
+      "scales": 10,
+      "artifacts": 4
+    },
+    {
+      "id": "ttf_atf_10",
+      "package_version": "1.0.0-staging",
+      "scales": 2,
+      "artifacts": 4
+    }
+  ]
+}

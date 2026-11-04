@@ -5,8 +5,16 @@ const {randomBytes, randomUUID} = require("node:crypto");
 const {spawn} = require("node:child_process");
 const {Pool} = require("pg");
 const root = path.resolve(__dirname, ".."), directory = path.join(root, ".local", "demo-stand");
+// A second isolated stand may run on the same host; the default port stays unchanged.
+function demoPort() {
+  const raw = process.env.PEDPSY_DEMO_PORT;
+  if (raw === undefined || raw === "") return 55432;
+  const port = Number(raw);
+  if (!Number.isInteger(port) || port < 1024 || port > 65535) throw new Error("INVALID_LOCAL_PORT");
+  return port;
+}
 function validateConfig(c, realm) {
-  if (!["owner", "runtime"].includes(realm) || !c || c.host !== "127.0.0.1" || c.port !== 55432 ||
+  if (!["owner", "runtime"].includes(realm) || !c || c.host !== "127.0.0.1" || c.port !== demoPort() ||
     !/^pedpsy_demo_[a-f0-9]{16}$/.test(c.database) ||
     c.user !== "pedpsy_" + realm + "_" + c.database.slice(-16) ||
     !/^[a-f0-9]{64}$/.test(c.password || "") ||
@@ -27,7 +35,7 @@ function privateWrite(name, value) {
 function initializeSecrets() {
   // PowerShell creates a fresh owner-only directory before this command.
   if (!fs.statSync(directory).isDirectory() || fs.readdirSync(directory).length) throw new Error("FRESH_PRIVATE_DIRECTORY_REQUIRED");
-  const suffix = randomBytes(8).toString("hex"), common = {host: "127.0.0.1", port: 55432, database: "pedpsy_demo_" + suffix};
+  const suffix = randomBytes(8).toString("hex"), common = {host: "127.0.0.1", port: demoPort(), database: "pedpsy_demo_" + suffix};
   for (const realm of ["owner", "runtime"]) privateWrite(realm + ".json", JSON.stringify({...common, user: "pedpsy_" + realm + "_" + suffix,
     password: randomBytes(32).toString("hex"), ...(realm === "runtime" ? {mfaKey: randomBytes(32).toString("base64")} : {})}));
   const password = randomBytes(32).toString("hex");
@@ -37,7 +45,7 @@ function initializeSecrets() {
 function configureCluster() {
   const cluster = path.join(directory, "cluster");
   if (fs.readFileSync(path.join(cluster, "PG_VERSION"), "utf8").trim() !== "18") throw new Error("PG18_REQUIRED");
-  fs.appendFileSync(path.join(cluster, "postgresql.conf"), "\n# PedPsy private synthetic development cluster\nlisten_addresses = '127.0.0.1'\nport = 55432\nmax_connections = 40\nshared_buffers = '64MB'\npassword_encryption = 'scram-sha-256'\nlog_statement = 'none'\nlog_min_error_statement = 'panic'\nlog_parameter_max_length = 0\nlog_parameter_max_length_on_error = 0\n");
+  fs.appendFileSync(path.join(cluster, "postgresql.conf"), "\n# PedPsy private synthetic development cluster\nlisten_addresses = '127.0.0.1'\nport = " + demoPort() + "\nmax_connections = 40\nshared_buffers = '64MB'\npassword_encryption = 'scram-sha-256'\nlog_statement = 'none'\nlog_min_error_statement = 'panic'\nlog_parameter_max_length = 0\nlog_parameter_max_length_on_error = 0\n");
   fs.writeFileSync(path.join(cluster, "pg_hba.conf"), "# Loopback only; no trust or remote rules\nhost all all 127.0.0.1/32 scram-sha-256\n");
   fs.unlinkSync(path.join(directory, "init-password.txt")); // Only our one-use initialization file.
 }
@@ -94,7 +102,7 @@ async function main(command) {
   if (command === "configure") {configureCluster(); return;}
   if (command === "prepare") {
     const c = JSON.parse(fs.readFileSync(path.join(directory, "control.json"), "utf8"));
-    if (c.host !== "127.0.0.1" || c.port !== 55432 || c.user !== "postgres" || c.database !== "postgres" || !/^[a-f0-9]{64}$/.test(c.password)) throw new Error("INVALID_CONTROL_CONFIG");
+    if (c.host !== "127.0.0.1" || c.port !== demoPort() || c.user !== "postgres" || c.database !== "postgres" || !/^[a-f0-9]{64}$/.test(c.password)) throw new Error("INVALID_CONTROL_CONFIG");
     const pool = new Pool(pgConfig(c));
     try {await createDemoDatabase(pool, readConfig("owner"), readConfig("runtime")); console.log("Local synthetic database prepared; no staff account or session created.");}
     finally {await pool.end();} return;

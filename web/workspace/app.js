@@ -24,7 +24,26 @@
     for(const action of actions){const button=document.createElement("button");button.type="button";button.className="secondary";button.textContent=action.label;if(action.stageOpen)button.dataset.stageOpen="true";button.addEventListener("click",()=>run(action.fn));tools.append(button);}node.append(tools);container.append(node);}
   function studyRows(id,studies){$(id).replaceChildren();if(!studies.length)$(id).textContent="Исследований пока нет.";for(const s of studies)row($(id),s.title,studyStates[s.status]||s.status,[{label:"Открыть",fn:()=>openDesign(s.id)}]);}
   function selectOptions(id,items,label,createLabel){const select=$(id);select.replaceChildren();if(createLabel){const o=document.createElement("option");o.value="";o.textContent=createLabel;select.append(o);}for(const item of items){const o=document.createElement("option");o.value=item.id;o.textContent=label(item);select.append(o);}}
-  function openStudySection(section){
+  function renderHubActivation(){
+    if(!design||realm!=="researcher"){$("hub-activation").hidden=true;return;}
+    const groups=(design.groups||[]).filter(g=>g.status!=="closed");
+    const stages=(design.stages||[]).filter(t=>t.status!=="closed");
+    const assignments=(design.assignments||[]).filter(a=>a.status==="active");
+    const missing=[];
+    for(const g of groups)for(const t of stages){
+      if(!assignments.some(a=>a.group_id===g.id&&a.stage_id===t.id))missing.push(g.name+" × "+t.code);
+    }
+    const draft=design.status==="draft";
+    const items=[
+      (groups.length?"✓":"✗")+" активных групп: "+groups.length,
+      (stages.length?"✓":"✗")+" активных этапов: "+stages.length,
+      (missing.length?"✗":"✓")+" пар «группа × этап» без назначений: "+missing.length+(missing.length?" — "+missing.join(", "):"")
+    ];
+    $("hub-activation-checklist").replaceChildren(...items.map(text=>{const li=document.createElement("li");li.textContent=text;return li;}));
+    $("hub-activation-status").textContent="Состояние: "+(studyStates[design.status]||design.status)+(draft?"":" — дизайн закреплён");
+    const button=$("hub-activate");button.hidden=!draft;button.disabled=!groups.length||!stages.length||missing.length>0;
+    $("hub-activation").hidden=design.status==="closed";
+  }  function openStudySection(section){
     activeStudySection=section;
     show("study-hub",section==="hub");
     show("study-design-section",section==="design");
@@ -32,6 +51,7 @@
     show("study-methods-section",section==="methods");
     show("back-study-hub",section!=="hub"&&realm==="researcher");
     if(section==="methods")renderMethodCatalog();
+    if(section==="hub")renderHubActivation();
     $("heading").textContent=section==="hub"?"Исследование":({design:"Дизайн исследования",participants:"Сведения об участниках",methods:"Методики"}[section]||"Исследование");
   }
   function closeStudy(){clearDesign();show("researcher-home",realm==="researcher");$("heading").textContent=realm==="researcher"?"Мои исследования":"Рабочий кабинет";}
@@ -56,16 +76,19 @@
   function editGroup(id=""){const g=design?.groups.find(x=>x.id===id);$("group-edit").value=g?.id||"";$("group-name").value=g?.name||"";$("group-kind").value=g?.kind||"experimental";$("group-note").value=g?design.group_notes?.[g.id]||"":"";show("group-form");}
   function editStage(id=""){const s=design?.stages.find(x=>x.id===id),next=design?.stages.length?Math.max(...design.stages.map(x=>x.ordinal))+1:0;$("stage-edit").value=s?.id||"";$("stage-code").value=s?.code||"T"+next;$("stage-ordinal").value=s?.ordinal??next;$("stage-note").value=s?design.stage_notes?.[s.id]||"":"";show("stage-form");}
   function openCopyAssignments(stageId){const stage=design.stages.find(x=>x.id===stageId),source=design.stages.filter(x=>x.ordinal<stage.ordinal).sort((a,b)=>b.ordinal-a.ordinal)[0];if(!source)throw Error("У первого этапа нет предыдущего этапа.");const names=id=>design.assignments.filter(a=>a.stage_id===id&&a.status==="active").map(a=>info(design.catalog.find(r=>r.id===a.release_id)||{})?.title||"Методика");copyAssignmentsStage=stageId;$("copy-assignments-summary").textContent=source.code+": "+(names(source.id).join(", ")||"нет методик")+". "+stage.code+" сейчас: "+(names(stage.id).join(", ")||"нет методик")+".";$("copy-assignments-dialog").showModal();}
-  async function copyAssignments(){if(!copyAssignmentsStage)throw Error("Выберите этап.");await workbenchWrite("copy_assignments",{stage_id:copyAssignmentsStage});$("copy-assignments-dialog").close();copyAssignmentsStage="";status("Методики скопированы с предыдущего этапа.");}
+  async function closeStage(stageId){
+    if(!confirm("Удалить этап? Он закроется и перестанет участвовать в активации. Назначения методик этого этапа будут сняты."))return;
+    await workbenchWrite("delete_stage",{stage_id:stageId});status("Этап удалён.");
+  }  async function copyAssignments(){if(!copyAssignmentsStage)throw Error("Выберите этап.");await workbenchWrite("copy_assignments",{stage_id:copyAssignmentsStage});$("copy-assignments-dialog").close();copyAssignmentsStage="";status("Методики скопированы с предыдущего этапа.");}
   function renderDesign(){if(!design)return;const d=design,draft=d.status==="draft";$("design-screen").dataset.version=String(d.version);if(realm==="researcher"){const previous=$("passport-group").value;selectOptions("passport-group",d.groups,g=>g.name);if(d.groups.some(g=>g.id===previous))$("passport-group").value=previous;}$("design-title").textContent=d.title;$("design-meta").textContent=studyStates[d.status]||d.status;
     show("group-invitations-panel",d.status==="active");selectOptions("invitation-group",d.groups,g=>g.name);$("group-invitation-link").value="";show("group-link-box",false);invitationLocked=true;$("group-invitation-list").replaceChildren();
     stageRows=[];openingLocked=true;$("stage-access-list").replaceChildren();show("stage-access-panel",d.status==="active");selectOptions("stage-access-group",d.groups,g=>g.name);
-    show("design-screen");show("researcher-home",false);show("design-edit",draft);show("design-lock-note",designLocked);$("design-fields").disabled=designLocked;show("activate-study",draft);show("archive-study",d.status!=="closed");openStudySection(realm==="researcher"?activeStudySection:"design");
+    show("design-screen");show("researcher-home",false);show("design-edit",draft);show("design-lock-note",designLocked);$("design-fields").disabled=designLocked;show("activate-study",draft);show("archive-study",d.status!=="closed");renderHubActivation();openStudySection(realm==="researcher"?activeStudySection:"design");
     $("design-matrix").replaceChildren();const table=document.createElement("table"),head=document.createElement("thead"),header=document.createElement("tr");
     const cell=(parent,tag,text)=>{const c=document.createElement(tag);c.textContent=text;parent.append(c);return c;};cell(header,"th","Группа / этап");for(const stage of d.stages)cell(header,"th",stage.code+(d.stage_notes?.[stage.id]?" — "+d.stage_notes[stage.id]:""));head.append(header);table.append(head);const body=document.createElement("tbody");
     for(const group of d.groups){const line=document.createElement("tr");cell(line,"th",group.name+" · "+({control:"КГ",experimental:"ЭГ",other:"Другая"}[group.kind]));for(const stage of d.stages){const set=d.assignments.filter(a=>a.group_id===group.id&&a.stage_id===stage.id&&a.status==="active");cell(line,"td",set.map(a=>info(d.catalog.find(r=>r.id===a.release_id)||{})?.title||"Методика").join(", ")||"Не назначено");}body.append(line);}table.append(body);$("design-matrix").append(table);if(!d.groups.length||!d.stages.length){const hint=document.createElement("p");hint.className="muted";hint.textContent="Добавьте группы и этапы, затем назначьте методики каждой паре.";$("design-matrix").append(hint);}
     $("group-cards").replaceChildren();for(const group of d.groups)row($("group-cards"),group.name,({control:"Контрольная",experimental:"Экспериментальная",other:"Другая"}[group.kind])+(d.group_notes?.[group.id]?" · "+d.group_notes[group.id]:""),draft?[{label:"Редактировать",fn:()=>editGroup(group.id)}]:[]);
-    $("stage-cards").replaceChildren();for(const stage of d.stages)row($("stage-cards"),stage.code,d.stage_notes?.[stage.id]||"Без пояснения",draft?[{label:"Редактировать",fn:()=>editStage(stage.id)},...(stage.ordinal>0&&realm==="researcher"?[{label:"Скопировать методики с предыдущего этапа",fn:()=>openCopyAssignments(stage.id)}]:[])]:[]);
+    $("stage-cards").replaceChildren();for(const stage of d.stages.filter(x=>x.status!=="closed"))row($("stage-cards"),stage.code,d.stage_notes?.[stage.id]||"Без пояснения",draft?[{label:"Редактировать",fn:()=>editStage(stage.id)},...(stage.ordinal>0&&realm==="researcher"?[{label:"Скопировать методики с предыдущего этапа",fn:()=>openCopyAssignments(stage.id)}]:[]),...(stage.ordinal>0&&realm==="researcher"?[{label:"Удалить этап",fn:()=>closeStage(stage.id)}]:[])]:[]);
     const previousGroup=$("method-target-group").value,previousStage=$("method-target-stage").value;selectOptions("method-target-group",d.groups,g=>g.name);selectOptions("method-target-stage",d.stages,s=>s.code);if(d.groups.some(g=>g.id===previousGroup))$("method-target-group").value=previousGroup;else if(d.groups.some(g=>g.kind==="experimental"))$("method-target-group").value=d.groups.find(g=>g.kind==="experimental").id;if(d.stages.some(s=>s.id===previousStage))$("method-target-stage").value=previousStage;else if(d.stages.length)$("method-target-stage").value=d.stages.slice().sort((a,b)=>a.ordinal-b.ordinal)[0].id;methodSelection=targetAssignments();renderMethodCatalog();
     show("group-form",false);show("stage-form",false);if(draft){selectOptions("copy-source",d.stages,s=>s.code);$("rename-title").value=d.title;const next=d.stages.length?Math.max(...d.stages.map(s=>s.ordinal))+1:0;$("copy-code").value="T"+next;$("copy-ordinal").value=next;}
   }
@@ -128,7 +151,8 @@
   $("add-stage").onclick=()=>editStage();$("cancel-stage").onclick=()=>show("stage-form",false);
   $("stage-form").addEventListener("submit",e=>{e.preventDefault();const id=$("stage-edit").value,input={code:$("stage-code").value,ordinal:Number($("stage-ordinal").value)};run(()=>{if(realm==="researcher")return workbenchWrite("stage",{id:id||null,code:input.code,note:$("stage-note").value});if(id)return saveDesign("/stages/"+id,input,"PATCH");const source=design.stages.slice().sort((a,b)=>b.ordinal-a.ordinal)[0];return source?saveDesign("/stages/copy",{source_stage_id:source.id,...input}):saveDesign("/stages",input,"POST");});});
   $("copy-stage-form").addEventListener("submit",e=>{e.preventDefault();const input={source_stage_id:$("copy-source").value,code:$("copy-code").value,ordinal:Number($("copy-ordinal").value)};run(()=>saveDesign("/stages/copy",input));});
-  $("activate-study").onclick=()=>run(async()=>{if(!confirm("Закрепить дизайн и активировать учебное исследование? Настройки больше нельзя будет изменить."))return;await saveDesign("/lifecycle",{status:"active"});});
+  $("hub-activate").onclick=()=>run(async()=>{if(!confirm("Закрепить дизайн и активировать учебное исследование? Настройки больше нельзя будет изменить."))return;await saveDesign("/lifecycle",{status:"active"});});
+  $("activate-study").onclick=$("hub-activate").onclick;
   $("archive-study").onclick=()=>run(async()=>{if(!confirm("Закрыть исследование? Данные сохранятся, но новое заполнение и изменение дизайна остановятся. Возобновление пока не предусмотрено."))return;await saveDesign("/lifecycle",{status:"closed"});});
   $("method-search").oninput=renderMethodCatalog;$("method-target-group").onchange=resetMethodSelection;$("method-target-stage").onchange=resetMethodSelection;$("save-method-selection").onclick=()=>run(saveMethodSelection);$("copy-assignments-form").addEventListener("submit",e=>{e.preventDefault();run(copyAssignments);});$("cancel-copy-assignments").onclick=()=>{$("copy-assignments-dialog").close();copyAssignmentsStage="";};
   $("passport-all-groups").onchange=()=>run(async()=>{show("passport-group-label",!$("passport-all-groups").checked);await loadPassportSchema();});$("passport-group").onchange=()=>run(loadPassportSchema);

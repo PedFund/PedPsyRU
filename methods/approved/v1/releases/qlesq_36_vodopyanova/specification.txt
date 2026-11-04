@@ -1,0 +1,5 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4,5,6,7,8,9,10, 36 items, all required.
+Scales: work, achievement, health, close_relations, support, optimism, tension, self_control, negative_emotions.
+Derived: quality_of_life_index=mean(work+achievement+health+close_relations+support+optimism+tension+self_control+negative_emotions).
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.

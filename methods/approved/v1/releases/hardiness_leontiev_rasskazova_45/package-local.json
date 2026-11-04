@@ -1,0 +1,1358 @@
+{
+  "schema_version": "1.0",
+  "method_id": "hardiness_leontiev_rasskazova_45",
+  "package_version": "1.0.0",
+  "title": "Тест жизнестойкости (45)",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "hardiness_leontiev_rasskazova_45_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "ordinal": 31,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "ordinal": 32,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "ordinal": 33,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "ordinal": 34,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q35",
+      "ordinal": 35,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q36",
+      "ordinal": 36,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q37",
+      "ordinal": 37,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q38",
+      "ordinal": 38,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q39",
+      "ordinal": 39,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q40",
+      "ordinal": 40,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q41",
+      "ordinal": 41,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q42",
+      "ordinal": 42,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q43",
+      "ordinal": 43,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q44",
+      "ordinal": 44,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    },
+    {
+      "id": "q45",
+      "ordinal": 45,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Нет"
+        },
+        {
+          "value": "2",
+          "label": "Скорее нет"
+        },
+        {
+          "value": "3",
+          "label": "Скорее да"
+        },
+        {
+          "value": "4",
+          "label": "Да"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "commitment",
+      "label": "Вовлечённость",
+      "min": -4,
+      "max": 50,
+      "direction": "not_specified"
+    },
+    {
+      "id": "control",
+      "label": "Контроль",
+      "min": -5,
+      "max": 46,
+      "direction": "not_specified"
+    },
+    {
+      "id": "challenge",
+      "label": "Принятие риска",
+      "min": -6,
+      "max": 24,
+      "direction": "not_specified"
+    },
+    {
+      "id": "total_hardiness",
+      "label": "Жизнестойкость",
+      "min": -15,
+      "max": 120,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        },
+        {
+          "item_id": "q29",
+          "value": "1"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "1"
+        },
+        {
+          "item_id": "q33",
+          "value": "1"
+        },
+        {
+          "item_id": "q34",
+          "value": "1"
+        },
+        {
+          "item_id": "q35",
+          "value": "1"
+        },
+        {
+          "item_id": "q36",
+          "value": "1"
+        },
+        {
+          "item_id": "q37",
+          "value": "1"
+        },
+        {
+          "item_id": "q38",
+          "value": "1"
+        },
+        {
+          "item_id": "q39",
+          "value": "1"
+        },
+        {
+          "item_id": "q40",
+          "value": "1"
+        },
+        {
+          "item_id": "q41",
+          "value": "1"
+        },
+        {
+          "item_id": "q42",
+          "value": "1"
+        },
+        {
+          "item_id": "q43",
+          "value": "1"
+        },
+        {
+          "item_id": "q44",
+          "value": "1"
+        },
+        {
+          "item_id": "q45",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "commitment",
+          "value": 33
+        },
+        {
+          "scale_id": "control",
+          "value": 33
+        },
+        {
+          "scale_id": "challenge",
+          "value": 24
+        },
+        {
+          "scale_id": "total_hardiness",
+          "value": 90
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "hardiness_leontiev_rasskazova_45_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 23475,
+      "sha256": "afd02fa03399f74c20d67528db0a782e851691bac8fde1cb41ef8d4a56b31bd6",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 2133,
+      "sha256": "946c4826c82f800b2f6bf807a986e405ec0cb98154975dd139f381920ff5def1",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 484,
+      "sha256": "fbcff1fa63f313c1637baf92866bcc74b138053fa7ef639c664851fe8a08124c",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 339,
+      "sha256": "3337a7c7c9247365d43c92d7f8e06d3e10324134db22a336e8d74115d93fee31",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

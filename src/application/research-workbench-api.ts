@@ -7,7 +7,7 @@ function invalid():never{throw new ParticipationError(400,"INVALID_STUDY_INPUT")
 function optionalId(value:unknown){return value===null?null:studyId(value);}
 function note(value:unknown){if(typeof value!=="string"||value.length>500||/[\u0000-\u001f\u007f]/.test(value))invalid();return value.trim();}
 export function workbenchInput(action:WorkbenchAction,input:unknown):{version:number;data:Record<string,unknown>}{
-  const keys={initialize:[],group:["id","name","kind","note"],stage:["id","code","note"],assign:["all","group_id","stage_id","release_ids"],copy_assignments:["stage_id"],schema:["all","group_id","schema_version","basic_fields","fields"],remind:["group_id","stage_id","request_id"]}[action];
+  const keys={initialize:[],group:["id","name","kind","note"],stage:["id","code","note"],assign:["all","group_id","stage_id","release_ids"],copy_assignments:["stage_id"],delete_stage:["stage_id"],schema:["all","group_id","schema_version","basic_fields","fields"],remind:["group_id","stage_id","request_id"]}[action];
   const b=studyObject(input,["expected_version",...keys]);const version=studyVersion(b.expected_version);let data:Record<string,unknown>={};
   if(action==="group"){if(!["control","experimental","other"].includes(String(b.kind)))invalid();data={id:optionalId(b.id),name:studyText(b.name,100),kind:b.kind,note:note(b.note)};}
   if(action==="stage"){if(typeof b.code!=="string"||!/^T(?:0|[1-4]?\d)$/.test(b.code))invalid();data={id:optionalId(b.id),code:b.code,note:note(b.note)};}
@@ -16,6 +16,7 @@ export function workbenchInput(action:WorkbenchAction,input:unknown):{version:nu
     data={all:b.all,group_id:b.all?null:studyId(b.group_id),stage_id:b.all?null:studyId(b.stage_id),release_ids:b.release_ids.map(studyId)};
   }
   if(action==="copy_assignments")data={stage_id:studyId(b.stage_id)};
+  if(action==="delete_stage")data={stage_id:studyId(b.stage_id)};
   if(action==="schema"){
     const allowed=["sex","age","city","organization","education"],basic=b.basic_fields;
     if(typeof b.all!=="boolean"||!Array.isArray(basic)||basic.length>allowed.length||

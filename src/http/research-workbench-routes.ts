@@ -13,7 +13,7 @@ export function registerResearchWorkbench(app:FastifyInstance,origin:string,apis
   const base="/api/v2/researcher/studies/:id/workbench";
   app.get(base,async r=>apis.research.read(token(r,researcher),id(r)));
   app.get(base+"/progress",async r=>apis.research.progress(token(r,researcher),id(r)));
-  for(const action of ["initialize","group","stage","assign","copy_assignments","schema","remind"] as WorkbenchAction[])app.post(base+"/"+action,async r=>apis.research.change(token(r,researcher),id(r),action,r.body,proof(r)));
+  for(const action of ["initialize","group","stage","delete_stage","assign","copy_assignments","schema","remind"] as WorkbenchAction[])app.post(base+"/"+action,async r=>apis.research.change(token(r,researcher),id(r),action,r.body,proof(r)));
   app.get("/api/v2/participant/profile",async r=>apis.profile.read(token(r,participant)));
   for(const action of ["restart","save","complete"] as const)app.post("/api/v2/participant/profile/"+action,async r=>apis.profile.change(token(r,participant),action,r.body,proof(r)));
 }

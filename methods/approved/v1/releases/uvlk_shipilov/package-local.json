@@ -1,0 +1,1469 @@
+{
+  "schema_version": "1.0",
+  "method_id": "uvlk_shipilov",
+  "package_version": "1.0.0",
+  "title": "Уровень внутриличностной конфликтности",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "uvlk_shipilov_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "ordinal": 31,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "ordinal": 32,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "ordinal": 33,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "ordinal": 34,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q35",
+      "ordinal": 35,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    },
+    {
+      "id": "q36",
+      "ordinal": 36,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Не переживаю"
+        },
+        {
+          "value": "2",
+          "label": "Слегка переживаю"
+        },
+        {
+          "value": "3",
+          "label": "Переживаю"
+        },
+        {
+          "value": "4",
+          "label": "В отчаянии"
+        },
+        {
+          "value": "5",
+          "label": "Открыто выражаю свои эмоции"
+        },
+        {
+          "value": "6",
+          "label": "Другое"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "motivational",
+      "label": "Мотивационный конфликт",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "moral",
+      "label": "Моральный конфликт",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "unrealized_desire",
+      "label": "Конфликт нереализованного желания",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "role",
+      "label": "Ролевой конфликт",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "adaptation",
+      "label": "Адаптационный конфликт",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "inadequate_self_esteem",
+      "label": "Конфликт неадекватной самооценки",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "motivational_sphere",
+      "label": "Мотивационная сфера",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "obligation_sphere",
+      "label": "Сфера долженствования",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "self_esteem_sphere",
+      "label": "Сфера самооценки",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "total",
+      "label": "Общий уровень внутриличностной конфликтности",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        },
+        {
+          "item_id": "q29",
+          "value": "1"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "1"
+        },
+        {
+          "item_id": "q33",
+          "value": "1"
+        },
+        {
+          "item_id": "q34",
+          "value": "1"
+        },
+        {
+          "item_id": "q35",
+          "value": "1"
+        },
+        {
+          "item_id": "q36",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "motivational",
+          "value": 0
+        },
+        {
+          "scale_id": "moral",
+          "value": 0
+        },
+        {
+          "scale_id": "unrealized_desire",
+          "value": 0
+        },
+        {
+          "scale_id": "role",
+          "value": 0
+        },
+        {
+          "scale_id": "adaptation",
+          "value": 0
+        },
+        {
+          "scale_id": "inadequate_self_esteem",
+          "value": 0
+        },
+        {
+          "scale_id": "motivational_sphere",
+          "value": 0
+        },
+        {
+          "scale_id": "obligation_sphere",
+          "value": 0
+        },
+        {
+          "scale_id": "self_esteem_sphere",
+          "value": 0
+        },
+        {
+          "scale_id": "total",
+          "value": 0
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "uvlk_shipilov_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 30927,
+      "sha256": "935b0a3773ee4862c478316eec51f72833be9948ba35070177744f9563ccc838",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 2176,
+      "sha256": "225b5877e5e7712ab288e57290f9aa337f2498a2d512b518031d8c1735288506",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 385,
+      "sha256": "a687b4f331903e92a17f7a86aa0843cff9149ca690193d47b48444a7142353c8",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 616,
+      "sha256": "8f801bd311ac7ad0262457ed3118d33489229678318bc29255f46cc60584e444",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

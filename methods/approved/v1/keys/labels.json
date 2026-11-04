@@ -1,0 +1,37 @@
+{
+  "schema_version": "1.0.0",
+  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04",
+  "methods": {
+    "reflexivity_karpov_27": {"reflexivity": "Рефлексивность"},
+    "sjo_20": {
+      "goals": "Цели в жизни",
+      "process": "Процесс жизни",
+      "result": "Результативность жизни",
+      "locus_self": "Локус контроля – Я",
+      "locus_life": "Локус контроля – жизнь",
+      "meaningfulness_total": "Общая осмысленность жизни"
+    },
+    "hardiness_leontiev_rasskazova_45": {
+      "commitment": "Вовлечённость",
+      "control": "Контроль",
+      "challenge": "Принятие риска",
+      "total_hardiness": "Жизнестойкость"
+    },
+    "ttf_atf_10": {
+      "ttf": "Тенденция к прощению (TTF)",
+      "atf": "Отношение к прощению (ATF)"
+    },
+    "uvlk_shipilov": {
+      "motivational": "Мотивационный конфликт",
+      "moral": "Моральный конфликт",
+      "unrealized_desire": "Конфликт нереализованного желания",
+      "role": "Ролевой конфликт",
+      "adaptation": "Адаптационный конфликт",
+      "inadequate_self_esteem": "Конфликт неадекватной самооценки",
+      "motivational_sphere": "Мотивационная сфера",
+      "obligation_sphere": "Сфера долженствования",
+      "self_esteem_sphere": "Сфера самооценки",
+      "total": "Общий уровень внутриличностной конфликтности"
+    }
+  }
+}

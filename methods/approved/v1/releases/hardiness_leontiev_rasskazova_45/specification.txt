@@ -1,0 +1,5 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4, 45 items, all required.
+Scales: commitment, control, challenge.
+Derived: total_hardiness=sum(commitment+control+challenge).
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.

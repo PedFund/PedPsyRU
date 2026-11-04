@@ -8,6 +8,8 @@
   },
   "scripts": {
     "test:pg": "npm run build && node --test tests/postgres-*.integration.js",
+    "test:pg:approved": "npm run build && node --test tests/postgres-approved-v1-online.integration.js",
+    "methods:status": "node scripts/approved-v1-status.js",
     "check:dependencies": "node scripts/check-dependencies.js",
     "build": "node scripts/build.js",
     "typecheck": "tsc --noEmit",
