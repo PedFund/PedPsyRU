@@ -28,6 +28,7 @@
 - [`../METHOD_EXTENSION_CONTRACT.md`](../METHOD_EXTENSION_CONTRACT.md) — versioned runtime для обычных и нестандартных методик; контракт не равен универсальному загрузчику.
 - [`../METHOD_LIBRARY_VALIDATION.md`](../METHOD_LIBRARY_VALIDATION.md) — технические проверки и известные границы переноса.
 - [`legacy/FORM_SOURCES.md`](legacy/FORM_SOURCES.md) — сверка доступных внешних бланков и неоднозначных адаптаций.
+- [`validation/pilot-11/`](validation/pilot-11/README.md) — техническая staging-матрица Issue №75. Она не является runtime allowlist и не делает неполные пакеты назначаемыми.
 
 Идентификаторы и контрольные суммы берутся из существующих JSON-манифестов и package/pins-файлов. Этот README объясняет навигацию и статусы, но не заменяет машинные источники.
 

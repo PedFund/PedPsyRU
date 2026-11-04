@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "contracts": [
+    {
+      "method_id": "uvlk_shipilov",
+      "version": "1.0.0-staging",
+      "item_count": 36,
+      "values": [1, 2, 3, 4, 5, 6],
+      "answer_map": {"1": 0, "2": 1, "3": 2, "4": 3, "5": 0, "6": 0},
+      "scales": {
+        "motivational": [6, 12, 18, 24, 30, 35],
+        "moral": [5, 11, 17, 23, 29, 36],
+        "unrealized_desire": [4, 10, 16, 22, 28, 34],
+        "role": [3, 9, 15, 21, 27, 33],
+        "adaptation": [1, 8, 14, 20, 26, 32],
+        "inadequate_self_esteem": [2, 7, 13, 19, 25, 31]
+      },
+      "derived": {
+        "motivational_sphere": ["motivational", "moral", "unrealized_desire"],
+        "obligation_sphere": ["moral", "role", "adaptation"],
+        "self_esteem_sphere": ["unrealized_desire", "adaptation", "inadequate_self_esteem"],
+        "total": ["motivational", "moral", "unrealized_desire", "role", "adaptation", "inadequate_self_esteem"]
+      },
+      "levels": {"total": [[0, 6, "extremely_low"], [7, 29, "low"], [30, 49, "medium"], [50, 74, "high"], [75, 108, "very_high"]]}
+    },
+    {
+      "method_id": "reflexivity_karpov_27",
+      "version": "1.1.0-staging",
+      "supersedes_norm_only": "1.0.0-local",
+      "item_count": 27,
+      "values": [1, 2, 3, 4, 5, 6, 7],
+      "reverse_max": 8,
+      "scales": {
+        "reflexivity": {
+          "direct": [1, 3, 4, 5, 9, 10, 11, 14, 15, 18, 19, 20, 22, 24, 25],
+          "reverse": [2, 6, 7, 8, 12, 13, 16, 17, 21, 23, 26, 27]
+        }
+      },
+      "sten": [[null, 100, 1], [101, 107, 2], [108, 113, 3], [114, 122, 4], [123, 130, 5], [131, 139, 6], [140, 147, 7], [148, 156, 8], [157, 171, 9], [172, 189, 10]],
+      "sten_levels": [[1, 3, "low"], [4, 6, "medium"], [7, 10, "high"]]
+    },
+    {
+      "method_id": "sjo_20",
+      "version": "1.0.0-staging",
+      "item_count": 20,
+      "values": [1, 2, 3, 4, 5, 6, 7],
+      "reverse_max": 8,
+      "direct": [1, 3, 4, 8, 9, 11, 12, 16, 17],
+      "reverse": [2, 5, 6, 7, 10, 13, 14, 15, 18, 19, 20],
+      "scales": {
+        "goals": [3, 4, 10, 16, 17, 18],
+        "process": [1, 2, 4, 5, 7, 9],
+        "result": [8, 9, 10, 12, 20],
+        "locus_self": [1, 15, 16, 19],
+        "locus_life": [7, 10, 11, 14, 18, 19],
+        "meaningfulness_total": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
+      },
+      "levels": {
+        "meaningfulness_total": [[20, 87, "low"], [88, 118, "medium"], [119, 140, "high"]],
+        "goals": [[6, 26, "low"], [27, 39, "medium"], [40, 42, "high"]],
+        "process": [[6, 26, "low"], [27, 35, "medium"], [36, 42, "high"]],
+        "result": [[5, 20, "low"], [21, 30, "medium"], [31, 35, "high"]],
+        "locus_self": [[4, 16, "low"], [17, 25, "medium"], [26, 28, "high"]],
+        "locus_life": [[6, 23, "low"], [24, 36, "medium"], [37, 42, "high"]]
+      }
+    },
+    {
+      "method_id": "hardiness_leontiev_rasskazova_45",
+      "version": "1.0.0-staging",
+      "item_count": 45,
+      "values": [0, 1, 2, 3],
+      "reverse_max": 3,
+      "scales": {
+        "commitment": {"direct": [4, 12, 22, 23, 24, 29, 41], "reverse": [2, 3, 10, 11, 14, 28, 32, 37, 38, 40, 42]},
+        "control": {"direct": [9, 15, 17, 21, 25, 44], "reverse": [1, 5, 6, 8, 16, 20, 27, 31, 35, 39, 43]},
+        "challenge": {"direct": [34, 45], "reverse": [7, 13, 18, 19, 26, 30, 33, 36]}
+      },
+      "derived": {"total_hardiness": ["commitment", "control", "challenge"]},
+      "levels": {
+        "total_hardiness": [[0, 61, "low"], [62, 99, "medium"], [100, 135, "high"]],
+        "commitment": [[0, 30, "low"], [31, 46, "medium"], [47, 54, "high"]],
+        "control": [[0, 21, "low"], [22, 38, "medium"], [39, 51, "high"]],
+        "challenge": [[0, 9, "low"], [10, 18, "medium"], [19, 30, "high"]]
+      }
+    },
+    {
+      "method_id": "qlesq_36_vodopyanova",
+      "version": "1.1.0-staging",
+      "item_count": 36,
+      "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+      "reverse_max": 11,
+      "reverse": [21, 33, 35],
+      "explicit_direct_exception": [28],
+      "scales": {
+        "work": [1, 6, 13, 15],
+        "achievement": [2, 25, 26, 30],
+        "health": [3, 16, 17, 18],
+        "close_relations": [4, 5, 7, 29],
+        "support": [8, 27, 32, 36],
+        "optimism": [9, 28, 34, 35],
+        "tension": [10, 11, 12, 14],
+        "self_control": [19, 20, 21, 23],
+        "negative_emotions": [22, 24, 31, 33]
+      },
+      "aggregate": {"quality_of_life_index": "mean_of_scale_sums"},
+      "levels": {"quality_of_life_index": [[4, 11, "very_low", "max_exclusive"], [11, 21, "low", "max_exclusive"], [21, 30, "medium", "max_exclusive"], [30, 40, "high", "inclusive"]]}
+    },
+    {
+      "method_id": "co36_kunitsyna_36",
+      "version": "1.0.0-staging",
+      "item_count": 36,
+      "values": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12],
+      "quota": {"1": 1, "10": 3, "11": 2, "12": 1},
+      "scale_calculation": "mean",
+      "scales": {
+        "family_safety": [1, 7, 13], "family_traditions": [4, 10, 16], "family_interpersonal_relations": [6, 12, 18], "family_normative_conformity": [21, 27, 33],
+        "individual_achievement": [2, 8, 14], "individual_power_influence": [20, 26, 32], "individual_hedonism": [19, 25, 31], "individual_activity_stimulation": [22, 28, 34],
+        "universal_independence": [3, 9, 15], "universal_moral_orientation": [5, 29, 35], "universal_tolerance": [24, 30, 36], "universal_spiritual": [11, 17, 23]
+      }
+    },
+    {
+      "method_id": "pvq_rr_57",
+      "version": "1.0.0-staging",
+      "item_count": 57,
+      "values": [1, 2, 3, 4, 5, 6],
+      "scale_calculation": "mean",
+      "scales": {
+        "SDT": [1, 23, 39], "SDA": [16, 30, 56], "ST": [10, 28, 43], "HE": [3, 36, 46], "AC": [17, 32, 48], "FOR": [12, 20, 44], "FOD": [6, 29, 41], "FAC": [9, 24, 49], "SES": [2, 35, 50], "SEP": [13, 26, 53], "COR": [15, 31, 42], "COI": [4, 22, 51], "TR": [18, 33, 40], "HUM": [7, 38, 54], "BED": [19, 27, 55], "BEC": [11, 25, 47], "UNC": [5, 37, 52], "UNN": [8, 21, 45], "UNT": [14, 34, 57]
+      },
+      "higher_order": {
+        "self_transcendence": ["BED", "BEC", "UNC", "UNN", "UNT"],
+        "self_enhancement": ["HE", "AC", "FOR", "FOD", "FAC"],
+        "openness_to_change": ["SDT", "SDA", "ST", "HE"],
+        "conservation": ["FAC", "SES", "SEP", "COR", "COI", "TR", "HUM"]
+      },
+      "calculation": "uncentered_mean_without_rounding",
+      "display_order": ["self_transcendence", "self_enhancement", "openness_to_change", "conservation"]
+    },
+    {
+      "method_id": "ttf_atf_10",
+      "version": "1.0.0-staging",
+      "item_count": 10,
+      "values": [1, 2, 3, 4, 5, 6, 7],
+      "reverse_max": 8,
+      "scales": {
+        "TTF": {"direct": [1, 4], "reverse": [2, 3]},
+        "ATF": {"direct": [5, 7, 10], "reverse": [6, 8, 9]}
+      },
+      "ranges": {"TTF": [4, 28], "ATF": [6, 42]},
+      "norms": null,
+      "categories": null
+    }
+  ]
+}
