@@ -8,7 +8,8 @@ import {scoreUmics,KEY_DIGEST as UMICS_DIGEST} from "../../core/umics-contract.j
 import {scoreLegacyNumeric} from "../../core/legacy-batch-contract.js";
 import {entries as legacyNumericEntries} from "../../core/legacy-batch-data.js";
 import {entries as approvedV1Entries} from "../../core/approved-v1-data.js";
-import {scoreApprovedNumeric, HANDLER_VERSION as APPROVED_NUMERIC_HANDLER} from "../../core/approved-v1-contract.js";
+import {createApprovedNumericScorer, HANDLER_VERSION as APPROVED_NUMERIC_HANDLER} from "../../core/approved-v1-contract.js";
+const scoreApprovedNumeric=createApprovedNumericScorer(approvedV1Entries);
 const TKI_DIGEST="sha256:45bc0c8a1b3f154fb3da5df629da6c42613609633594c4f5f54014a301cded7d";
 
 // Compatibility modules for the existing v1 choice-attempt protocol. A v2 module

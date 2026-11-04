@@ -5,7 +5,7 @@
 // quotas) is reported as unsupported instead of being flattened into a form that
 // would change what the participant actually answers.
 const {createHash} = require('node:crypto');
-const {entries} = require('../core/approved-v1-data.js');
+const {entries} = require('./approved-v1-data.js');
 const {canonicalJson} = require('./releases.js');
 
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');

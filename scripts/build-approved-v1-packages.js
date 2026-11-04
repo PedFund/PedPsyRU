@@ -7,7 +7,7 @@ const fs = require("node:fs");
 const path = require("node:path");
 const {createHash} = require("node:crypto");
 const {approvedV1Releases} = require("../storage/approved-v1-release.js");
-const {entries} = require("../core/approved-v1-data.js");
+const {entries} = require("../storage/approved-v1-data.js");
 const {scoreNumericPassport} = require("../core/numeric-passport.js");
 
 const root = path.resolve(__dirname, "..");

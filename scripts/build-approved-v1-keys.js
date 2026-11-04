@@ -77,6 +77,14 @@ function keyFromContract(contract) {
   return key;
 }
 
+const stagingFile = path.join(root, "methods", "validation", "pilot-11", "manifest.json");
+function stagingAuthor(methodId) {
+  try {
+    const record = JSON.parse(fs.readFileSync(stagingFile, "utf8")).methods.find(item => item.method_id === methodId);
+    return record && typeof record.author === "string" ? record.author.trim() : null;
+  } catch { return null; }
+}
+
 function main() {
   const contracts = JSON.parse(fs.readFileSync(contractsFile, "utf8")).contracts;
   const packages = new Map();
@@ -99,7 +107,8 @@ function main() {
     const text = JSON.stringify(key, null, 2) + "\n";
     fs.writeFileSync(path.join(outDir, contract.method_id + ".key.json"), text, "utf8");
     written.push({method_id: contract.method_id, key_version: contract.version, key_digest: sha(text),
-      package_file: source.file, package_version: source.pkg.version, items: key.items});
+      package_file: source.file, package_version: source.pkg.version, title: source.pkg.title,
+      author: stagingAuthor(contract.method_id), items: key.items});
   }
   const manifest = {schema_version: "1.0.0", generated_by: "scripts/build-approved-v1-keys.js",
     source_contracts: "methods/validation/pilot-11/scoring-contracts.json",

@@ -1,55 +1,37 @@
 'use strict';
-// Declarative approved-library entries: package metadata (form texts) plus the
-// generated numeric key. A missing or inconsistent pair is a hard error; nothing
-// is inferred and no release is implied by the presence of these files.
-const fs = require('node:fs');
-const path = require('node:path');
+// Calculation-layer entries for the approved library. Every key is a static require so
+// this module performs no file-system access; package texts live in storage where the
+// release builder loads them. A key whose digest does not match its file is a hard error.
 const {createHash} = require('node:crypto');
-
-const directory = path.join(__dirname, '..', 'methods', 'approved', 'v1');
-const manifest = JSON.parse(fs.readFileSync(path.join(directory, 'keys', 'manifest.json'), 'utf8'));
+const manifest = require('../methods/approved/v1/keys/manifest.json');
+const keys = {
+  uvlk_shipilov: require('../methods/approved/v1/keys/uvlk_shipilov.key.json'),
+  reflexivity_karpov_27: require('../methods/approved/v1/keys/reflexivity_karpov_27.key.json'),
+  sjo_20: require('../methods/approved/v1/keys/sjo_20.key.json'),
+  hardiness_leontiev_rasskazova_45: require('../methods/approved/v1/keys/hardiness_leontiev_rasskazova_45.key.json'),
+  qlesq_36_vodopyanova: require('../methods/approved/v1/keys/qlesq_36_vodopyanova.key.json'),
+  co36_kunitsyna_36: require('../methods/approved/v1/keys/co36_kunitsyna_36.key.json'),
+  pvq_rr_57: require('../methods/approved/v1/keys/pvq_rr_57.key.json'),
+  ttf_atf_10: require('../methods/approved/v1/keys/ttf_atf_10.key.json')
+};
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');
 
-// Author strings come from the Issue #75 staging manifest; no author is invented.
-function stagingAuthors() {
-  const file = path.join(__dirname, '..', 'methods', 'validation', 'pilot-11', 'manifest.json');
-  const map = new Map();
-  try {
-    for (const item of JSON.parse(fs.readFileSync(file, 'utf8')).methods || []) {
-      if (item && typeof item.method_id === 'string' && typeof item.author === 'string' && item.author.trim()) {
-        map.set(item.method_id, item.author.trim());
-      }
-    }
-  } catch { /* A missing staging manifest only means no author metadata. */ }
-  return map;
-}
+const entries = manifest.keys.map(item => {
+  const key = keys[item.method_id];
+  if (!key) throw new Error('APPROVED_KEY_MISSING:' + item.method_id);
+  const pins = {key: sha(JSON.stringify(key))};
+  return {
+    id: item.method_id,
+    version: item.key_version,
+    methodVersionId: item.method_id + '@' + item.key_version,
+    key,
+    pins,
+    title: item.title,
+    itemCount: key.items,
+    valid: key.valid.map(String),
+    authors: item.author ? [item.author] : [],
+    search: item.title ? [item.title] : []
+  };
+});
 
-function loadApprovedV1() {
-  const entries = [];
-  const authors = stagingAuthors();
-  for (const item of manifest.keys) {
-    const keyText = fs.readFileSync(path.join(directory, 'keys', item.method_id + '.key.json'), 'utf8');
-    const packageText = fs.readFileSync(path.join(directory, item.package_file), 'utf8');
-    const key = JSON.parse(keyText), pkg = JSON.parse(packageText);
-    if (!Array.isArray(pkg.items) || pkg.items.length !== key.items) throw new Error('APPROVED_KEY_ITEM_MISMATCH:' + item.method_id);
-    const ids = pkg.items.map(entry => entry && entry.id);
-    if (ids.some((id, index) => id !== 'q' + String(index + 1).padStart(2, '0'))) throw new Error('APPROVED_ITEM_IDS_INVALID:' + item.method_id);
-    entries.push({
-      id: item.method_id,
-      version: item.key_version,
-      methodVersionId: item.method_id + '@' + item.key_version,
-      key,
-      pins: {key: sha(JSON.stringify(key))},
-      package: pkg,
-      title: pkg.title,
-      itemCount: key.items,
-      valid: key.valid.map(String),
-      authors: authors.has(item.method_id) ? [authors.get(item.method_id)] : [],
-      search: [pkg.title]
-    });
-  }
-  return entries;
-}
-
-const entries = loadApprovedV1();
-module.exports = {entries, loadApprovedV1};
+module.exports = {entries};

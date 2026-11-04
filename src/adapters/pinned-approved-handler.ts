@@ -2,7 +2,9 @@ import {readFileSync} from "node:fs";
 import {resolve} from "node:path";
 import {canonicalJson} from "../../storage/releases.js";
 import {approvedV1Releases} from "../../storage/approved-v1-release.js";
-import {scoreApprovedNumeric,CONTRACT_VERSION,HANDLER_VERSION} from "../../core/approved-v1-contract.js";
+import {createApprovedNumericScorer,CONTRACT_VERSION,HANDLER_VERSION} from "../../core/approved-v1-contract.js";
+import {entries as approvedV1Entries} from "../../core/approved-v1-data.js";
+const scoreApprovedNumeric=createApprovedNumericScorer(approvedV1Entries);
 import {ParticipationError} from "../ports/errors.js";
 import type {MethodHandlerRegistry,PinnedMethodHandler} from "../ports/method-handlers.js";
 
