@@ -48,7 +48,7 @@ export const builtinInstrumentRegistry=createMethodRuntimeRegistry([
       let id=base,index=2;
       while(seen.has(id))id=base+"_"+(index++);
       seen.add(id);
-      return {id,label:(entry.labels&&entry.labels[name])||name,kind:"raw"};
+      const ruLabels=entry.labels||{};const cut=name.indexOf(" – ");const stem=cut<0?name:name.slice(0,cut);const tail=cut<0?"":name.slice(cut);const ru=ruLabels[stem]||ruLabels[stem.toLowerCase()]||ruLabels[name];return {id,label:ru?ru+tail:name,kind:"raw"};
     });
     return choices({method:entry.methodVersionId,handler:APPROVED_NUMERIC_HANDLER,digest:entry.pins.key,title:entry.title,
       authors:entry.authors.length?[...entry.authors]:[entry.title],count:entry.itemCount,values:[...entry.valid],
