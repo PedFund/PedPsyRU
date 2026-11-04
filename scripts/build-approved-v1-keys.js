@@ -92,6 +92,36 @@ function stagingAuthor(methodId) {
   } catch { return null; }
 }
 
+// A package may describe its own scoring completely (scale item lists, reverse formula
+// and overall cut-offs). Such a package is owner-supplied data, not a reconstruction:
+// the key is built from it verbatim and only the scale ids are assigned explicitly.
+const PACKAGE_SCALE_IDS = {
+  ryff_pwb_84_shevelenkova_fesenko: ['positive_relations', 'autonomy', 'environment_mastery', 'personal_growth', 'purpose_in_life', 'self_acceptance']
+};
+
+function keyFromPackage(pkg) {
+  const ids = PACKAGE_SCALE_IDS[pkg.id];
+  if (!ids) return null;
+  if (!Array.isArray(pkg.items) || !Array.isArray(pkg.scales) || pkg.scales.length !== ids.length) {
+    throw new Error(pkg.id + ':SCALE_COUNT_MISMATCH');
+  }
+  const reverseMax = 7;
+  const scales = {};
+  pkg.scales.forEach((scale, index) => {
+    const direct = (scale.direct_items || []).slice().sort((a, b) => a - b);
+    const reverse = (scale.reverse_items || []).slice().sort((a, b) => a - b);
+    if (!direct.length || !reverse.length) throw new Error(pkg.id + ':EMPTY_SCALE');
+    scales[ids[index]] = {direct, reverse, reverseMax, aggregate: 'sum'};
+  });
+  const levels = {};
+  const cuts = pkg.scoring && pkg.scoring.overall_cutoffs_source;
+  if (Array.isArray(cuts) && cuts.length) levels.overall = cuts.map(cut => [cut.min, cut.max, cut.level]);
+  return {id: pkg.id, key_version: '1.0.0-staging', type: 'passport', items: pkg.items.length,
+    valid: [1, 2, 3, 4, 5, 6], reverseMax, scales,
+    derived: {overall: {op: 'sum', inputs: ids.slice()}},
+    ...(Object.keys(levels).length ? {levels} : {})};
+}
+
 function main() {
   const contracts = JSON.parse(fs.readFileSync(contractsFile, "utf8")).contracts;
   const packages = new Map();
@@ -117,6 +147,19 @@ function main() {
       package_file: source.file, package_version: source.pkg.version, title: source.pkg.title,
       author: stagingAuthor(contract.method_id), items: key.items});
   }
+  for (const [id, source] of packages) {
+    if (written.some(entry => entry.method_id === id)) continue;
+    let key;
+    try { key = keyFromPackage(source.pkg); }
+    catch (error) { skipped.push({method_id: id, reason: error.message}); continue; }
+    if (!key) { skipped.push({method_id: id, reason: 'NO_CONTRACT'}); continue; }
+    const text = JSON.stringify(key, null, 2) + "\n";
+    fs.writeFileSync(path.join(outDir, id + ".key.json"), text, "utf8");
+    written.push({method_id: id, key_version: key.key_version, key_digest: sha(text),
+      package_file: source.file, package_version: source.pkg.version, title: source.pkg.title,
+      author: stagingAuthor(id), items: key.items});
+  }
+
   const manifest = {schema_version: "1.0.0", generated_by: "scripts/build-approved-v1-keys.js",
     source_contracts: "methods/validation/pilot-11/scoring-contracts.json",
     note: "Declarative keys for scoreNumericPassport. Not a release, not scientific approval.",

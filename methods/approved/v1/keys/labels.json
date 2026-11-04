@@ -2,7 +2,9 @@
   "schema_version": "1.0.0",
   "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04",
   "methods": {
-    "reflexivity_karpov_27": {"reflexivity": "Рефлексивность"},
+    "reflexivity_karpov_27": {
+      "reflexivity": "Рефлексивность"
+    },
     "sjo_20": {
       "goals": "Цели в жизни",
       "process": "Процесс жизни",
@@ -32,6 +34,15 @@
       "obligation_sphere": "Сфера долженствования",
       "self_esteem_sphere": "Сфера самооценки",
       "total": "Общий уровень внутриличностной конфликтности"
+    },
+    "ryff_pwb_84_shevelenkova_fesenko": {
+      "positive_relations": "Положительные отношения с другими",
+      "autonomy": "Автономия",
+      "environment_mastery": "Управление окружением",
+      "personal_growth": "Личностный рост",
+      "purpose_in_life": "Цель в жизни",
+      "self_acceptance": "Самопринятие",
+      "overall": "Психологическое благополучие (общий балл)"
     }
   }
 }

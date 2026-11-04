@@ -83,7 +83,26 @@
       "title": "Тенденция к прощению / отношение к прощению",
       "author": "Т. Браун; русская адаптация Е. С. Кононовой и Н. В. Пуговкина",
       "items": 10
+    },
+    {
+      "method_id": "ryff_pwb_84_shevelenkova_fesenko",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:0d766fdd7a185a57c2af21705bf5bc2317c795f46c9d88a39d4eb5a5f0d690fd",
+      "package_file": "02_МетодТест_02_Шкала_психологического_благополучия_Рифф.json",
+      "package_version": "1.0.0-staging",
+      "title": "Шкала психологического благополучия К. Рифф",
+      "author": null,
+      "items": 84
     }
   ],
-  "skipped": []
+  "skipped": [
+    {
+      "method_id": "motkov_psychological_culture_18",
+      "reason": "NO_CONTRACT"
+    },
+    {
+      "method_id": "tki_ru_30_pairs",
+      "reason": "NO_CONTRACT"
+    }
+  ]
 }
