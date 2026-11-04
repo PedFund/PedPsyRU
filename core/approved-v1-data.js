@@ -13,7 +13,8 @@ const keys = {
   qlesq_36_vodopyanova: require('../methods/approved/v1/keys/qlesq_36_vodopyanova.key.json'),
   co36_kunitsyna_36: require('../methods/approved/v1/keys/co36_kunitsyna_36.key.json'),
   pvq_rr_57: require('../methods/approved/v1/keys/pvq_rr_57.key.json'),
-  ttf_atf_10: require('../methods/approved/v1/keys/ttf_atf_10.key.json')
+  ttf_atf_10: require('../methods/approved/v1/keys/ttf_atf_10.key.json'),
+  ryff_pwb_84_shevelenkova_fesenko: require('../methods/approved/v1/keys/ryff_pwb_84_shevelenkova_fesenko.key.json')
 };
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');
 

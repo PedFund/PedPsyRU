@@ -38,6 +38,12 @@
       "package_version": "1.0.0-staging",
       "scales": 2,
       "artifacts": 4
+    },
+    {
+      "id": "ryff_pwb_84_shevelenkova_fesenko",
+      "package_version": "1.0.0-staging",
+      "scales": 7,
+      "artifacts": 4
     }
   ]
 }

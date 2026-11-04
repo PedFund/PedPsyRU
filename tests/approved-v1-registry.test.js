@@ -16,10 +16,10 @@ const requestFor = (entry, value) => ({contract_version: "1.0", method_version_i
 test("the registry exposes seven approved packages and deliberately omits CO-36", () => {
   const descriptors = builtinInstrumentRegistry.descriptors();
   const approved = descriptors.filter(d => d.handler_version === "approved-numeric-1.0.0");
-  assert.equal(approved.length, 7);
+  assert.equal(approved.length, 8);
   assert.deepEqual(approved.map(d => d.method_version_id).sort(), [
     "hardiness_leontiev_rasskazova_45@1.0.0-staging", "pvq_rr_57@1.0.0-staging",
-    "qlesq_36_vodopyanova@1.1.0-staging", "reflexivity_karpov_27@1.1.0-staging",
+    "qlesq_36_vodopyanova@1.1.0-staging", "reflexivity_karpov_27@1.1.0-staging", "ryff_pwb_84_shevelenkova_fesenko@1.0.0-staging",
     "sjo_20@1.0.0-staging", "ttf_atf_10@1.0.0-staging", "uvlk_shipilov@1.0.0-staging"]);
   assert.equal(descriptors.some(d => d.method_version_id.startsWith("co36_kunitsyna_36")), false);
 });
@@ -28,9 +28,9 @@ test("Shipilov scores through the registry with the approved numbers", () => {
   const entry = entries.find(e => e.id === "uvlk_shipilov");
   const result = builtinInstrumentRegistry.calculate(identityFor(entry), requestFor(entry, 4));
   assert.equal(result.status, "scored");
-  const total = result.measures.find(m => m.label === "total");
+  const total = result.measures.find(m => m.code === "total");
   assert.equal(total.value, 108);
-  const level = result.classifications.find(c => c.label === "total – уровень");
+  const level = result.classifications.find(c => c.code === "total – уровень");
   assert.equal(level.value, "very_high");
 });
 
@@ -39,14 +39,14 @@ test("Karpov 1.1.0 scores 110 as sten 3 through the registry", () => {
   const request = requestFor(entry, 4);
   request.responses[0] = {item_id: "q01", value: "6"};
   const result = builtinInstrumentRegistry.calculate(identityFor(entry), request);
-  assert.equal(result.measures.find(m => m.label === "reflexivity").value, 110);
-  assert.equal(result.measures.find(m => m.label === "reflexivity – стен").value, 3);
+  assert.equal(result.measures.find(m => m.code === "reflexivity").value, 110);
+  assert.equal(result.measures.find(m => m.code === "reflexivity – стен").value, 3);
 });
 
 test("PVQ-RR keeps full precision through the registry and never rounds", () => {
   const entry = entries.find(e => e.id === "pvq_rr_57");
   const result = builtinInstrumentRegistry.calculate(identityFor(entry), requestFor(entry, 1));
-  const openness = result.measures.find(m => m.label === "openness_to_change");
+  const openness = result.measures.find(m => m.code === "openness_to_change");
   assert.ok(Math.abs(openness.value - 12 / 12) < Number.EPSILON * 16);
   assert.equal(openness.precision, 4);
 });

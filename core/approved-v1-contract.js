@@ -44,12 +44,20 @@ function createApprovedNumericScorer(entries) {
     let scored;
     try { scored = scoreNumericPassport(method.key, answers); }
     catch (error) { return invalid(/Quota/.test(error.message) ? 'QUOTA_VIOLATION' : 'INVALID_RESPONSES'); }
+    const labels = method.labels || {};
+    const display = name => {
+      const cut = name.indexOf(' – ');
+      const stem = cut < 0 ? name : name.slice(0, cut);
+      const suffix = cut < 0 ? '' : name.slice(cut);
+      const russian = labels[stem] || labels[stem.toLowerCase()] || labels[name];
+      return russian ? russian + suffix : name;
+    };
     for (const [name, value] of Object.entries(scored.metrics)) {
       if (typeof value === 'number') {
-        result.measures.push({code: name, label: name, value, value_type: 'number',
+        result.measures.push({code: name, label: display(name), value, value_type: 'number',
           representation: name.includes(' – стен') ? 'sten' : 'raw', precision: method.key.fullPrecision === true ? 4 : 2});
       } else if (typeof value === 'string') {
-        result.classifications.push({code: name, label: name, value, basis: 'approved_contract'});
+        result.classifications.push({code: name, label: display(name), value, basis: 'approved_contract'});
       }
     }
     if (!result.measures.length) return invalid();

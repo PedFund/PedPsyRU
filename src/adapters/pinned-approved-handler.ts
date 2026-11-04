@@ -31,7 +31,7 @@ export function pinnedApprovedHandler():MethodHandlerRegistry {
         if(result.status!=="scored"||result.calculation.key_digest!==release.keyDigest||!result.quality.complete)
           throw new ParticipationError(503,"METHOD_HANDLER_UNAVAILABLE");
         return result.measures.filter(measure=>measure.representation==="raw").map(measure=>{
-          const candidate=normalize(measure.label);const scaleId=scaleIds.has(candidate)?candidate:undefined;
+          const candidate=normalize(measure.code);const scaleId=scaleIds.has(candidate)?candidate:undefined;
           if(!scaleId)throw new ParticipationError(503,"METHOD_HANDLER_UNAVAILABLE");
           return Object.freeze({scale_id:scaleId,value:measure.value});
         });
