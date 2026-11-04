@@ -33,6 +33,7 @@ export interface PinnedRelease {
   readonly handlerVersion: string;
   readonly choiceValues?:readonly string[];
   readonly keyDigest: string;
+  readonly presentation?:{readonly title?:string;readonly instruction?:string};
   readonly itemIds: readonly string[];
 }
 export interface StoredResult {

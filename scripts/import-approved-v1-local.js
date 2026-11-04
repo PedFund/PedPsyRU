@@ -23,6 +23,41 @@ function materialsFor(release) {
   return {pkg, contents};
 }
 
+// Owner-approved presentation corrections for already pinned releases.
+// The release itself stays immutable; only the title and the instruction shown to a
+// participant are corrected here.
+const OWNER_CORRECTIONS = {
+  ryff_pwb_84_shevelenkova_fesenko: {
+    reason: 'owner_instruction_2026_11_04',
+    instruction: [
+      'Предлагаемые вам утверждения касаются того, как вы относитесь к себе и своей жизни.',
+      '',
+      'Мы предлагаем вам согласиться или не согласиться с каждым из предложенных утверждений.',
+      '',
+      'Выберите ответ, который лучше всего отражает степень вашего согласия или несогласия с каждым утверждением.'
+    ].join('\n')
+  },
+  ttf_atf_10: {
+    reason: 'owner_title_instruction_2026_11_05',
+    title: 'Склонность к прощению и установки по отношению к прощению',
+    instruction: [
+      'Прочтите, пожалуйста, приведенные ниже высказывания и оцените, насколько вы с ними согласны.',
+      '',
+      'Автор: R. P. Brown (2003)',
+      'Адаптация: А. П. Кононова, О. Д. Пуговкина (2018)'
+    ].join('\n')
+  }
+};
+
+async function seedPresentationCorrection(client, releaseId, methodId) {
+  const correction = OWNER_CORRECTIONS[methodId];
+  if (!correction) return;
+  const exists = await client.query('SELECT 1 FROM pedpsy.release_presentation_corrections WHERE release_id=$1 AND reason=$2', [releaseId, correction.reason]);
+  if (exists.rowCount) return;
+  await client.query('INSERT INTO pedpsy.release_presentation_corrections(id,release_id,title,instruction,indicators,reason,created_at_ms) VALUES($1,$2,$3,$4,$5::jsonb,$6,$7)',
+    [randomUUID(), releaseId, correction.title || null, correction.instruction || null, null, correction.reason, Date.now()]);
+}
+
 async function importApprovedV1Local(client) {
   const {releases} = approvedV1Releases();
   await client.query('SELECT pg_advisory_xact_lock(5151980034)');
@@ -63,6 +98,7 @@ async function importApprovedV1Local(client) {
     const allowed = (await client.query('SELECT pedpsy.constructor_release_allowed($1) allowed', [row.id])).rows[0].allowed;
     if (!allowed) throw new Error('APPROVED_RELEASE_NOT_ALLOWED');
     ids.push(row.id);
+    await seedPresentationCorrection(client, row.id, release.id);
   }
   return ids;
 }

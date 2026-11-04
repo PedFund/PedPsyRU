@@ -48,5 +48,10 @@ export function verifyPinnedChoiceRelease(row:ReleaseRow|undefined,items:readonl
 }
 export function pinnedParticipantForm(release:PinnedRelease):ParticipantForm {
   const p=resolve(release.methodVersionId,release.handlerVersion);
-  if(p.keyDigest!==release.keyDigest)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");return p.form;
+  if(p.keyDigest!==release.keyDigest)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
+  // A presentational correction never changes items or options: it only replaces the
+  // title and the instruction shown above the stimulus.
+  const correction=release.presentation;
+  if(!correction)return p.form;
+  return {...p.form,...(correction.title?{title:correction.title}:{}),...(correction.instruction!==undefined?{instruction:correction.instruction}:{})};
 }
