@@ -10,7 +10,7 @@ const {validateConfig} = require("./local-demo.js");
 const {approvedV1Releases} = require("../storage/approved-v1-release.js");
 
 const root = path.resolve(__dirname, "..");
-const output = path.join(root, "storage", "postgres", "053_approved_v1_attempt_guard.sql");
+const output = path.join(root, "storage", "postgres", process.argv[2] || "053_approved_v1_attempt_guard.sql");
 
 async function main() {
   const owner = validateConfig(JSON.parse(fs.readFileSync(path.join(root, ".local/demo-stand/owner.json"), "utf8")), "owner");

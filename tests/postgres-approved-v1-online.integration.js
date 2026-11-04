@@ -59,11 +59,10 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
     assert.equal(complete.statusCode, 200, release.id + ' ' + JSON.stringify(complete.json()));
     const result = complete.json();
     if (index === 0) firstResult = result;
-    const expected = vector.expected.map(entry => {
-      const scale = pkg.scales.find(candidate => candidate.id === entry.scale_id);
-      return {label: scale.label, value: entry.value};
-    });
-    const measured = result.measures.filter(measure => measure.representation === 'raw').map(measure => ({label: measure.label, value: measure.value}));
+    // Measure labels are localised; compare by the language-independent scale id.
+    const normalize = name => name.split(' – ')[0].toLowerCase().replace(/[^a-z0-9_-]+/g, '_').replace(/^[^a-z]+/, 's_');
+    const expected = vector.expected.map(entry => ({id: entry.scale_id, value: entry.value}));
+    const measured = result.measures.filter(measure => measure.representation === 'raw').map(measure => ({id: normalize(measure.label), value: measure.value}));
     assert.deepEqual(measured, expected, release.id);
     assert.equal(JSON.stringify(result).includes('key_digest'), false, release.id);
     assert.deepEqual((await w.app.inject({url: base + '/result', headers: participantHeaders})).json(), result, release.id);

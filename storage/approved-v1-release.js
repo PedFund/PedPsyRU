@@ -11,18 +11,24 @@ const {canonicalJson} = require('./releases.js');
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');
 const HANDLER = 'approved-numeric-1.0.0';
 
-// The database pins the exact option sets a release item may carry
-// (release_item_pinned_choices). A package whose option set is not listed there
-// cannot be stored without relaxing a safety constraint, so it is reported instead.
-const PINNED_OPTION_SETS = [
-  ['A', 'B'],
-  ['1', '2', '3', '4'],
-  ['1', '2', '3', '4', '5', '6', '7']
-];
+// Migration 055 accepts any labelled numeric scale 1..N (2..20) plus the A/B pair.
+// The exact option array is still pinned by the release form digest.
+function numericScaleValid(options) {
+  return Array.isArray(options) && options.length >= 2 && options.length <= 20 &&
+    options.every((option, index) => option && String(option.value) === String(index + 1) &&
+      typeof option.text === 'string' && option.text.trim().length > 0);
+}
 
 function optionsFor(pkg, methodId) {
   const declared = Array.isArray(pkg.response_options) ? pkg.response_options : [];
-  if (!declared.length) throw new Error(methodId + ':NO_RESPONSE_OPTIONS');
+  if (!declared.length) {
+    // An integer scale documents its bounds per item and explicitly has no word labels
+    // for intermediate values, so the numbers themselves are the labels.
+    const bounds = (pkg.items || []).map(item => [Number(item.response_min), Number(item.response_max)]);
+    const consistent = bounds.length && bounds.every(([min, max]) => min === 1 && Number.isInteger(max) && max >= 2 && max <= 20 && max === bounds[0][1]);
+    if (!consistent) throw new Error(methodId + ':NO_RESPONSE_OPTIONS');
+    return Array.from({length: bounds[0][1]}, (_, index) => ({value: String(index + 1), text: String(index + 1)}));
+  }
   const options = declared.map(option => {
     const value = option && (option.value !== undefined ? option.value : option.ui_value);
     const text = option && (option.label !== undefined ? option.label
@@ -44,16 +50,16 @@ function formFor(entry) {
     const text = typeof item.text === 'string' && item.text.trim() ? item.text.trim()
       : (typeof item.left === 'string' && typeof item.right === 'string' && item.left.trim() && item.right.trim()
         ? item.left.trim() + ' — ' + item.right.trim() : '');
-    if (!text) throw new Error(entry.id + ':UNSUPPORTED_ITEM_PRESENTATION');
+    const anchored = typeof item.title === 'string' && item.title.trim() && typeof item.anchor_1 === 'string' && typeof item.anchor_10 === 'string'
+      ? item.title.trim() + '. ' + item.anchor_1.trim() + ' … ' + item.anchor_10.trim() : '';
+    if (!text && !anchored) throw new Error(entry.id + ':UNSUPPORTED_ITEM_PRESENTATION');
     if (item.id !== 'q' + String(index + 1).padStart(2, '0')) throw new Error(entry.id + ':NON_CANONICAL_ITEM_ID');
-    return {id: item.id, number: index + 1, text, options};
+    return {id: item.id, number: index + 1, text: text || anchored, options};
   });
   if (options.map(option => option.value).join(',') !== entry.valid.join(',')) {
     throw new Error(entry.id + ':OPTIONS_DO_NOT_MATCH_KEY_VALUES');
   }
-  if (!PINNED_OPTION_SETS.some(set => set.join(',') === options.map(option => option.value).join(','))) {
-    throw new Error(entry.id + ':OPTION_SET_NOT_PINNED');
-  }
+  if (!numericScaleValid(options)) throw new Error(entry.id + ':OPTION_SET_NOT_PINNED');
   return {id: entry.id + '_shared', version: '1.0.0', method_id: entry.id, title: entry.title,
     language: pkg.language || 'ru', instruction: pkg.instructions || '', items};
 }
