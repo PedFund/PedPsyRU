@@ -13,6 +13,7 @@ export class PostgresResearchWorkbench extends WorkbenchConnection implements Re
   read(token:string,study:string){return this.call<WorkbenchDesign>(token,"SELECT pedpsy.read_research_workbench($1) data",[study]);}
   change(token:string,study:string,version:number,action:WorkbenchAction,input:Record<string,unknown>){
     if(action==="schema")return this.call<WorkbenchDesign>(token,"SELECT pedpsy.change_research_profile_schema($1,$2,$3::jsonb) data",[study,version,JSON.stringify(input)]);
+    if(action==="delete_stage")return this.call<WorkbenchDesign>(token,"SELECT pedpsy.close_research_stage($1,$2,$3) data",[study,version,String(input.stage_id)]);
     return this.call<WorkbenchDesign|{queued:number;mode:"synthetic"}>(token,"SELECT pedpsy.change_research_workbench($1,$2,$3,$4::jsonb) data",[study,version,action,JSON.stringify(input)]);
   }
   progress(token:string,study:string){return this.call<WorkbenchProgress>(token,"SELECT pedpsy.research_progress($1) data",[study]);}

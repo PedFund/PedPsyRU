@@ -13,6 +13,9 @@ test("research workbench rejects forged metadata, arbitrary stages and excessive
   assert.deepEqual(workbenchInput("stage",{expected_version:1,id:null,code:"T49",note:""}).data,{id:null,code:"T49",note:""});
   assert.deepEqual(workbenchInput("copy_assignments",{expected_version:2,stage_id:id}).data,{stage_id:id});
   assert.throws(()=>workbenchInput("copy_assignments",{expected_version:2,stage_id:"T1"}));
+  assert.deepEqual(workbenchInput("delete_stage",{expected_version:2,stage_id:id}).data,{stage_id:id});
+  assert.throws(()=>workbenchInput("delete_stage",{expected_version:2,stage_id:"T1"}));
+  assert.throws(()=>workbenchInput("delete_stage",{expected_version:2}));
 });
 test("bulk assignments are explicit and do not accept duplicate or caller-owned releases",()=>{
   const b={expected_version:2,all:false,group_id:id,stage_id:id,release_ids:[id]};

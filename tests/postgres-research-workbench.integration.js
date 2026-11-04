@@ -93,3 +93,20 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   assert.equal((await w.app.inject({url:url+"/progress",headers:{...rh,cookie:"pedpsy_researcher_demo="+x.staff.session.token}})).statusCode,401);
   assert.equal((await w.app.inject({url:"/api/v2/participant/profile",headers:{...h,cookie:"pedpsy_v2_demo="+x.r.session.token}})).statusCode,401);
 });
+
+test("PostgreSQL workbench: an extra stage can be closed, the base stage cannot", async t => {
+  const x = await setup(t);
+  const group = x.d.groups[0], t0 = x.d.stages[0];
+  await change(x, "assign", {all: true, group_id: null, stage_id: null, release_ids: [x.f.seed.release_id]});
+  await change(x, "stage", {id: null, code: "T1", note: ""});
+  const t1 = x.d.stages.find(stage => stage.code === "T1");
+  assert.equal(x.d.assignments.filter(a => a.stage_id === t1.id).length, 1, "T1 inherits the T0 set");
+  await change(x, "delete_stage", {stage_id: t1.id});
+  const closed = x.d.stages.find(stage => stage.id === t1.id);
+  assert.equal(closed.status, "closed");
+  assert.equal(x.d.assignments.filter(a => a.stage_id === t1.id).length, 0, "closed stage loses its assignments");
+  assert.equal(x.d.assignments.filter(a => a.stage_id === t0.id).length, 1, "T0 keeps its assignments");
+  await assert.rejects(() => change(x, "delete_stage", {stage_id: t0.id}), /STAGE_BASE_FROZEN|DESIGN_FROZEN/);
+  assert.equal((await x.f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_stages WHERE study_id=$1 AND status='closed'", [x.d.id])).rows[0].n, 1);
+  assert.ok(group);
+});
