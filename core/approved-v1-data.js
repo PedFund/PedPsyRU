@@ -10,8 +10,23 @@ const directory = path.join(__dirname, '..', 'methods', 'approved', 'v1');
 const manifest = JSON.parse(fs.readFileSync(path.join(directory, 'keys', 'manifest.json'), 'utf8'));
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');
 
+// Author strings come from the Issue #75 staging manifest; no author is invented.
+function stagingAuthors() {
+  const file = path.join(__dirname, '..', 'methods', 'validation', 'pilot-11', 'manifest.json');
+  const map = new Map();
+  try {
+    for (const item of JSON.parse(fs.readFileSync(file, 'utf8')).methods || []) {
+      if (item && typeof item.method_id === 'string' && typeof item.author === 'string' && item.author.trim()) {
+        map.set(item.method_id, item.author.trim());
+      }
+    }
+  } catch { /* A missing staging manifest only means no author metadata. */ }
+  return map;
+}
+
 function loadApprovedV1() {
   const entries = [];
+  const authors = stagingAuthors();
   for (const item of manifest.keys) {
     const keyText = fs.readFileSync(path.join(directory, 'keys', item.method_id + '.key.json'), 'utf8');
     const packageText = fs.readFileSync(path.join(directory, item.package_file), 'utf8');
@@ -29,8 +44,8 @@ function loadApprovedV1() {
       title: pkg.title,
       itemCount: key.items,
       valid: key.valid.map(String),
-      authors: [],
-      search: []
+      authors: authors.has(item.method_id) ? [authors.get(item.method_id)] : [],
+      search: [pkg.title]
     });
   }
   return entries;
