@@ -1,0 +1,73 @@
+{
+  "schema_version": "1.0.0",
+  "generated_by": "scripts/build-approved-v1-keys.js",
+  "source_contracts": "methods/validation/pilot-11/scoring-contracts.json",
+  "note": "Declarative keys for scoreNumericPassport. Not a release, not scientific approval.",
+  "keys": [
+    {
+      "method_id": "uvlk_shipilov",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:225b5877e5e7712ab288e57290f9aa337f2498a2d512b518031d8c1735288506",
+      "package_file": "03_Шипилов_36.json",
+      "package_version": "1.0.0-staging",
+      "items": 36
+    },
+    {
+      "method_id": "reflexivity_karpov_27",
+      "key_version": "1.1.0-staging",
+      "key_digest": "sha256:94180b7b16ae1793bd04788814b612bde0f9b63b8602577ac1703d8bd30df21f",
+      "package_file": "05_Карпов_27.json",
+      "package_version": "1.1.0-staging",
+      "items": 27
+    },
+    {
+      "method_id": "sjo_20",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:c1bb003af6f5bba4721b7c629b12111fef9a643f8acd38c5c0e3b1624e0b2b34",
+      "package_file": "06_СЖО_20.json",
+      "package_version": "1.0.0-staging",
+      "items": 20
+    },
+    {
+      "method_id": "hardiness_leontiev_rasskazova_45",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:e7f115fa926f1d86481d3fb12f5dba769b1419e4880d5693527ba78b06704dec",
+      "package_file": "07_Жизнестойкость_45.json",
+      "package_version": "1.0.0-staging",
+      "items": 45
+    },
+    {
+      "method_id": "qlesq_36_vodopyanova",
+      "key_version": "1.1.0-staging",
+      "key_digest": "sha256:9306acaaa96a8f7fd1ab59c58f031461ae062b702434b4b69653b9ea3c56e7e4",
+      "package_file": "08_МетодТест_03_Шкала_оценки_качества_жизни_QLESQ.json",
+      "package_version": "1.1.0-staging",
+      "items": 36
+    },
+    {
+      "method_id": "co36_kunitsyna_36",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:d79a208d87735f847c2f606efb424414a22d7bfab11f953cf4a9c098fc99f33a",
+      "package_file": "09_ЦО_36.json",
+      "package_version": "1.0.0-staging",
+      "items": 36
+    },
+    {
+      "method_id": "pvq_rr_57",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:4fbd74adb84660bf401b45b61689d6057fb8ea71a8966a607b08ad052091ef97",
+      "package_file": "10_PVQ_RR_57.json",
+      "package_version": "1.0.0-staging",
+      "items": 57
+    },
+    {
+      "method_id": "ttf_atf_10",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:80834f4ea3c5a9ee1ac497acea05f1c0bb482056c4894ee812563fa46e1d0453",
+      "package_file": "11_TTF_ATF_10.json",
+      "package_version": "1.0.0-staging",
+      "items": 10
+    }
+  ],
+  "skipped": []
+}
