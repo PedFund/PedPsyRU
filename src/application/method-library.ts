@@ -4,6 +4,7 @@ import type {MethodLibrary,PreparedMethodDraft} from "../ports/method-library.js
 import {validateMethodPackageJson} from "./method-package-validation.js";
 import {verifyMethodHandler} from "./method-handler-verification.js";
 import {ParticipationError} from "../ports/errors.js";
+import {pilotMethodReadiness} from "./pilot-method-readiness.js";
 // Snapshot each trusted input once, then verify and persist those same owned
 // bytes. Re-reading a mutable host source must not change the stored artifacts.
 export async function prepareMethodDraft(json:unknown,source:MethodArtifactReader,hasher:MethodPackageHasher,registry:MethodHandlerRegistry):Promise<PreparedMethodDraft>{
@@ -20,5 +21,5 @@ export function createMethodLibraryApi(store:MethodLibrary){return {
   list:(token:string)=>store.list(token),
   read:(token:string,id:string,version:string)=>{if(!/^[a-z][a-z0-9_]{0,95}$/.test(id)||!/^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$/.test(version)||version.length>32)throw new ParticipationError(404,"NOT_AVAILABLE");return store.read(token,id,version);},
   catalog:async(token:string,query:unknown)=>{if(typeof query!=="string"||query.length>120||/[\u0000-\u001f\u007f]/.test(query))throw new ParticipationError(400,"INVALID_REQUEST");const q=query.trim().toLocaleLowerCase("ru-RU");return (await store.catalog(token)).filter(m=>[m.title,...m.authors,...m.indicators,...m.search_terms].join(" ").toLocaleLowerCase("ru-RU").includes(q));}
-  ,transferStatus:(token:string)=>store.transferStatus(token)
+  ,transferStatus:async(token:string)=>({...await store.transferStatus(token),pilot_methods:pilotMethodReadiness()})
 };}
