@@ -86,6 +86,7 @@ function approvedV1Releases() {
       formDigest: sha(canonicalJson(form)),
       keyDigest: entry.pins.key,
       verificationState: 'legacy_checked',
+      labels: entry.labels || {},
       outputs: [...Object.keys(entry.key.scales || {}), ...Object.keys(entry.key.derived || {})]
     });
   }

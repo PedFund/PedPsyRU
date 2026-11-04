@@ -7,6 +7,7 @@ export interface ApprovedEntry {
   readonly title: string;
   readonly itemCount: number;
   readonly valid: readonly string[];
+  readonly labels: Readonly<Record<string, string>>;
   readonly authors: readonly string[];
   readonly search: readonly string[];
 }

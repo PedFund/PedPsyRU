@@ -733,42 +733,42 @@
   "scales": [
     {
       "id": "goals",
-      "label": "goals",
+      "label": "Цели в жизни",
       "min": 6,
       "max": 42,
       "direction": "not_specified"
     },
     {
       "id": "process",
-      "label": "process",
+      "label": "Процесс жизни",
       "min": 6,
       "max": 42,
       "direction": "not_specified"
     },
     {
       "id": "result",
-      "label": "result",
+      "label": "Результативность жизни",
       "min": 5,
       "max": 35,
       "direction": "not_specified"
     },
     {
       "id": "locus_self",
-      "label": "locus_self",
+      "label": "Локус контроля – Я",
       "min": 4,
       "max": 28,
       "direction": "not_specified"
     },
     {
       "id": "locus_life",
-      "label": "locus_life",
+      "label": "Локус контроля – жизнь",
       "min": 6,
       "max": 42,
       "direction": "not_specified"
     },
     {
       "id": "meaningfulness_total",
-      "label": "meaningfulness_total",
+      "label": "Общая осмысленность жизни",
       "min": 20,
       "max": 140,
       "direction": "not_specified"

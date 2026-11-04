@@ -978,7 +978,7 @@
   "scales": [
     {
       "id": "reflexivity",
-      "label": "reflexivity",
+      "label": "Рефлексивность",
       "min": 27,
       "max": 189,
       "direction": "not_specified"

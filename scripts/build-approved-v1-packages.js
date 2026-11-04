@@ -33,9 +33,10 @@ function boundsOf(key, scale) {
   return {min, max};
 }
 
-function scalesOf(key, expected) {
+function scalesAndSources(key, expected, labels) {
   const ranges = new Map();
   const scales = [];
+  const sources = new Map();
   const used = new Set();
   // A package scale id is a lowercase token; the display label keeps the key's name.
   const scaleId = name => {
@@ -51,7 +52,9 @@ function scalesOf(key, expected) {
     if (typeof value !== "number") throw new Error("SCALE_NOT_SCORED:" + id);
     const {min, max} = boundsOf(key, scale);
     ranges.set(id, {min, max});
-    scales.push({id: scaleId(id), label: id, min, max, direction: "not_specified"});
+    const sid = scaleId(id);
+    sources.set(sid, id);
+    scales.push({id: sid, label: labels[id] || id, min, max, direction: "not_specified"});
   }
   for (const [id, derived] of Object.entries(key.derived || {})) {
     const value = expected[id];
@@ -72,18 +75,21 @@ function scalesOf(key, expected) {
       throw new Error("UNSUPPORTED_DERIVED:" + derived.op);
     }
     ranges.set(id, {min, max});
-    scales.push({id: scaleId(id), label: id, min, max, direction: "not_specified"});
+    const did = scaleId(id);
+    sources.set(did, id);
+    scales.push({id: did, label: labels[id] || id, min, max, direction: "not_specified"});
   }
-  return scales;
+  return {scales, sources};
 }
 
 function build(entry, release) {
   const answers = Array.from({length: release.itemCount}, (_, index) => ({
     item_id: "q" + String(index + 1).padStart(2, "0"), value: entry.valid[0]}));
   const expected = scoreNumericPassport(entry.key, answers.map(answer => Number(answer.value))).metrics;
-  const scales = scalesOf(entry.key, expected);
-  const vector = scales.filter(scale => typeof expected[scale.label] === "number")
-    .map(scale => ({scale_id: scale.id, value: expected[scale.label]}));
+  const built = scalesAndSources(entry.key, expected, entry.labels || {});
+  const scales = built.scales, sources = built.sources;
+  const vector = scales.filter(scale => typeof expected[sources.get(scale.id)] === "number")
+    .map(scale => ({scale_id: scale.id, value: expected[sources.get(scale.id)]}));
 
   const folder = path.join(target, release.id);
   const files = {

@@ -2,7 +2,8 @@
 const {test} = require("node:test"), assert = require("node:assert/strict");
 const {validateConfig, runtimeEnvironment, bootstrapFirst} = require("../scripts/local-demo.js");
 const suffix = "abcdef0123456789";
-const config = {host: "127.0.0.1", port: 55432, database: "pedpsy_demo_" + suffix,
+const port = Number(process.env.PEDPSY_DEMO_PORT || 55432);
+const config = {host: "127.0.0.1", port, database: "pedpsy_demo_" + suffix,
   user: "pedpsy_runtime_" + suffix, password: "a".repeat(64), mfaKey: Buffer.alloc(32, 1).toString("base64")};
 test("local demo refuses remote, CI, generic DB, privileged role and mismatched config", () => {
   assert.equal(validateConfig(config, "runtime"), config);

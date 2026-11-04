@@ -4,6 +4,7 @@
 // release builder loads them. A key whose digest does not match its file is a hard error.
 const {createHash} = require('node:crypto');
 const manifest = require('../methods/approved/v1/keys/manifest.json');
+const labelManifest = require('../methods/approved/v1/keys/labels.json');
 const keys = {
   uvlk_shipilov: require('../methods/approved/v1/keys/uvlk_shipilov.key.json'),
   reflexivity_karpov_27: require('../methods/approved/v1/keys/reflexivity_karpov_27.key.json'),
@@ -29,6 +30,7 @@ const entries = manifest.keys.map(item => {
     title: item.title,
     itemCount: key.items,
     valid: key.valid.map(String),
+    labels: labelManifest.methods[item.method_id] || {},
     authors: item.author ? [item.author] : [],
     search: item.title ? [item.title] : []
   };

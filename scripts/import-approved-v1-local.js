@@ -36,8 +36,11 @@ async function importApprovedV1Local(client) {
       throw new Error('APPROVED_DRAFT_VERIFICATION_REQUIRED');
     }
     const head = (await client.query('SELECT revision FROM pedpsy.method_library_heads WHERE method_id=$1', [pkg.method_id])).rows[0];
-    await client.query('SELECT pedpsy.append_method_library_draft($1,$2,$3,$4::jsonb,$5::jsonb)',
-      [head ? head.revision : 0, ...methodDraftSqlInput(prepared)]);
+    const stored = await client.query('SELECT 1 FROM pedpsy.method_library_versions WHERE method_id=$1 AND package_version=$2', [pkg.method_id, pkg.package_version]);
+    if (!stored.rowCount) {
+      await client.query('SELECT pedpsy.append_method_library_draft($1,$2,$3,$4::jsonb,$5::jsonb)',
+        [head ? head.revision : 0, ...methodDraftSqlInput(prepared)]);
+    }
 
     let row = (await client.query('SELECT id FROM pedpsy.instrument_releases WHERE method_version_id=$1 AND handler_version=$2',
       [release.methodVersionId, release.handlerVersion])).rows[0];
@@ -56,7 +59,7 @@ async function importApprovedV1Local(client) {
     }
     const authors = pkg.provenance && Array.isArray(pkg.provenance.sources) ? [pkg.provenance.sources[0].citation] : [];
     await client.query('INSERT INTO pedpsy.method_library_catalog VALUES($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7::jsonb) ON CONFLICT(release_id) DO NOTHING',
-      [row.id, release.id, pkg.package_version, release.title, JSON.stringify(authors), JSON.stringify(release.outputs), JSON.stringify([release.title])]);
+      [row.id, release.id, pkg.package_version, release.title, JSON.stringify(authors), JSON.stringify(release.outputs.map(id => (release.labels && release.labels[id]) || id)), JSON.stringify([release.title])]);
     const allowed = (await client.query('SELECT pedpsy.constructor_release_allowed($1) allowed', [row.id])).rows[0].allowed;
     if (!allowed) throw new Error('APPROVED_RELEASE_NOT_ALLOWED');
     ids.push(row.id);

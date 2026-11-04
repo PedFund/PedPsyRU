@@ -1068,28 +1068,28 @@
   "scales": [
     {
       "id": "commitment",
-      "label": "commitment",
+      "label": "Вовлечённость",
       "min": -4,
       "max": 50,
       "direction": "not_specified"
     },
     {
       "id": "control",
-      "label": "control",
+      "label": "Контроль",
       "min": -5,
       "max": 46,
       "direction": "not_specified"
     },
     {
       "id": "challenge",
-      "label": "challenge",
+      "label": "Принятие риска",
       "min": -6,
       "max": 24,
       "direction": "not_specified"
     },
     {
       "id": "total_hardiness",
-      "label": "total_hardiness",
+      "label": "Жизнестойкость",
       "min": -15,
       "max": 120,
       "direction": "not_specified"

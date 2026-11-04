@@ -23,14 +23,15 @@ export function pinnedApprovedHandler():MethodHandlerRegistry {
       pkg.calculation.adapter_version!=="1.0.0"||
       pkg.artifacts.some(artifact=>evidence.checked.find(checked=>checked.artifact_id===artifact.id)?.sha256!==artifact.sha256))
       throw new ParticipationError(400,"METHOD_HANDLER_MISMATCH");
-    const scaleByLabel=new Map<string,string>((pkg.scales as unknown as readonly {id:string;label:string}[]).map(scale=>[scale.label,scale.id]));
+    const scaleIds=new Set<string>((pkg.scales as unknown as readonly {id:string;label:string}[]).map(scale=>scale.id));
+    const normalize=(name:string)=>name.toLowerCase().replace(/[^a-z0-9_-]+/g,"_").replace(/^[^a-z]+/,"s_");
     const handler:PinnedMethodHandler=Object.freeze({method_version_id:release.methodVersionId,handler_version:HANDLER_VERSION,key_digest:release.keyDigest,
       run(responses:Parameters<PinnedMethodHandler["run"]>[0]){
         const result=scoreApprovedNumeric({contract_version:CONTRACT_VERSION,method_version_id:release.methodVersionId,handler_version:HANDLER_VERSION,responses});
         if(result.status!=="scored"||result.calculation.key_digest!==release.keyDigest||!result.quality.complete)
           throw new ParticipationError(503,"METHOD_HANDLER_UNAVAILABLE");
         return result.measures.filter(measure=>measure.representation==="raw").map(measure=>{
-          const scaleId=scaleByLabel.get(measure.label);
+          const candidate=normalize(measure.label);const scaleId=scaleIds.has(candidate)?candidate:undefined;
           if(!scaleId)throw new ParticipationError(503,"METHOD_HANDLER_UNAVAILABLE");
           return Object.freeze({scale_id:scaleId,value:measure.value});
         });
