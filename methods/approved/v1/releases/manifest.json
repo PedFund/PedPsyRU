@@ -16,6 +16,12 @@
       "artifacts": 4
     },
     {
+      "id": "hardiness_leontiev_rasskazova_45",
+      "package_version": "1.0.0-staging",
+      "scales": 4,
+      "artifacts": 4
+    },
+    {
       "id": "ttf_atf_10",
       "package_version": "1.0.0-staging",
       "scales": 2,

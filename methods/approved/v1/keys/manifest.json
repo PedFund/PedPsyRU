@@ -37,7 +37,7 @@
     {
       "method_id": "hardiness_leontiev_rasskazova_45",
       "key_version": "1.0.0-staging",
-      "key_digest": "sha256:e7f115fa926f1d86481d3fb12f5dba769b1419e4880d5693527ba78b06704dec",
+      "key_digest": "sha256:946c4826c82f800b2f6bf807a986e405ec0cb98154975dd139f381920ff5def1",
       "package_file": "07_Жизнестойкость_45.json",
       "package_version": "1.0.0-staging",
       "title": "Тест жизнестойкости (45)",

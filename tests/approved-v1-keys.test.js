@@ -50,7 +50,7 @@ test("SJO key reproduces the approved direction and level boundaries", () => {
 
 test("Hardiness key reproduces the 28/29/20/77 vector without inventing levels", () => {
   const k = key("hardiness_leontiev_rasskazova_45");
-  const metrics = scoreNumericPassport(k, repeat(45, 0)).metrics;
+  const metrics = scoreNumericPassport(k, repeat(45, 1)).metrics;
   assert.deepEqual({commitment: metrics.commitment, control: metrics.control, challenge: metrics.challenge, total: metrics.total_hardiness},
     {commitment: 33, control: 33, challenge: 24, total: 90});
   const levelFor = (name, value) => {

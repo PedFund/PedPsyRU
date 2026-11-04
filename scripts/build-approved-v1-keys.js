@@ -33,18 +33,25 @@ function scaleOf(name, scale, contract) {
   return out;
 }
 
+// A package may document its own answer display: Hardiness shows 1..4 while scoring
+// 0..3 and reverses as "3 - scored". The adapter encodes exactly that, not a guess.
+const INPUT_ADAPTERS = {
+  hardiness_leontiev_rasskazova_45: {valid: [1, 2, 3, 4], answerMap: {"1": 0, "2": 1, "3": 2, "4": 3}}
+};
+
 function keyFromContract(contract) {
   if (!contract.item_count || !Array.isArray(contract.values) || !contract.values.length) {
     throw new Error(contract.method_id + ":INCOMPLETE_CONTRACT");
   }
+  const adapter = INPUT_ADAPTERS[contract.method_id];
   const key = {
     id: contract.method_id,
     key_version: contract.version,
     type: "passport",
     items: contract.item_count,
-    valid: contract.values.slice(),
+    valid: adapter ? adapter.valid.slice() : contract.values.slice(),
     ...(contract.reverse_max ? {reverseMax: contract.reverse_max} : {}),
-    ...(contract.answer_map ? {answerMap: contract.answer_map} : {}),
+    ...(adapter ? {answerMap: {...adapter.answerMap}} : contract.answer_map ? {answerMap: contract.answer_map} : {}),
     ...(contract.quota ? {quota: contract.quota} : {}),
     ...(contract.calculation === "uncentered_mean_without_rounding" ? {fullPrecision: true} : {}),
     scales: {},
