@@ -1,4 +1,4 @@
-# Фаза6: технический журнал библиотеки методик
+# Фаза 6 — централизованная библиотека методик
 
 ## 2026-10-29: PRFQ-RU-16 доступна в локальном учебном кабинете
 
@@ -11,7 +11,7 @@
 
 ## 2026-10-29: расширяемые модули и учебное прохождение Карпова
 
-По решению владельца методики не ограничиваются заранее заданными четырьмя типами. Новый [METHOD_EXTENSION_CONTRACT.md](METHOD_EXTENSION_CONTRACT.md) описывает versioned module runtime, JSON-ответы/состояние/результат произвольной формы, отдельные экраны и индивидуальные проверки/обработчики, включая возможность ручной оценки. ТКИ и Карпов используют общий реестр, а для необычных форм предусмотрено отдельное подключение. Открытый программный контракт не означает, что уже реализованы универсальный импорт, онлайн-прохождение всех 50 методик, медиа, таймеры, ветвление или экспертный интерфейс: новый формат требует своего экрана и адаптеров хранения/HTTP. Текущий SQL participant-контур по-прежнему закреплён за двумя выпусками и одиночным выбором; научное утверждение и права отдельно.
+По решению владельца методики не ограничиваются заранее заданными четырьмя типами. Новый [METHOD_EXTENSION_CONTRACT.md](../../METHOD_EXTENSION_CONTRACT.md) описывает versioned module runtime, JSON-ответы/состояние/результат произвольной формы, отдельные экраны и индивидуальные проверки/обработчики, включая возможность ручной оценки. ТКИ и Карпов используют общий реестр, а для необычных форм предусмотрено отдельное подключение. Открытый программный контракт не означает, что уже реализованы универсальный импорт, онлайн-прохождение всех 50 методик, медиа, таймеры, ветвление или экспертный интерфейс: новый формат требует своего экрана и адаптеров хранения/HTTP. Текущий SQL participant-контур по-прежнему закреплён за двумя выпусками и одиночным выбором; научное утверждение и права отдельно.
 
 Карпов подключён в локальном учебном контуре: 27 пунктов, семь ответов, общий балл/стен/уровень по исходному владельческому процессору; нормы и инструкция остаются не утверждёнными, выпуск draft/legacy_checked. В локальном стенде перед миграцией036 выполнен pg_dump с проверкой pg_restore --list, fingerprints пользователей/исследований/ответов до и после совпали; импорт выполнен дважды без дублей. После перезапуска проверены health, закрытая граница авторизации, 50 архивных описаний и 63 хэша, два доступных выпуска и 27 пунктов Карпова. MAAS пользователь отложил до конца.
 
@@ -46,89 +46,85 @@
 На личном локальном стенде перед034 создана и проверена резервная копия; fingerprints прежних исследований, аккаунтов и ответов совпали после миграции. Импорт выполнен дважды без дублей, сервер перезапущен, /health отвечает ok. GitHub, Selectel, реальные почта и аккаунты не изменялись. Пароли/конфигурации/резервные копии не включаются в исходники. Старые записи о pending ниже — история соответствующих этапов.
 
 
-## 2026-10-07: принятый draft Карпова и локальный06а.3
+## Разрешение и безопасный старт, 2026-10-07
 
-PR#55 ordinary mainbb2bb115245e0effaa13abbb410a130c09c125ef/head924764bf/run37603815117: all-six success,338baseNode22/24,294actualPG18.6,threeChrome5/5,0all. Freshbase/source/preview/334rawblobs/319unchanged/old45critical и actualmain/parents/tree/full334 verified;2newdraftJSON→47critical. Научный выпуск/нормы/primarykey/fullauthorinstruction/rights не утверждены.
+Владелец явно поручил начать фазу6. Историческая остановка после фазы5 выполнена
+и новым поручением отменена; остальные границы безопасности сохраняются.
+Основа: принятая main29932a6781eebcc1bc696acf23fefad438ba96d5, PR#52 /
+run37591582200 all-six success,313base Node22/24,294actualPG18.6,триChrome5/5.
+Новая фаза не означает разрешение scientific publication/новых норм/прав,
+реальных данных/почты/Selectel или перезапуска ownerstand/MFA.
 
-[METHOD_HANDLER_VALIDATION.md](METHOD_HANDLER_VALIDATION.md) —06а.3 staticexistingTKI/form+key bytepins/schema/handler/exact3legacyvectors;8newgroups/address8/8/capturedfull346/346/build/types/architecture/syntax/deps passed. Firstfull344/346 twofailures retained (one fetch failed captured, second detail truncated), unchangedweb9/9/repeat346 passed; причина не объявлена исправленной. Current-head all-six/actual294PG/threeChrome/currentbase/preview/parents/fullmanifests gate pending. Positivehandler evidence не scientificapproval, publishablefalse и basis review required; unsupportedKarpov не зарегистрирован. All47critical/SQL/core/packages/workflow/ownerstand/MFA unchanged. Послеacceptance06бpersistence→API/editor.
+## 06а — фактический реестр и контракт пакета
 
-## 2026-10-07:06а.2 в main; новые материалы Карпова06е.0
+Существующий аудит не выполняется заново. Проверен текущий исходный реестр:
+24 builtin +12standard +14tanit =50 обработчиков. Источники — локальные
+methods.js/methods/builtin.js и два method-packages JSON, без чтения XLSX/PII.
+METHOD_IMPORT_INVENTORY.json содержит только IDs/names/types/items/provenance
+и независимые статусы, не ключи, формы или нормы. Все non-TKI записи inventory_only,
+не утверждены научно и не доступны исследователю как релизы новой платформы.
+Паспорт может отставать; состав подтверждается исходниками, а не его давностью.
+TKI используется только из действующего пакета PedPsyRU; legacy ключ не копируется.
 
-PR#54 accepted maindb37069509ad6db45fd6e9f576136a8fb023ef51/final7a99ea83/run37600160276 all-six success:332baseNode22/24,294actualPG18.6,триChrome5/5,0all; source/base/preview/parents/all329/314unchanged/all45critical и actualmain/tree/parents/all329 verified. Framework06а.3 staticruntime/vector verification и06бpersistence ещёне реализованы; не выдавать integrity за science.
+Контракт следующего маленького блока: method_id, package_schema_version,
+package_version, provenance/source citations, rights review, instruction/form,
+item IDs/answer types, scale IDs/specification, key/scoring adapter reference,
+explicit norms basis or absent, independent control vectors, artifact digests
+и отдельные technical/scientific/publication statuses. Не выполнять произвольный
+импортированный JS/формулу; архив/path traversal/ресурсные лимиты fail closed.
+Контрольные примеры синтетические; успешный validator не scientific approval.
 
-Владелец прислал27утверждений/7labels Карпова и primarycitation, явно разрешил общую грамматику через/. [KARPOV_VALIDATION.md](KARPOV_VALIDATION.md): отдельныйsmall06е.0 draftform+rawkeyизexistingcode, source_text retained/2questions11+26 и6labelsedits/numeric1..7/orderunchanged. PrimaryURLtool403, fullauthorinstruction/independentkey-source/norms/rights approvalpending. RawfieldscopySHA4992123e/15direct12reverse; normsstenslevelsнеперенесены;5legacyvectorsнеindependentproof.6newgroups/full338local/build/types/architecture/syntax/depspassed0all; newcurrent-head all-six/294actualPG/threeChrome5/5/freshbase/source/preview/parents/manifests beforemerge. Existing45criticaluntouched+2newdraftJSON→47; no oldkeyrestoration/TKIchanges/clinicalregistration/permissions/SQL/packages/workflow/ownerstand/MFA/secrets change. Genericdraft validation+4artifact integrity acceptsstructure/bytes, publishablefalse/handler+source/instruction+rights/scientific/publicationblocked. Послеdraftmaterialgate continue06а.3 then06б; no automaticscientificpublication/realdata/mail/Selectel. Старыеpending statementsbelow historical.
+## Последовательность проверяемых блоков
 
-## 06а.1 принят; текущий06а.2 — actual artifact integrity
+Владелец выбрал следующий реальный импорт после TKI: **Карпов — рефлексивность,
+27 вопросов** (`reflexivity_karpov_27`). Черновик из existing source; scientific,
+norms, rights/publication остаются отдельной проверкой и решением. Отсутствующие
+текст/инструкция/контрольные исходники не восстанавливаются догадками.
 
-PR#53 ordinarymain9a34cfbceb5a544276e47f9f68096600187e1bc9, final
-0c905653ca2b4cde2e0da23d7c9e70fa910d5aee/tree5ce6aefc;
-[run37597066870](https://github.com/PedFund/PedPsyRU/actions/runs/37597066870)
-all-six success:324baseNode22/24,294actualPG18.6,триextraChrome5/5,0all.
-Incomingmainafbf6b3d trafficinstruction preserved via ordinarytwo-parent sync;
-thenexistingformcompatfix. Freshbase/sourceancestry/preview/parents/all324/
-308unchangedbase/all45critical и actualpostmain/tree/parents/all324 verified.
-Supersededcancelled37596037959/37596338453 NOTaccepted, retainedinPRbody.
+Владелец затем предоставил27statements+7labels/primarycitation. Отдельный
+малый06е.0блок сохраняет dataform/rawkeydraft/commongender8edits и6testgroups;
+сверка первичнойстатьи/полнойавторскойинструкции/норм/прав не завершена.
+Это дополнение материалов не заменяет pending06а.3/06б/редактор/clinicaldispatch;
+новая методика пока не доступна к научному прохождению/публикации.
 
-Новый06а.2: trustedportreader+SHA256adapter+boundedscopedmemorystaging (notauth),
-actuallength/hash/strictUTF8/ownedbyte snapshots/copyin-out/privateimmutablescope,
-canonicalJSONv1packagefingerprint/deepfrozenmetadataevidence, neutral400mismatch/
-503providererror. Nofiles/archives/network/eval/scoring/DB/HTTP/roles/approval.
-Emptydraftnotverified; artifactsvalidbytes ≠ semanticform/key/right/scientific
-validation. Handler/scientific/publication blockers remain+contentnotvalidated.
-8newgroups passed locally, full332 expected; current-head allsix/actual294PG/
-threeChrome5/5/freshbase/source/preview/parents/rawmanifest requiredbeforemerge.
-All45critical/currentpackage/SQL/core/TKI/ownerstand/MFA preserved; nonewdeps.
-Next06а.3 pinnedhandler/exactcurrentform-key/controlvectors, then06бpersistence.
+|Блок|Результат|
+|---|---|
+|06а Реестр/контракт|Фактический metadata registry + versioned package schema/validator, positive/negative tests|
+|06б Библиотека в БД|Private versioned draft metadata/artifact references, current superadmin/MFA/audit/CAS; researcher только approved выпуски|
+|06в Чтение через API|Bounded whitelist catalogue/detail; admin/researcher/participant не получают научные управляющие права|
+|06г Управление draft|Superadmin create/update draft через browser; immutable used versions, исправление новой версией|
+|06д Первый импорт|Действующий TKI пакет без переписывания key/form/processor и без возврата старого ключа|
+|06е Импорт иных типов|По одной методике: sums/reverse/special algorithms, независимые vectors/источники/права; отсутствие данных явно блокирует конкретный импорт|
+|06ж Подготовка новых материалов|Внешний воспроизводимый конвейер PDF/DOCX/XLSX → draft package; missing/conflicts отмечаются, не угадываются|
+|06з Приёмка|Actual PG/HTTP/browser/roles/races/immutable versions/backup/CI/manifests; журнал METHOD_VALIDATION|
 
-## 06а.1 — metadata inventory и structural package contract, 2026-10-07
+План не утверждает научный результат или конкретную библиотеку parser/OCR.
+6А и6Б проверяются на нескольких типах; новые method sources/scientific decisions
+и правомерность распространения потребуют владельца. При отсутствии материалов
+продолжать независимую техническую библиотеку, не заменять их догадками.
+Каждый небольшой блок: адресные tests → полный доступный local regression →
+current-head all-six actualPG/nativebrowser/currentbase/preview/manifests → ordinary
+technical merge. Ниже scientific/method publication approval не автоматизируется.
 
-От accepted main29932a6781eebcc1bc696acf23fefad438ba96d5 /PR#52/run37591582200
-all-six success:313base(Node22/24),294actualPG18.6,триextraChrome5/5,0all.
-Владелец отдельно разрешил фазу6; это не scientific/publication approval.
+## Модель разработки
 
-METHOD_IMPORT_INVENTORY: actuallegacyregistry50 =24builtin+12standard+14tanit;
-metadata-only, non-TKI inventory_only. Existing PedPsyRU TKI используется отдельно;
-oldlegacykey не скопирован. Нет чтения реальных Excel/protocols/participantdata.
+Рекомендация владельцу: GPT-6.1 Sol/medium для обычных небольших технических
+блоков. High — при сложной отладке доступа/миграций/архитектуры и спорных расчётах;
+это выбор уровня рассуждения, не замена контрольным примерам/источникам/owner approval.
+Автоматическое переключение модели не выполнено. Источники рекомендации:
+https://developers.openai.com/api/docs/models/gpt-6.1-sol
+https://developers.openai.com/api/docs/guides/reasoning
 
-Pure typed submission1.0 validator/contract: exactJSON/bytes/depth/duplicatekeys/
-UTF8/type/version/id/ref/path/media/digest syntax/finite bounds/caps; explicit
-missingparts/normsabsence/rightsstatus/draft-onlyreview; synthetic vectors exact
-own ordereditems/scales/sourcebasis. Deepfrozen outcome/publishablefalse/neutral
-errors; no I/O/SQL/network/scoring/eval/auth claims/newdeps/HTTP/UI.
-
-11 new test groups (many negative vectors per group) passed locally; numbers
-count test groups, not individual mutations. Первый full324/324 passed0all.
-Code review заменил regexp pre-scan на linear forward string scanner, чтобы
-не повторять поиск closingquote на каждом escapedquote в malformed input;
-added180KBunterminatedquote regression в том же test group/11of11 passed.
-Это превентивное code-review исправление, не заявление о воспроизведённой
-эксплуатации. Final full324/324/build/types/syntax/deps/architecture passed0all;
-current-head all-six required beforemerge. Actual PG expectedunchanged294 and
-threeChrome5/5: регрессии существующей платформы, НЕ новый library persistence/
-HTTP/browser и НЕ научная проверка новых методик.
-
-All45critical/core/TKI key+form/releases/SQL001–030/npm manifest+lock/workflow/
-ownerstand/MFA/secrets unchanged. Source-only local folder without Git index;
-beforemerge freshbase/source/preview/parents/fullrawblobs and actualpostmerge
-verification. Historical scientific failures/statuses retained, no false approval.
-
-Не решено этим блоком: actualartifact bytes/hash verification, handler static
-allowlist/control-vector execution, trusted scientific/right review, immutable
-library persistence/MFA/CAS/audit, API/editor and multi-method independent acceptance.
-Послеaccepted06а.1 отдельный06а.2 trustedartifact/handler verification, затем06б.
-При нехватке источников блокировать конкретный import, продолжать независимую
-техническую библиотеку; не выполнять всю фазу как одно огромное задание.
-
-### Совместимость existing TKI form и выбор владельца
-
-Code review actual form.json выявила version0.1.0-draft; initial structural
-formversion numeric-only её не принимал. Existing protectedform НЕ переименован:
-формат form.version расширен только numeric x.y.z[-draft[.N]], без изменения
-package/handler numeric-onlyversions, без неизвестных suffix/build/coercion.
-Added exact existingformversion andbadversions regressions в прежней группе.
-Это несовместимость нового контракта, не дефект/исправление научного TKI.
-Нужен новый full current-head CI после изменения, прежний run не acceptance.
-
-Владелец выбрал следующий реальный draft import: reflexivity_karpov_27
-(рефлексивность Карпова,27вопросов). Выбор приоритета не scientificapproval,
-не разрешение восстановить отсутствующие источники/форму/нормы догадками.
+06а разделён на06а.1 structural draft contract/inventory,06а.2 actual artifact
+integrity и06а.3 static pinned handler/control-vector verification.
+06а.1 принят в main через PR#53/9a34cfbc/run37597066870:all-six,
+324base/294actualPG/триChrome5/5,0all;actual324blobs/parents/tree проверены.
+06а.2 принят PR#54/main db370695/run37600160276: all-six/332base/294PG/
+threeChrome5/5. Карпов06е.0 draft принят PR#55/mainbb2bb115/run37603815117:
+all-six/338base/294PG/threeChrome5/5,actual334blobs/parents/tree verified.
+Новые migrations/API/editor/imports/approved releases ещё НЕ реализованы.
+Текущий06а.3 реализует exact trusted TKI form/key/handler и control execution
+через trusted порты, без scientific approval/произвольного импортированного JS.
+8newgroups/346capturedlocal passed; first344/346 failure retained в
+METHOD_HANDLER_VALIDATION; current-head all-six acceptance ещё обязательна.
+Затем06б private versioned persistence, отдельно API/editor.
