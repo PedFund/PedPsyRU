@@ -1,0 +1,293 @@
+{
+  "id": "ttf_atf_10",
+  "version": "1.0.0-staging",
+  "library_number": 11,
+  "title": "Тенденция к прощению / отношение к прощению",
+  "language": "ru",
+  "item_count": 10,
+  "response_options": [
+    {
+      "value": 1,
+      "label": "Совершенно не согласен"
+    },
+    {
+      "value": 2,
+      "label": "Не согласен"
+    },
+    {
+      "value": 3,
+      "label": "В чем-то не согласен"
+    },
+    {
+      "value": 4,
+      "label": "Затрудняюсь ответить"
+    },
+    {
+      "value": 5,
+      "label": "В чем-то согласен"
+    },
+    {
+      "value": 6,
+      "label": "Согласен"
+    },
+    {
+      "value": 7,
+      "label": "Полностью согласен"
+    }
+  ],
+  "items": [
+    {
+      "number": 1,
+      "id": "q01",
+      "text": "Когда кто-то задевает мои чувства, я легко с этим справляюсь и быстро прихожу в себя.",
+      "required": true,
+      "scale": "TTF",
+      "direction": "direct"
+    },
+    {
+      "number": 2,
+      "id": "q02",
+      "text": "Если со мной поступают несправедливо, я долго вспоминаю об этом.",
+      "required": true,
+      "scale": "TTF",
+      "direction": "reverse"
+    },
+    {
+      "number": 3,
+      "id": "q03",
+      "text": "Я склонен затаивать обиду.",
+      "required": true,
+      "scale": "TTF",
+      "direction": "reverse"
+    },
+    {
+      "number": 4,
+      "id": "q04",
+      "text": "Когда люди поступают со мной несправедливо, я прощаю и забываю об этом.",
+      "required": true,
+      "scale": "TTF",
+      "direction": "direct"
+    },
+    {
+      "number": 5,
+      "id": "q05",
+      "text": "Я верю, что способность/склонность к прощению – это хорошее и полезное качество.",
+      "required": true,
+      "scale": "ATF",
+      "direction": "direct"
+    },
+    {
+      "number": 6,
+      "id": "q06",
+      "text": "Справедливость важнее доброты.",
+      "required": true,
+      "scale": "ATF",
+      "direction": "reverse"
+    },
+    {
+      "number": 7,
+      "id": "q07",
+      "text": "Как это прекрасно – уметь прощать.",
+      "required": true,
+      "scale": "ATF",
+      "direction": "direct"
+    },
+    {
+      "number": 8,
+      "id": "q08",
+      "text": "Я нормально отношусь к людям, которые долго злятся на тех, кто их обидел.",
+      "required": true,
+      "scale": "ATF",
+      "direction": "reverse"
+    },
+    {
+      "number": 9,
+      "id": "q09",
+      "text": "Прощение – признак слабости.",
+      "required": true,
+      "scale": "ATF",
+      "direction": "reverse"
+    },
+    {
+      "number": 10,
+      "id": "q10",
+      "text": "Люди должны сильно стараться для того, чтобы выбросить из головы мысли о несправедливости, от которой они пострадали.",
+      "required": true,
+      "scale": "ATF",
+      "direction": "direct"
+    }
+  ],
+  "missing_item_text_count": 0,
+  "source": {
+    "approved_english_reference_file": "tendencytoforgivescale.iqjs",
+    "scope": "Complete 10-item Russian blank; English .iqjs used only for prior ATF key confirmation.",
+    "approved_russian_statements": "user_supplied_in_current_conversation_2026-11-04"
+  },
+  "scoring": {
+    "scales": {
+      "TTF": {
+        "direct": [
+          1,
+          4
+        ],
+        "reverse": [
+          2,
+          3
+        ],
+        "range": [
+          4,
+          28
+        ]
+      },
+      "ATF": {
+        "direct": [
+          5,
+          7,
+          10
+        ],
+        "reverse": [
+          6,
+          8,
+          9
+        ],
+        "range": [
+          6,
+          42
+        ]
+      }
+    },
+    "reverse_formula": "8 - response",
+    "outcome": "2 unrounded quantitative sums",
+    "norms": null,
+    "categories": null,
+    "formula": "TTF = a1 + (8-a2) + (8-a3) + a4; ATF = a5 + (8-a6) + a7 + (8-a8) + (8-a9) + a10",
+    "required_all_items": true,
+    "high_score_meaning": {
+      "TTF": "Более выраженная склонность отпускать обиды и не копить злобу.",
+      "ATF": "Более позитивное отношение к прощению как ценному и конструктивному способу реагирования."
+    }
+  },
+  "review": {
+    "scientific_content_decision": "approved_in_issue_69",
+    "status": "COMPLETE_RUSSIAN_10_ITEMS_AND_SCORING",
+    "publication_rights": "not_documented",
+    "runtime": "not_implemented",
+    "blocker": "Publication rights must be assessed before public distribution; technical instruction is editorial, not a verbatim approved source."
+  },
+  "stimulus_material": {
+    "instruction": "Оцените степень согласия с каждым из следующих утверждений, выбрав один ответ от 1 до 7.",
+    "instruction_provenance": "editorial_technical_instruction_not_user_verified",
+    "response_options": [
+      {
+        "value": 1,
+        "label": "Совершенно не согласен"
+      },
+      {
+        "value": 2,
+        "label": "Не согласен"
+      },
+      {
+        "value": 3,
+        "label": "В чем-то не согласен"
+      },
+      {
+        "value": 4,
+        "label": "Затрудняюсь ответить"
+      },
+      {
+        "value": 5,
+        "label": "В чем-то согласен"
+      },
+      {
+        "value": 6,
+        "label": "Согласен"
+      },
+      {
+        "value": 7,
+        "label": "Полностью согласен"
+      }
+    ],
+    "items": [
+      {
+        "number": 1,
+        "id": "q01",
+        "text": "Когда кто-то задевает мои чувства, я легко с этим справляюсь и быстро прихожу в себя.",
+        "required": true,
+        "scale": "TTF",
+        "direction": "direct"
+      },
+      {
+        "number": 2,
+        "id": "q02",
+        "text": "Если со мной поступают несправедливо, я долго вспоминаю об этом.",
+        "required": true,
+        "scale": "TTF",
+        "direction": "reverse"
+      },
+      {
+        "number": 3,
+        "id": "q03",
+        "text": "Я склонен затаивать обиду.",
+        "required": true,
+        "scale": "TTF",
+        "direction": "reverse"
+      },
+      {
+        "number": 4,
+        "id": "q04",
+        "text": "Когда люди поступают со мной несправедливо, я прощаю и забываю об этом.",
+        "required": true,
+        "scale": "TTF",
+        "direction": "direct"
+      },
+      {
+        "number": 5,
+        "id": "q05",
+        "text": "Я верю, что способность/склонность к прощению – это хорошее и полезное качество.",
+        "required": true,
+        "scale": "ATF",
+        "direction": "direct"
+      },
+      {
+        "number": 6,
+        "id": "q06",
+        "text": "Справедливость важнее доброты.",
+        "required": true,
+        "scale": "ATF",
+        "direction": "reverse"
+      },
+      {
+        "number": 7,
+        "id": "q07",
+        "text": "Как это прекрасно – уметь прощать.",
+        "required": true,
+        "scale": "ATF",
+        "direction": "direct"
+      },
+      {
+        "number": 8,
+        "id": "q08",
+        "text": "Я нормально отношусь к людям, которые долго злятся на тех, кто их обидел.",
+        "required": true,
+        "scale": "ATF",
+        "direction": "reverse"
+      },
+      {
+        "number": 9,
+        "id": "q09",
+        "text": "Прощение – признак слабости.",
+        "required": true,
+        "scale": "ATF",
+        "direction": "reverse"
+      },
+      {
+        "number": 10,
+        "id": "q10",
+        "text": "Люди должны сильно стараться для того, чтобы выбросить из головы мысли о несправедливости, от которой они пострадали.",
+        "required": true,
+        "scale": "ATF",
+        "direction": "direct"
+      }
+    ]
+  }
+}

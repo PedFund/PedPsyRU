@@ -1,0 +1,1081 @@
+{
+  "id": "ryff_pwb_84_shevelenkova_fesenko",
+  "title": "Шкала психологического благополучия К. Рифф",
+  "adaptation": "Т. Д. Шевеленкова, П. П. Фесенко",
+  "version": "84 пункта",
+  "age_min": null,
+  "source": {
+    "file": "РИФФключи и обработка результатов методики.pdf",
+    "webpage": "https://dip-psi.ru/psikhologicheskiye-testy/post/oprosnik-shkala-psihologicheskogo-blagopoluchiya-k-riff-adaptaciya-t-d-shevelenkovoj-p-p-fesenko",
+    "version": "84 пункта, адаптация Т. Д. Шевеленковой и П. П. Фесенко"
+  },
+  "response_options": [
+    {
+      "value": 1,
+      "label": "Абсолютно не согласен"
+    },
+    {
+      "value": 2,
+      "label": "Не согласен"
+    },
+    {
+      "value": 3,
+      "label": "Скорее не согласен"
+    },
+    {
+      "value": 4,
+      "label": "Скорее согласен"
+    },
+    {
+      "value": 5,
+      "label": "Согласен"
+    },
+    {
+      "value": 6,
+      "label": "Абсолютно согласен"
+    }
+  ],
+  "items": [
+    {
+      "id": "Q01",
+      "number": 1,
+      "text": "Большинство моих знакомых считает меня любящим и преданным человеком.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q02",
+      "number": 2,
+      "text": "Иногда я меняю свое поведение или образ мышления, чтобы не выделяться.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q03",
+      "number": 3,
+      "text": "Как правило, я считаю себя в ответе за то, как я живу.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q04",
+      "number": 4,
+      "text": "Меня не интересуют занятия, которые принесут результат в отдаленном будущем.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q05",
+      "number": 5,
+      "text": "Мне приятно думать о том, что я совершил в прошлом и надеюсь совершить в будущем.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q06",
+      "number": 6,
+      "text": "Когда я оглядываюсь назад, мне нравится, как сложилась моя жизнь.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q07",
+      "number": 7,
+      "text": "Поддержание близких отношений было связано для меня с трудностями и разочарованиями.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q08",
+      "number": 8,
+      "text": "Я не боюсь высказывать свое мнение, даже если оно противоречит мнению большинства.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q09",
+      "number": 9,
+      "text": "Требования повседневной жизни часто угнетают меня.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q10",
+      "number": 10,
+      "text": "В принципе, я считаю, что со временем узнаю о себе все больше и больше.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q11",
+      "number": 11,
+      "text": "Я живу сегодняшним днем и не особо задумываюсь о будущем.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q12",
+      "number": 12,
+      "text": "В целом я уверен в себе.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q13",
+      "number": 13,
+      "text": "Мне часто бывает одиноко из-за того, что у меня мало друзей, с кем я могу поделиться своими проблемами.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q14",
+      "number": 14,
+      "text": "На мои решения обычно не влияет то, что делают другие.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q15",
+      "number": 15,
+      "text": "Я не очень вписываюсь в сообщество окружающих меня людей.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q16",
+      "number": 16,
+      "text": "Я отношусь к тем людям, которым нравится пробовать все новое.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q17",
+      "number": 17,
+      "text": "Я стараюсь сосредоточиться на настоящем, потому что будущее почти всегда приносит какие-то проблемы.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q18",
+      "number": 18,
+      "text": "Мне кажется, что многие из моих знакомых преуспели в жизни больше, чем я.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q19",
+      "number": 19,
+      "text": "Я люблю задушевные беседы с родными или друзьями.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q20",
+      "number": 20,
+      "text": "Меня беспокоит то, что думают обо мне другие.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q21",
+      "number": 21,
+      "text": "Я вполне справляюсь со своими повседневными заботами.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q22",
+      "number": 22,
+      "text": "Я не хочу пробовать новые виды деятельности – моя жизнь и так меня устраивает.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q23",
+      "number": 23,
+      "text": "Моя жизнь имеет смысл",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q24",
+      "number": 24,
+      "text": "Если бы у меня была такая возможность, я бы многое в себе изменил.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q25",
+      "number": 25,
+      "text": "Мне кажется важным быть хорошим слушателем, когда близкие друзья делятся со мной своими проблемами.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q26",
+      "number": 26,
+      "text": "Для меня важнее быть в согласии с самим собой, чем получать одобрение окружающих.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q27",
+      "number": 27,
+      "text": "Я часто чувствую, что мои обязанности угнетают меня.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q28",
+      "number": 28,
+      "text": "Мне кажется, что новый опыт, способный изменить мои представления о себе и об окружающем мире, очень важен.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q29",
+      "number": 29,
+      "text": "Мои повседневные дела часто кажутся мне банальными и незначительными.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q30",
+      "number": 30,
+      "text": "В целом, я себе нравлюсь.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q31",
+      "number": 31,
+      "text": "У меня не так много знакомых, готовых выслушать меня, когда мне нужно выговориться.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q32",
+      "number": 32,
+      "text": "На меня оказывают влияние сильные люди.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q33",
+      "number": 33,
+      "text": "Если бы я был несчастен в жизни, я предпринял бы эффективные меры, чтобы изменить ситуацию.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q34",
+      "number": 34,
+      "text": "Если задуматься, то с годами я не стал намного лучше.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q35",
+      "number": 35,
+      "text": "Я не очень хорошо осознаю, чего хочу достичь в жизни.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q36",
+      "number": 36,
+      "text": "Я совершал ошибки, но: «всё, что не делается, всё к лучшему».",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q37",
+      "number": 37,
+      "text": "Я считаю, что многое получаю от друзей.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q38",
+      "number": 38,
+      "text": "Людям редко удается уговорить меня сделать то, чего я сам не хочу.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q39",
+      "number": 39,
+      "text": "Я неплохо справляюсь со своими финансовыми делами.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q40",
+      "number": 40,
+      "text": "На мой взгляд, человек способен расти и развиваться в любом возрасте.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q41",
+      "number": 41,
+      "text": "Когда-то я ставил перед собой цели, но теперь это кажется мне пустой тратой времени.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q42",
+      "number": 42,
+      "text": "Во многом я разочарован своими достижениями в жизни.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q43",
+      "number": 43,
+      "text": "Мне кажется, что у большинства людей больше друзей, чем у меня.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q44",
+      "number": 44,
+      "text": "Для меня важнее приспособиться к окружающим людям, чем в одиночку отстаивать свои принципы.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q45",
+      "number": 45,
+      "text": "Я расстраиваюсь, когда не успеваю сделать все, что намечено на день.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q46",
+      "number": 46,
+      "text": "Со временем я стал лучше разбираться в жизни, и это сделало меня более сильным и компетентным.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q47",
+      "number": 47,
+      "text": "Мне доставляет удовольствие составлять планы на будущее и воплощать их в жизнь.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q48",
+      "number": 48,
+      "text": "Как правило, я горжусь тем, какой я, и какой образ жизни я веду.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q49",
+      "number": 49,
+      "text": "Окружающие считают меня отзывчивым человеком, у которого всегда найдется время для других.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q50",
+      "number": 50,
+      "text": "Я уверен в своих суждениях, даже если они идут вразрез с общепринятым мнением.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q51",
+      "number": 51,
+      "text": "Я умею рассчитывать свое время так, чтобы все делать в срок.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q52",
+      "number": 52,
+      "text": "У меня есть ощущение, что с годами я стал лучше.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q53",
+      "number": 53,
+      "text": "Я активно стараюсь осуществлять планы, которые составляю для себя.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q54",
+      "number": 54,
+      "text": "Я завидую образу жизни многих людей.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q55",
+      "number": 55,
+      "text": "У меня было мало теплых доверительных отношений с другими людьми.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q56",
+      "number": 56,
+      "text": "Мне трудно высказывать свое мнение по спорным вопросам.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q57",
+      "number": 57,
+      "text": "Я занятой человек, но я получаю удовольствие от того, что справляюсь с делами.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q58",
+      "number": 58,
+      "text": "Я не люблю оказываться в новых ситуациях, когда нужно менять привычный для меня способ поведения.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q59",
+      "number": 59,
+      "text": "Я не отношусь к людям, которые скитаются по жизни безо всякой цели.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q60",
+      "number": 60,
+      "text": "Возможно, я отношусь к себе хуже, чем большинство людей.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q61",
+      "number": 61,
+      "text": "Когда дело доходит до дружбы, я часто чувствую себя сторонним наблюдателем.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q62",
+      "number": 62,
+      "text": "Я часто меняю свою точку зрения, если друзья или родные не согласны с ней.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q63",
+      "number": 63,
+      "text": "Я не люблю строить планы на день, потому что никогда не успеваю сделать все запланированное.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q64",
+      "number": 64,
+      "text": "Для меня жизнь – это непрерывный процесс познания и развития.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q65",
+      "number": 65,
+      "text": "Мне иногда кажется, что я уже совершил в жизни все, что было можно.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q66",
+      "number": 66,
+      "text": "Я часто просыпаюсь с мыслью о том, что жил неправильно.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q67",
+      "number": 67,
+      "text": "Я знаю, что могу доверять моим друзьям, а они знают, что могут доверять мне.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q68",
+      "number": 68,
+      "text": "Я не из тех, кто поддается давлению общества в том, как себя вести и как мыслить.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q69",
+      "number": 69,
+      "text": "Мне удалось найти себе подходящее занятие и нужные мне отношения.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q70",
+      "number": 70,
+      "text": "Мне нравится наблюдать, как с годами мои взгляды изменились и стали более зрелыми.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q71",
+      "number": 71,
+      "text": "Цели, которые я ставил перед собой, чаще приносили мне радость, нежели разочарование.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q72",
+      "number": 72,
+      "text": "В моем прошлом были взлеты и падения, но я не хотел бы ничего менять.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q73",
+      "number": 73,
+      "text": "Мне трудно полностью раскрыться в общении с людьми.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q74",
+      "number": 74,
+      "text": "Меня беспокоит, как окружающие оценивают то, что я выбираю в жизни.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q75",
+      "number": 75,
+      "text": "Мне трудно обустроить свою жизнь так, как хотелось бы.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q76",
+      "number": 76,
+      "text": "Я уже давно не пытаюсь изменить или улучшить свою жизнь.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q77",
+      "number": 77,
+      "text": "Мне приятно думать о том, чего я достиг в жизни.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q78",
+      "number": 78,
+      "text": "Когда я сравниваю себя со своими друзьями и знакомыми то понимаю, что я во многом лучше их.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q79",
+      "number": 79,
+      "text": "Мы с моими друзьями относимся с сочувствием к проблемам друг друга.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q80",
+      "number": 80,
+      "text": "Я сужу о себе исходя из того, что я считаю важным, а не из того, что считают важным другие.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q81",
+      "number": 81,
+      "text": "Мне удалось создать себе такое жилище и такой образ жизни, которые мне очень нравятся.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": false
+    },
+    {
+      "id": "Q82",
+      "number": 82,
+      "text": "Старого пса не научить новым трюкам.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q83",
+      "number": 83,
+      "text": "Я не уверен, что мне стоит чего-то ждать от жизни.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    },
+    {
+      "id": "Q84",
+      "number": 84,
+      "text": "Каждый имеет недостатки, но у меня их больше чем у других.",
+      "response_min": 1,
+      "response_max": 6,
+      "reverse_scored": true
+    }
+  ],
+  "scales": [
+    {
+      "id": "Положительные отношения с другими",
+      "name": "Положительные отношения с другими",
+      "direct_items": [
+        1,
+        19,
+        25,
+        37,
+        49,
+        67,
+        79
+      ],
+      "reverse_items": [
+        7,
+        13,
+        31,
+        43,
+        55,
+        61,
+        73
+      ],
+      "item_count": 14,
+      "min": 14,
+      "max": 84
+    },
+    {
+      "id": "Автономия",
+      "name": "Автономия",
+      "direct_items": [
+        8,
+        14,
+        26,
+        38,
+        50,
+        68,
+        80
+      ],
+      "reverse_items": [
+        2,
+        20,
+        32,
+        44,
+        56,
+        62,
+        74
+      ],
+      "item_count": 14,
+      "min": 14,
+      "max": 84
+    },
+    {
+      "id": "Управление окружением",
+      "name": "Управление окружением",
+      "direct_items": [
+        3,
+        21,
+        33,
+        39,
+        51,
+        57,
+        69,
+        81
+      ],
+      "reverse_items": [
+        9,
+        15,
+        27,
+        45,
+        63,
+        75
+      ],
+      "item_count": 14,
+      "min": 14,
+      "max": 84
+    },
+    {
+      "id": "Личностный рост",
+      "name": "Личностный рост",
+      "direct_items": [
+        10,
+        16,
+        28,
+        40,
+        46,
+        52,
+        64,
+        70
+      ],
+      "reverse_items": [
+        4,
+        22,
+        34,
+        58,
+        76,
+        82
+      ],
+      "item_count": 14,
+      "min": 14,
+      "max": 84
+    },
+    {
+      "id": "Цель в жизни",
+      "name": "Цель в жизни",
+      "direct_items": [
+        5,
+        23,
+        47,
+        53,
+        59,
+        71,
+        77
+      ],
+      "reverse_items": [
+        11,
+        17,
+        29,
+        35,
+        41,
+        65,
+        83
+      ],
+      "item_count": 14,
+      "min": 14,
+      "max": 84
+    },
+    {
+      "id": "Самопринятие",
+      "name": "Самопринятие",
+      "direct_items": [
+        6,
+        12,
+        30,
+        36,
+        48,
+        72,
+        78
+      ],
+      "reverse_items": [
+        18,
+        24,
+        42,
+        54,
+        60,
+        66,
+        84
+      ],
+      "item_count": 14,
+      "min": 14,
+      "max": 84
+    }
+  ],
+  "scoring": {
+    "direct": "score = response",
+    "reverse": "score = 7 - response",
+    "scale": "sum of 14 scored items",
+    "overall": "sum of 84 scored items",
+    "overall_range": [
+      84,
+      504
+    ],
+    "missing_answers": "block calculations for scales with missing values",
+    "overall_cutoffs_source": [
+      {
+        "level": "низкий",
+        "min": 84,
+        "max": 323
+      },
+      {
+        "level": "средний",
+        "min": 324,
+        "max": 353
+      },
+      {
+        "level": "высокий",
+        "min": 354,
+        "max": 504
+      }
+    ]
+  },
+  "norms": {
+    "group_columns": [
+      "Мужчины 20–35",
+      "Мужчины 35–55",
+      "Женщины 20–35",
+      "Женщины 35–55"
+    ],
+    "rows": [
+      {
+        "scale": "Положительные отношения с другими",
+        "values": [
+          {
+            "M": 63,
+            "SD": 7.12
+          },
+          {
+            "M": 54,
+            "SD": 6.52
+          },
+          {
+            "M": 65,
+            "SD": 8.28
+          },
+          {
+            "M": 58,
+            "SD": 7.5
+          }
+        ]
+      },
+      {
+        "scale": "Автономия",
+        "values": [
+          {
+            "M": 56,
+            "SD": 6.86
+          },
+          {
+            "M": 57,
+            "SD": 7.73
+          },
+          {
+            "M": 58,
+            "SD": 7.31
+          },
+          {
+            "M": 57,
+            "SD": 5.6
+          }
+        ]
+      },
+      {
+        "scale": "Управление окружением",
+        "values": [
+          {
+            "M": 57,
+            "SD": 6.27
+          },
+          {
+            "M": 56,
+            "SD": 8.27
+          },
+          {
+            "M": 58,
+            "SD": 7.35
+          },
+          {
+            "M": 59,
+            "SD": 8.3
+          }
+        ]
+      },
+      {
+        "scale": "Личностный рост",
+        "values": [
+          {
+            "M": 65,
+            "SD": 4.94
+          },
+          {
+            "M": 58,
+            "SD": 7.8
+          },
+          {
+            "M": 65,
+            "SD": 6.04
+          },
+          {
+            "M": 63,
+            "SD": 7.9
+          }
+        ]
+      },
+      {
+        "scale": "Цель в жизни",
+        "values": [
+          {
+            "M": 63,
+            "SD": 5.16
+          },
+          {
+            "M": 58,
+            "SD": 8.51
+          },
+          {
+            "M": 64,
+            "SD": 8.19
+          },
+          {
+            "M": 59,
+            "SD": 6.9
+          }
+        ]
+      },
+      {
+        "scale": "Самопринятие",
+        "values": [
+          {
+            "M": 59,
+            "SD": 6.99
+          },
+          {
+            "M": 52,
+            "SD": 5.31
+          },
+          {
+            "M": 61,
+            "SD": 9.08
+          },
+          {
+            "M": 57,
+            "SD": 6.1
+          }
+        ]
+      },
+      {
+        "scale": "Психологическое благополучие",
+        "values": [
+          {
+            "M": 363,
+            "SD": 24.2
+          },
+          {
+            "M": 336,
+            "SD": 33.94
+          },
+          {
+            "M": 370,
+            "SD": 34.68
+          },
+          {
+            "M": 351,
+            "SD": null
+          }
+        ]
+      }
+    ],
+    "notice": "SD у женщин 35–55 по интегральному показателю неразборчиво в PDF; необходимо сверить с первоисточником"
+  },
+  "interpretation": [
+    {
+      "scale": "Положительные отношения с другими",
+      "description": "Теплота, доверие, способность к сопереживанию и близким отношениям. Низкие показатели связаны с трудностями установления и поддержания доверительных контактов."
+    },
+    {
+      "scale": "Автономия",
+      "description": "Независимость суждений, саморегуляция и оценка себя по собственным критериям. Низкие показатели отражают зависимость от мнения окружающих."
+    },
+    {
+      "scale": "Управление окружением",
+      "description": "Способность организовывать повседневную деятельность, использовать возможности и создавать подходящие условия жизни."
+    },
+    {
+      "scale": "Личностный рост",
+      "description": "Восприятие собственного развития, открытость новому опыту и готовность изменять свое поведение и представления."
+    },
+    {
+      "scale": "Цель в жизни",
+      "description": "Наличие жизненных целей, чувства направленности, осмысленности прошлого и настоящего."
+    },
+    {
+      "scale": "Самопринятие",
+      "description": "Позитивное отношение к себе, признание собственных сильных и слабых сторон и принятие прошлого."
+    }
+  ],
+  "qa": {
+    "item_coverage": "verified 1–84 exactly once across scales",
+    "ambiguous": "Интегральное SD (женщины 35–55) требует сверки; возрастные ограничения и нормативные пороги отдельных шкал в источнике не определены",
+    "source_faithfulness": "Нормы/пороги приведены по PDF без внешней проверки"
+  }
+}

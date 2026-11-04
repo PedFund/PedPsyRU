@@ -1,0 +1,672 @@
+{
+  "id": "qlesq_36_vodopyanova",
+  "version": "1.1.0-staging",
+  "library_number": 3,
+  "title": "Шкала оценки качества жизни",
+  "short_title": "Q-LES-Q, 36 пунктов",
+  "adaptation": "Н. Е. Водопьянова",
+  "language": "ru",
+  "source_variant": "Рабочая согласованная редакция по Поляковой О. Б., Бонкало Т. И. (2023), с. 238–244; библиографическую эквивалентность Q-LES-Q не утверждать автоматически.",
+  "instructions": "Пожалуйста, оцените степень удовлетворенности вашей жизнью по каждому пункту. Оценка не может быть правильной или неправильной – она только ваша. В каждом пункте выберите число от 1 до 10, наиболее точно отражающее ваше состояние. Постарайтесь отвечать быстро, ориентируясь на первую реакцию.",
+  "response_format": {
+    "type": "integer",
+    "min": 1,
+    "max": 10,
+    "required": true,
+    "anchors": "Оба крайних полюса заданы отдельно для каждого пункта; промежуточные числа без самостоятельных словесных якорей."
+  },
+  "respondent_fields": [
+    {
+      "id": "respondent_code",
+      "label": "Код респондента",
+      "required": false
+    },
+    {
+      "id": "age",
+      "label": "Возраст",
+      "required": false
+    },
+    {
+      "id": "sex",
+      "label": "Пол",
+      "required": false
+    },
+    {
+      "id": "profession",
+      "label": "Профессия",
+      "required": false
+    }
+  ],
+  "items": [
+    {
+      "id": "q01",
+      "number": 1,
+      "title": "Работа (карьера)",
+      "anchor_1": "Полностью не соответствует интересам и ожиданиям",
+      "anchor_10": "Полностью соответствует интересам и ожиданиям",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q02",
+      "number": 2,
+      "title": "Личные устремления и достижения",
+      "anchor_1": "Не достиг многих целей, часто чувствую себя неудачником",
+      "anchor_10": "Достиг многих целей, обычно чувствую себя удачливым человеком",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q03",
+      "number": 3,
+      "title": "Здоровье",
+      "anchor_1": "Часто болею",
+      "anchor_10": "Обычно здоров",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q04",
+      "number": 4,
+      "title": "Изменяющиеся обстоятельства",
+      "anchor_1": "Часто вызывают сильное переживание одиночества",
+      "anchor_10": "Никогда не чувствую себя одиноко",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q05",
+      "number": 5,
+      "title": "Отношения с детьми (своими или чужими)",
+      "anchor_1": "Не вызывают радости",
+      "anchor_10": "Всегда радуют",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q06",
+      "number": 6,
+      "title": "Отношения на работе (с коллегами, начальством и др.)",
+      "anchor_1": "Вызывают сильный дискомфорт (напряжение и неудовлетворенность)",
+      "anchor_10": "Обычно гармоничные (приятные)",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q07",
+      "number": 7,
+      "title": "Отношения с друзьями",
+      "anchor_1": "Нет искренних дружеских отношений, без теплоты и взаимопонимания",
+      "anchor_10": "Близкие и теплые, чувствую их поддержку",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q08",
+      "number": 8,
+      "title": "Духовная или религиозная поддержка",
+      "anchor_1": "Несущественная (нет)",
+      "anchor_10": "Сильная и существенная",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q09",
+      "number": 9,
+      "title": "Хорошее настроение, как правило, зависит",
+      "anchor_1": "От внешней ситуации (отношений с другими людьми)",
+      "anchor_10": "От внутреннего самообладания (оптимизм, чувство юмора, жизнерадостность)",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q10",
+      "number": 10,
+      "title": "Умение организовать свое время",
+      "anchor_1": "Всегда не хватает, постоянное напряжение из-за дефицита времени",
+      "anchor_10": "Время – мой союзник, умею хорошо организовать свое время",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q11",
+      "number": 11,
+      "title": "Окружающая среда",
+      "anchor_1": "Неприятна и опасна",
+      "anchor_10": "Безопасна и комфортна",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q12",
+      "number": 12,
+      "title": "Физическое состояние",
+      "anchor_1": "Усталость, постоянное напряжение",
+      "anchor_10": "Отличное, дееспособное",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q13",
+      "number": 13,
+      "title": "Финансовое состояние",
+      "anchor_1": "Неудовлетворительное, плохо управляемое",
+      "anchor_10": "Хорошее, стабильное",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q14",
+      "number": 14,
+      "title": "Количество и драматизм жизненных кризисов за последние два года",
+      "anchor_1": "Чрезмерное",
+      "anchor_10": "Не было кризисов",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q15",
+      "number": 15,
+      "title": "Деловая (профессиональная) карьера",
+      "anchor_1": "Бесперспективна",
+      "anchor_10": "Хорошие перспективы",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q16",
+      "number": 16,
+      "title": "Физическая активность",
+      "anchor_1": "Очень низкая и нерегулярная",
+      "anchor_10": "Высокая и регулярная",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q17",
+      "number": 17,
+      "title": "Сон",
+      "anchor_1": "Часто плохой",
+      "anchor_10": "Отличный и полноценный",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q18",
+      "number": 18,
+      "title": "Физическая форма",
+      "anchor_1": "Моя проблема (неудовлетворенность)",
+      "anchor_10": "Нет проблем",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q19",
+      "number": 19,
+      "title": "Самоконтроль и самообладание",
+      "anchor_1": "Неудовлетворительные",
+      "anchor_10": "Всегда держусь на уровне",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q20",
+      "number": 20,
+      "title": "Принятие решений",
+      "anchor_1": "Всегда трудно принимаю ответственные решения",
+      "anchor_10": "Легко принимаю решения",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q21",
+      "number": 21,
+      "title": "Обязательность",
+      "anchor_1": "Делаю только то, что могу, никогда не перенапрягаюсь",
+      "anchor_10": "Беру на себя слишком много своих и чужих обязательств, часто беру на себя то, что должны делать другие",
+      "reverse": true,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q22",
+      "number": 22,
+      "title": "Чувство вины и стыда",
+      "anchor_1": "Очень часто",
+      "anchor_10": "Никогда",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q23",
+      "number": 23,
+      "title": "При изменении ситуации или планов",
+      "anchor_1": "Всегда нервничаю",
+      "anchor_10": "Легко приспосабливаюсь к любой новой ситуации",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q24",
+      "number": 24,
+      "title": "Гнев",
+      "anchor_1": "Я часто сержусь на себя или на других",
+      "anchor_10": "Многие вещи я воспринимаю с легкостью и без раздражения",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q25",
+      "number": 25,
+      "title": "Самоуважение",
+      "anchor_1": "Я часто недоволен собой",
+      "anchor_10": "В целом я доволен собой",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q26",
+      "number": 26,
+      "title": "Жизненные ценности и принципы",
+      "anchor_1": "Не всегда ясны, часто изменчивы",
+      "anchor_10": "Всегда ясны и стабильны",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q27",
+      "number": 27,
+      "title": "Моральная и эмоциональная поддержка близких людей",
+      "anchor_1": "Минимальная (отсутствует)",
+      "anchor_10": "Сильная и существенная",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q28",
+      "number": 28,
+      "title": "Чувство эмоциональной «приподнятости» и жизнерадостности",
+      "anchor_1": "Очень часто",
+      "anchor_10": "Никогда",
+      "reverse": true,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q29",
+      "number": 29,
+      "title": "Интимно-сексуальная жизнь",
+      "anchor_1": "Неудовлетворительная",
+      "anchor_10": "Гармоничная и регулярная",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q30",
+      "number": 30,
+      "title": "Понимание и уважение в деловой (профессиональной) среде",
+      "anchor_1": "Очень низкое",
+      "anchor_10": "Высокое",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q31",
+      "number": 31,
+      "title": "Страх и тревога",
+      "anchor_1": "Присутствуют ежедневно",
+      "anchor_10": "Отсутствуют",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q32",
+      "number": 32,
+      "title": "Профессиональная (деловая) поддержка",
+      "anchor_1": "Отсутствует",
+      "anchor_10": "Высокая",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q33",
+      "number": 33,
+      "title": "Обида или гнев на других",
+      "anchor_1": "Отсутствует",
+      "anchor_10": "Очень часто",
+      "reverse": true,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q34",
+      "number": 34,
+      "title": "Настроение",
+      "anchor_1": "Почти всегда мрачное",
+      "anchor_10": "Всегда жизнерадостное",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q35",
+      "number": 35,
+      "title": "В трудных жизненных ситуациях",
+      "anchor_1": "Никогда не теряю надежду на благополучное разрешение ситуации",
+      "anchor_10": "Всегда испытываю растерянность или чувство «безысходности»",
+      "reverse": true,
+      "response_min": 1,
+      "response_max": 10
+    },
+    {
+      "id": "q36",
+      "number": 36,
+      "title": "Внутренние (личные) ресурсы",
+      "anchor_1": "Чувствую истощенность внутренних резервов",
+      "anchor_10": "Чувствую в себе огромные силы и ресурсы",
+      "reverse": false,
+      "response_min": 1,
+      "response_max": 10
+    }
+  ],
+  "scales": [
+    {
+      "id": "work",
+      "name": "Работа",
+      "item_numbers": [
+        1,
+        6,
+        13,
+        15
+      ],
+      "item_ids": [
+        "q01",
+        "q06",
+        "q13",
+        "q15"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "achievement",
+      "name": "Личные достижения",
+      "item_numbers": [
+        2,
+        25,
+        26,
+        30
+      ],
+      "item_ids": [
+        "q02",
+        "q25",
+        "q26",
+        "q30"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "health",
+      "name": "Здоровье",
+      "item_numbers": [
+        3,
+        16,
+        17,
+        18
+      ],
+      "item_ids": [
+        "q03",
+        "q16",
+        "q17",
+        "q18"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "close_relations",
+      "name": "Общение с близкими людьми",
+      "item_numbers": [
+        4,
+        5,
+        7,
+        29
+      ],
+      "item_ids": [
+        "q04",
+        "q05",
+        "q07",
+        "q29"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "support",
+      "name": "Поддержка",
+      "item_numbers": [
+        8,
+        27,
+        32,
+        36
+      ],
+      "item_ids": [
+        "q08",
+        "q27",
+        "q32",
+        "q36"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "optimism",
+      "name": "Оптимистичность",
+      "item_numbers": [
+        9,
+        28,
+        34,
+        35
+      ],
+      "item_ids": [
+        "q09",
+        "q28",
+        "q34",
+        "q35"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "tension",
+      "name": "Напряженность",
+      "item_numbers": [
+        10,
+        11,
+        12,
+        14
+      ],
+      "item_ids": [
+        "q10",
+        "q11",
+        "q12",
+        "q14"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "self_control",
+      "name": "Самоконтроль",
+      "item_numbers": [
+        19,
+        20,
+        21,
+        23
+      ],
+      "item_ids": [
+        "q19",
+        "q20",
+        "q21",
+        "q23"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    },
+    {
+      "id": "negative_emotions",
+      "name": "Негативные эмоции",
+      "item_numbers": [
+        22,
+        24,
+        31,
+        33
+      ],
+      "item_ids": [
+        "q22",
+        "q24",
+        "q31",
+        "q33"
+      ],
+      "min": 4,
+      "max": 40,
+      "scoring": "sum_scored"
+    }
+  ],
+  "scoring": {
+    "reverse_items": [
+      21,
+      33,
+      35
+    ],
+    "reverse_formula": "11 - raw_answer",
+    "direct_formula": "raw_answer",
+    "scale_formula": "sum(scored answers of scale items)",
+    "overall_index_formula": "sum(scale_scores) / 9",
+    "overall_index_range": [
+      4,
+      40
+    ],
+    "overall_raw_total_formula": "sum(all 36 scored answers)",
+    "overall_raw_total_range": [
+      36,
+      360
+    ],
+    "normalized_percent_formula": "(overall_index - 4) / 36 * 100",
+    "scale_normalized_percent_formula": "(scale_score - 4) / 36 * 100",
+    "interpretation_basis": "overall_index",
+    "rounding": "do not round before level assignment; display to two decimal places",
+    "missing_answers": "Do not calculate scale or index if any required item missing",
+    "valid_answer_values": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10
+    ]
+  },
+  "overall_levels": [
+    {
+      "label": "Очень низкий",
+      "min": 4,
+      "max": 10
+    },
+    {
+      "label": "Низкий",
+      "min": 11,
+      "max": 20
+    },
+    {
+      "label": "Средний",
+      "min": 21,
+      "max": 29
+    },
+    {
+      "label": "Высокий",
+      "min": 30,
+      "max": 40
+    }
+  ],
+  "notes": [
+    "Уровни 4–10, 11–20, 21–29, 30–40 применяются к интегральному индексу 4–40, а не к сумме 36–360.",
+    "Для значений между целыми порогами классификация задается по диапазонам исходной шкалы с границами: <11, <21, <30, >=30. Это техническая реализация целочисленных опубликованных интервалов, не дополнительная норма.",
+    "Проценты – дополнительная линейная нормировка, а не отдельные нормативы.",
+    "ФИО в цифровой форме необязательное поле, предпочтителен обезличенный код.",
+    "Согласованное решение Issue #69: пункт 28 прямой; обратные только 21, 33, 35. Это новая версия и не переписывает исторические результаты."
+  ],
+  "sources": [
+    {
+      "title": "Практикум по психологии здоровья",
+      "editor": "Г. С. Никифоров",
+      "year": 2005,
+      "publisher": "Питер",
+      "section": "Занятие 21; приложение 21.1, с. 148–155",
+      "url": "https://studfile.net/preview/8837964/"
+    },
+    {
+      "title": "Психология посттравматического стресса",
+      "authors": "О. Б. Полякова, Т. И. Бонкало",
+      "year": 2023,
+      "pages": "239–244",
+      "url": "https://niioz.ru/upload/iblock/fe7/fe760d2f8ac6ce407c0c1bd8c28f7d78.pdf"
+    }
+  ],
+  "validation": {
+    "item_count": 36,
+    "scale_count": 9,
+    "items_per_scale": 4,
+    "all_items_assigned_once": true,
+    "reverse_count": 3,
+    "status": "checked"
+  },
+  "review": {
+    "scientific_content_decision": "approved_in_issue_69",
+    "runtime": "new_immutable_release_required",
+    "publication_rights": "not_documented",
+    "status": "electronic_source_package_not_automatically_publishable"
+  }
+}
