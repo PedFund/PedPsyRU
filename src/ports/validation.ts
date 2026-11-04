@@ -8,7 +8,7 @@ export function validateRevision(input: unknown): asserts input is {expected_rev
     !Number.isSafeInteger(input.expected_revision) || (input.expected_revision as number) < 0 ||
     (input.expected_revision as number) >= Number.MAX_SAFE_INTEGER) throw new ParticipationError(400, "INVALID_COMPLETION");
 }
-export function validateDraft(input: unknown, itemIds: readonly string[],choiceValues:readonly string[]=["A","B"]): asserts input is DraftInput {
+export function validateDraft(input: unknown, itemIds: readonly string[],choiceValues:readonly string[]=["A","B"],quota?:Readonly<Record<string,number>>): asserts input is DraftInput {
   const fail = (): never => {throw new ParticipationError(400, "INVALID_DRAFT");};
   if (!object(input) || Object.keys(input).sort().join(",") !== "current_item_id,expected_revision,responses" ||
     !Number.isSafeInteger(input.expected_revision) || (input.expected_revision as number) < 0 ||
@@ -22,5 +22,14 @@ export function validateDraft(input: unknown, itemIds: readonly string[],choiceV
       typeof response.item_id !== "string" || !itemIds.includes(response.item_id) || seen.has(response.item_id) ||
       typeof response.value!=="string" || !choiceValues.includes(response.value)) fail();
     seen.add((response as Record<string, unknown>).item_id as string);
+  }
+  // A ranking method fixes how many times a rank may be used. The rule is checked while
+  // the draft is edited, so a participant learns about a violation before completing.
+  if (quota && Object.keys(quota).length) {
+    const counts = new Map<string, number>();
+    for (const response of value.responses as {value: string}[]) counts.set(response.value, (counts.get(response.value) || 0) + 1);
+    for (const [rank, allowed] of Object.entries(quota)) {
+      if ((counts.get(rank) || 0) > allowed) throw new ParticipationError(409, "QUOTA_VIOLATION");
+    }
   }
 }

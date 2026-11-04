@@ -26,6 +26,10 @@ function optionsFor(pkg, methodId) {
     // for intermediate values, so the numbers themselves are the labels.
     const bounds = (pkg.items || []).map(item => [Number(item.response_min), Number(item.response_max)]);
     const consistent = bounds.length && bounds.every(([min, max]) => min === 1 && Number.isInteger(max) && max >= 2 && max <= 20 && max === bounds[0][1]);
+    const ranked = pkg.scoring && pkg.scoring.response && Array.isArray(pkg.scoring.response.valid) ? pkg.scoring.response.valid.map(Number) : null;
+    if (ranked && ranked.length >= 2 && ranked.every((value, index) => value === index + 1)) {
+      return ranked.map(value => ({value: String(value), text: String(value)}));
+    }
     if (!consistent) throw new Error(methodId + ':NO_RESPONSE_OPTIONS');
     return Array.from({length: bounds[0][1]}, (_, index) => ({value: String(index + 1), text: String(index + 1)}));
   }
@@ -60,7 +64,10 @@ function formFor(entry) {
     throw new Error(entry.id + ':OPTIONS_DO_NOT_MATCH_KEY_VALUES');
   }
   if (!numericScaleValid(options)) throw new Error(entry.id + ':OPTION_SET_NOT_PINNED');
+  const ranking = pkg.scoring && pkg.scoring.response && pkg.scoring.response.type === 'constrained_priority_rating';
   return {id: entry.id + '_shared', version: '1.0.0', method_id: entry.id, title: entry.title,
+    ...(ranking ? {presentation: {id: 'pedpsy/ranking-grid', version: '1.0.0'},
+      rules: {require_all: true, ...(pkg.scoring.approved_quota ? {quota: pkg.scoring.approved_quota} : {})}} : {}),
     language: pkg.language || 'ru', instruction: pkg.instructions || '', items};
 }
 

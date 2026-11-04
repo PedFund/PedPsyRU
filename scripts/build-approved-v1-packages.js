@@ -82,9 +82,23 @@ function scalesAndSources(key, expected, labels) {
   return {scales, sources};
 }
 
+// A ranking method fixes how often some values may appear, so the control vector must
+// respect its quota instead of filling every item with the first valid value.
+function controlValues(entry, count) {
+  const quota = entry.key && entry.key.quota;
+  if (!quota) return Array.from({length: count}, () => entry.valid[0]);
+  const values = Array.from({length: count}, () => entry.valid[1]);
+  let slot = 0;
+  for (const [rank, allowed] of Object.entries(quota)) {
+    for (let index = 0; index < allowed && slot < count; index += 1) values[slot++] = String(rank);
+  }
+  return values;
+}
+
 function build(entry, release) {
-  const answers = Array.from({length: release.itemCount}, (_, index) => ({
-    item_id: "q" + String(index + 1).padStart(2, "0"), value: entry.valid[0]}));
+  const control = controlValues(entry, release.itemCount);
+  const answers = control.map((value, index) => ({
+    item_id: "q" + String(index + 1).padStart(2, "0"), value}));
   const expected = scoreNumericPassport(entry.key, answers.map(answer => Number(answer.value))).metrics;
   const built = scalesAndSources(entry.key, expected, entry.labels || {});
   const scales = built.scales, sources = built.sources;

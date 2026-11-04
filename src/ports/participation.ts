@@ -34,6 +34,7 @@ export interface PinnedRelease {
   readonly choiceValues?:readonly string[];
   readonly keyDigest: string;
   readonly presentation?:{readonly title?:string;readonly instruction?:string};
+  readonly quota?:Readonly<Record<string,number>>;
   readonly itemIds: readonly string[];
 }
 export interface StoredResult {

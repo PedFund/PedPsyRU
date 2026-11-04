@@ -1,0 +1,4 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4,5,6,7,8,9,10,11,12, 36 items, all required.
+Scales: family_safety, family_traditions, family_interpersonal_relations, family_normative_conformity, individual_achievement, individual_power_influence, individual_hedonism, individual_activity_stimulation, universal_independence, universal_moral_orientation, universal_tolerance, universal_spiritual.
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.
