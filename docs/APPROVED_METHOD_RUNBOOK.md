@@ -1,0 +1,43 @@
+# Runbook: подключение методики из `methods/approved/v1`
+
+Практический порядок, которым уже подключены Карпов, СЖО, Мадди и TTF/ATF. Шаги 1–2 выполняются только для методики, у которой есть проверенный контракт расчёта; при отсутствии контракта или ключа шаг блокируется, а данные не восстанавливаются по памяти.
+
+## Что требуется заранее
+
+- запись в `methods/validation/pilot-11/scoring-contracts.json` (проверенные шкалы, реверсы, уровни, стоп-условия);
+- пакет `methods/approved/v1/<номер>_<название>.json` с текстами пунктов и вариантами ответа;
+- набор вариантов ответа, который уже разрешён ограничением `release_item_pinned_choices` (сейчас: `A/B`, `1–4`, `1–7`).
+
+## Шаги
+
+1. **Ключ.** `node scripts/build-approved-v1-keys.js` — строит `methods/approved/v1/keys/<id>.key.json` из контракта. Методика без контракта пропускается с причиной. Если пакет сам документирует отображение ответов (например, «показано 1–4 → балл 0–3»), это кодируется адаптером ввода в генераторе, а не пересчётом «на глаз».
+2. **Пакет.** `node scripts/build-approved-v1-packages.js` — собирает `methods/approved/v1/releases/<id>/` (форма, ключ, инструкция, спецификация, `package-local.json`, `pins.json`). Пакет обязан пройти `validateMethodPackageJson` как `structurally_valid_draft`; версия пакета — числовой SemVer, идентификаторы шкал в нижнем регистре.
+3. **Проверка паритета.** `node --test tests/approved-v1-keys.test.js` — ключ обязан воспроизвести контрольные значения контракта до последнего пункта.
+4. **Миграции закрепления** (append-only, каждая копирует прежние условия дословно):
+   - allowlist и контроль размера формы: `node scripts/generate-approved-v1-migration.js` (первая партия) или `node scripts/generate-approved-v1-delta.js <allowlist.sql> <constraint.sql> <out.sql>` (последующие);
+   - допустимые результаты: `node scripts/generate-approved-v1-results.js` → расширяет `result_pinned_payload`;
+   - счётчик ответов при завершении: `node scripts/generate-approved-v1-attempt-guard.js` → расширяет `pedpsy.guard_attempt`.
+5. **Композиция участника.** Выпуск обязан попасть в `installed()` в [src/adapters/pinned-instrument-releases.ts](../src/adapters/pinned-instrument-releases.ts) — иначе форма участника вернёт `503`.
+6. **Импорт на стенд.** `node scripts/import-approved-v1-local.js` — прогоняет черновик через `prepareMethodDraft`, закрепляет выпуск, создаёт карточку каталога. Импорт идемпотентен и падает, если allowlist не принял выпуск.
+7. **Статус.** `node scripts/approved-v1-status.js` — таблица «ключ / пакет / закреплён / назначаем» и причина отказа.
+
+## Проверки перед merge
+
+```text
+npm run build
+npm run typecheck
+npm run check:architecture
+npm run check:syntax
+npm run check:dependencies
+npm test
+node --test tests/postgres-approved-v1-online.integration.js   # требует PGTEST_* и синтетическую БД
+```
+
+Интеграционный тест обязан остаться зелёным: он проходит путь «импорт → назначение → форма → черновик → завершение → результат» и сверяет показатели с контрольными значениями пакета, а также проверяет отказ при завершённой попытке и анонимном доступе.
+
+## Границы
+
+- Набор вариантов вне разрешённых — не повод ослаблять ограничение: сначала отдельное решение владельца, затем миграция.
+- Отсутствующие ключ, нормы или инструкция не восполняются; выпуск остаётся заблокированным.
+- Технически работающий выпуск не означает научного утверждения или права публикации: `review` остаётся `draft`, `rights` — `unknown`.
+- Реальные данные, рабочая PostgreSQL и секреты в этом конвейере не участвуют.
