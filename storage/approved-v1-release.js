@@ -25,7 +25,9 @@ function optionsFor(pkg, methodId) {
   if (!declared.length) throw new Error(methodId + ':NO_RESPONSE_OPTIONS');
   const options = declared.map(option => {
     const value = option && (option.value !== undefined ? option.value : option.ui_value);
-    const text = option && (option.label !== undefined ? option.label : option.text);
+    const text = option && (option.label !== undefined ? option.label
+      : option.text !== undefined ? option.text
+      : option.display_score !== undefined ? String(option.display_score) : undefined);
     if (value === undefined || typeof text !== 'string' || !text.trim()) throw new Error(methodId + ':UNSUPPORTED_OPTION_SHAPE');
     return {value: String(value), text};
   });
@@ -38,7 +40,10 @@ function formFor(entry) {
   if (!Array.isArray(pkg.items) || !pkg.items.length) throw new Error(entry.id + ':NO_ITEMS');
   const options = optionsFor(pkg, entry.id);
   const items = pkg.items.map((item, index) => {
-    const text = typeof item.text === 'string' ? item.text.trim() : '';
+    // A bipolar item carries two anchors instead of a sentence; both are shown.
+    const text = typeof item.text === 'string' && item.text.trim() ? item.text.trim()
+      : (typeof item.left === 'string' && typeof item.right === 'string' && item.left.trim() && item.right.trim()
+        ? item.left.trim() + ' — ' + item.right.trim() : '');
     if (!text) throw new Error(entry.id + ':UNSUPPORTED_ITEM_PRESENTATION');
     if (item.id !== 'q' + String(index + 1).padStart(2, '0')) throw new Error(entry.id + ':NON_CANONICAL_ITEM_ID');
     return {id: item.id, number: index + 1, text, options};

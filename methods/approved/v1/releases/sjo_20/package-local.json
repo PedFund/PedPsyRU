@@ -1,0 +1,945 @@
+{
+  "schema_version": "1.0",
+  "method_id": "sjo_20",
+  "package_version": "1.0.0",
+  "title": "Смысложизненные ориентации (СЖО)",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "sjo_20_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "-3"
+        },
+        {
+          "value": "2",
+          "label": "-2"
+        },
+        {
+          "value": "3",
+          "label": "-1"
+        },
+        {
+          "value": "4",
+          "label": "0"
+        },
+        {
+          "value": "5",
+          "label": "1"
+        },
+        {
+          "value": "6",
+          "label": "2"
+        },
+        {
+          "value": "7",
+          "label": "3"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "goals",
+      "label": "goals",
+      "min": 6,
+      "max": 42,
+      "direction": "not_specified"
+    },
+    {
+      "id": "process",
+      "label": "process",
+      "min": 6,
+      "max": 42,
+      "direction": "not_specified"
+    },
+    {
+      "id": "result",
+      "label": "result",
+      "min": 5,
+      "max": 35,
+      "direction": "not_specified"
+    },
+    {
+      "id": "locus_self",
+      "label": "locus_self",
+      "min": 4,
+      "max": 28,
+      "direction": "not_specified"
+    },
+    {
+      "id": "locus_life",
+      "label": "locus_life",
+      "min": 6,
+      "max": 42,
+      "direction": "not_specified"
+    },
+    {
+      "id": "meaningfulness_total",
+      "label": "meaningfulness_total",
+      "min": 20,
+      "max": 140,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "goals",
+          "value": 18
+        },
+        {
+          "scale_id": "process",
+          "value": 24
+        },
+        {
+          "scale_id": "result",
+          "value": 17
+        },
+        {
+          "scale_id": "locus_self",
+          "value": 16
+        },
+        {
+          "scale_id": "locus_life",
+          "value": 36
+        },
+        {
+          "scale_id": "meaningfulness_total",
+          "value": 86
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "sjo_20_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 16763,
+      "sha256": "26aea648b83607395afca52f236a0ee846866837dbc4cf44a3de4850cee9577c",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 2688,
+      "sha256": "c1bb003af6f5bba4721b7c629b12111fef9a643f8acd38c5c0e3b1624e0b2b34",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 619,
+      "sha256": "fa5832649f0827a1b30fdf82b73dc72f0f0e1f8e923dc0afff7fbd49c08e9862",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 323,
+      "sha256": "9d8e3a11725daa89837bd32e6276641c3b1806b2b219c2b595a66a3c86e59681",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

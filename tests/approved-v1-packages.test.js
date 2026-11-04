@@ -10,7 +10,7 @@ const {validateMethodPackageJson} = require("../dist/src/application/method-pack
 const {scoreNumericPassport} = require("../core/numeric-passport.js");
 
 const dir = path.join(__dirname, "..", "methods", "approved", "v1", "releases");
-const ids = ["reflexivity_karpov_27", "ttf_atf_10"];
+const ids = ["reflexivity_karpov_27", "sjo_20", "ttf_atf_10"];
 const read = name => JSON.parse(fs.readFileSync(path.join(dir, name, "package-local.json"), "utf8"));
 const sha = bytes => createHash("sha256").update(bytes).digest("hex");
 
