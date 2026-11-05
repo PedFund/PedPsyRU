@@ -8,7 +8,10 @@
 2. Безопасность, сохранность данных и научная корректность.
 3. [CURRENT_STATE.md](CURRENT_STATE.md) – контрольная точка; фактические Git/PR/CI проверяйте отдельно, так как статусы меняются.
 4. [methods/README.md](methods/README.md) и действующие манифесты – навигация по методикам.
-5. [ARCHITECTURE.md](ARCHITECTURE.md), профильные документы и код конкретной задачи.
+5. [methods/skills/method-intake-SKILL.md](methods/skills/method-intake-SKILL.md) – канонический skill подключения методики: проверка сырого пакета, нормализация, ключ, выпуск, append-only миграции, приёмка и PR. Практическое дополнение – [docs/APPROVED_METHOD_RUNBOOK.md](docs/APPROVED_METHOD_RUNBOOK.md).
+6. [ARCHITECTURE.md](ARCHITECTURE.md), профильные документы и код конкретной задачи.
+
+Канонический источник skill – репозиторий. Если внешний каталог скиллов пуст, устарел или не показывает `method-intake`, читайте `methods/skills/method-intake-SKILL.md` и действуйте по нему.
 
 Не перечитывайте весь `STATUS.md`, `BACKLOG.md` и историю без необходимости. Старые инструкции о продолжении фаз не разрешают новую работу. При расхождении источников установите факты и сообщите владельцу.
 

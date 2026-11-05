@@ -7,6 +7,7 @@
 - [CURRENT_STATE.md](CURRENT_STATE.md) — краткое фактическое состояние веток, PR, CI и открытых вопросов.
 - [AGENTS.md](AGENTS.md) — действующие правила работы coding agents.
 - [methods/README.md](methods/README.md) — единая точка входа в библиотеку методик.
+- [methods/skills/method-intake-SKILL.md](methods/skills/method-intake-SKILL.md) — канонический skill подключения новой методики; [docs/APPROVED_METHOD_RUNBOOK.md](docs/APPROVED_METHOD_RUNBOOK.md) — краткий практический runbook.
 - [ARCHITECTURE.md](ARCHITECTURE.md) — архитектурные границы платформы.
 - [docs/archive/](docs/archive/) — исторические отчёты фаз и приёмок; они сохраняют решения и доказательства, но не описывают текущее состояние.
 - [STATUS.md](STATUS.md) и [BACKLOG.md](BACKLOG.md) — подробные исторические отчеты и очередь работ; они не заменяют текущую контрольную точку.
