@@ -1,5 +1,6 @@
 "use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict");
+const {randomUUID}=require("node:crypto");
 const {createStudyApi,studyId}=require("../dist/src/application/study-api.js");
 test("staff creation requires explicit existing owner ID, exact DTO and CSRF, no implicit impersonation",async()=>{
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({createFor:async(...x)=>calls.push(x)},{assert:(_t,c)=>{if(c!=="csrf")throw Error("csrf");}});
@@ -28,6 +29,14 @@ test("assignment is a strict bounded set of IDs, not client method content or sc
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({assign:async(...x)=>calls.push(x)},{assert:()=>{}}),good={group_id:id,stage_id:id,release_ids:[id],expected_version:0};
   for(const bad of [{...good,release_ids:[id,id]},{...good,release_ids:null},{...good,release_ids:Array(11).fill(id)},{...good,key:"client"},{...good,scores:[12]}])assert.throws(()=>api.assign("token",id,bad,"csrf"),e=>e.status===400);
   await api.assign("token",id,good,"csrf");assert.deepEqual(calls[0],["token",id,good]);
+});
+test("assignment accepts up to 30 unique releases and rejects 31",async()=>{
+  const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({assign:async(...x)=>calls.push(x)},{assert:()=>{}});
+  const base={group_id:id,stage_id:id,expected_version:0};
+  const ids=n=>Array.from({length:n},()=>randomUUID());
+  await api.assign("token",id,{...base,release_ids:ids(30)},"csrf");
+  assert.equal(calls[0][2].release_ids.length,30);
+  assert.throws(()=>api.assign("token",id,{...base,release_ids:ids(31)},"csrf"),e=>e.status===400);
 });
 test("copy cannot carry participants, responses or inferred source",async()=>{
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({copy:async(...x)=>calls.push(x)},{assert:()=>{}}),good={source_stage_id:id,code:"T1",ordinal:1,expected_version:0};

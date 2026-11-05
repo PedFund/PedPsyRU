@@ -12,7 +12,7 @@ export function workbenchInput(action:WorkbenchAction,input:unknown):{version:nu
   if(action==="group"){if(!["control","experimental","other"].includes(String(b.kind)))invalid();data={id:optionalId(b.id),name:studyText(b.name,100),kind:b.kind,note:note(b.note)};}
   if(action==="stage"){if(typeof b.code!=="string"||!/^T(?:0|[1-4]?\d)$/.test(b.code))invalid();data={id:optionalId(b.id),code:b.code,note:note(b.note)};}
   if(action==="assign"){
-    if(typeof b.all!=="boolean"||!Array.isArray(b.release_ids)||b.release_ids.length>10||new Set(b.release_ids).size!==b.release_ids.length)invalid();
+    if(typeof b.all!=="boolean"||!Array.isArray(b.release_ids)||b.release_ids.length>30||new Set(b.release_ids).size!==b.release_ids.length)invalid();
     data={all:b.all,group_id:b.all?null:studyId(b.group_id),stage_id:b.all?null:studyId(b.stage_id),release_ids:b.release_ids.map(studyId)};
   }
   if(action==="copy_assignments")data={stage_id:studyId(b.stage_id)};

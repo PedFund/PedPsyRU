@@ -29,7 +29,7 @@ export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
   },
   assign:(token:string,id:string,input:unknown,value:string)=>{
     csrf.assert(token,value);const b=studyObject(input,["group_id","stage_id","release_ids","expected_version"]);
-    if(!Array.isArray(b.release_ids)||b.release_ids.length>10||new Set(b.release_ids).size!==b.release_ids.length)throw new ParticipationError(400,"INVALID_STUDY_INPUT");
+    if(!Array.isArray(b.release_ids)||b.release_ids.length>30||new Set(b.release_ids).size!==b.release_ids.length)throw new ParticipationError(400,"INVALID_STUDY_INPUT");
     return studies.assign(token,studyId(id),{group_id:studyId(b.group_id),stage_id:studyId(b.stage_id),release_ids:b.release_ids.map(studyId),expected_version:studyVersion(b.expected_version)});
   },
   copy:(token:string,id:string,input:unknown,value:string)=>{
