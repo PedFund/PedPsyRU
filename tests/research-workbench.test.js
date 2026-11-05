@@ -1,5 +1,6 @@
 "use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict");
+const {randomUUID}=require("node:crypto");
 const {workbenchInput,createResearchWorkbenchApi,createParticipantProfileApi}=require("../dist/src/application/research-workbench-api.js");
 const id="11111111-1111-4111-8111-111111111111";
 test("research workbench rejects forged metadata, arbitrary stages and excessive passport fields",()=>{
@@ -23,6 +24,12 @@ test("bulk assignments are explicit and do not accept duplicate or caller-owned 
   assert.throws(()=>workbenchInput("assign",{...b,release_ids:[id,id]}));
   assert.throws(()=>workbenchInput("assign",{...b,all:"yes"}));
   assert.throws(()=>workbenchInput("assign",{...b,release_ids:["foreign"]}));
+});
+test("workbench assignment accepts 30 unique releases and rejects 31",()=>{
+  const base={expected_version:2,all:false,group_id:id,stage_id:id};
+  const ids=n=>Array.from({length:n},()=>randomUUID());
+  assert.equal(workbenchInput("assign",{...base,release_ids:ids(30)}).data.release_ids.length,30);
+  assert.throws(()=>workbenchInput("assign",{...base,release_ids:ids(31)}));
 });
 test("workbench and profile mutations require CSRF before storage, profile never accepts participant IDs",async()=>{
   let calls=0;const csrf={assert:()=>{throw Error("CSRF");}};
