@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04",
+  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04; PVQ-RR scale names from the approved psytests source https://psytests.org/life/pvqrr-bl.html (2026-11-05)",
   "methods": {
     "reflexivity_karpov_27": {
       "reflexivity": "Рефлексивность"
@@ -43,6 +43,31 @@
       "purpose_in_life": "Цель в жизни",
       "self_acceptance": "Самопринятие",
       "overall": "Психологическое благополучие (общий балл)"
+    },
+    "pvq_rr_57": {
+      "SDT": "Самостоятельность / мысли",
+      "SDA": "Самостоятельность / действия",
+      "ST": "Стимуляция",
+      "HE": "Гедонизм",
+      "AC": "Достижение",
+      "FOR": "Власть / ресурсы",
+      "FOD": "Власть / доминирование",
+      "FAC": "Репутация",
+      "SES": "Безопасность / общественная",
+      "SEP": "Безопасность / личная",
+      "COR": "Конформность / правила",
+      "COI": "Конформность / межличностная",
+      "TR": "Традиция",
+      "HUM": "Скромность",
+      "BED": "Благожелательность / долг",
+      "BEC": "Благожелательность / забота",
+      "UNC": "Универсализм / забота",
+      "UNN": "Универсализм / природа",
+      "UNT": "Универсализм / толерантность",
+      "self_transcendence": "Самопреодоление",
+      "self_enhancement": "Самоутверждение",
+      "openness_to_change": "Открытость изменениям",
+      "conservation": "Сохранение"
     }
   }
 }

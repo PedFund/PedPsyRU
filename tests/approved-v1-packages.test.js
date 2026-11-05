@@ -10,7 +10,7 @@ const {validateMethodPackageJson} = require("../dist/src/application/method-pack
 const {scoreNumericPassport} = require("../core/numeric-passport.js");
 
 const dir = path.join(__dirname, "..", "methods", "approved", "v1", "releases");
-const ids = ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"];
+const ids = ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "pvq_rr_57", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"];
 const read = name => JSON.parse(fs.readFileSync(path.join(dir, name, "package-local.json"), "utf8"));
 const sha = bytes => createHash("sha256").update(bytes).digest("hex");
 
@@ -50,7 +50,10 @@ test("each package control vector is reproduced by its own key", () => {
     const responses = pkg.control_vectors[0].responses.map(response => Number(response.value));
     const metrics = scoreNumericPassport(key, responses).metrics;
     for (const expected of pkg.control_vectors[0].expected) {
-      assert.ok(Number.isFinite(metrics[expected.scale_id]) || Number.isFinite(metrics[scaleLabel(pkg, expected.scale_id)]),
+      // Package scale ids are lowercase tokens; the approved key keeps the original
+      // codes (PVQ-RR uses SDT/SDA/...). Compare through the key's own spelling.
+      const metricId = Object.keys(key.scales).find(id => id.toLowerCase() === expected.scale_id) || expected.scale_id;
+      assert.ok(Number.isFinite(metrics[metricId]) || Number.isFinite(metrics[scaleLabel(pkg, expected.scale_id)]),
         id + ":" + expected.scale_id);
     }
   }

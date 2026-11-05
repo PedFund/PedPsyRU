@@ -1,0 +1,212 @@
+{
+  "id": "pvq_rr_57",
+  "key_version": "1.0.0-staging",
+  "type": "passport",
+  "items": 57,
+  "valid": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "fullPrecision": true,
+  "scales": {
+    "SDT": {
+      "direct": [
+        1,
+        23,
+        39
+      ],
+      "aggregate": "mean"
+    },
+    "SDA": {
+      "direct": [
+        16,
+        30,
+        56
+      ],
+      "aggregate": "mean"
+    },
+    "ST": {
+      "direct": [
+        10,
+        28,
+        43
+      ],
+      "aggregate": "mean"
+    },
+    "HE": {
+      "direct": [
+        3,
+        36,
+        46
+      ],
+      "aggregate": "mean"
+    },
+    "AC": {
+      "direct": [
+        17,
+        32,
+        48
+      ],
+      "aggregate": "mean"
+    },
+    "FOR": {
+      "direct": [
+        12,
+        20,
+        44
+      ],
+      "aggregate": "mean"
+    },
+    "FOD": {
+      "direct": [
+        6,
+        29,
+        41
+      ],
+      "aggregate": "mean"
+    },
+    "FAC": {
+      "direct": [
+        9,
+        24,
+        49
+      ],
+      "aggregate": "mean"
+    },
+    "SES": {
+      "direct": [
+        2,
+        35,
+        50
+      ],
+      "aggregate": "mean"
+    },
+    "SEP": {
+      "direct": [
+        13,
+        26,
+        53
+      ],
+      "aggregate": "mean"
+    },
+    "COR": {
+      "direct": [
+        15,
+        31,
+        42
+      ],
+      "aggregate": "mean"
+    },
+    "COI": {
+      "direct": [
+        4,
+        22,
+        51
+      ],
+      "aggregate": "mean"
+    },
+    "TR": {
+      "direct": [
+        18,
+        33,
+        40
+      ],
+      "aggregate": "mean"
+    },
+    "HUM": {
+      "direct": [
+        7,
+        38,
+        54
+      ],
+      "aggregate": "mean"
+    },
+    "BED": {
+      "direct": [
+        19,
+        27,
+        55
+      ],
+      "aggregate": "mean"
+    },
+    "BEC": {
+      "direct": [
+        11,
+        25,
+        47
+      ],
+      "aggregate": "mean"
+    },
+    "UNC": {
+      "direct": [
+        5,
+        37,
+        52
+      ],
+      "aggregate": "mean"
+    },
+    "UNN": {
+      "direct": [
+        8,
+        21,
+        45
+      ],
+      "aggregate": "mean"
+    },
+    "UNT": {
+      "direct": [
+        14,
+        34,
+        57
+      ],
+      "aggregate": "mean"
+    }
+  },
+  "derived": {
+    "self_transcendence": {
+      "op": "mean",
+      "inputs": [
+        "BED",
+        "BEC",
+        "UNC",
+        "UNN",
+        "UNT"
+      ]
+    },
+    "self_enhancement": {
+      "op": "mean",
+      "inputs": [
+        "HE",
+        "AC",
+        "FOR",
+        "FOD",
+        "FAC"
+      ]
+    },
+    "openness_to_change": {
+      "op": "mean",
+      "inputs": [
+        "SDT",
+        "SDA",
+        "ST",
+        "HE"
+      ]
+    },
+    "conservation": {
+      "op": "mean",
+      "inputs": [
+        "FAC",
+        "SES",
+        "SEP",
+        "COR",
+        "COI",
+        "TR",
+        "HUM"
+      ]
+    }
+  }
+}
