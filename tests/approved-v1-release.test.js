@@ -7,9 +7,8 @@ const {approvedV1Releases} = require("../storage/approved-v1-release.js");
 
 test("only packages with a pinned option set become releases", () => {
   const {releases, unsupported} = approvedV1Releases();
-  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
-  const reasons = Object.fromEntries(unsupported.map(item => [item.method_id, item.reason]));
-  assert.equal(reasons.pvq_rr_57, "UNSUPPORTED_OPTION_SHAPE");
+  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "pvq_rr_57", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
+  assert.deepEqual(unsupported, []);
 });
 
 test("a release form is canonical, complete and single-choice only", () => {
@@ -32,4 +31,24 @@ test("release digests are stable across runs", () => {
   const first = approvedV1Releases().releases.map(r => r.formDigest + "|" + r.keyDigest);
   const second = approvedV1Releases().releases.map(r => r.formDigest + "|" + r.keyDigest);
   assert.deepEqual(first, second);
+});
+
+test("PVQ-RR uses the owner-supplied shared text, instruction and six anchors", () => {
+  const release = approvedV1Releases().releases.find(item => item.id === "pvq_rr_57");
+  assert.ok(release);
+  assert.equal(release.form.items.length, 57);
+  assert.equal(release.form.items[0].text, "Для него важно самостоятельно формировать свои взгляды.");
+  assert.equal(release.form.items[56].text, "Для него важно принимать людей такими, какие они есть, даже если он с ними не согласен.");
+  assert.match(release.form.instruction, /Ниже приведены описания некоторых людей\./);
+  assert.match(release.form.instruction, /адаптация Т\. П\. Бутенко и др\. \(2012\)/);
+  assert.deepEqual(release.form.items[0].options.map(option => option.text), [
+    "Совсем не похож на меня",
+    "Не похож на меня",
+    "Мало похож на меня",
+    "Умеренно похож на меня",
+    "Похож на меня",
+    "Очень похож на меня"
+  ]);
+  assert.equal(release.labels.SDT, "Самостоятельность / мысли");
+  assert.equal(release.labels.conservation, "Сохранение");
 });

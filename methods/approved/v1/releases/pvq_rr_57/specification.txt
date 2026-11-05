@@ -1,0 +1,5 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4,5,6, 57 items, all required.
+Scales: SDT, SDA, ST, HE, AC, FOR, FOD, FAC, SES, SEP, COR, COI, TR, HUM, BED, BEC, UNC, UNN, UNT.
+Derived: self_transcendence=mean(BED+BEC+UNC+UNN+UNT); self_enhancement=mean(HE+AC+FOR+FOD+FAC); openness_to_change=mean(SDT+SDA+ST+HE); conservation=mean(FAC+SES+SEP+COR+COI+TR+HUM).
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.
