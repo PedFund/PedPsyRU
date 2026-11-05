@@ -7,7 +7,7 @@ const {approvedV1Releases} = require("../storage/approved-v1-release.js");
 
 test("only packages with a pinned option set become releases", () => {
   const {releases, unsupported} = approvedV1Releases();
-  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "pvq_rr_57", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
+  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "motkov_psychological_culture_18", "pvq_rr_57", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
   assert.deepEqual(unsupported, []);
 });
 
@@ -51,4 +51,28 @@ test("PVQ-RR uses the owner-supplied shared text, instruction and six anchors", 
   ]);
   assert.equal(release.labels.SDT, "Самостоятельность / мысли");
   assert.equal(release.labels.conservation, "Сохранение");
+});
+
+test("Motkov presents odd A items and even B items with their own answer wording", () => {
+  const release = approvedV1Releases().releases.find(item => item.id === "motkov_psychological_culture_18");
+  assert.ok(release);
+  assert.equal(release.form.items.length, 36);
+  assert.equal(release.form.items[0].text, "Четко осознавать и понимать себя, свои желания, свой характер.");
+  assert.equal(release.form.items[1].text, "Четко осознавать и понимать себя, свои желания, свой характер.");
+  assert.deepEqual(release.form.items[0].options.map(option => option.text), [
+    "Очень слабое стремление",
+    "Слабое стремление",
+    "Среднее по силе стремление",
+    "Сильное стремление",
+    "Очень сильное стремление"
+  ]);
+  assert.deepEqual(release.form.items[1].options.map(option => option.text), [
+    "Очень слабая степень осуществления",
+    "Слабая степень осуществления",
+    "Средняя степень осуществления",
+    "Высокая степень осуществления",
+    "Очень высокая степень осуществления"
+  ]);
+  assert.match(release.form.instruction, /18 пунктов/);
+  assert.equal(release.labels.pk_A, "Психологическая культура — стремления (общий)");
 });

@@ -1,0 +1,4 @@
+Handler approved-numeric-1.0.0. Answers 1,2,3,4,5, 36 items, all required.
+Scales: I_A, I_B, II_A, II_B, III_A, III_B, IV_A, IV_B, V_A, V_B, VI_A, VI_B, pk_A, pk_B.
+Norms: no separate norm artifact is approved; the key alone carries the conversion tables, if any.
+Publication rights are not documented. Scientific review is draft.

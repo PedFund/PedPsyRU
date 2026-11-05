@@ -85,6 +85,16 @@
       "items": 10
     },
     {
+      "method_id": "motkov_psychological_culture_18",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:8d022b2d46a568e451f856b72b382aa3e949b7fbb5d171a8ada4af952229d05e",
+      "package_file": "01_МетодТест_01_Психологическая_культура_личности.json",
+      "package_version": "1.0.0-staging",
+      "title": "Психологическая культура личности (О. И. Мотков), 18 пунктов × 2 шкалы",
+      "author": null,
+      "items": 36
+    },
+    {
       "method_id": "ryff_pwb_84_shevelenkova_fesenko",
       "key_version": "1.0.0-staging",
       "key_digest": "sha256:0d766fdd7a185a57c2af21705bf5bc2317c795f46c9d88a39d4eb5a5f0d690fd",
@@ -96,10 +106,6 @@
     }
   ],
   "skipped": [
-    {
-      "method_id": "motkov_psychological_culture_18",
-      "reason": "NO_CONTRACT"
-    },
     {
       "method_id": "tki_ru_30_pairs",
       "reason": "NO_CONTRACT"

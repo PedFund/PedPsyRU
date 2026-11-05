@@ -24,8 +24,8 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
   assert.equal(ids.length, releases.length);
   const staff = await verifiedStaff(f), researcher = await studyResearcher(f, staff), store = new PostgresResearchWorkbench(f.runtime);
   let design = await researcher.studies.create(researcher.session.token, 'Synthetic approved library');
-  design = await store.change(researcher.session.token, design.id, design.version, 'assign', {all: true, release_ids: [f.seed.release_id, ...ids]});
-  assert.equal(design.assignments.length, ids.length + 1);
+  design = await store.change(researcher.session.token, design.id, design.version, 'assign', {all: true, release_ids: [...ids]});
+  assert.equal(design.assignments.length, ids.length);
   const w = workspaceFixture(f, undefined, {workbench: true, library: true});
   t.after(() => w.app.close());
   const researchHeaders = {...headers, cookie: 'pedpsy_researcher_demo=' + researcher.session.token, 'x-pedpsy-csrf': csrfFor(researcher.session.token)};

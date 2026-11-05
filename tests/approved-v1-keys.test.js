@@ -111,6 +111,44 @@ test("PVQ-RR key produces 19 uncentered means and four higher-order vectors with
   near(metrics.conservation, 80 / 21);
 });
 
+test("Motkov key reproduces the owner's processed example and the full Gpk table", () => {
+  const k = key("motkov_psychological_culture_18");
+  const responses = repeat(36, 1);
+  const put = (items, values) => items.forEach((item, index) => { responses[item - 1] = values[index]; });
+  put([1, 13, 25], [3, 4, 4]);
+  put([3, 15, 27], [3, 4, 4]);
+  put([5, 17, 29], [3, 4, 4]);
+  put([7, 19, 31], [4, 4, 5]);
+  put([9, 21, 33], [4, 4, 5]);
+  put([11, 23, 35], [3, 4, 4]);
+  put([2, 14, 26], [1, 2, 2]);
+  put([4, 16, 28], [1, 2, 2]);
+  put([6, 18, 30], [2, 2, 2]);
+  put([8, 20, 32], [1, 2, 2]);
+  put([10, 22, 34], [2, 2, 2]);
+  put([12, 24, 36], [2, 2, 2]);
+  const metrics = scoreNumericPassport(k, responses).metrics;
+  assert.equal(Object.keys(k.scales).length, 14);
+  assert.deepEqual({
+    I_A: metrics.I_A, II_A: metrics.II_A, III_A: metrics.III_A, IV_A: metrics.IV_A, V_A: metrics.V_A, VI_A: metrics.VI_A,
+    I_B: metrics.I_B, II_B: metrics.II_B, III_B: metrics.III_B, IV_B: metrics.IV_B, V_B: metrics.V_B, VI_B: metrics.VI_B,
+    pk_A: metrics.pk_A, pk_B: metrics.pk_B
+  }, {I_A: 3.67, II_A: 3.67, III_A: 3.67, IV_A: 4.33, V_A: 4.33, VI_A: 3.67,
+    I_B: 1.67, II_B: 1.67, III_B: 2, IV_B: 1.67, V_B: 2, VI_B: 2, pk_A: 3.89, pk_B: 1.83});
+  assert.equal(metrics["I_A – уровень"], "средний");
+  assert.equal(metrics["IV_A – уровень"], "высокий");
+  assert.equal(metrics["I_B – уровень"], "низкий");
+  assert.equal(metrics["pk_A – уровень"], "средний");
+  assert.equal(metrics["pk_B – уровень"], "низкий");
+  assert.equal(metrics["gpk – уровень"], "низкий");
+  assert.deepEqual(k.crossLevels.gpk.table, {
+    "низкий": {"низкий": "низкий", "средний": "средний", "высокий": "средний", "псевдовысокий": "средний"},
+    "средний": {"низкий": "низкий", "средний": "средний", "высокий": "высокий", "псевдовысокий": "псевдовысокий"},
+    "высокий": {"низкий": "низкий", "средний": "средний", "высокий": "высокий", "псевдовысокий": "псевдовысокий"},
+    "псевдовысокий": {"низкий": "низкий", "средний": "средний", "высокий": "высокий", "псевдовысокий": "псевдовысокий"}
+  });
+});
+
 test("TTF/ATF key uses approved directions and declares no norms", () => {
   const k = key("ttf_atf_10");
   assert.equal(k.norms, undefined);

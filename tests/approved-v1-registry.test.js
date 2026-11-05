@@ -16,11 +16,12 @@ const requestFor = (entry, value) => ({contract_version: "1.0", method_version_i
 test("the registry exposes every approved package, CO-36 included", () => {
   const descriptors = builtinInstrumentRegistry.descriptors();
   const approved = descriptors.filter(d => d.handler_version === "approved-numeric-1.0.0");
-  assert.equal(approved.length, 9);
+  assert.equal(approved.length, 10);
   assert.deepEqual(approved.map(d => d.method_version_id).sort(), [
-    "co36_kunitsyna_36@1.0.0-staging", "hardiness_leontiev_rasskazova_45@1.0.0-staging", "pvq_rr_57@1.0.0-staging",
-    "qlesq_36_vodopyanova@1.1.0-staging", "reflexivity_karpov_27@1.1.0-staging", "ryff_pwb_84_shevelenkova_fesenko@1.0.0-staging",
-    "sjo_20@1.0.0-staging", "ttf_atf_10@1.0.0-staging", "uvlk_shipilov@1.0.0-staging"]);
+    "co36_kunitsyna_36@1.0.0-staging", "hardiness_leontiev_rasskazova_45@1.0.0-staging", "motkov_psychological_culture_18@1.0.0-staging",
+    "pvq_rr_57@1.0.0-staging", "qlesq_36_vodopyanova@1.1.0-staging", "reflexivity_karpov_27@1.1.0-staging",
+    "ryff_pwb_84_shevelenkova_fesenko@1.0.0-staging", "sjo_20@1.0.0-staging", "ttf_atf_10@1.0.0-staging",
+    "uvlk_shipilov@1.0.0-staging"]);
   assert.equal(descriptors.filter(d => d.method_version_id.startsWith("co36_kunitsyna_36")).length, 1);
 });
 
@@ -49,6 +50,31 @@ test("PVQ-RR keeps full precision through the registry and never rounds", () => 
   const openness = result.measures.find(m => m.code === "openness_to_change");
   assert.ok(Math.abs(openness.value - 12 / 12) < Number.EPSILON * 16);
   assert.equal(openness.precision, 4);
+});
+
+test("Motkov scores the owner's processed example through the registry, including Gpk", () => {
+  const entry = entries.find(e => e.id === "motkov_psychological_culture_18");
+  const responses = answers(entry, 1);
+  const put = (items, values) => items.forEach((item, index) => { responses[item - 1].value = String(values[index]); });
+  put([1, 13, 25], [3, 4, 4]);
+  put([3, 15, 27], [3, 4, 4]);
+  put([5, 17, 29], [3, 4, 4]);
+  put([7, 19, 31], [4, 4, 5]);
+  put([9, 21, 33], [4, 4, 5]);
+  put([11, 23, 35], [3, 4, 4]);
+  put([2, 14, 26], [1, 2, 2]);
+  put([4, 16, 28], [1, 2, 2]);
+  put([6, 18, 30], [2, 2, 2]);
+  put([8, 20, 32], [1, 2, 2]);
+  put([10, 22, 34], [2, 2, 2]);
+  put([12, 24, 36], [2, 2, 2]);
+  const result = builtinInstrumentRegistry.calculate(identityFor(entry), {...requestFor(entry, 1), responses});
+  assert.equal(result.status, "scored");
+  assert.equal(result.measures.find(m => m.code === "pk_A").value, 3.89);
+  assert.equal(result.measures.find(m => m.code === "pk_B").value, 1.83);
+  assert.equal(result.classifications.find(c => c.code === "pk_A – уровень").value, "средний");
+  assert.equal(result.classifications.find(c => c.code === "pk_B – уровень").value, "низкий");
+  assert.equal(result.classifications.find(c => c.code === "gpk – уровень").value, "низкий");
 });
 
 test("an unknown version, handler or digest is refused by the registry", () => {

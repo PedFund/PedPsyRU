@@ -10,6 +10,7 @@ const keys = {
   reflexivity_karpov_27: require('../methods/approved/v1/keys/reflexivity_karpov_27.key.json'),
   sjo_20: require('../methods/approved/v1/keys/sjo_20.key.json'),
   hardiness_leontiev_rasskazova_45: require('../methods/approved/v1/keys/hardiness_leontiev_rasskazova_45.key.json'),
+  motkov_psychological_culture_18: require('../methods/approved/v1/keys/motkov_psychological_culture_18.key.json'),
   qlesq_36_vodopyanova: require('../methods/approved/v1/keys/qlesq_36_vodopyanova.key.json'),
   co36_kunitsyna_36: require('../methods/approved/v1/keys/co36_kunitsyna_36.key.json'),
   pvq_rr_57: require('../methods/approved/v1/keys/pvq_rr_57.key.json'),
