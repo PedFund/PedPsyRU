@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04; PVQ-RR scale names from the approved psytests source https://psytests.org/life/pvqrr-bl.html (2026-11-05)",
+  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04; PVQ-RR scale names from the approved psytests source https://psytests.org/life/pvqrr-bl.html (2026-11-05); Motkov factor names from the author's article and owner-supplied package (2026-11-05)",
   "methods": {
     "reflexivity_karpov_27": {
       "reflexivity": "Рефлексивность"
@@ -68,6 +68,23 @@
       "self_enhancement": "Самоутверждение",
       "openness_to_change": "Открытость изменениям",
       "conservation": "Сохранение"
+    },
+    "motkov_psychological_culture_18": {
+      "I_A": "Самопознание — стремление",
+      "II_A": "Конструктивность общения — стремление",
+      "III_A": "Психическая саморегуляция — стремление",
+      "IV_A": "Творческое поведение — стремление",
+      "V_A": "Конструктивность в делах — стремление",
+      "VI_A": "Гармонизирующее саморазвитие — стремление",
+      "I_B": "Самопознание — осуществление",
+      "II_B": "Конструктивность общения — осуществление",
+      "III_B": "Психическая саморегуляция — осуществление",
+      "IV_B": "Творческое поведение — осуществление",
+      "V_B": "Конструктивность в делах — осуществление",
+      "VI_B": "Гармонизирующее саморазвитие — осуществление",
+      "pk_A": "Психологическая культура — стремления (общий)",
+      "pk_B": "Психологическая культура — осуществление (общий)",
+      "gpk": "Гармоничность психологической культуры"
     }
   }
 }

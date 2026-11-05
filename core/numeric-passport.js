@@ -110,6 +110,16 @@ function scoreNumericPassport(def, responses) {
     const value = lookup(metrics[name], ranges);
     if (value != null) metrics[name + ' – уровень'] = value;
   }
+  for (const [name, rule] of Object.entries(def.crossLevels || {})) {
+    if (!rule || typeof rule.left !== 'string' || typeof rule.right !== 'string' || !rule.table ||
+        typeof rule.table !== 'object') throw new Error('Invalid cross-level table');
+    const left = metrics[rule.left], right = metrics[rule.right];
+    if (typeof left !== 'string' || typeof right !== 'string') throw new Error('Invalid cross-level inputs');
+    const row = rule.table[left];
+    const value = row && row[right];
+    if (typeof value !== 'string') throw new Error('Unmapped cross-level pair');
+    metrics[name + (rule.suffix || ' – уровень')] = value;
+  }
   for (const [name, criterion] of Object.entries(def.criteria || {})) {
     if (!Number.isFinite(metrics[name]) || !Number.isFinite(criterion)) throw new Error('Invalid criterion');
     if (def.criteriaRule === 'below_deficit') metrics[name + ' – относительно критерия'] = metrics[name] < criterion ? 'дефицит характеристики' : 'не ниже критериального значения';

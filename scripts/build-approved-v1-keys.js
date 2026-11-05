@@ -130,7 +130,48 @@ function co36Key(pkg) {
     ...(quota ? {quota} : {})};
 }
 
+// Motkov's 18 statements are presented as 36 single-choice items: odd items are
+// the A scale (strength) and even items are the B scale (implementation). The key
+// keeps the author's six factors and two general means, plus the two-dimensional
+// Gpk table (A level x B level, preference to B).
+const MOTKOV_ROMAN = ['I', 'II', 'III', 'IV', 'V', 'VI'];
+const MOTKOV_A_LEVELS = [[1, 3.6, 'низкий'], [3.6, 4.3, 'средний'], [4.3, 4.65, 'высокий'], [4.65, 5, 'псевдовысокий']];
+const MOTKOV_B_LEVELS = [[1, 2.9, 'низкий'], [2.9, 3.6, 'средний'], [3.6, 4.5, 'высокий'], [4.5, 5, 'псевдовысокий']];
+const MOTKOV_GPK = {
+  'низкий': {'низкий': 'низкий', 'средний': 'средний', 'высокий': 'средний', 'псевдовысокий': 'средний'},
+  'средний': {'низкий': 'низкий', 'средний': 'средний', 'высокий': 'высокий', 'псевдовысокий': 'псевдовысокий'},
+  'высокий': {'низкий': 'низкий', 'средний': 'средний', 'высокий': 'высокий', 'псевдовысокий': 'псевдовысокий'},
+  'псевдовысокий': {'низкий': 'низкий', 'средний': 'средний', 'высокий': 'высокий', 'псевдовысокий': 'псевдовысокий'}
+};
+
+function motkovKey(pkg) {
+  if (pkg.id !== 'motkov_psychological_culture_18') return null;
+  if (!Array.isArray(pkg.items) || pkg.items.length !== 36) throw new Error(pkg.id + ':ITEM_COUNT_MISMATCH');
+  if (!Array.isArray(pkg.factors) || pkg.factors.length !== 6) throw new Error(pkg.id + ':FACTOR_COUNT_MISMATCH');
+  const scales = {}, levels = {};
+  pkg.factors.forEach((factor, index) => {
+    const source = (factor.items || []).slice().sort((a, b) => a - b);
+    if (source.length !== 3 || source.some(item => !Number.isInteger(item) || item < 1 || item > 18)) {
+      throw new Error(pkg.id + ':FACTOR_ITEMS_INVALID');
+    }
+    const a = source.map(item => 2 * item - 1), b = source.map(item => 2 * item);
+    scales[MOTKOV_ROMAN[index] + '_A'] = {direct: a, aggregate: 'mean'};
+    scales[MOTKOV_ROMAN[index] + '_B'] = {direct: b, aggregate: 'mean'};
+    levels[MOTKOV_ROMAN[index] + '_A'] = MOTKOV_A_LEVELS;
+    levels[MOTKOV_ROMAN[index] + '_B'] = MOTKOV_B_LEVELS;
+  });
+  scales.pk_A = {direct: Array.from({length: 18}, (_, index) => 2 * index + 1), aggregate: 'mean'};
+  scales.pk_B = {direct: Array.from({length: 18}, (_, index) => 2 * index + 2), aggregate: 'mean'};
+  levels.pk_A = MOTKOV_A_LEVELS;
+  levels.pk_B = MOTKOV_B_LEVELS;
+  return {id: pkg.id, key_version: pkg.version || '1.0.0-staging', type: 'passport', items: 36,
+    valid: [1, 2, 3, 4, 5], scales, levels,
+    crossLevels: {gpk: {left: 'pk_A – уровень', right: 'pk_B – уровень', table: MOTKOV_GPK}}};
+}
+
 function keyFromPackage(pkg) {
+  const motkov = motkovKey(pkg);
+  if (motkov) return motkov;
   const co36 = co36Key(pkg);
   if (co36) return co36;
   const ids = PACKAGE_SCALE_IDS[pkg.id];

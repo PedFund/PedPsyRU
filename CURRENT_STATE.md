@@ -8,7 +8,7 @@
 
 ## Git, PR и проверки
 
-- Текущий `main` на момент подготовки: `e5e28559721fac99f21ac480d186a01143f3e05e` – **merge [PR №85](https://github.com/PedFund/PedPsyRU/pull/85)** (read-only проверка сырых пакетов). Предыдущие контрольные точки: `d73c4e87ba1422fb8bcc1a6a82377d4263558926` – merge [PR №84](https://github.com/PedFund/PedPsyRU/pull/84) (ЦО-36); `b3a4f190454de2ab8bf9882430f731ef7f114769` – merge [PR №67](https://github.com/PedFund/PedPsyRU/pull/67).
+- Текущий `main` на момент подготовки: `0b5e540785093dd5ab2f23f01c27e1ce82973e7b` – merge [PR №87](https://github.com/PedFund/PedPsyRU/pull/87) (skill location). Предыдущие контрольные точки: `5339e7e8b9cb5bb39fe6d359a0f711f08ed67b58` – merge [PR №86](https://github.com/PedFund/PedPsyRU/pull/86) (PVQ-RR); `e5e28559721fac99f21ac480d186a01143f3e05e` – merge [PR №85](https://github.com/PedFund/PedPsyRU/pull/85); `d73c4e87ba1422fb8bcc1a6a82377d4263558926` – merge [PR №84](https://github.com/PedFund/PedPsyRU/pull/84); `b3a4f190454de2ab8bf9882430f731ef7f114769` – merge [PR №67](https://github.com/PedFund/PedPsyRU/pull/67).
 - [CI PR №67](https://github.com/PedFund/PedPsyRU/actions/runs/41615024618) завершился успешно на head `7dff88e4c4d8b15de399df9abf4de4833bbba4b0`: 6/6 jobs.
 - [Контрольный CI после Merge в `main`](https://github.com/PedFund/PedPsyRU/actions/runs/41617936028) завершился успешно на `b3a4f190454de2ab8bf9882430f731ef7f114769`: **6/6 jobs** (Node 22/24, PostgreSQL 18 с браузерными проверками, dependency audit, secret scan, Required checks).
 - PR [№57](https://github.com/PedFund/PedPsyRU/pull/57) и [№63](https://github.com/PedFund/PedPsyRU/pull/63) объединены. Исправление [№66](https://github.com/PedFund/PedPsyRU/pull/66) вошло в интеграцию через контрольную ветку и №67.
@@ -22,7 +22,7 @@
 - Backend Node.js/TypeScript, PostgreSQL, роли, RLS, аудит, CAS, сессии и MFA.
 - Кабинеты участника, исследователя и staff; создание и ведение исследований, групп и этапов, назначения методик, приглашения, анкеты и сохранение прохождений/результатов.
 - Функции из №64 уже в `main`: начальные группа «Экспериментальная» и этап T0, карточки групп/этапов, наследование назначений, массовый выбор методик, визуальные варианты дополнительных вопросов.
-- Библиотека: **50 архивных описаний**, **63 закрепленных архивных файла**, **22 назначаемых учебных выпуска**: 13 прежних и 9 из methods/approved/v1 (Карпов 1.1.0, СЖО, Мадди, TTF/ATF, Шипилов-36, ШОКЖ-36, Рифф-84, ЦО-36, PVQ-RR-57) (4 отдельных пакета и 9 пакетных числовых). Подробные ограничения в [methods/README.md](methods/README.md).
+- Библиотека: **50 архивных описаний**, **63 закрепленных архивных файла**, **23 назначаемых учебных выпуска**: 13 прежних и 10 из methods/approved/v1 (Карпов 1.1.0, СЖО, Мадди, TTF/ATF, Шипилов-36, ШОКЖ-36, Рифф-84, ЦО-36, PVQ-RR-57, Мотков-18) (4 отдельных пакета и 9 пакетных числовых). Подробные ограничения в [methods/README.md](methods/README.md).
 - Версионированный runtime и реестр проверенных модулей [METHOD_EXTENSION_CONTRACT.md](METHOD_EXTENSION_CONTRACT.md). Обычные анкеты поддерживаются существующим адаптером; для нестандартного формата могут понадобиться отдельные экран, HTTP и адаптер хранения.
 - Раздел суперадминистратора «Перенос методик» показывает статусы библиотеки. Это еще не универсальный браузерный редактор/загрузчик/публикатор новых методик.
 

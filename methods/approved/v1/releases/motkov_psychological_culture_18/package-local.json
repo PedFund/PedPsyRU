@@ -1,0 +1,1369 @@
+{
+  "schema_version": "1.0",
+  "method_id": "motkov_psychological_culture_18",
+  "package_version": "1.0.0",
+  "title": "Психологическая культура личности (О. И. Мотков), 18 пунктов × 2 шкалы",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "motkov_psychological_culture_18_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "ordinal": 31,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "ordinal": 32,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "ordinal": 33,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "ordinal": 34,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    },
+    {
+      "id": "q35",
+      "ordinal": 35,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабое стремление"
+        },
+        {
+          "value": "2",
+          "label": "Слабое стремление"
+        },
+        {
+          "value": "3",
+          "label": "Среднее по силе стремление"
+        },
+        {
+          "value": "4",
+          "label": "Сильное стремление"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильное стремление"
+        }
+      ]
+    },
+    {
+      "id": "q36",
+      "ordinal": 36,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Очень слабая степень осуществления"
+        },
+        {
+          "value": "2",
+          "label": "Слабая степень осуществления"
+        },
+        {
+          "value": "3",
+          "label": "Средняя степень осуществления"
+        },
+        {
+          "value": "4",
+          "label": "Высокая степень осуществления"
+        },
+        {
+          "value": "5",
+          "label": "Очень высокая степень осуществления"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "i_a",
+      "label": "Самопознание — стремление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "i_b",
+      "label": "Самопознание — осуществление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "ii_a",
+      "label": "Конструктивность общения — стремление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "ii_b",
+      "label": "Конструктивность общения — осуществление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "iii_a",
+      "label": "Психическая саморегуляция — стремление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "iii_b",
+      "label": "Психическая саморегуляция — осуществление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "iv_a",
+      "label": "Творческое поведение — стремление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "iv_b",
+      "label": "Творческое поведение — осуществление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "v_a",
+      "label": "Конструктивность в делах — стремление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "v_b",
+      "label": "Конструктивность в делах — осуществление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "vi_a",
+      "label": "Гармонизирующее саморазвитие — стремление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "vi_b",
+      "label": "Гармонизирующее саморазвитие — осуществление",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "pk_a",
+      "label": "Психологическая культура — стремления (общий)",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    },
+    {
+      "id": "pk_b",
+      "label": "Психологическая культура — осуществление (общий)",
+      "min": null,
+      "max": null,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        },
+        {
+          "item_id": "q29",
+          "value": "1"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "1"
+        },
+        {
+          "item_id": "q33",
+          "value": "1"
+        },
+        {
+          "item_id": "q34",
+          "value": "1"
+        },
+        {
+          "item_id": "q35",
+          "value": "1"
+        },
+        {
+          "item_id": "q36",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "i_a",
+          "value": 1
+        },
+        {
+          "scale_id": "i_b",
+          "value": 1
+        },
+        {
+          "scale_id": "ii_a",
+          "value": 1
+        },
+        {
+          "scale_id": "ii_b",
+          "value": 1
+        },
+        {
+          "scale_id": "iii_a",
+          "value": 1
+        },
+        {
+          "scale_id": "iii_b",
+          "value": 1
+        },
+        {
+          "scale_id": "iv_a",
+          "value": 1
+        },
+        {
+          "scale_id": "iv_b",
+          "value": 1
+        },
+        {
+          "scale_id": "v_a",
+          "value": 1
+        },
+        {
+          "scale_id": "v_b",
+          "value": 1
+        },
+        {
+          "scale_id": "vi_a",
+          "value": 1
+        },
+        {
+          "scale_id": "vi_b",
+          "value": 1
+        },
+        {
+          "scale_id": "pk_a",
+          "value": 1
+        },
+        {
+          "scale_id": "pk_b",
+          "value": 1
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "motkov_psychological_culture_18_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 29566,
+      "sha256": "2734ea56f822497f35d040436f4431366c51441d46b25b237bbf4ef5fca4185d",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 7371,
+      "sha256": "8d022b2d46a568e451f856b72b382aa3e949b7fbb5d171a8ada4af952229d05e",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 666,
+      "sha256": "c35b1244bc0b19d90865b9e55f1cfb22455e0ee60a7649133cd134f75535ec97",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 331,
+      "sha256": "e8612fd5bc4449d63b69fa6190957cb8530bd5e1444aa58fa9f1ce39c0bdae71",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}
