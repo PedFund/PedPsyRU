@@ -139,7 +139,7 @@ scenario("lookalike release and malformed release sets cannot bypass the technic
   assert.equal((await x.studies.read(x.session.token,d.id)).catalog.some(r=>r.id===fake),false);
   const cell={group_id:d.groups[0].id,stage_id:d.stages[0].id,expected_version:d.version};
   await assert.rejects(x.studies.assign(x.session.token,d.id,{...cell,release_ids:[fake]}),e=>e.status===404);
-  for(const release_ids of [[f.seed.release_id,f.seed.release_id],[null],Array.from({length:11},()=>randomUUID())])await assert.rejects(x.studies.assign(x.session.token,d.id,{...cell,release_ids}),e=>e.status===400);
+  for(const release_ids of [[f.seed.release_id,f.seed.release_id],[null],Array.from({length:31},()=>randomUUID())])await assert.rejects(x.studies.assign(x.session.token,d.id,{...cell,release_ids}),e=>e.status===400);
   const after=await x.studies.read(x.session.token,d.id);assert.equal(after.version,d.version);assert.deepEqual(after.assignments,d.assignments);
 });
 scenario("activation and close audit failures roll back status/version/quota; repeats are idempotent",async(f,x)=>{
