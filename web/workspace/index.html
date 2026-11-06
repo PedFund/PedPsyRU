@@ -67,6 +67,7 @@
           <button type="button" class="study-section-card" data-study-section-open="design"><strong>Дизайн исследования</strong><span>Название, группы и этапы исследования</span></button>
           <button type="button" class="study-section-card" data-study-section-open="participants"><strong>Сведения об участниках</strong><span>Поля анкеты, приглашения и ход исследования</span></button>
           <button type="button" class="study-section-card" data-study-section-open="methods"><strong>Методики</strong><span>Выбор методик и назначение группам</span></button>
+          <button type="button" class="study-section-card" data-study-section-open="progress"><strong>Ход исследования</strong><span>Этапы, приглашения и прохождение</span></button>
         </div>
       </section>
 
@@ -118,6 +119,7 @@
         <p class="muted">Отметьте несколько методик и сохраните набор для выбранной группы и этапа.</p>
         <div id="method-catalog-list"></div>
       </section>
+      <section id="study-progress-section" class="card study-section" hidden></section>
       <dialog id="copy-assignments-dialog"><form id="copy-assignments-form"><h3>Скопировать методики с предыдущего этапа?</h3><p id="copy-assignments-summary"></p><p class="error">Текущий набор выбранного этапа будет заменён.</p><div class="toolbar"><button type="submit">Заменить набор</button><button id="cancel-copy-assignments" type="button" class="text">Отмена</button></div></form></dialog>
       <dialog id="confirm-dialog"><form method="dialog"><h3>Подтвердите действие</h3><p id="confirm-text"></p><div class="toolbar"><button value="ok">Подтвердить</button><button value="cancel" class="secondary">Отмена</button></div></form></dialog>
     </section>
