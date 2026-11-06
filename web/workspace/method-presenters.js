@@ -14,11 +14,28 @@
     ["2","2 — согласен со вторым утверждением"],
     ["3","3 — абсолютно согласен со вторым утверждением"]
   ]);
-  function optionText(option){const key=String(option.text).replace(/−/g,"-").trim();return bipolarLabels.get(key)||option.text;}
+  const bipolarCaptions=new Map([["-3","абсолютно"],["-2","согласен"],["-1","скорее"],["0","оба верны"],["1","скорее"],["2","согласен"],["3","абсолютно"]]);
+  function optionKey(option){return String(option.text).replace(/−/g,"-").trim();}
+  function optionText(option){return bipolarLabels.get(optionKey(option))||option.text;}
+  function isBipolar(item){return item.options.some(option=>optionKey(option)==="-3");}
+  function radio(doc,option,selected,disabled,onChange){const input=doc.createElement("input");input.type="radio";input.name="response";input.value=option.value;input.checked=selected===option.value;input.disabled=disabled;input.onchange=()=>onChange(input.value);return input;}
   const singleChoice=Object.freeze({id:"pedpsy/single-choice",version:"1.0",mount({container,item,selected,disabled,onChange}){
     const doc=container.ownerDocument;
-    for(const option of item.options){const label=doc.createElement("label");label.className="question-option";const input=doc.createElement("input");input.type="radio";input.name="response";input.value=option.value;input.checked=selected===option.value;input.disabled=disabled;
-      label.append(input,doc.createTextNode(optionText(option)));input.onchange=()=>onChange(input.value);container.append(label);}
+    if(isBipolar(item)){
+      const scale=doc.createElement("div");scale.className="bipolar-scale";
+      const poles=doc.createElement("div");poles.className="bipolar-poles";
+      const first=doc.createElement("span");first.textContent="Абсолютно согласен с первым";
+      const second=doc.createElement("span");second.textContent="Абсолютно согласен со вторым";
+      poles.append(first,second);
+      const track=doc.createElement("div");track.className="bipolar-track";
+      for(const option of item.options){const label=doc.createElement("label");label.className="bipolar-point";label.title=optionText(option);
+        const number=doc.createElement("span");number.className="bipolar-number";number.textContent=option.text;
+        const caption=doc.createElement("small");caption.textContent=bipolarCaptions.get(optionKey(option))||"";
+        label.append(radio(doc,option,selected,disabled,onChange),number,caption);track.append(label);}
+      scale.append(poles,track);container.append(scale);return;
+    }
+    for(const option of item.options){const label=doc.createElement("label");label.className="question-option";
+      label.append(radio(doc,option,selected,disabled,onChange),doc.createTextNode(optionText(option)));container.append(label);}
   }});
   const api={createMethodPresenters,singleChoice};
   if(typeof module==="object"&&module.exports){module.exports=api;return;}
