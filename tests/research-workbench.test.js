@@ -25,7 +25,9 @@ test("bulk assignments are explicit and do not accept duplicate or caller-owned 
   assert.throws(()=>workbenchInput("assign",{...b,release_ids:["foreign"]}));
   const eleven=Array.from({length:11},(_,i)=>`11111111-1111-4111-8111-${String(i+1).padStart(12,"0")}`);
   assert.deepEqual(workbenchInput("assign",{...b,release_ids:eleven}).data.release_ids,eleven,"pilot requires 11 distinct method releases");
-  assert.throws(()=>workbenchInput("assign",{...b,release_ids:[...eleven,id.replace(/1$/, "2")]}),"12 releases must remain rejected");
+  const twelfth="11111111-1111-4111-8111-000000000012";
+  assert.ok(!eleven.includes(twelfth),"the 12th release must be distinct from the first 11");
+  assert.throws(()=>workbenchInput("assign",{...b,release_ids:[...eleven,twelfth]}),"12 distinct releases must remain rejected");
 });
 test("workbench and profile mutations require CSRF before storage, profile never accepts participant IDs",async()=>{
   let calls=0;const csrf={assert:()=>{throw Error("CSRF");}};
