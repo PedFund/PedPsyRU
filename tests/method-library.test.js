@@ -16,3 +16,9 @@ test("catalogue searches titles/authors/indicators, rejects forged query and ver
  const api=createMethodLibraryApi({catalog:async()=>[{title:"ТКИ",authors:["Томас"],indicators:["Сотрудничество"],search_terms:["конфликт"]}]});
  assert.equal((await api.catalog("token","сотрудничество")).length,1);assert.equal((await api.catalog("token","тревожность")).length,0);await assert.rejects(api.catalog("token",{q:"x"}));assert.throws(()=>api.read("token","../form","1.0.0"));
 });
+test("Issue 77 readiness is 11/11, immutable per read and keeps incomplete pilot packages outside admission",async()=>{
+ const api=createMethodLibraryApi({transferStatus:async()=>({archived_methods:50,prepared_packages:2,assignable_releases:13,blocked_packages:1,mode:"allowlisted_packages_only"})});
+ const first=await api.transferStatus("token"),second=await api.transferStatus("token");assert.equal(first.pilot_methods.length,11);assert.deepEqual(first.pilot_methods.map(x=>x.number),Array.from({length:11},(_,i)=>i+1));
+ assert.deepEqual(first.pilot_methods.filter(x=>x.assignable).map(x=>[x.method_id,x.version]),[["tki_ru_30_pairs","1.0.0"]]);assert.equal(first.pilot_methods.some(x=>x.pilot_ready),false);
+ assert.ok(first.pilot_methods.filter(x=>!x.assignable).every(x=>x.blockers.length>0));assert.notEqual(first.pilot_methods,second.pilot_methods);assert.throws(()=>first.pilot_methods[0].blockers.push("forged"));
+});

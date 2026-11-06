@@ -25,6 +25,8 @@ test("PostgreSQL method library: fresh real superadmin only, audit rollback, blo
  let response=await w.app.inject({url:"/api/v2/researcher/methods?q="+encodeURIComponent("сотрудничество"),headers:rh});assert.equal(response.statusCode,200);assert.equal(response.json().length,1);assert.equal(response.headers["cache-control"],"no-store");
  assert.equal((await w.app.inject({url:"/api/v2/researcher/methods?q="+encodeURIComponent("рефлексивность"),headers:rh})).json().length,0);
  assert.equal((await w.app.inject({url:"/api/v2/staff/method-library",headers:{...rh,cookie:"pedpsy_staff_demo="+r.session.token}})).statusCode,401);
+ const transferHttp=await w.app.inject({url:"/api/v2/staff/method-transfer/status",headers:{...headers,cookie:"pedpsy_staff_demo="+s.session.token}});assert.equal(transferHttp.statusCode,200);assert.equal(transferHttp.json().pilot_methods.length,11);assert.deepEqual(transferHttp.json().pilot_methods.filter(x=>x.assignable).map(x=>x.method_id),["tki_ru_30_pairs"]);
+ assert.equal((await w.app.inject({url:"/api/v2/staff/method-transfer/status",headers:{...headers,cookie:"pedpsy_staff_demo="+admin.session.token}})).statusCode,403);
  assert.equal((await w.app.inject({url:"/api/v2/researcher/methods",headers:{...rh,cookie:"pedpsy_researcher_demo="+s.session.token}})).statusCode,401);
  assert.equal((await w.app.inject({url:"/api/v2/researcher/methods?role=superadministrator",headers:rh})).statusCode,400);
  await f.admin.query("CREATE FUNCTION pedpsy.synthetic_library_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'synthetic audit failed'; END $$;CREATE TRIGGER synthetic_library_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_library_audit_fail()");
