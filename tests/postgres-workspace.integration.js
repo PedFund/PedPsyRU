@@ -16,7 +16,7 @@ scenario("real password/MFA HTTP, cookie separation and global stored protocols 
 });
 scenario("invite/accept/researcher own metadata, no private answers, block and audited denial",async(f,w)=>{
   const s=await staffHttp(f,w,"administrator"),i=(await w.app.inject({method:"POST",url:"/api/v2/staff/researchers/invite",headers:s.headers,payload:{}})).json(),password=randomBytes(24).toString("base64url");
-  assert.equal((await w.app.inject({method:"POST",url:"/api/v2/researcher/accept",headers,payload:{invite_code:i.invite_code,password}})).statusCode,200);
+  const accepted=await w.app.inject({method:"POST",url:"/api/v2/researcher/accept",headers,payload:{invite_code:i.invite_code,password}});assert.equal(accepted.statusCode,200);assert.equal(accepted.json().login_id,i.login_id);
   const login=await w.app.inject({method:"POST",url:"/api/v2/researcher/login",headers,payload:{login_id:i.login_id,password}});assert.equal(login.statusCode,200);const rh={...headers,cookie:cookie(login,"pedpsy_researcher_demo"),"x-pedpsy-csrf":login.json().csrf};
   const r=(await f.admin.query("SELECT id,user_id FROM pedpsy.researcher_credentials WHERE login_id=$1",[i.login_id])).rows[0];await f.admin.query("INSERT INTO pedpsy.study_memberships(study_id,user_id,role) VALUES($1,$2,'researcher')",[f.studyId,r.user_id]);
   const home=await w.app.inject({url:"/api/v2/researcher/session",headers:rh});assert.equal(home.statusCode,200);assert.equal(home.json().home.studies.length,1);assert.equal(home.json().home.studies[0].id,f.studyId);assert.ok(!home.body.includes("responses"));assert.ok(!home.body.includes("measures"));

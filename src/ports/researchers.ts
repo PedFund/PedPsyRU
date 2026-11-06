@@ -3,7 +3,7 @@ export interface ResearcherRecord {id:string;user_id:string;login_id:string;stat
 export interface ResearcherInvite {login_id:string;invite_code:string;expires_at:number}
 export interface ResearcherHome {active_study_quota:number;studies:{id:string;title:string;status:string}[]}
 export interface ResearcherGateway {
-  accept(input:unknown):Promise<void>;
+  accept(input:unknown):Promise<{login_id:string}>;
   login(input:unknown):Promise<LoginSession>;
   home(token:string):Promise<ResearcherHome>;
   logout(token:string,csrf:string):Promise<void>;
