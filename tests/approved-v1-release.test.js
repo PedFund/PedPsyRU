@@ -76,3 +76,17 @@ test("Motkov presents odd A items and even B items with their own answer wording
   assert.match(release.form.instruction, /18 пунктов/);
   assert.equal(release.labels.pk_A, "Психологическая культура — стремления (общий)");
 });
+
+test("CO-36 is presented whole; every other method remains sequential", () => {
+  const releases = approvedV1Releases().releases;
+  const co36 = releases.find(item => item.id === "co36_kunitsyna_36");
+  assert.ok(co36);
+  assert.deepEqual(co36.form.presentation, {id: "pedpsy/ranking-grid", version: "1.0.0"});
+  for (const release of releases.filter(item => item.id !== "co36_kunitsyna_36")) {
+    assert.equal(release.form.presentation, undefined, release.id);
+  }
+  // TKI is pinned by the original seed, not by the approved-v1 pipeline, but it
+  // follows the same sequential default.
+  const tki = require("../methods/tki/form.json");
+  assert.equal(tki.presentation, undefined);
+});
