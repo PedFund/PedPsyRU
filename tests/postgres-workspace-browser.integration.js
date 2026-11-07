@@ -72,7 +72,7 @@ test("PostgreSQL browser acceptance: actual MFA, both staff workspaces/download,
   browser.setStage("researcher invite link");const password=randomBytes(24).toString("base64url");
   const researcher=(await f.admin.query("SELECT user_id FROM pedpsy.researcher_credentials WHERE login_id=$1",[loginId])).rows[0];await f.admin.query("INSERT INTO pedpsy.study_memberships(study_id,user_id,role) VALUES($1,$2,'researcher')",[f.studyId,researcher.user_id]);await f.admin.query("UPDATE pedpsy.studies SET title=$1 WHERE id=$2",["<img src=x onerror=alert(1)>",f.studyId]);
   await browser.evaluate(`location.hash=${JSON.stringify("#researcher-invite="+invite)}`);
-  await browser.reload(`!document.getElementById('login-screen').hidden && document.getElementById('login-form').hidden && document.getElementById('researcher-invite-details').open && document.getElementById('invite-code').value===${JSON.stringify(invite)}`);
+  await browser.reload(`!document.getElementById('login-screen').hidden && document.getElementById('login-form').hidden && document.getElementById('researcher-invite-details').open && document.getElementById('invite-code').value===${JSON.stringify(invite)} && document.getElementById('message').textContent.includes('Вас пригласили')`);
   assert.equal(await browser.evaluate("document.getElementById('message').textContent.includes('Вас пригласили')"),true);
   await browser.evaluate(`document.getElementById('invite-password').value=${JSON.stringify(password)};document.getElementById('accept-form').requestSubmit();`);await browser.wait(visible("workspace-screen")+" && !document.getElementById('refresh').disabled");
   assert.equal(await browser.evaluate("document.getElementById('identity').textContent"),"Исследователь");
