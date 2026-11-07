@@ -70,7 +70,7 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         const data=await accounts.download(token(r,names.staff),(b as {attempt_id?:string}).attempt_id,csrf(r));
         reply.header("Content-Disposition",'attachment; filename="pedpsy-protocols.json"');return data;
       });
-      app.post("/api/v2/researcher/accept",async r=>{await accounts.researcherAccept(r.body);return {status:"accepted"};});
+      app.post("/api/v2/researcher/accept",async r=>{const accepted=await accounts.researcherAccept(r.body);return {status:"accepted",login_id:accepted.login_id};});
       app.post("/api/v2/researcher/login",async(r,reply)=>{const s=await accounts.researcherLogin(r.body);reply.header("Set-Cookie",[cookie(names.researcher,s.token,s.expiresAt),cookie(names.staff,"",0),cookie(names.pending,"",0)]);return {csrf:s.csrf,expires_at:s.expiresAt};});
       app.get("/api/v2/researcher/session",async r=>accounts.researcherSession(token(r,names.researcher)));
       if(studies){

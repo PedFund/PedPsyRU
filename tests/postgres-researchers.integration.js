@@ -5,7 +5,7 @@ const {PostgresResearcherManagement,PostgresResearcherGateway}=require("../dist/
 const password=()=>randomBytes(24).toString("base64url");
 function scenario(name,fn){test("PostgreSQL researchers: "+name,async t=>{const f=await postgresFixture({runtimePoolSize:2});t.after(()=>f.close());await fn(f);});}
 async function accepted(f,staff){const m=new PostgresResearcherManagement(f.runtime),g=new PostgresResearcherGateway(f.runtime),invite=await m.invite(staff.session.token),pw=password();
-  await g.accept({invite_code:invite.invite_code,password:pw});const session=await g.login({login_id:invite.login_id,password:pw});const row=(await m.list(staff.session.token)).find(x=>x.login_id===invite.login_id);return {m,g,invite,pw,session,row};}
+  const accepted=await g.accept({invite_code:invite.invite_code,password:pw});assert.equal(accepted.login_id,invite.login_id);const session=await g.login({login_id:invite.login_id,password:pw});const row=(await m.list(staff.session.token)).find(x=>x.login_id===invite.login_id);return {m,g,invite,pw,session,row};}
 scenario("both MFA staff roles invite/accept/login/block with durable default quota",async f=>{
   for(const role of ["administrator","superadministrator"]){const staff=await verifiedStaff(f,role),x=await accepted(f,staff);
     assert.equal(x.row.status,"active");assert.equal(x.row.active_study_quota,1);assert.equal((await new PostgresAccountAccess(f.runtime).session(x.session.token)).role,"researcher");

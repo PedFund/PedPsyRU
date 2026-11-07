@@ -23,7 +23,7 @@ export class PostgresResearcherGateway implements ResearcherGateway{
   private deriving=false;
   private readonly dummySalt=randomBytes(16);private readonly dummyHash=randomBytes(64).toString("hex");
   constructor(private readonly pool:Pool,private readonly derivePassword=derive){}
-  async accept(input:unknown):Promise<void>{
+  async accept(input:unknown):Promise<{login_id:string}>{
     if(!input||typeof input!=="object"||Array.isArray(input)||Object.keys(input).sort().join(",")!=="invite_code,password")throw new ParticipationError(400,"INVALID_INVITE");
     const d=input as Record<string,unknown>;if(typeof d.invite_code!=="string"||!validToken(d.invite_code)||!validPassword(d.password))throw new ParticipationError(400,"INVALID_INVITE");
     const inviteCode=d.invite_code;
@@ -32,8 +32,8 @@ export class PostgresResearcherGateway implements ResearcherGateway{
       const allowed=await accountTransaction(this.pool,async c=>(await c.query<{allowed:boolean}>("SELECT pedpsy.reserve_invite_attempt($1) allowed",[tokenHash(inviteCode)])).rows[0]?.allowed);
       if(!allowed)throw new ParticipationError(429,"LOGIN_THROTTLED");
       const salt=randomBytes(16),b=await this.derivePassword(d.password,salt,64,SCRYPT),hash=b.toString("hex");b.fill(0);
-      const accepted=await accountTransaction(this.pool,async c=>(await c.query<{accepted:boolean}>("SELECT pedpsy.accept_researcher_invite($1,$2,$3) accepted",[tokenHash(inviteCode),salt.toString("hex"),hash])).rows[0]?.accepted);
-      if(!accepted)throw new ParticipationError(401,"INVALID_INVITE");
+      const loginId=await accountTransaction(this.pool,async c=>(await c.query<{login_id:string|null}>("SELECT pedpsy.accept_researcher_invite($1,$2,$3) login_id",[tokenHash(inviteCode),salt.toString("hex"),hash])).rows[0]?.login_id);
+      if(!loginId)throw new ParticipationError(401,"INVALID_INVITE");return {login_id:loginId};
     }finally{this.deriving=false;}
   }
   async login(input:unknown){
