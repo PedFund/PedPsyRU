@@ -1,8 +1,8 @@
 import type {InstrumentRequest,InstrumentResponse,InstrumentResult} from "../ports/instruments.js";
 import {calculatePinnedInstrument} from "../scoring/instruments.js";
 import {ParticipationError} from "../ports/errors.js";
-import {validateDraft, validateRevision} from "../ports/validation.js";
-import type {ParticipantContext, UnitOfWork, StoredResult} from "../ports/participation.js";
+import {validateRevision} from "../ports/validation.js";
+import type {DraftInput, ParticipantContext, UnitOfWork, StoredResult} from "../ports/participation.js";
 
 export interface ParticipationDependencies {
   readonly newId: () => string;
@@ -23,12 +23,7 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
     },
     save(context: ParticipantContext, id: string, input: unknown) {
       return uow.run(context, async ports => {
-        const state = await ports.attempts.getAuthorized(id);
-        if (!state) throw new ParticipationError(404, "NOT_AVAILABLE");
-        if (state.status !== "draft") throw new ParticipationError(409, "ATTEMPT_COMPLETED");
-        const release = await ports.releases.getPinned(state.releaseId);
-        validateDraft(input, release.itemIds,release.choiceValues,release.quota);
-        const result = await ports.attempts.compareAndSave(id, input);
+        const result = await ports.attempts.compareAndSave(id, input as DraftInput);
         await ports.audit.appendRequired({event: "draft_saved", resourceId: id});
         return result;
       });

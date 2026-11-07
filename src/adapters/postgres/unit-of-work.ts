@@ -29,6 +29,8 @@ export async function assertRuntimeClient(client: PoolClient): Promise<void> {
 export class PostgresUnitOfWork implements UnitOfWork {
   private readonly contexts = new WeakMap<ParticipantContext, string>();
   private readonly local = new AsyncLocalStorage<boolean>();
+  // Verified release definitions are immutable; presentation corrections are always read fresh.
+  private readonly releaseCache = new Map<string,{key:string;release:PinnedRelease}>();
   constructor(private readonly pool: Pool) {}
   private async assertRuntime(client: PoolClient): Promise<void> {
     await assertRuntimeClient(client);
@@ -61,7 +63,8 @@ export class PostgresUnitOfWork implements UnitOfWork {
       await this.assertRuntime(client); await client.query("BEGIN"); open = true;
       await client.query("SELECT set_config('app.session_hash',$1,true),set_config('statement_timeout','5000',true),set_config('lock_timeout','3000',true),set_config('idle_in_transaction_session_timeout','10000',true)", [hash]);
       return await this.local.run(true, async () => {
-        let live = true, attemptScope: string | null = null;
+        // One attempt per transaction; the snapshot is invalidated after any write.
+        let live = true, attemptScope: string | null = null, attemptCache: {id:string;snapshot:AttemptSnapshot} | undefined;
         const pendingAudit = new Set<string>();
         const ensure = async (): Promise<Actor> => {
           if (!live) throw new Error("TRANSACTION_CLOSED");
@@ -71,6 +74,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
           return actor;
         };
         const get = async (id: string): Promise<AttemptSnapshot> => {
+          if (attemptCache && attemptCache.id === id) return attemptCache.snapshot;
           await ensure(); if (!uuid(id)) throw new ParticipationError(404, "NOT_AVAILABLE");
           if (attemptScope && attemptScope !== id) throw new Error("ONE_ATTEMPT_PER_TRANSACTION");
           if (!attemptScope) {await client.query("SELECT pedpsy.lock_participant_scope($1)", [id]); attemptScope = id;}
@@ -78,18 +82,29 @@ export class PostgresUnitOfWork implements UnitOfWork {
           const result = await client.query<AttemptRow>("SELECT id,study_id,release_id,status,revision,current_item_id FROM pedpsy.attempts WHERE id=$1", [id]);
           const row = result.rows[0]; if (!row) throw new ParticipationError(404, "NOT_AVAILABLE");
           const values = await client.query<InstrumentResponse>("SELECT item_id,value FROM pedpsy.responses WHERE attempt_id=$1 ORDER BY item_id", [id]);
-          return {id, studyId: row.study_id, participantId: context.participantId, releaseId: row.release_id, status: row.status,
+          const snapshot={id, studyId: row.study_id, participantId: context.participantId, releaseId: row.release_id, status: row.status,
             revision: Number(row.revision), currentItemId: row.current_item_id, responses: values.rows};
+          attemptCache={id,snapshot}; return snapshot;
         };
         const pinned = async (id: string): Promise<PinnedRelease> => {
-          await ensure(); if (!attemptScope || (await get(attemptScope)).releaseId !== id) throw new ParticipationError(404, "NOT_AVAILABLE");
-          const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);
-          const row = release.rows[0];
-          const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.release_items WHERE release_id=$1 ORDER BY ordinal",[id]);
-          const pinned=verifyPinnedChoiceRelease(row,items.rows);
+          await ensure();
+          if (!attemptScope) throw new ParticipationError(404, "NOT_AVAILABLE");
+          const owned = await client.query("SELECT 1 FROM pedpsy.attempts WHERE id=$1 AND release_id=$2", [attemptScope, id]);
+          if (!owned.rowCount) throw new ParticipationError(404, "NOT_AVAILABLE");
+          const meta = await client.query<{form_digest:string;key_digest:string;method_version_id:string;handler_version:string;publication_state:string;verification_state:string}>("SELECT form_digest,key_digest,method_version_id,handler_version,publication_state,verification_state FROM pedpsy.instrument_releases WHERE id=$1", [id]);
+          const m = meta.rows[0]; if (!m) throw new ParticipationError(503, "RELEASE_UNAVAILABLE");
+          const key = [id,m.form_digest,m.key_digest,m.method_version_id,m.handler_version,m.publication_state,m.verification_state].join(":");
+          let cached = this.releaseCache.get(id);
+          if (!cached || cached.key !== key) {
+            const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);
+            const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.release_items WHERE release_id=$1 ORDER BY ordinal",[id]);
+            cached={key,release:verifyPinnedChoiceRelease(release.rows[0],items.rows)};
+            if(this.releaseCache.size>100)this.releaseCache.clear();
+            this.releaseCache.set(id,cached);
+          }
           const correction=await client.query<{title:string|null;instruction:string|null}>("SELECT title,instruction FROM pedpsy.release_presentation_corrections WHERE release_id=$1 ORDER BY created_at_ms DESC, id DESC LIMIT 1",[id]);
           const c=correction.rows[0];
-          return c?{...pinned,presentation:{...(c.title?{title:c.title}:{}),...(c.instruction?{instruction:c.instruction}:{})}}:pinned;
+          return c?{...cached.release,presentation:{...(c.title?{title:c.title}:{}),...(c.instruction?{instruction:c.instruction}:{})}}:cached.release;
         };
         const stored = async (id: string): Promise<StoredResult | null> => {
           await get(id); const result = await client.query<ResultRow>("SELECT id,attempt_id,input_revision,responses_digest,calculated_at,payload FROM pedpsy.attempt_results WHERE attempt_id=$1", [id]);
@@ -100,20 +115,26 @@ export class PostgresUnitOfWork implements UnitOfWork {
           attempts: {
             getAuthorized: get,
             compareAndSave: async (id, input) => {
-              const state = await get(id), release = await pinned(state.releaseId); validateDraft(input, release.itemIds,release.choiceValues);
+              const state = await get(id);
               if (state.status !== "draft") throw new ParticipationError(409, "ATTEMPT_COMPLETED");
+              const release = await pinned(state.releaseId); validateDraft(input, release.itemIds,release.choiceValues,release.quota);
               if (state.revision !== input.expected_revision) throw new ParticipationError(409, "REVISION_CONFLICT");
               const updated = await client.query("UPDATE pedpsy.attempts SET revision=revision+1,current_item_id=$1,updated_at=clock_timestamp() WHERE id=$2 AND status='draft' AND revision=$3", [input.current_item_id, id, input.expected_revision]);
               if (updated.rowCount !== 1) throw new ParticipationError(409, "REVISION_CONFLICT");
-              await client.query("DELETE FROM pedpsy.responses WHERE attempt_id=$1", [id]);
-              for (const response of input.responses) await client.query("INSERT INTO pedpsy.responses(study_id,attempt_id,release_id,item_id,value) VALUES($1,$2,$3,$4,$5)", [context.studyId, id, state.releaseId, response.item_id, response.value]);
-              pendingAudit.add(id + ":draft_saved"); return get(id);
+              // Rewrite only changed or removed responses instead of all of them on every click.
+              const current=new Map(state.responses.map(r=>[r.item_id,r.value])),next=new Map(input.responses.map(r=>[r.item_id,r.value]));
+              const removed=[...current.keys()].filter(item=>!next.has(item)),changed=[...next].filter(([item,value])=>current.get(item)!==value);
+              if(removed.length)await client.query("DELETE FROM pedpsy.responses WHERE attempt_id=$1 AND item_id=ANY($2::text[])",[id,removed]);
+              if(changed.length){await client.query("DELETE FROM pedpsy.responses WHERE attempt_id=$1 AND item_id=ANY($2::text[])",[id,changed.map(([item])=>item)]);await client.query("INSERT INTO pedpsy.responses(study_id,attempt_id,release_id,item_id,value) SELECT $1,$2,$3,item_id,value FROM UNNEST($4::text[],$5::text[]) AS t(item_id,value)",[context.studyId,id,state.releaseId,changed.map(([item])=>item),changed.map(([,value])=>value)]);}
+              pendingAudit.add(id + ":draft_saved"); attemptCache=undefined;
+              const responses=input.responses.map(r=>({item_id:r.item_id,value:r.value})).sort((a,b)=>a.item_id.localeCompare(b.item_id));
+              return {...state,revision:state.revision+1,currentItemId:input.current_item_id,responses};
             },
             markCompleted: async (id, revision, resultId, at) => {
               await get(id);
               const updated = await client.query("UPDATE pedpsy.attempts SET status='completed',revision=revision+1,completion_result_id=$1,completed_at=$2,updated_at=$2 WHERE id=$3 AND status='draft' AND revision=$4", [resultId, at, id, revision]);
               if (updated.rowCount !== 1) throw new ParticipationError(409, "REVISION_CONFLICT");
-              pendingAudit.add(id + ":attempt_completed");
+              pendingAudit.add(id + ":attempt_completed"); attemptCache=undefined;
             }
           },
           releases: {getPinned: pinned},
