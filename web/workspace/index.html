@@ -59,16 +59,24 @@
     </section>
 
     <section id="design-screen" hidden>
-      <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><span class="crumb-sep" id="study-crumb-sep" aria-hidden="true">/</span><button id="back-study-hub" class="text" type="button" hidden>Обзор исследования</button></nav>
-      <section id="study-hub" class="card">
-        <h2 id="design-title"></h2><p id="design-meta" class="muted"></p>
-<div id="hub-activation" hidden><p id="hub-activation-status" class="muted"></p><ul id="hub-activation-checklist" class="muted"></ul><div class="toolbar"><button id="hub-activate">Активировать исследование</button></div></div>
-        <div class="study-section-grid">
-          <button type="button" class="study-section-card" data-study-section-open="design"><strong>Дизайн исследования</strong><span>Название, группы и этапы исследования</span></button>
-          <button type="button" class="study-section-card" data-study-section-open="participants"><strong>Сведения об участниках</strong><span>Поля анкеты, приглашения и ход исследования</span></button>
-          <button type="button" class="study-section-card" data-study-section-open="methods"><strong>Методики</strong><span>Выбор методик и назначение группам</span></button>
-          <button type="button" class="study-section-card" data-study-section-open="progress"><strong>Ход исследования</strong><span>Этапы, приглашения и прохождение</span></button>
-        </div>
+      <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><span class="crumb-sep" id="study-crumb-sep" aria-hidden="true">/</span><button id="back-study-hub" class="text" type="button" hidden>К запуску</button></nav>
+      <header class="study-header">
+        <div><h2 id="design-title"></h2><p id="design-meta" class="muted"></p></div>
+        <div class="study-header-actions"><button id="archive-study" class="secondary" type="button" hidden>Закрыть исследование</button></div>
+      </header>
+      <nav id="study-tabs" class="tabs study-tabs" aria-label="Разделы исследования">
+        <button type="button" id="study-tab-launch" data-study-section-open="launch" hidden>Запуск</button>
+        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden>Ход</button>
+        <button type="button" data-study-section-open="design">Дизайн</button>
+        <button type="button" data-study-section-open="participants">Участники</button>
+        <button type="button" data-study-section-open="methods">Методики</button>
+      </nav>
+
+      <section id="study-hub" class="card study-section" hidden>
+        <h2>Запуск исследования</h2>
+        <p class="muted">Проверьте готовность и активируйте исследование. После активации дизайн закрепляется, а исследование открывается на вкладке «Ход».</p>
+        <div id="hub-activation" hidden><p id="hub-activation-status" class="muted"></p><ul id="hub-activation-checklist" class="muted"></ul></div>
+        <div class="toolbar"><button id="activate-study" type="button" hidden>Активировать исследование</button></div>
       </section>
 
       <section id="study-design-section" class="card study-section" hidden>
@@ -82,7 +90,6 @@
           <section><h3>Этапы</h3><div id="stage-cards"></div><button id="add-stage" type="button" class="secondary">Добавить этап</button><form id="stage-form" hidden><input id="stage-edit" type="hidden"><label>Этап<input id="stage-code" readonly></label><label>Пояснение (необязательно)<input id="stage-note" maxlength="500" placeholder="Например, до начала программы"></label><input id="stage-ordinal" type="hidden"><div class="toolbar"><button type="submit">Сохранить этап</button><button id="cancel-stage" type="button" class="text">Отмена</button></div></form></section>
           <section hidden><form id="copy-stage-form"><select id="copy-source"></select><input id="copy-code"><input id="copy-ordinal" type="number"></form></section>
         </div></fieldset></div>
-        <div class="toolbar"><button id="activate-study">Активировать исследование</button><button id="archive-study" class="secondary">Закрыть исследование</button></div>
         <p class="muted">Перед активацией заполните назначения всех групп и этапов. Активный дизайн закрепляется; закрытие сохраняет записи и освобождает квоту.</p>
       </section>
 
