@@ -23,5 +23,5 @@ test("group QR: encoder is pinned, integrity reviewed, no runtime deps/install s
 });
 test("group QR: same-origin asset preserves encoder copyright and existing restrictive CSP",async()=>{
  const assets=require("../dist/src/bootstrap/workspace-assets.js").workspaceAssets(),app=require("../dist/src/http/workspace-app.js").createWorkspacePreviewApp(assets);
- try{const r=await app.inject({url:"/workspace/qr.js"});assert.equal(r.statusCode,200);assert.match(r.headers["content-security-policy"],/script-src 'self'/);assert.doesNotMatch(r.headers["content-security-policy"],/unsafe-inline|unsafe-eval|https:/);assert.match(r.body,/Copyright \(c\) 2009 Kazuhiko Arase/);assert.match(r.body,/window.PedPsyQR/);assert.match(assets.html,/src="\/workspace\/qr.js" defer/);}finally{await app.close();}
+ try{const r=await app.inject({url:"/workspace/qr.js"});assert.equal(r.statusCode,200);assert.match(r.headers["content-security-policy"],/script-src 'self'/);assert.doesNotMatch(r.headers["content-security-policy"],/unsafe-inline|unsafe-eval|https:/);assert.match(r.body,/Copyright \(c\) 2009 Kazuhiko Arase/);assert.match(r.body,/window.PedPsyQR/);assert.match(assets.html,/src="\/workspace\/qr\.js(?:\?[^"]+)?" defer/);}finally{await app.close();}
 });

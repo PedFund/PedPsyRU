@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>МетодТест — кабинет</title>
-  <link rel="stylesheet" href="/workspace/styles.css">
-  <script src="/workspace/qr.js" defer></script>
-  <script src="/workspace/participant.js" defer></script>
-  <script src="/workspace/app.js" defer></script>
+  <link rel="stylesheet" href="/workspace/styles.css?v=20261106-5">
+  <script src="/workspace/qr.js?v=20261106-5" defer></script>
+  <script src="/workspace/participant.js?v=20261106-5" defer></script>
+  <script src="/workspace/app.js?v=20261106-5" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -59,7 +59,7 @@
     </section>
 
     <section id="design-screen" hidden>
-      <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><button id="back-study-hub" class="text" type="button" hidden>← К разделам исследования</button></nav>
+      <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><span class="crumb-sep" id="study-crumb-sep" aria-hidden="true">/</span><button id="back-study-hub" class="text" type="button" hidden>Обзор исследования</button></nav>
       <section id="study-hub" class="card">
         <h2 id="design-title"></h2><p id="design-meta" class="muted"></p>
 <div id="hub-activation" hidden><p id="hub-activation-status" class="muted"></p><ul id="hub-activation-checklist" class="muted"></ul><div class="toolbar"><button id="hub-activate">Активировать исследование</button></div></div>
@@ -67,6 +67,7 @@
           <button type="button" class="study-section-card" data-study-section-open="design"><strong>Дизайн исследования</strong><span>Название, группы и этапы исследования</span></button>
           <button type="button" class="study-section-card" data-study-section-open="participants"><strong>Сведения об участниках</strong><span>Поля анкеты, приглашения и ход исследования</span></button>
           <button type="button" class="study-section-card" data-study-section-open="methods"><strong>Методики</strong><span>Выбор методик и назначение группам</span></button>
+          <button type="button" class="study-section-card" data-study-section-open="progress"><strong>Ход исследования</strong><span>Этапы, приглашения и прохождение</span></button>
         </div>
       </section>
 
@@ -117,8 +118,10 @@
         <div class="toolbar"><label>Группа<select id="method-target-group"></select></label><label>Этап<select id="method-target-stage"></select></label><button id="save-method-selection" type="button">Сохранить выбранные методики</button></div>
         <p class="muted">Отметьте несколько методик и сохраните набор для выбранной группы и этапа.</p>
         <div id="method-catalog-list"></div>
-        <dialog id="copy-assignments-dialog"><form id="copy-assignments-form"><h3>Скопировать методики с предыдущего этапа?</h3><p id="copy-assignments-summary"></p><p class="error">Текущий набор выбранного этапа будет заменён.</p><div class="toolbar"><button type="submit">Заменить набор</button><button id="cancel-copy-assignments" type="button" class="text">Отмена</button></div></form></dialog>
       </section>
+      <section id="study-progress-section" class="card study-section" hidden></section>
+      <dialog id="copy-assignments-dialog"><form id="copy-assignments-form"><h3>Скопировать методики с предыдущего этапа?</h3><p id="copy-assignments-summary"></p><p class="error">Текущий набор выбранного этапа будет заменён.</p><div class="toolbar"><button type="submit">Заменить набор</button><button id="cancel-copy-assignments" type="button" class="text">Отмена</button></div></form></dialog>
+      <dialog id="confirm-dialog"><form method="dialog"><h3>Подтвердите действие</h3><p id="confirm-text"></p><div class="toolbar"><button value="ok">Подтвердить</button><button value="cancel" class="secondary">Отмена</button></div></form></dialog>
     </section>
 
     <footer>Учебная платформа · Данные не размещены в Selectel · Полная методическая и эксплуатационная приёмка впереди</footer>
