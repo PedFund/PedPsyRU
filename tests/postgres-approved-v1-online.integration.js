@@ -58,6 +58,21 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
     const complete = await w.app.inject({method: 'POST', url: base + '/complete', headers: participantHeaders, payload: {expected_revision: 1}});
     assert.equal(complete.statusCode, 200, release.id + ' ' + JSON.stringify(complete.json()));
     const result = complete.json();
+    if (release.id === 'motkov_psychological_culture_18') {
+      assert.equal(result.presentation.groups.length, 6, 'Motkov keeps six factor pairs');
+      assert.equal(result.presentation.summary.measures.length, 2, 'Motkov keeps general A/B');
+      assert.ok(['низкий', 'средний', 'высокий', 'псевдовысокий'].includes(result.presentation.summary.level.value));
+      assert.ok(result.classifications.some(entry => entry.code === 'gpk – уровень'), 'general harmony level is projected');
+    }
+    if (release.id === 'ryff_pwb_84_shevelenkova_fesenko') {
+      assert.equal(result.presentation.groups[0].measures.length, 6, 'Ryff keeps six profile scales');
+      assert.equal(result.presentation.summary.colors, 3, 'Ryff total has three levels');
+    }
+    if (release.id === 'uvlk_shipilov') {
+      assert.equal(result.presentation.groups[0].measures.length, 3, 'Shipilov keeps three spheres');
+      assert.equal(result.presentation.groups[1].measures.length, 6, 'Shipilov keeps six conflicts');
+      assert.equal(result.presentation.summary.colors, 5, 'Shipilov total has five levels');
+    }
     if (index === 0) firstResult = result;
     // Measure labels are localised; compare by the language-independent scale id.
     // Both lists follow the key's scale order: compare the values positionally, so the
