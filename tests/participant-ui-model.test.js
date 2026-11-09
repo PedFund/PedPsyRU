@@ -12,15 +12,17 @@ test("participant UI: labels are escaped, not executable HTML",()=>{assert.equal
 test("participant UI: own role, in-page confirmation and explicit missing normative levels",()=>{const js=fs.readFileSync(path.join(__dirname,"../web/workspace/participant.js"),"utf8"),html=fs.readFileSync(path.join(__dirname,"../web/workspace/index.html"),"utf8");assert.match(js,/Кабинет участника/);assert.match(js,/participant-confirm-dialog/);assert.doesNotMatch(js,/\bconfirm\(/);assert.match(html,/id="participant-confirm-dialog"/);assert.match(js,/Нормативная интерпретация не утверждена/);});
 
 test("participant UI: presentation result draws gradient bars, levels and no scores",()=>{
-  const view={title:"Психологическая культура личности",summary_position:"bottom",groups:[{title:"Самопознание",description:"Понимать свои желания.",measures:[{code:"I_A",label:"Стремление",value:4.8,min:1,max:5,colors:4,description:null,level:"высокий",level_text:"По вашим ответам это стремление выражено сильно."}]}],summary:{title:"Общий уровень гармоничности",colors:4,measures:[],level:{code:"gpk",value:"псевдовысокий",text:"Общий уровень учитывает силу стремлений.",index:3,count:4}}};
+  const view={title:"Психологическая культура личности",palette:"negative",summary_position:"bottom",groups:[{title:"Самопознание",description:"Понимать свои желания.",measures:[{code:"I_A",label:"Стремление",value:4.8,min:1,max:5,colors:4,description:null,level:"высокий",level_index:2,level_text:"По вашим ответам это стремление выражено сильно."},{code:"positive_relations",label:"Отношения",value:50,min:14,max:84,colors:2,description:"Теплота и доверие.",level:null,level_index:-1,level_text:null}]}],summary:{title:"Общий уровень гармоничности",colors:4,measures:[],level:{code:"gpk",value:"псевдовысокий",text:"Общий уровень учитывает силу стремлений.",index:3,count:4}}};
   const html=m.resultMarkup(view);
+  assert.match(html,/result-card palette-negative/);
   assert.ok(html.indexOf("Самопознание")<html.indexOf("Общий уровень гармоничности"));
-  assert.match(html,/result-scale scale-4/);
   assert.match(html,/result-categorical scale-4/);
+  assert.match(html,/tone-3 active/);
+  assert.match(html,/result-scale scale-2/);
   assert.match(html,/tone-4 active/);
   assert.match(html,/высокий/);
   assert.match(html,/псевдовысокий/);
   assert.match(html,/Спасибо за участие в исследовании/);
   assert.equal(html.includes("4.8"),false);
-  assert.equal(html.includes(">4<"),false);
+  assert.equal(html.includes(">50<"),false);
 });
