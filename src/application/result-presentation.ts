@@ -312,6 +312,35 @@ const catalog: Catalog = {
         ]
       }
     },
+    "sjo_20@1.0.0-staging": {
+      "title": "Смысложизненные ориентации",
+      "summary_position": "top",
+      "level_templates": {
+        "three": {"низкий": "", "средний": "", "высокий": ""}
+      },
+      "measures": {
+        "goals": {"min": 6, "max": 42, "colors": 3, "level_template": "three"},
+        "process": {"min": 6, "max": 42, "colors": 3, "level_template": "three"},
+        "result": {"min": 5, "max": 35, "colors": 3, "level_template": "three"},
+        "locus_self": {"min": 4, "max": 28, "colors": 3, "level_template": "three"},
+        "locus_life": {"min": 6, "max": 42, "colors": 3, "level_template": "three"},
+        "meaningfulness_total": {"label": "Общий балл", "min": 20, "max": 140, "colors": 3, "level_template": "three"}
+      },
+      "groups": [
+        {
+          "title": "Субшкалы",
+          "description": null,
+          "measures": ["goals", "process", "result", "locus_self", "locus_life"]
+        }
+      ],
+      "summary": {
+        "title": "Общая осмысленность жизни",
+        "measures": ["meaningfulness_total"],
+        "level_code": "meaningfulness_total",
+        "colors": 3,
+        "levels_order": ["низкий", "средний", "высокий"]
+      }
+    },
     "co36_kunitsyna_36@1.0.0-staging": {
       "title": "ЦО-36, семейные ценности",
       "note": "Нормативные уровни для этой методики не утверждены.",

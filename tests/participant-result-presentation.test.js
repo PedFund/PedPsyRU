@@ -64,7 +64,7 @@ test("participant result: Ryff profile and three-level total are projected",asyn
 });
 
 test("participant result: methods without a catalog keep the legacy shape",async()=>{
-  const body=await complete(stored("sjo_20@1.0.0-staging",[measure("goals",30)],[level("goals","low")]));
+  const body=await complete(stored("legacy_method@1.0.0-local",[measure("goals",30)],[level("goals","low")]));
   assert.equal(body.presentation,undefined);
   assert.equal(body.measures[0].value,30);
 });

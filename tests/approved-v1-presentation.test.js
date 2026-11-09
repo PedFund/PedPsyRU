@@ -66,6 +66,20 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: SJO shows five subscales and a three-level total",()=>{
+  const codes=["goals","process","result","locus_self","locus_life","meaningfulness_total"];
+  const view=buildPresentation("sjo_20@1.0.0-staging",codes.map(code=>measure(code,30)),new Map(codes.map(code=>[code,level("средний")])));
+  assert.equal(view.groups.length,1);
+  assert.equal(view.groups[0].measures.length,5);
+  assert.equal(view.groups[0].measures[0].max,42);
+  assert.equal(view.groups[0].measures[0].level_index,1);
+  assert.equal(view.groups[0].measures[0].level_text,null);
+  assert.equal(view.summary.colors,3);
+  assert.equal(view.summary.level.value,"средний");
+  assert.equal(view.summary.level.index,1);
+  assert.equal(view.summary.measures[0].max,140);
+});
+
 test("presentation: CO36 uses Russian labels and two-color scales without levels",()=>{
   const codes=["family_safety","family_traditions","family_interpersonal_relations","family_normative_conformity","individual_achievement","individual_power_influence","individual_hedonism","individual_activity_stimulation","universal_independence","universal_moral_orientation","universal_tolerance","universal_spiritual"];
   const view=buildPresentation("co36_kunitsyna_36@1.0.0-staging",codes.map(code=>measure(code,6)),new Map());
@@ -115,6 +129,6 @@ test("presentation: Shipilov has three spheres, six conflicts and a five-level t
 });
 
 test("presentation: unknown or non-catalog methods keep the legacy result",()=>{
-  assert.equal(buildPresentation("sjo_20@1.0.0-staging",[measure("goals",30)],new Map()),null);
+  assert.equal(buildPresentation("unknown_method@1.0.0-staging",[measure("goals",30)],new Map()),null);
   assert.equal(buildPresentation("",[measure("x",1)],new Map()),null);
 });
