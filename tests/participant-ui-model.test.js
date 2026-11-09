@@ -37,3 +37,10 @@ test("participant UI: ranking uses locked and legacy result copy is updated",()=
   assert.doesNotMatch(js,/Сохранённый результат/);
   assert.match(js,/Уровень определяется как положение балла относительно количественных границ ключа/);
 });
+
+test("participant UI: presentation note replaces the level note when there are no levels",()=>{
+  const html=m.resultMarkup({title:"ЦО-36, семейные ценности",note:"Нормативные уровни для этой методики не утверждены.",palette:"positive",summary_position:"top",groups:[{title:"Ценности",description:null,measures:[{code:"family_safety",label:"Безопасность семьи",value:6,min:1,max:12,colors:2,description:null,level:null,level_index:-1,level_text:null}]}],summary:null});
+  assert.match(html,/Нормативные уровни для этой методики не утверждены/);
+  assert.doesNotMatch(html,/Уровень определяется как положение балла/);
+  assert.equal(html.includes(">6<"),false);
+});

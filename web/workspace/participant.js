@@ -41,7 +41,9 @@
   function resultMarkup(presentation){
     const groups=(presentation.groups||[]).map(group=>'<section class="result-group"><h3>'+escape(group.title)+'</h3>'+(group.description?'<p class="result-description">'+escape(group.description)+'</p>':"")+(group.measures||[]).map(m=>measureMarkup(m,false)).join("")+'</section>').join("");
     const summary=summaryMarkup(presentation.summary),after=presentation.summary_position==="bottom";
-    return '<section class="card result-card palette-'+(presentation.palette==="negative"?"negative":"positive")+'"><p class="result-eyebrow">Ваш результат</p><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p><p class="muted result-level-note">Уровень определяется как положение балла относительно количественных границ ключа. Не является психологическим диагнозом.</p>'+(after?groups+summary:summary+groups)+'<button id="result-methods" class="secondary">К методикам</button></section>';
+    const hasLevels=Boolean(presentation.summary&&presentation.summary.level)||(presentation.groups||[]).some(group=>(group.measures||[]).some(measure=>measure.level));
+    const note=presentation.note||(hasLevels?"Уровень определяется как положение балла относительно количественных границ ключа. Не является психологическим диагнозом.":"");
+    return '<section class="card result-card palette-'+(presentation.palette==="negative"?"negative":"positive")+'"><p class="result-eyebrow">Ваш результат</p><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p>'+(note?'<p class="muted result-level-note">'+escape(note)+'</p>':"")+(after?groups+summary:summary+groups)+'<button id="result-methods" class="secondary">К методикам</button></section>';
   }
   const model={ownsPage,entry,escape,fieldValue,question,draftChoice,groupLink,resultMarkup};
   if(typeof module==="object"&&module.exports){module.exports=model;return;}
