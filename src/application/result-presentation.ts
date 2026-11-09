@@ -1,7 +1,7 @@
 // Participant-facing presentation for approved releases. Display data only:
 // it never changes forms, keys, scoring, norms or historical results.
 type LevelTable = Record<string, string>;
-type MeasureMeta = {label?: string; min: number; max: number; colors: number; description?: string | null; level_template?: string; levels?: LevelTable};
+type MeasureMeta = {label?: string; min: number; max: number; colors: number; description?: string | null; level_template?: string; level_code?: string; levels?: LevelTable};
 type GroupMeta = {title: string; description?: string | null; measures: string[]};
 type SummaryMeta = {title: string; measures: string[]; level_code: string; colors: number; level_template?: string; levels?: LevelTable; levels_order?: string[]};
 type MethodView = {title: string; note?: string; palette?: "positive" | "negative"; summary_position?: "top" | "bottom"; level_templates?: Record<string, LevelTable>; measures: Record<string, MeasureMeta>; groups: GroupMeta[]; summary?: SummaryMeta};
@@ -312,6 +312,24 @@ const catalog: Catalog = {
         ]
       }
     },
+    "reflexivity_karpov_27@1.0.0-local": {
+      "title": "Рефлексивность",
+      "summary_position": "top",
+      "level_templates": {
+        "three": {"низкий": "", "средний": "", "высокий": ""}
+      },
+      "measures": {
+        "reflexivity_sten": {"label": "Рефлексивность (стен)", "min": 1, "max": 10, "colors": 3, "level_template": "three", "level_code": "reflexivity_level"}
+      },
+      "groups": [],
+      "summary": {
+        "title": "Уровень рефлексивности",
+        "measures": ["reflexivity_sten"],
+        "level_code": "reflexivity_level",
+        "colors": 3,
+        "levels_order": ["низкий", "средний", "высокий"]
+      }
+    },
     "sjo_20@1.0.0-staging": {
       "title": "Смысложизненные ориентации",
       "summary_position": "top",
@@ -536,7 +554,7 @@ export function buildPresentation(methodVersionId: string, measures: readonly Me
     const measure = byCode.get(code);
     if (!measure) return null;
     const meta = view.measures[code];
-    const raw = levels.get(code)?.value;
+    const raw = levels.get(meta?.level_code || code)?.value;
     const level = raw ? normalizeLevel(raw) : "";
     const order = meta?.level_template ? Object.keys(view.level_templates?.[meta.level_template] ?? {}) : Object.keys(meta?.levels ?? {});
     const levelIndex = level ? order.indexOf(level) : -1;
