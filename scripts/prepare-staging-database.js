@@ -1,10 +1,10 @@
 "use strict";
-// Staging-only bootstrap: clean database + synthetic snapshot + first superadministrator.
+// Staging-only bootstrap: clean database + synthetic snapshot + two superadministrators.
 // Never run against production/real-data databases.
 const {randomBytes}=require("node:crypto");
 const {readFileSync}=require("node:fs");
 const {Pool}=require("pg");
-const {prepareOwnedDatabase,bootstrapFirst}=require("./local-demo.js");
+const {prepareOwnedDatabase,bootstrapFirst,bootstrapStaff}=require("./local-demo.js");
 function required(name){const v=process.env[name];if(typeof v!=="string"||!v.length)throw new Error("ENV_REQUIRED");return v;}
 function integer(name,fallback){const n=Number(process.env[name]??fallback);if(!Number.isInteger(n)||n<1||n>65535)throw new Error("ENV_INVALID");return n;}
 (async()=>{
@@ -28,11 +28,22 @@ function integer(name,fallback){const n=Number(process.env[name]??fallback);if(!
       if(exists)throw new Error("TARGET_NOT_EMPTY");
       await prepareOwnedDatabase(client,runtimeRole);
     }
-    const password=randomBytes(24).toString("base64url");
-    await bootstrapFirst(client,"PEDPSY-OWNER",password);
+    let count=(await client.query("SELECT count(*)::integer n FROM pedpsy.staff_credentials")).rows[0].n;
+    if(count>2)throw new Error("STAFF_ALREADY_PROVISIONED");
     console.log("Synthetic staging database prepared; no real data was imported.");
-    console.log("Staff login: PEDPSY-OWNER");
-    console.log("One-time password: "+password);
-    console.log("Complete MFA, then create the researcher/group/stage/methods in the workspace.");
+    if(count===0){
+      const first=randomBytes(24).toString("base64url");
+      await bootstrapFirst(client,"PEDPSY-ADMIN",first);
+      console.log("Superadmin 1: PEDPSY-ADMIN");
+      console.log("One-time password: "+first);
+      count=1;
+    }
+    if(count===1){
+      const second=randomBytes(24).toString("base64url");
+      await bootstrapStaff(client,"PEDPSY-OWNER",second,"superadministrator");
+      console.log("Superadmin 2: PEDPSY-OWNER");
+      console.log("One-time password: "+second);
+    }
+    console.log("Complete MFA for both accounts; keep recovery codes separately.");
   }finally{client.release();await pool.end();}
 })().catch(()=>{console.error("Staging preparation failed; database state is not confirmed.");process.exitCode=1;});

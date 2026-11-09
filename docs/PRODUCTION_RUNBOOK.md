@@ -55,19 +55,37 @@ node scripts/migrate-production.js
 
 ## 3a. Synthetic staging (только стенд, не production)
 
-Для вечернего закрытого стенда с synthetic-данными и первым staff-входом:
+Для вечернего закрытого стенда с synthetic-данными и двумя staff-входами:
 
 ```bash
-PGHOST=... PGPORT=5432 PGDATABASE=... PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
+PGHOST=... PGPORT=5432 PGDATABASE=pedpsy_staging_<16hex> PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
 PEDPSY_RUNTIME_ROLE=pedpsy_runtime_<16hex> PEDPSY_STAGING_CONFIRM=<staging-db> \
 node scripts/prepare-staging-database.js
 ```
 
-Скрипт применяет миграции, импортирует **synthetic snapshot** (учебные исследования/методики, без credentials) и создаёт одного `PEDPSY-OWNER` с одноразовым паролем. Пароль печатается только в интерактивном TTY; сохраните его и завершите MFA. Это **не production**: реальные данные, реальная почта и юридические тексты запрещены.
+Скрипт применяет миграции, импортирует **synthetic snapshot** (учебные исследования/методики, без credentials) и создаёт двух superadministrator:
 
-Если seed уже применён, а admin не создан, повторный запуск с `PEDPSY_STAGING_ADMIN_ONLY=1` создаёт только admin.
+- `PEDPSY-ADMIN` — технический superadmin;
+- `PEDPSY-OWNER` — владелец/ИП, superadmin.
 
-Для **production clean** этот скрипт не использовать: нужен отдельный утверждённый импорт методик и production-процедура первого администратора; сейчас автоматизирован только staging-путь.
+Пароли печатаются один раз только в интерактивном TTY; сохраните их раздельно и завершите MFA для каждой учётки. Это **не production**: реальные данные, реальная почта и юридические тексты запрещены.
+
+Если seed уже применён, а одна из учёток не создана, повторный запуск с `PEDPSY_STAGING_ADMIN_ONLY=1` создаёт недостающую учётку; если обе уже есть — откажется.
+
+Миграция 075 разрешает `pedpsy_staging_*`/`pedpsy_prod_*` для первого superadmin и добавляет owner-only `bootstrap_staff` для второй учётки. Runtime-роль не получает EXECUTE.
+
+Для **production clean** этот скрипт не использовать: нужен отдельный утверждённый импорт методик. Первого superadmin создаёт `scripts/bootstrap-first-superadmin.js`, вторую учётку — `scripts/bootstrap-staff.js`; оба вызова owner-only, TTY-only и не доступны HTTP.
+
+```bash
+# first superadmin (PEDPSY-ADMIN)
+PGHOST=... PGDATABASE=pedpsy_prod_<16hex> PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
+PEDPSY_FIRST_CONFIRM=<prod-db> node scripts/bootstrap-first-superadmin.js
+
+# second superadmin (PEDPSY-OWNER)
+PGHOST=... PGDATABASE=pedpsy_prod_<16hex> PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
+PEDPSY_STAFF_CONFIRM=<prod-db> PEDPSY_STAFF_LOGIN=PEDPSY-OWNER PEDPSY_STAFF_ROLE=superadministrator \
+node scripts/bootstrap-staff.js
+```
 
 ## 4. Запуск приложения
 
