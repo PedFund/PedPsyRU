@@ -19,6 +19,7 @@ import {MfaVault} from "../adapters/security/mfa-vault.js";
 import {ParticipationError} from "../ports/errors.js";
 import {workspaceAssets} from "./workspace-assets.js";
 import {demoConfig} from "./demo-config.js";
+import {productionConfig} from "./production-config.js";
 import {PostgresStudyConstructor} from "../adapters/postgres/studies.js";
 import {createStudyApi} from "../application/study-api.js";
 import {createStageAccessApi} from "../application/stage-access-api.js";
@@ -33,10 +34,11 @@ import {admissionBoundary} from "./admission-boundary.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
-    pool=new Pool(demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
+    const production=process.env.PEDPSY_ENV==="production",config=production?productionConfig(process.env):undefined;
+    pool=new Pool(production?config!.db:demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
     const api=createParticipantApi(new PostgresParticipantGateway(pool,uow),createParticipationService(uow,
       {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>instrumentResponsesDigest(ids,values)}));
-    const encoded=process.env.PEDPSY_MFA_KEY;
+    const encoded=production?config!.mfaKey:process.env.PEDPSY_MFA_KEY;
     if(!encoded||Buffer.from(encoded,"base64").length!==32||Buffer.from(encoded,"base64").toString("base64")!==encoded)throw new Error("EXPLICIT_MFA_KEY_REQUIRED");
     const key=Buffer.from(encoded,"base64");const vault=new MfaVault(key);key.fill(0);
     const accounts=createAccountApi({access:new PostgresAccountAccess(pool),auth:new PostgresStaffMfa(pool,vault),researchers:new PostgresResearcherGateway(pool),
@@ -46,14 +48,15 @@ async function main(): Promise<void> {
     const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined;
-    try{if(contactKey)registration=registrationBoundary(pool,contactKey,"http://127.0.0.1:4174");}finally{contactKey?.fill(0);}
+    const origin=production?config!.origin:"http://127.0.0.1:4174";
+    try{if(contactKey)registration=registrationBoundary(pool,contactKey,origin);}finally{contactKey?.fill(0);}
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;
-    const app=createWorkspaceApp(api,accounts,"http://127.0.0.1:4174",workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool));
+    const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool));
     app.addHook("onClose",async()=>{await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
-    try {await app.listen({host:"127.0.0.1",port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}
+    try {await app.listen({host:production?config!.host:"127.0.0.1",port:production?config!.port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}
   } catch {await pool?.end().catch(()=>{});process.exitCode=1;console.error("Synthetic PostgreSQL configuration required or unavailable; no data migrated.");}
 }
 void main();
