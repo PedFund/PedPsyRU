@@ -41,7 +41,7 @@
   function resultMarkup(presentation){
     const groups=(presentation.groups||[]).map(group=>'<section class="result-group"><h3>'+escape(group.title)+'</h3>'+(group.description?'<p class="result-description">'+escape(group.description)+'</p>':"")+(group.measures||[]).map(m=>measureMarkup(m,false)).join("")+'</section>').join("");
     const summary=summaryMarkup(presentation.summary),after=presentation.summary_position==="bottom";
-    return '<section class="card result-card palette-'+(presentation.palette==="negative"?"negative":"positive")+'"><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p>'+(after?groups+summary:summary+groups)+'<button id="result-methods" class="secondary">К методикам</button></section>';
+    return '<section class="card result-card palette-'+(presentation.palette==="negative"?"negative":"positive")+'"><p class="result-eyebrow">Ваш результат</p><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p><p class="muted result-level-note">Уровень определяется как положение балла относительно количественных границ ключа. Не является психологическим диагнозом.</p>'+(after?groups+summary:summary+groups)+'<button id="result-methods" class="secondary">К методикам</button></section>';
   }
   const model={ownsPage,entry,escape,fieldValue,question,draftChoice,groupLink,resultMarkup};
   if(typeof module==="object"&&module.exports){module.exports=model;return;}
@@ -105,7 +105,7 @@
       const empty=document.createElement("option");empty.value="";empty.textContent="—";select.append(empty);
       for(const option of item.options){
         const used=exhausted(option.value)&&answers.get(item.id)!==option.value;
-        const node=document.createElement("option");node.value=option.value;node.textContent=option.text;node.disabled=disabled||used;
+        const node=document.createElement("option");node.value=option.value;node.textContent=option.text;node.disabled=locked||used;
         if(answers.get(item.id)===option.value)node.selected=true;
         select.append(node);
       }
@@ -135,7 +135,7 @@
     blocked("question-prev",q.index===0||locked);blocked("question-next",q.index===q.total-1||!selected||locked);$("question-complete").hidden=q.index!==q.total-1;blocked("question-complete",draft.responses.length!==q.total||locked);async function move(index){if(locked)throw Error("Перечитайте прохождение.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:form.items[index].id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderQuestion();}bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-reload",async()=>{form=await request("participant/attempts/"+attempt+"/form");draft=await request("participant/attempts/"+attempt);locked=false;renderQuestion();});bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
   }
   async function backToMethods(){if(!activeStageId){await reload();return;}const s=await request("participant/stages");const stage=(s.stages||[]).find(x=>x.stage_id===activeStageId);if(!stage){await reload();return;}stages=s;try{await openStage(stage);}catch{await reload();}}
-  function renderResult(result){const c=$("participant-content");if(result.presentation){c.innerHTML=resultMarkup(result.presentation);bind("result-methods",backToMethods);return;}c.innerHTML='<section class="card"><h2>Сохранённый результат</h2><p class="muted" id="result-note"></p><div id="own-measures" class="measures"></div><button id="result-methods" class="secondary">К методикам</button></section>';
+  function renderResult(result){const c=$("participant-content");if(result.presentation){c.innerHTML=resultMarkup(result.presentation);bind("result-methods",backToMethods);return;}c.innerHTML='<section class="card"><h2>Ваш результат</h2><p class="muted" id="result-note"></p><div id="own-measures" class="measures"></div><button id="result-methods" class="secondary">К методикам</button></section>';
     const classifications=result.classifications||[],suffix=" – уровень",levels=new Map();
     for(const x of classifications){if(x&&typeof x.code==="string"&&x.code.endsWith(suffix))levels.set(x.code.slice(0,-suffix.length).trim(),String(x.value));}
     const hasLevels=levels.size>0;let note;
@@ -143,7 +143,7 @@
     else if(result.method_version_id==="umics_pi_ru_13@1.0.0-local")note="Учебный результат: суммы и средние по трём шкалам. Нормативные уровни и общий балл не рассчитываются.";
     else if(result.method_version_id==="prfq_ru_16_kamskaya_2023@1.0.0-local")note="Учебный результат: средние значения шкал, станайны и уровни по таблицам исходного процессора. Применимость норм отдельно не утверждена.";
     else if(result.method_version_id==="reflexivity_karpov_27@1.0.0-local")note="Учебный результат. Стен и уровень рассчитаны по таблице исходного процессора; применимость норм отдельно не утверждена.";
-    else if(hasLevels)note="Уровень — положение балла относительно границ ключа: низкий, средний или высокий. Это не диагноз; содержательная интерпретация шкалы — в паспорте методики.";
+    else if(hasLevels)note="Уровень определяется как положение балла относительно количественных границ ключа. Не является психологическим диагнозом.";
     else note="Сырые баллы. Нормативная интерпретация для этой методики не утверждена.";
     $("result-note").textContent=note;
     for(const m of result.measures){const p=document.createElement("div");p.className="measure";p.textContent=m.label;const value=document.createElement("strong");value.textContent=m.value;p.append(value);const level=levels.get(m.code);if(level){const small=document.createElement("small");small.className="measure-level";small.textContent="Уровень: "+level+" — "+({низкий:"ниже среднего диапазона ключа",средний:"внутри среднего диапазона ключа",высокий:"выше среднего диапазона ключа"}[level]||"по ключу методики");p.append(small);}else if(!hasLevels&&!classifications.length){const small=document.createElement("small");small.className="measure-level";small.textContent="Нормативная интерпретация не утверждена.";p.append(small);}$("own-measures").append(p);}

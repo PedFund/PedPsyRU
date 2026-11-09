@@ -23,6 +23,17 @@ test("participant UI: presentation result draws gradient bars, levels and no sco
   assert.match(html,/высокий/);
   assert.match(html,/псевдовысокий/);
   assert.match(html,/Спасибо за участие в исследовании/);
+  assert.match(html,/Ваш результат/);
+  assert.match(html,/Уровень определяется как положение балла относительно количественных границ ключа/);
   assert.equal(html.includes("4.8"),false);
   assert.equal(html.includes(">50<"),false);
+});
+
+test("participant UI: ranking uses locked and legacy result copy is updated",()=>{
+  const js=fs.readFileSync(path.join(__dirname,"../web/workspace/participant.js"),"utf8");
+  assert.match(js,/node\.disabled=locked\|\|used/);
+  assert.doesNotMatch(js,/node\.disabled=disabled\|\|used/);
+  assert.match(js,/Ваш результат/);
+  assert.doesNotMatch(js,/Сохранённый результат/);
+  assert.match(js,/Уровень определяется как положение балла относительно количественных границ ключа/);
 });
