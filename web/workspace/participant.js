@@ -36,7 +36,8 @@
   }
   function resultMarkup(presentation){
     const groups=(presentation.groups||[]).map(group=>'<section class="result-group"><h3>'+escape(group.title)+'</h3>'+(group.description?'<p class="result-description">'+escape(group.description)+'</p>':"")+(group.measures||[]).map(m=>measureMarkup(m,false)).join("")+'</section>').join("");
-    return '<section class="card result-card"><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p>'+summaryMarkup(presentation.summary)+groups+'<button id="result-methods" class="secondary">К методикам</button></section>';
+    const summary=summaryMarkup(presentation.summary),after=presentation.summary_position==="bottom";
+    return '<section class="card result-card"><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p>'+(after?groups+summary:summary+groups)+'<button id="result-methods" class="secondary">К методикам</button></section>';
   }
   const model={ownsPage,entry,escape,fieldValue,question,draftChoice,groupLink,resultMarkup};
   if(typeof module==="object"&&module.exports){module.exports=model;return;}

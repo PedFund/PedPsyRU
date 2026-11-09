@@ -22,6 +22,7 @@ test("presentation: Motkov keeps six factor pairs, general A/B and pseudohigh ha
   const levels=new Map(codes.map(code=>[code,level("псевдовысокий")]).concat([["gpk",level("псевдовысокий")]]));
   const view=buildPresentation("motkov_psychological_culture_18@1.0.0-staging",codes.map(code=>measure(code,4.8)),levels);
   assert.equal(view.title,"Психологическая культура личности");
+  assert.equal(view.summary_position,"bottom");
   assert.equal(view.groups.length,6);
   assert.deepEqual(view.groups.map(group=>group.measures.length),[2,2,2,2,2,2]);
   assert.equal(view.groups[0].description,"Понимать свои желания, особенности характера и причины своих реакций.");
@@ -42,6 +43,7 @@ test("presentation: Motkov keeps six factor pairs, general A/B and pseudohigh ha
 test("presentation: Ryff profile has six described bars and one three-level total",()=>{
   const codes=["positive_relations","autonomy","environment_mastery","personal_growth","purpose_in_life","self_acceptance","overall"];
   const view=buildPresentation("ryff_pwb_84_shevelenkova_fesenko@1.0.0-staging",codes.map(code=>measure(code,300)),new Map([["overall",level("низкий")]]));
+  assert.equal(view.summary_position,"top");
   assert.equal(view.groups.length,1);
   assert.equal(view.groups[0].measures.length,6);
   assert.equal(view.groups[0].measures[0].min,14);
