@@ -66,6 +66,16 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: Karpov uses the sten scale and reflexivity_level",()=>{
+  const view=buildPresentation("reflexivity_karpov_27@1.0.0-local",[{code:"reflexivity",label:"Рефлексивность",value:108},{code:"reflexivity_sten",label:"Рефлексивность — стен",value:3}],new Map([["reflexivity_level",level("низкий")]]));
+  assert.equal(view.groups.length,0);
+  assert.equal(view.summary.colors,3);
+  assert.equal(view.summary.measures[0].min,1);
+  assert.equal(view.summary.measures[0].max,10);
+  assert.equal(view.summary.measures[0].level,"низкий");
+  assert.equal(view.summary.level.value,"низкий");
+});
+
 test("presentation: SJO shows five subscales and a three-level total",()=>{
   const codes=["goals","process","result","locus_self","locus_life","meaningfulness_total"];
   const view=buildPresentation("sjo_20@1.0.0-staging",codes.map(code=>measure(code,30)),new Map(codes.map(code=>[code,level("средний")])));

@@ -32,11 +32,13 @@ const fullLevels = (r: StoredResult) => {
   for (const item of r.payload.classifications) {
     if (!item || typeof item !== "object" || !("code" in item) || !("value" in item)) continue;
     const code = item.code;
-    if (typeof code !== "string" || !code.endsWith(LEVEL_SUFFIX)) continue;
+    if (typeof code !== "string") continue;
+    const suffixed = code.endsWith(LEVEL_SUFFIX);
+    if (!suffixed && code !== "reflexivity_level") continue;
     const value = normalizeLevel(item.value);
     if (!value) continue;
     const label = "label" in item && typeof item.label === "string" ? item.label : code;
-    levels.set(code.slice(0, -LEVEL_SUFFIX.length).trim(), {value, label});
+    levels.set(suffixed ? code.slice(0, -LEVEL_SUFFIX.length).trim() : code, {value, label});
   }
   return levels;
 };

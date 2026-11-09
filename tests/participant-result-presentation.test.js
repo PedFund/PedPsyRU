@@ -6,10 +6,10 @@ const {createParticipantApp}=require("../dist/src/http/participant-app.js");
 const origin="http://127.0.0.1:4174";
 const headers={host:"127.0.0.1:4174",origin,"content-type":"application/json"};
 
-function stored(methodVersionId,measures,classifications){
+function stored(methodVersionId,measures,classifications,handler="approved-numeric-1.0.0"){
   return {id:"result",attemptId:"attempt",inputRevision:1,responsesDigest:"synthetic",calculatedAt:"2026-11-09T00:00:00.000Z",
-    payload:{status:"scored",contract_version:"1.0",method_version_id:methodVersionId,handler_version:"approved-numeric-1.0.0",
-      quality:{valid_response_count:1,complete:true,usable_for_aggregation:true},measures,classifications,warnings:[],calculation:{algorithm_id:"approved-numeric-1.0.0",key_digest:"synthetic"}}};
+    payload:{status:"scored",contract_version:"1.0",method_version_id:methodVersionId,handler_version:handler,
+      quality:{valid_response_count:1,complete:true,usable_for_aggregation:true},measures,classifications,warnings:[],calculation:{algorithm_id:handler,key_digest:"synthetic"}}};
 }
 const measure=(code,value)=>({code,label:code+" — подпись",value,value_type:"number",representation:"raw",precision:2});
 const level=(code,value)=>({code:code+" – уровень",label:code+" — подпись – уровень",value});
@@ -61,6 +61,12 @@ test("participant result: Ryff profile and three-level total are projected",asyn
   assert.equal(body.presentation.summary.colors,3);
   assert.equal(body.presentation.summary.level.value,"низкий");
   assert.match(body.presentation.summary.measures[0].level_text,/выражены слабо/);
+});
+
+test("participant result: Karpov maps reflexivity_level to the sten scale",async()=>{
+  const body=await complete(stored("reflexivity_karpov_27@1.0.0-local",[measure("reflexivity",108),measure("reflexivity_sten",3)],[{code:"reflexivity_level",label:"Уровень рефлексивности",value:"низкий"}],"karpov-local-1.0.0"));
+  assert.equal(body.presentation.summary.level.value,"низкий");
+  assert.equal(body.presentation.summary.measures[0].level,"низкий");
 });
 
 test("participant result: methods without a catalog keep the legacy shape",async()=>{
