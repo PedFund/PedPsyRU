@@ -20,7 +20,10 @@ interface ChoiceRelease {
 // Explicit host composition. Adding a choice method changes this list, not the
 // transaction, access checks, retry protocol, enrollment or participant gateway.
 type FormShape={id:string;version:string;title?:string;instruction?:string;presentation?:{id:string;version:string};rules?:{require_all?:boolean;quota?:Record<string,number>};items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
+// Pinned release metadata is immutable for the process lifetime; avoid rebuilding it on every save.
+let installedCache:ChoiceRelease[]|undefined;
 function installed():ChoiceRelease[]{
+  if(installedCache)return installedCache;
   const t=releasePackage(),k=karpovReleasePackage(),p=prfqReleasePackage(),u=umicsReleasePackage();
   const asForm=(f:FormShape):ParticipantForm=>({id:f.id,version:f.version,
     ...(f.title!==undefined?{title:f.title}:{}),...(f.instruction!==undefined?{instruction:f.instruction}:{}),
@@ -29,7 +32,7 @@ function installed():ChoiceRelease[]{
       options:item.options.map(option=>({value:String(option.value),text:option.text}))}))});
   const asRelease=(form:FormShape,base:Omit<ChoiceRelease,"itemSnapshots"|"choiceValues"|"form">):ChoiceRelease=>({...base,
     itemSnapshots:form.items.map(item=>item.options),choiceValues:form.items[0]!.options.map(option=>String(option.value)),form:asForm(form)});
-  return [
+  const list=[
     asRelease(t.form as FormShape,{methodVersionId:"tki_ru_30_pairs@1.0.0",handlerVersion:"tki-contract-0.3.0",verificationState:"key_verified",formSnapshot:t.formSnapshot,formDigest:t.formDigest,keyDigest:t.keyDigest}),
     asRelease(k.form as FormShape,{methodVersionId:k.methodVersionId,handlerVersion:k.handlerVersion,verificationState:k.verificationState,formSnapshot:k.formSnapshot,formDigest:k.formDigest,keyDigest:k.keyDigest}),
     asRelease(p.form as FormShape,{methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,verificationState:p.verificationState,formSnapshot:p.formSnapshot,formDigest:p.formDigest,keyDigest:p.keyDigest}),
@@ -37,6 +40,8 @@ function installed():ChoiceRelease[]{
     ...legacyBatchReleases().map(b=>asRelease(b.form as FormShape,{methodVersionId:b.methodVersionId,handlerVersion:b.handlerVersion,verificationState:b.verificationState,formSnapshot:b.formSnapshot,formDigest:b.formDigest,keyDigest:b.keyDigest})),
     ...approvedV1Releases().releases.map(a=>{const rules=(a.form as {rules?:{quota?:Record<string,number>}}).rules;return asRelease(a.form as unknown as FormShape,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest,...(rules&&rules.quota?{quota:rules.quota}:{})});})
   ];
+  installedCache=list;
+  return list;
 }
 function resolve(methodVersionId:string,handlerVersion:string):ChoiceRelease {
   const entry=installed().find(p=>p.methodVersionId===methodVersionId&&p.handlerVersion===handlerVersion);
