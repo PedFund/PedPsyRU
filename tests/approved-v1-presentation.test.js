@@ -66,6 +66,20 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: Hardiness uses three-level scales without numbers",()=>{
+  const codes=["commitment","control","challenge","total_hardiness"];
+  const view=buildPresentation("hardiness_leontiev_rasskazova_45@1.0.0-staging",codes.map(code=>measure(code,30)),new Map(codes.map(code=>[code,level("средний")])));
+  assert.equal(view.groups.length,1);
+  assert.equal(view.groups[0].measures.length,3);
+  assert.equal(view.groups[0].measures[0].colors,3);
+  assert.equal(view.groups[0].measures[0].level_index,1);
+  assert.equal(view.groups[0].measures[0].level_text,null);
+  assert.equal(view.summary.colors,3);
+  assert.equal(view.summary.level.value,"средний");
+  assert.equal(view.summary.level.index,1);
+  assert.equal(view.summary.measures[0].max,135);
+});
+
 test("presentation: Shipilov has three spheres, six conflicts and a five-level total",()=>{
   const codes=["motivational_sphere","obligation_sphere","self_esteem_sphere","motivational","moral","unrealized_desire","role","adaptation","inadequate_self_esteem","total"];
   const view=buildPresentation("uvlk_shipilov@1.0.0-staging",codes.map(code=>measure(code,10)),new Map([["total",level("very_high")]]));

@@ -312,6 +312,33 @@ const catalog: Catalog = {
         ]
       }
     },
+    "hardiness_leontiev_rasskazova_45@1.0.0-staging": {
+      "title": "Жизнестойкость",
+      "summary_position": "top",
+      "level_templates": {
+        "three": {"низкий": "", "средний": "", "высокий": ""}
+      },
+      "measures": {
+        "commitment": {"min": 0, "max": 54, "colors": 3, "level_template": "three"},
+        "control": {"min": 0, "max": 51, "colors": 3, "level_template": "three"},
+        "challenge": {"min": 0, "max": 30, "colors": 3, "level_template": "three"},
+        "total_hardiness": {"label": "Общий балл", "min": 0, "max": 135, "colors": 3, "level_template": "three"}
+      },
+      "groups": [
+        {
+          "title": "Шкалы жизнестойкости",
+          "description": null,
+          "measures": ["commitment", "control", "challenge"]
+        }
+      ],
+      "summary": {
+        "title": "Общий уровень жизнестойкости",
+        "measures": ["total_hardiness"],
+        "level_code": "total_hardiness",
+        "colors": 3,
+        "levels_order": ["низкий", "средний", "высокий"]
+      }
+    },
     "uvlk_shipilov@1.0.0-staging": {
       "title": "Уровень внутриличностной конфликтности",
       "palette": "negative",
