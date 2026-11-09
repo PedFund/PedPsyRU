@@ -53,6 +53,40 @@ node scripts/migrate-production.js
 
 Скрипт применяет append-only миграции `storage/postgres/001..NNN` и выдаёт runtime-роли только разрешённые grants. Он не создаёт demo-данные и не импортирует локальную БД. Перед запуском — backup; после — `pg_dump`/restore rehearsal.
 
+## 3a. Synthetic staging (только стенд, не production)
+
+Для вечернего закрытого стенда с synthetic-данными и двумя staff-входами:
+
+```bash
+PGHOST=... PGPORT=5432 PGDATABASE=pedpsy_staging_<16hex> PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
+PEDPSY_RUNTIME_ROLE=pedpsy_runtime_<16hex> PEDPSY_STAGING_CONFIRM=<staging-db> \
+node scripts/prepare-staging-database.js
+```
+
+Скрипт применяет миграции, импортирует **synthetic snapshot** (учебные исследования/методики, без credentials) и создаёт двух superadministrator:
+
+- `PEDPSY-ADMIN` — технический superadmin;
+- `PEDPSY-OWNER` — владелец/ИП, superadmin.
+
+Пароли печатаются один раз только в интерактивном TTY; сохраните их раздельно и завершите MFA для каждой учётки. Это **не production**: реальные данные, реальная почта и юридические тексты запрещены.
+
+Если seed уже применён, а одна из учёток не создана, повторный запуск с `PEDPSY_STAGING_ADMIN_ONLY=1` создаёт недостающую учётку; если обе уже есть — откажется.
+
+Миграция 075 разрешает `pedpsy_staging_*`/`pedpsy_prod_*` для первого superadmin и добавляет owner-only `bootstrap_staff` для второй учётки. Runtime-роль не получает EXECUTE.
+
+Для **production clean** этот скрипт не использовать: нужен отдельный утверждённый импорт методик. Первого superadmin создаёт `scripts/bootstrap-first-superadmin.js`, вторую учётку — `scripts/bootstrap-staff.js`; оба вызова owner-only, TTY-only и не доступны HTTP.
+
+```bash
+# first superadmin (PEDPSY-ADMIN)
+PGHOST=... PGDATABASE=pedpsy_prod_<16hex> PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
+PEDPSY_FIRST_CONFIRM=<prod-db> node scripts/bootstrap-first-superadmin.js
+
+# second superadmin (PEDPSY-OWNER)
+PGHOST=... PGDATABASE=pedpsy_prod_<16hex> PGUSER=<owner> PGPASSWORD=... PGSSL=verify-full \
+PEDPSY_STAFF_CONFIRM=<prod-db> PEDPSY_STAFF_LOGIN=PEDPSY-OWNER PEDPSY_STAFF_ROLE=superadministrator \
+node scripts/bootstrap-staff.js
+```
+
 ## 4. Запуск приложения
 
 Systemd unit (пример; путь и пользователь заменить):
@@ -100,5 +134,6 @@ Nginx: TLS termination, `proxy_set_header Host $host`, `X-Forwarded-Proto https`
 - Реальная почта/домен/SPF/DKIM/DMARC и замена `@example.test`.
 - Backup/PITR, monitoring/alerts, on-call, access review, security review.
 - Отдельное письменное разрешение владельца на real data.
+- Production-импорт утверждённой библиотеки методик и процедура первого администратора (staging-скрипт для этого не подходит).
 
 До этих пунктов Selectel-контур считается **staging/demo с synthetic-данными**.

@@ -42,3 +42,16 @@ test("PostgreSQL staff roles: actual owner-only first synthetic bootstrap then p
   await assert.rejects(f.admin.query("SELECT pedpsy.bootstrap_first_superadmin($1,$2,$3,$4,$5)",[randomUUID(),randomUUID(),"SYNTHETIC-SECOND",p.salt,p.password_hash]),e=>e.code==="23514");
   assert.equal((await f.admin.query("SELECT role FROM pedpsy.staff_credentials WHERE id=$1",[id])).rows[0].role,"superadministrator");assert.equal((await f.admin.query("SELECT * FROM pedpsy.staff_sessions")).rowCount,0);
 });
+test("PostgreSQL staff roles: owner-only second superadmin bootstrap and runtime denial",async t=>{
+  const f=await postgresFixture();t.after(()=>f.close());
+  const p1=await passwordRecord(randomBytes(24).toString("base64url")),p2=await passwordRecord(randomBytes(24).toString("base64url"));
+  const c1=randomUUID(),u1=randomUUID(),c2=randomUUID(),u2=randomUUID();
+  await f.admin.query("SELECT pedpsy.bootstrap_first_superadmin($1,$2,$3,$4,$5)",[c1,u1,"PEDPSY-ADMIN",p1.salt,p1.password_hash]);
+  await f.admin.query("SELECT pedpsy.bootstrap_staff($1,$2,$3,$4,$5,$6)",[c2,u2,"PEDPSY-OWNER",p2.salt,p2.password_hash,"superadministrator"]);
+  const rows=(await f.admin.query("SELECT login_id,role FROM pedpsy.staff_credentials WHERE id IN ($1,$2) ORDER BY login_id",[c1,c2])).rows;
+  assert.deepEqual(rows,[{login_id:"PEDPSY-ADMIN",role:"superadministrator"},{login_id:"PEDPSY-OWNER",role:"superadministrator"}]);
+  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE action='staff_bootstrap' AND credential_id IN ($1,$2)",[c1,c2])).rows[0].n,2);
+  await assert.rejects(f.admin.query("SELECT pedpsy.bootstrap_staff($1,$2,$3,$4,$5,$6)",[randomUUID(),randomUUID(),"PEDPSY-THIRD",p1.salt,p1.password_hash,"invalid"]),e=>e.code==="22023");
+  await assert.rejects(f.admin.query("SELECT pedpsy.bootstrap_staff($1,$2,$3,$4,$5,$6)",[randomUUID(),randomUUID(),"PEDPSY-OWNER",p1.salt,p1.password_hash,"administrator"]),e=>e.code==="23505");
+  await assert.rejects(f.runtime.query("SELECT pedpsy.bootstrap_staff($1,$2,$3,$4,$5,$6)",[randomUUID(),randomUUID(),"PEDPSY-RUNTIME",p1.salt,p1.password_hash,"administrator"]),e=>e.code==="42501");
+});

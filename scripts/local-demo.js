@@ -85,10 +85,16 @@ async function upgradeOwnedDatabase(client, runtimeRole) {
     await grantRuntime(client, runtimeRole);
 }
 async function bootstrapFirst(client, login, password) {
-  if (login !== "PEDPSY-OWNER") throw new Error("INVALID_OWNER_LOGIN");
+  if (!/^[A-Z0-9-]{3,80}$/.test(login)) throw new Error("INVALID_OWNER_LOGIN");
   const {passwordRecord} = require("../storage/access.js"), record = await passwordRecord(password);
   // Existing owner-only, advisory-locked, one-use operation with mandatory audit.
   await client.query("SELECT pedpsy.bootstrap_first_superadmin($1,$2,$3,$4,$5)", [randomUUID(), randomUUID(), login, record.salt, record.password_hash]);
+}
+async function bootstrapStaff(client, login, password, role) {
+  if (!/^[A-Z0-9-]{3,80}$/.test(login) || !["administrator", "superadministrator"].includes(role)) throw new Error("INVALID_STAFF_BOOTSTRAP");
+  const {passwordRecord} = require("../storage/access.js"), record = await passwordRecord(password);
+  // Owner-only second account; the SQL function enforces an existing superadmin.
+  await client.query("SELECT pedpsy.bootstrap_staff($1,$2,$3,$4,$5,$6)", [randomUUID(), randomUUID(), login, record.salt, record.password_hash, role]);
 }
 function runtimeEnvironment(c, inherited = process.env) {
   validateConfig(c, "runtime");
@@ -138,4 +144,4 @@ if (require.main === module) main(process.argv[2]).catch(error => {
   // SQL errors may include bound credentials. Do not print message/detail/cause.
   console.error("Local operation failed; existing data preserved.", /^[A-Z0-9_]{2,64}$/.test(error.code || "") ? error.code : "CHECK_LOCAL_SETUP"); process.exitCode = 1;
 });
-module.exports = {validateConfig, createDemoDatabase, prepareOwnedDatabase, upgradeOwnedDatabase, bootstrapFirst, runtimeEnvironment};
+module.exports = {validateConfig, createDemoDatabase, prepareOwnedDatabase, upgradeOwnedDatabase, bootstrapFirst, bootstrapStaff, runtimeEnvironment};

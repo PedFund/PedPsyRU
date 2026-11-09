@@ -1,6 +1,6 @@
 "use strict";
 const {test} = require("node:test"), assert = require("node:assert/strict");
-const {validateConfig, runtimeEnvironment, bootstrapFirst} = require("../scripts/local-demo.js");
+const {validateConfig, runtimeEnvironment, bootstrapFirst, bootstrapStaff} = require("../scripts/local-demo.js");
 const suffix = "abcdef0123456789";
 const port = Number(process.env.PEDPSY_DEMO_PORT || 55432);
 const config = {host: "127.0.0.1", port, database: "pedpsy_demo_" + suffix,
@@ -20,10 +20,11 @@ test("local runtime environment excludes owner/control credentials and test mode
   assert.equal(e.PEDPSY_PG_DEMO, "1"); assert.equal(e.PEDPSY_MFA_KEY, config.mfaKey);
   assert.equal(e.PEDPSY_PG_TEST, undefined); assert.equal(e.PGTEST_HOST, undefined);
 });
-test("offline owner bootstrap has fixed login, validates password, no SQL before validation", async () => {
+test("offline owner bootstrap accepts a named login, validates password and role, no SQL before validation", async () => {
   let queries = 0; const client = {query: async () => {queries++;}};
-  await assert.rejects(bootstrapFirst(client, "OTHER", "synthetic-valid-password"), /INVALID_OWNER_LOGIN/);
-  await assert.rejects(bootstrapFirst(client, "PEDPSY-OWNER", "short"), /INVALID_PASSWORD/);
+  await assert.rejects(bootstrapFirst(client, "bad login", "synthetic-valid-password"), /INVALID_OWNER_LOGIN/);
+  await assert.rejects(bootstrapFirst(client, "PEDPSY-ADMIN", "short"), /INVALID_PASSWORD/);
+  await assert.rejects(bootstrapStaff(client, "PEDPSY-ADMIN", "synthetic-valid-password", "owner"), /INVALID_STAFF_BOOTSTRAP/);
   assert.equal(queries, 0);
 });
 test("local contact demo needs explicit private opt-in and a distinct retained key; inherited flags cannot activate it",()=>{
