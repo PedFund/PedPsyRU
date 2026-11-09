@@ -12,7 +12,33 @@
   function question(form,draft){const index=form.items.findIndex(i=>i.id===draft.current_item_id);if(index<0)throw Error("Текущий вопрос не найден. Перечитайте прохождение.");return {item:form.items[index],index,total:form.items.length};}
   function draftChoice(draft,item,value,next,allowed=["A","B"]){if(!allowed.includes(value))throw Error("Выберите один вариант.");return {expected_revision:draft.revision,current_item_id:next,responses:[...draft.responses.filter(r=>r.item_id!==item).map(r=>({item_id:r.item_id,value:r.value})),{item_id:item,value}]};}
   function groupLink(origin,token){if(!/^[A-Za-z0-9_-]{43}$/.test(token))throw Error("Недействительное приглашение.");return new URL("/workspace#join="+token,origin).href;}
-  const model={ownsPage,entry,escape,fieldValue,question,draftChoice,groupLink};
+  function scaleClass(colors){const n=Math.max(2,Math.min(5,Number(colors)||2));return "scale-"+n;}
+  function barMarkup(measure){
+    const min=Number(measure.min),max=Number(measure.max),value=Number(measure.value);
+    const valid=Number.isFinite(min)&&Number.isFinite(max)&&max>min&&Number.isFinite(value);
+    const percent=valid?Math.max(4,Math.min(96,(value-min)/(max-min)*100)):50;
+    const label=measure.level?"Уровень: "+measure.level:"Результат по шкале";
+    return '<div class="result-scale '+scaleClass(measure.colors)+'" role="img" aria-label="'+escape(label)+'"><span class="result-marker" style="left:'+percent.toFixed(2)+'%"></span></div><div class="result-scale-ends"><span>ниже</span><span>выше</span></div>';
+  }
+  function measureMarkup(measure,compact){
+    const level=measure.level?'<span class="result-level">'+escape(measure.level)+'</span>':"";
+    const description=measure.description?'<p class="result-description">'+escape(measure.description)+'</p>':"";
+    const levelText=!compact&&measure.level_text?'<p class="result-level-text">'+escape(measure.level_text)+'</p>':"";
+    return '<div class="result-measure"><div class="result-measure-head"><span class="result-measure-label">'+escape(measure.label)+'</span>'+level+'</div>'+barMarkup(measure)+description+levelText+'</div>';
+  }
+  function summaryMarkup(summary){
+    if(!summary)return "";
+    const separate=Boolean(summary.level&&summary.level.code&&!(summary.measures||[]).some(m=>m.code===summary.level.code));
+    const level=separate&&summary.level&&summary.level.value?'<span class="result-level">'+escape(summary.level.value)+'</span>':"";
+    const levelText=separate&&summary.level&&summary.level.text?'<p class="result-level-text">'+escape(summary.level.text)+'</p>':"";
+    const categorical=separate&&summary.level.index>=0?'<div class="result-categorical '+scaleClass(summary.colors)+'" role="img" aria-label="Уровень: '+escape(summary.level.value)+'">'+Array.from({length:summary.level.count||summary.colors||4},(_,i)=>'<span class="result-segment tone-'+(i+1)+(i===summary.level.index?' active':'')+'"></span>').join("")+'</div>':"";
+    return '<section class="result-summary"><h3>'+escape(summary.title)+'</h3>'+categorical+level+levelText+(summary.measures||[]).map(m=>measureMarkup(m,separate)).join("")+'</section>';
+  }
+  function resultMarkup(presentation){
+    const groups=(presentation.groups||[]).map(group=>'<section class="result-group"><h3>'+escape(group.title)+'</h3>'+(group.description?'<p class="result-description">'+escape(group.description)+'</p>':"")+(group.measures||[]).map(m=>measureMarkup(m,false)).join("")+'</section>').join("");
+    return '<section class="card result-card"><h2>'+escape(presentation.title)+'</h2><p class="muted result-disclaimer">Спасибо за участие в исследовании! Этот результат носит ориентировочный характер и получен в рамках исследования. Он не является диагнозом.</p>'+summaryMarkup(presentation.summary)+groups+'<button id="result-methods" class="secondary">К методикам</button></section>';
+  }
+  const model={ownsPage,entry,escape,fieldValue,question,draftChoice,groupLink,resultMarkup};
   if(typeof module==="object"&&module.exports){module.exports=model;return;}
   window.PedPsyParticipant=model;
   if(!ownsPage(location.hash))return;
@@ -104,7 +130,7 @@
     blocked("question-prev",q.index===0||locked);blocked("question-next",q.index===q.total-1||!selected||locked);$("question-complete").hidden=q.index!==q.total-1;blocked("question-complete",draft.responses.length!==q.total||locked);async function move(index){if(locked)throw Error("Перечитайте прохождение.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:form.items[index].id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderQuestion();}bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-reload",async()=>{form=await request("participant/attempts/"+attempt+"/form");draft=await request("participant/attempts/"+attempt);locked=false;renderQuestion();});bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
   }
   async function backToMethods(){if(!activeStageId){await reload();return;}const s=await request("participant/stages");const stage=(s.stages||[]).find(x=>x.stage_id===activeStageId);if(!stage){await reload();return;}stages=s;try{await openStage(stage);}catch{await reload();}}
-  function renderResult(result){const c=$("participant-content");c.innerHTML='<section class="card"><h2>Сохранённый результат</h2><p class="muted" id="result-note"></p><div id="own-measures" class="measures"></div><button id="result-methods" class="secondary">К методикам</button></section>';
+  function renderResult(result){const c=$("participant-content");if(result.presentation){c.innerHTML=resultMarkup(result.presentation);bind("result-methods",backToMethods);return;}c.innerHTML='<section class="card"><h2>Сохранённый результат</h2><p class="muted" id="result-note"></p><div id="own-measures" class="measures"></div><button id="result-methods" class="secondary">К методикам</button></section>';
     const classifications=result.classifications||[],suffix=" – уровень",levels=new Map();
     for(const x of classifications){if(x&&typeof x.code==="string"&&x.code.endsWith(suffix))levels.set(x.code.slice(0,-suffix.length).trim(),String(x.value));}
     const hasLevels=levels.size>0;let note;
