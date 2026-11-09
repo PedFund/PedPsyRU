@@ -66,6 +66,19 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: CO36 uses Russian labels and two-color scales without levels",()=>{
+  const codes=["family_safety","family_traditions","family_interpersonal_relations","family_normative_conformity","individual_achievement","individual_power_influence","individual_hedonism","individual_activity_stimulation","universal_independence","universal_moral_orientation","universal_tolerance","universal_spiritual"];
+  const view=buildPresentation("co36_kunitsyna_36@1.0.0-staging",codes.map(code=>measure(code,6)),new Map());
+  assert.equal(view.note,"Нормативные уровни для этой методики не утверждены.");
+  assert.equal(view.summary,null);
+  assert.equal(view.groups[0].measures.length,12);
+  assert.equal(view.groups[0].measures[0].label,"Безопасность семьи");
+  assert.equal(view.groups[0].measures[0].min,1);
+  assert.equal(view.groups[0].measures[0].max,12);
+  assert.equal(view.groups[0].measures[0].colors,2);
+  assert.equal(view.groups[0].measures[0].level,null);
+});
+
 test("presentation: Hardiness uses three-level scales without numbers",()=>{
   const codes=["commitment","control","challenge","total_hardiness"];
   const view=buildPresentation("hardiness_leontiev_rasskazova_45@1.0.0-staging",codes.map(code=>measure(code,30)),new Map(codes.map(code=>[code,level("средний")])));
