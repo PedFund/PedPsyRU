@@ -66,6 +66,20 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: TTF/ATF uses Russian labels and two scales",()=>{
+  const view=buildPresentation("ttf_atf_10@1.0.0-staging",[measure("TTF",16),measure("ATF",24)],new Map());
+  assert.equal(view.title,"Склонность к прощению и отношение к прощению");
+  assert.equal(view.note,"Нормативные уровни для этой методики не утверждены.");
+  assert.equal(view.item_count,10);
+  assert.equal(view.groups[0].measures.length,2);
+  assert.equal(view.groups[0].measures[0].label,"Тенденция к прощению");
+  assert.equal(view.groups[0].measures[0].min,4);
+  assert.equal(view.groups[0].measures[0].max,28);
+  assert.equal(view.groups[0].measures[1].min,6);
+  assert.equal(view.groups[0].measures[1].max,42);
+  assert.equal(view.summary,null);
+});
+
 test("presentation: PVQ keeps four Russian indexes and nineteen values",()=>{
   const values=["SDT","SDA","ST","HE","AC","FOR","FOD","FAC","SES","SEP","COR","COI","TR","HUM","BED","BEC","UNC","UNN","UNT"];
   const indexes=["self_transcendence","self_enhancement","openness_to_change","conservation"];
