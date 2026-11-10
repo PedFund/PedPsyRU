@@ -1,13 +1,13 @@
-SET LOCAL search_path=pedpsy,pg_catalog;
+﻿SET LOCAL search_path=pedpsy,pg_catalog;
 -- 080: aggregate the effective completed participant profile for the researcher.
 -- Current profiles live in research_profile_history; legacy synthetic rows still
 -- live in participant_passports. Only counts leave the DB; cells below three are nulled.
 CREATE OR REPLACE FUNCTION research_participant_passport_stats(study uuid) RETURNS jsonb
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
-DECLARE fields jsonb;total integer;average_age numeric;field_data jsonb;age_data jsonb;
+DECLARE current_fields jsonb;total integer;average_age numeric;field_data jsonb;age_data jsonb;
 BEGIN
   PERFORM pedpsy.lock_research_workbench(study);
-  SELECT q.fields INTO fields FROM (
+  SELECT q.fields INTO current_fields FROM (
     (SELECT v.fields,1 priority FROM pedpsy.research_profile_schemas v WHERE v.study_id=study ORDER BY v.version DESC LIMIT 1)
     UNION ALL
     (SELECT v.fields,2 priority FROM pedpsy.passport_schema_versions v WHERE v.study_id=study ORDER BY v.schema_version DESC LIMIT 1)
@@ -63,7 +63,7 @@ BEGIN
       ) o ON true
     ),'[]'::jsonb)
   ) ORDER BY f->>'key'),'[]'::jsonb) INTO field_data
-  FROM jsonb_array_elements(coalesce(fields,'[]'::jsonb)) f;
+  FROM jsonb_array_elements(coalesce(current_fields,'[]'::jsonb)) f;
   WITH latest AS (
     SELECT DISTINCT ON (participant_id) participant_id,answers
     FROM pedpsy.research_profile_history WHERE study_id=study ORDER BY participant_id,revision DESC
@@ -78,8 +78,8 @@ BEGIN
   )
   SELECT coalesce(jsonb_agg(jsonb_build_object('label',b.bucket,'count',CASE WHEN b.n>=3 THEN b.n END) ORDER BY b.bucket),'[]'::jsonb)
   INTO age_data FROM (
-    SELECT CASE WHEN age<25 THEN '18–24' WHEN age<35 THEN '25–34' WHEN age<45 THEN '35–44'
-      WHEN age<55 THEN '45–54' ELSE '55+' END bucket,count(*)::integer n
+    SELECT CASE WHEN age<25 THEN '18вЂ“24' WHEN age<35 THEN '25вЂ“34' WHEN age<45 THEN '35вЂ“44'
+      WHEN age<55 THEN '45вЂ“54' ELSE '55+' END bucket,count(*)::integer n
     FROM (
       SELECT (c.answers->>'age')::integer age
       FROM combined c
