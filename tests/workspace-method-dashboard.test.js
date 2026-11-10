@@ -17,7 +17,8 @@ test("method dashboard toggles the panel by id, not by element",()=>{
   assert.match(html,/id="method-progress-group"/);
   assert.match(html,/id="method-progress-stage"/);
   assert.match(app,/completion-ring/);
-  assert.match(app,/analytics-bar/);
+  assert.match(app,/level-columns/);
+  assert.match(app,/scale-track/);
   assert.match(app,/analytics-legend/);
   assert.match(app,/скрыто \(<3\)/);
 });

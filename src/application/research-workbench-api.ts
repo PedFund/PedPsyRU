@@ -3,6 +3,7 @@ import {studyObject,studyId,studyText,studyVersion} from "./study-api.js";
 import {passportAdditionalFields} from "./passport-schema-api.js";
 import {passportScalars} from "../ports/passport-values.js";
 import {ParticipationError} from "../ports/errors.js";
+import {presentationMeasureBounds} from "./result-presentation.js";
 function invalid():never{throw new ParticipationError(400,"INVALID_STUDY_INPUT");}
 function optionalId(value:unknown){return value===null?null:studyId(value);}
 function note(value:unknown){if(typeof value!=="string"||value.length>500||/[\u0000-\u001f\u007f]/.test(value))invalid();return value.trim();}
@@ -32,7 +33,7 @@ export function createResearchWorkbenchApi(store:ResearchWorkbench,csrf:{assert(
   read:(token:string,id:string)=>store.read(token,studyId(id)),
   progress:(token:string,id:string)=>store.progress(token,studyId(id)),
   methodProgress:(token:string,id:string)=>store.methodProgress(token,studyId(id)),
-  methodAnalytics:(token:string,id:string,group?:string,stage?:string)=>store.methodAnalytics(token,studyId(id),group,stage),
+  methodAnalytics:async(token:string,id:string,group?:string,stage?:string)=>{const data=await store.methodAnalytics(token,studyId(id),group,stage);return {...data,rows:data.rows.map(row=>({...row,measures:row.measures.map(measure=>({...measure,...(presentationMeasureBounds(row.method_version_id,measure.code)??{})}))}))};},
   change:(token:string,id:string,action:WorkbenchAction,input:unknown,proof:string)=>{csrf.assert(token,proof);const b=workbenchInput(action,input);return store.change(token,studyId(id),b.version,action,b.data);}
 };}
 export function createParticipantProfileApi(store:ParticipantProfiles,csrf:{assert(token:string,value:string):void}){return {
