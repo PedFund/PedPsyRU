@@ -1,5 +1,5 @@
 import type {Pool} from "pg";
-import type {ResearchWorkbench,WorkbenchAction,WorkbenchDesign,WorkbenchProgress,ParticipantProfiles,ProfileSnapshot} from "../../ports/research-workbench.js";
+import type {ResearchWorkbench,WorkbenchAction,WorkbenchDesign,WorkbenchProgress,WorkbenchMethodProgress,ParticipantProfiles,ProfileSnapshot} from "../../ports/research-workbench.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {accountTransaction,tokenHash} from "./account-transaction.js";
 class WorkbenchConnection {
@@ -17,6 +17,7 @@ export class PostgresResearchWorkbench extends WorkbenchConnection implements Re
     return this.call<WorkbenchDesign|{queued:number;mode:"synthetic"}>(token,"SELECT pedpsy.change_research_workbench($1,$2,$3,$4::jsonb) data",[study,version,action,JSON.stringify(input)]);
   }
   progress(token:string,study:string){return this.call<WorkbenchProgress>(token,"SELECT pedpsy.research_progress($1) data",[study]);}
+  methodProgress(token:string,study:string){return this.call<WorkbenchMethodProgress>(token,"SELECT pedpsy.research_method_progress($1) data",[study]);}
 }
 export class PostgresParticipantProfiles extends WorkbenchConnection implements ParticipantProfiles {
   read(token:string){return this.call<ProfileSnapshot>(token,"SELECT pedpsy.own_profile('read',NULL,NULL,NULL) data",[]);}
