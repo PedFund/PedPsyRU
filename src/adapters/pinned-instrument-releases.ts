@@ -22,7 +22,8 @@ interface ChoiceRelease {
 type FormShape={id:string;version:string;title?:string;instruction?:string;presentation?:{id:string;version:string};rules?:{require_all?:boolean;quota?:Record<string,number>};items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
 // Pinned packages keep their original titles for verification. These display-only
 // corrections remove technical abbreviations from the participant interface.
-const displayTitles: Record<string,string> = {"pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца"};
+const displayTitles: Record<string,string> = {"pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца", "tki_ru_30_pairs@1.0.0": "Томас–Килманн: стили поведения в конфликте"};
+const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{const title=displayTitles[methodVersionId];return title?{...form,title:title as string}:form;};
 // Pinned release metadata is immutable for the process lifetime; avoid rebuilding it on every save.
 let installedCache:ChoiceRelease[]|undefined;
 function installed():ChoiceRelease[]{
@@ -36,12 +37,12 @@ function installed():ChoiceRelease[]{
   const asRelease=(form:FormShape,base:Omit<ChoiceRelease,"itemSnapshots"|"choiceValues"|"form">):ChoiceRelease=>({...base,
     itemSnapshots:form.items.map(item=>item.options),choiceValues:form.items[0]!.options.map(option=>String(option.value)),form:asForm(form)});
   const list=[
-    asRelease(t.form as FormShape,{methodVersionId:"tki_ru_30_pairs@1.0.0",handlerVersion:"tki-contract-0.3.0",verificationState:"key_verified",formSnapshot:t.formSnapshot,formDigest:t.formDigest,keyDigest:t.keyDigest}),
+    asRelease(withDisplayTitle(t.form as FormShape,"tki_ru_30_pairs@1.0.0"),{methodVersionId:"tki_ru_30_pairs@1.0.0",handlerVersion:"tki-contract-0.3.0",verificationState:"key_verified",formSnapshot:t.formSnapshot,formDigest:t.formDigest,keyDigest:t.keyDigest}),
     asRelease(k.form as FormShape,{methodVersionId:k.methodVersionId,handlerVersion:k.handlerVersion,verificationState:k.verificationState,formSnapshot:k.formSnapshot,formDigest:k.formDigest,keyDigest:k.keyDigest}),
     asRelease(p.form as FormShape,{methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,verificationState:p.verificationState,formSnapshot:p.formSnapshot,formDigest:p.formDigest,keyDigest:p.keyDigest}),
     asRelease(u.form as FormShape,{methodVersionId:u.methodVersionId,handlerVersion:u.handlerVersion,verificationState:u.verificationState,formSnapshot:u.formSnapshot,formDigest:u.formDigest,keyDigest:u.keyDigest}),
     ...legacyBatchReleases().map(b=>asRelease(b.form as FormShape,{methodVersionId:b.methodVersionId,handlerVersion:b.handlerVersion,verificationState:b.verificationState,formSnapshot:b.formSnapshot,formDigest:b.formDigest,keyDigest:b.keyDigest})),
-    ...approvedV1Releases().releases.map(a=>{const raw=a.form as unknown as FormShape;const title=displayTitles[a.methodVersionId];const form=title?{...raw,title:title as string}:raw;const rules=raw.rules;return asRelease(form,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest,...(rules&&rules.quota?{quota:rules.quota}:{})});})
+    ...approvedV1Releases().releases.map(a=>{const raw=a.form as unknown as FormShape;const form=withDisplayTitle(raw,a.methodVersionId);const rules=raw.rules;return asRelease(form,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest,...(rules&&rules.quota?{quota:rules.quota}:{})});})
   ];
   installedCache=list;
   return list;
