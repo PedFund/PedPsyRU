@@ -66,6 +66,19 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: TKI has five Russian conflict styles",()=>{
+  const codes=["competing","collaborating","compromising","avoiding","accommodating"];
+  const view=buildPresentation("tki_ru_30_pairs@1.0.0",codes.map(code=>measure(code,6)),new Map());
+  assert.equal(view.title,"Томас–Килманн: стили поведения в конфликте");
+  assert.equal(view.note,"Нормативные уровни для этой методики не утверждены.");
+  assert.equal(view.item_count,30);
+  assert.equal(view.item_unit,"пар");
+  assert.equal(view.groups[0].measures.length,5);
+  assert.equal(view.groups[0].measures[0].label,"Соперничество");
+  assert.equal(view.groups[0].measures[0].max,12);
+  assert.equal(view.summary,null);
+});
+
 test("presentation: TTF/ATF uses Russian labels and two scales",()=>{
   const view=buildPresentation("ttf_atf_10@1.0.0-staging",[measure("TTF",16),measure("ATF",24)],new Map());
   assert.equal(view.title,"Склонность к прощению и отношение к прощению");
