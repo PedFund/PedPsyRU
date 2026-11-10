@@ -66,6 +66,19 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: PVQ keeps four Russian indexes and nineteen values",()=>{
+  const values=["SDT","SDA","ST","HE","AC","FOR","FOD","FAC","SES","SEP","COR","COI","TR","HUM","BED","BEC","UNC","UNN","UNT"];
+  const indexes=["self_transcendence","self_enhancement","openness_to_change","conservation"];
+  const view=buildPresentation("pvq_rr_57@1.0.0-staging",[...values,...indexes].map(code=>measure(code,3)),new Map());
+  assert.equal(view.note,"Нормативные уровни для этой методики не утверждены.");
+  assert.equal(view.groups.length,4);
+  assert.deepEqual(view.groups.map(group=>group.measures.length),[5,4,4,6]);
+  assert.equal(view.groups[0].measures[0].label,"Универсализм / забота");
+  assert.equal(view.summary.measures.length,4);
+  assert.equal(view.summary.level,null);
+  assert.equal(view.summary.measures[0].label,"Самопреодоление");
+});
+
 test("presentation: QLESQ has nine scales and a four-level index",()=>{
   const codes=["work","achievement","health","close_relations","support","optimism","tension","self_control","negative_emotions","quality_of_life_index"];
   const view=buildPresentation("qlesq_36_vodopyanova@1.1.0-staging",codes.map(code=>measure(code,20)),new Map([["quality_of_life_index",level("very_low")]]));

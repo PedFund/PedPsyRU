@@ -312,6 +312,48 @@ const catalog: Catalog = {
         ]
       }
     },
+    "pvq_rr_57@1.0.0-staging": {
+      "title": "Портретный ценностный опросник Шварца, 57 пунктов",
+      "note": "Нормативные уровни для этой методики не утверждены.",
+      "summary_position": "top",
+      "measures": {
+        "SDT": {"label": "Самостоятельность / мысли", "min": 1, "max": 6, "colors": 2},
+        "SDA": {"label": "Самостоятельность / действия", "min": 1, "max": 6, "colors": 2},
+        "ST": {"label": "Стимуляция", "min": 1, "max": 6, "colors": 2},
+        "HE": {"label": "Гедонизм", "min": 1, "max": 6, "colors": 2},
+        "AC": {"label": "Достижение", "min": 1, "max": 6, "colors": 2},
+        "FOR": {"label": "Власть / ресурсы", "min": 1, "max": 6, "colors": 2},
+        "FOD": {"label": "Власть / доминирование", "min": 1, "max": 6, "colors": 2},
+        "FAC": {"label": "Репутация", "min": 1, "max": 6, "colors": 2},
+        "SES": {"label": "Безопасность / общественная", "min": 1, "max": 6, "colors": 2},
+        "SEP": {"label": "Безопасность / личная", "min": 1, "max": 6, "colors": 2},
+        "COR": {"label": "Конформность / правила", "min": 1, "max": 6, "colors": 2},
+        "COI": {"label": "Конформность / межличностная", "min": 1, "max": 6, "colors": 2},
+        "TR": {"label": "Традиция", "min": 1, "max": 6, "colors": 2},
+        "HUM": {"label": "Скромность", "min": 1, "max": 6, "colors": 2},
+        "BED": {"label": "Благожелательность / долг", "min": 1, "max": 6, "colors": 2},
+        "BEC": {"label": "Благожелательность / забота", "min": 1, "max": 6, "colors": 2},
+        "UNC": {"label": "Универсализм / забота", "min": 1, "max": 6, "colors": 2},
+        "UNN": {"label": "Универсализм / природа", "min": 1, "max": 6, "colors": 2},
+        "UNT": {"label": "Универсализм / толерантность", "min": 1, "max": 6, "colors": 2},
+        "self_transcendence": {"label": "Самопреодоление", "min": 1, "max": 6, "colors": 2},
+        "self_enhancement": {"label": "Самоутверждение", "min": 1, "max": 6, "colors": 2},
+        "openness_to_change": {"label": "Открытость изменениям", "min": 1, "max": 6, "colors": 2},
+        "conservation": {"label": "Сохранение", "min": 1, "max": 6, "colors": 2}
+      },
+      "groups": [
+        {"title": "Самопреодоление", "description": null, "measures": ["UNC", "UNN", "UNT", "BEC", "BED"]},
+        {"title": "Самоутверждение", "description": null, "measures": ["AC", "FOR", "FOD", "FAC"]},
+        {"title": "Открытость изменениям", "description": null, "measures": ["SDT", "SDA", "ST", "HE"]},
+        {"title": "Сохранение", "description": null, "measures": ["SES", "SEP", "COR", "COI", "TR", "HUM"]}
+      ],
+      "summary": {
+        "title": "Ценностные индексы",
+        "measures": ["self_transcendence", "self_enhancement", "openness_to_change", "conservation"],
+        "level_code": "",
+        "colors": 2
+      }
+    },
     "qlesq_36_vodopyanova@1.1.0-staging": {
       "title": "Шкала оценки качества жизни",
       "summary_position": "top",
