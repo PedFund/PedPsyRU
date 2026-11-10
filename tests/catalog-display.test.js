@@ -27,8 +27,10 @@ test("catalogue display removes technical codes and abbreviations",()=>{
   assert.equal(pvq.title,"Портретный ценностный опросник Шварца");
   assert.equal(pvq.item_count,57);
   const ttf=forMethod("ttf_atf_10");
-  assert.equal(ttf.title,"Склонность к прощению и отношение к прощению");
-  assert.deepEqual(ttf.indicators,["Тенденция к прощению","Отношение к прощению"]);
+  assert.equal(ttf.title,"Склонность к прощению и установки по отношению к прощению");
+  assert.deepEqual(ttf.authors,["R. P. Brown"]);
+  assert.equal(ttf.adaptation,"А. П. Кононова, О. Д. Пуговкина");
+  assert.deepEqual(ttf.indicators,["Склонность к прощению","Установки по отношению к прощению"]);
   const tki=forMethod("tki_ru_30_pairs");
   assert.equal(tki.title,"Томас–Килманн: стили поведения в конфликте");
   assert.equal(tki.item_count,30);

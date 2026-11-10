@@ -81,11 +81,11 @@ test("presentation: TKI has five Russian conflict styles",()=>{
 
 test("presentation: TTF/ATF uses Russian labels and two scales",()=>{
   const view=buildPresentation("ttf_atf_10@1.0.0-staging",[measure("TTF",16),measure("ATF",24)],new Map());
-  assert.equal(view.title,"Склонность к прощению и отношение к прощению");
+  assert.equal(view.title,"Склонность к прощению и установки по отношению к прощению");
   assert.equal(view.note,"Нормативные уровни для этой методики не утверждены.");
   assert.equal(view.item_count,10);
   assert.equal(view.groups[0].measures.length,2);
-  assert.equal(view.groups[0].measures[0].label,"Тенденция к прощению");
+  assert.equal(view.groups[0].measures[0].label,"Склонность к прощению");
   assert.equal(view.groups[0].measures[0].min,4);
   assert.equal(view.groups[0].measures[0].max,28);
   assert.equal(view.groups[0].measures[1].min,6);
