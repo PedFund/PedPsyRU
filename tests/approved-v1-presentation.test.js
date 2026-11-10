@@ -66,6 +66,18 @@ test("presentation: Ryff profile has six described bars and one three-level tota
   assert.equal(view.summary.measures[0].colors,3);
 });
 
+test("presentation: QLESQ has nine scales and a four-level index",()=>{
+  const codes=["work","achievement","health","close_relations","support","optimism","tension","self_control","negative_emotions","quality_of_life_index"];
+  const view=buildPresentation("qlesq_36_vodopyanova@1.1.0-staging",codes.map(code=>measure(code,20)),new Map([["quality_of_life_index",level("very_low")]]));
+  assert.equal(view.groups[0].measures.length,9);
+  assert.equal(view.groups[0].measures[0].label,"Работа");
+  assert.equal(view.groups[0].measures[0].max,40);
+  assert.equal(view.summary.colors,4);
+  assert.equal(view.summary.level.value,"очень низкий");
+  assert.equal(view.summary.level.index,0);
+  assert.equal(view.summary.measures[0].level_index,0);
+});
+
 test("presentation: Karpov uses the sten scale and reflexivity_level",()=>{
   const view=buildPresentation("reflexivity_karpov_27@1.0.0-local",[{code:"reflexivity",label:"Рефлексивность",value:108},{code:"reflexivity_sten",label:"Рефлексивность — стен",value:3}],new Map([["reflexivity_level",level("низкий")]]));
   assert.equal(view.groups.length,0);
