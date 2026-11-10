@@ -45,7 +45,8 @@ async function main(): Promise<void> {
       researcherManagement:new PostgresResearcherManagement(pool),staffManagement:new PostgresStaffManagement(pool),diagnostics:new PostgresStaffDiagnostics(pool)},
       {forToken:csrfFor,assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const studies=createStudyApi(new PostgresStudyConstructor(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-    const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
+    const inviteKey=process.env.PEDPSY_CONTACT_KEY?Buffer.from(process.env.PEDPSY_CONTACT_KEY,"base64"):undefined;
+    const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool,inviteKey),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined;
     const origin=production?config!.origin:"http://127.0.0.1:4174";

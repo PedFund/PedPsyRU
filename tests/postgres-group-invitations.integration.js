@@ -2,6 +2,7 @@
 const {test} = require("node:test"), assert = require("node:assert/strict"), {randomUUID, randomBytes} = require("node:crypto");
 const {postgresFixture} = require("./postgres-fixture.js"), {verifiedStaff} = require("./mfa-fixture.js");
 const {invitationResearcher} = require("./group-invitation-fixture.js"), {studyResearcher} = require("./study-fixture.js");
+const {PostgresGroupInvitations} = require("../dist/src/adapters/postgres/group-invitations.js");
 const {tokenHash} = require("../dist/src/adapters/postgres/account-transaction.js");
 function scenario(name, fn) {test("PostgreSQL group invites: " + name, async t => {
   const f = await postgresFixture({runtimePoolSize: 2}); t.after(() => f.close());
@@ -30,6 +31,17 @@ scenario("one active shared token per group, stored hashed, list is secret-free;
   const audit=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE study_id=$1",[x.design.id])).rows;
   assert.ok(!JSON.stringify(audit).includes(invite_token));
   assert.ok(audit.some(a=>a.action==="participants.invites.create"&&a.resource_id===r.id&&a.credential_id===x.row.id));
+});
+scenario("deterministic active link is re-derived for display and disappears on revoke", async (f,x) => {
+  const invitations = new PostgresGroupInvitations(f.runtime, Buffer.alloc(32, 7));
+  const created = await invitations.create(x.session.token, x.design.id, x.design.groups[0].id, {expires_at: Date.now()+86400000});
+  const active = (await invitations.list(x.session.token, x.design.id, x.design.groups[0].id)).find(item => item.id === created.id);
+  assert.equal(active.invite_token, created.invite_token);
+  assert.equal(active.token_hash, undefined);
+  await invitations.revoke(x.session.token, x.design.id, x.design.groups[0].id, created.id, {expected_revision: created.revision});
+  const revoked = (await invitations.list(x.session.token, x.design.id, x.design.groups[0].id)).find(item => item.id === created.id);
+  assert.equal(revoked.status, "revoked");
+  assert.equal(revoked.invite_token, undefined);
 });
 scenario("direct tables/private helpers are inaccessible; identity/expiry/scope cannot be edited or deleted",async(f,x)=>{
   const r=await create(x);
