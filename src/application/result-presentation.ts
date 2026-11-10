@@ -703,3 +703,7 @@ export function buildPresentation(methodVersionId: string, measures: readonly Me
   }
   return {method_version_id: methodVersionId, title: view.title, note: typeof view.note === "string" && view.note ? view.note : null, item_count: typeof view.item_count === "number" ? view.item_count : null, item_unit: typeof view.item_unit === "string" && view.item_unit ? view.item_unit : null, palette: view.palette === "negative" ? "negative" : "positive", summary_position: view.summary_position === "bottom" ? "bottom" : "top", groups, summary};
 }
+export function presentationMeasureBounds(methodVersionId: string, code: string): {min: number; max: number} | null {
+  const meta = catalog.methods[methodVersionId]?.measures[code];
+  return meta ? {min: meta.min, max: meta.max} : null;
+}

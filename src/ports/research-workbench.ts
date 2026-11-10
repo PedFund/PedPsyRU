@@ -7,9 +7,9 @@ export interface ProgressRow {participant_id:string;group_id:string;stage_id:str
 export interface WorkbenchProgress {openings:{group_id:string;stage_id:string}[];rows:ProgressRow[];reminders:{participant_id:string;stage_id:string;created_at:number}[]}
 export interface MethodProgressRow {release_id:string;method_id:string;completed:number}
 export interface MethodAnalyticsLevel {code:string;label:string;value:string;count:number|null}
-export interface MethodAnalyticsMeasure {code:string;label:string;n:number;mean:number|null}
-export interface MethodAnalyticsRow {release_id:string;method_id:string;completed:number;levels:MethodAnalyticsLevel[];measures:MethodAnalyticsMeasure[]}
-export interface WorkbenchMethodAnalytics {registered:number;completed_any:number;rows:MethodAnalyticsRow[]}
+export interface MethodAnalyticsMeasure {code:string;label:string;n:number;mean:number|null;min?:number|null;max?:number|null}
+export interface MethodAnalyticsRow {release_id:string;method_id:string;method_version_id:string;completed:number;levels:MethodAnalyticsLevel[];measures:MethodAnalyticsMeasure[]}
+export interface WorkbenchMethodAnalytics {registered:number;completed_any:number;completed_all:number;rows:MethodAnalyticsRow[]}
 export interface WorkbenchMethodProgress {registered:number;completed_any:number;rows:MethodProgressRow[]}
 export interface ResearchWorkbench {
   read(token:string,study:string):Promise<WorkbenchDesign>;
