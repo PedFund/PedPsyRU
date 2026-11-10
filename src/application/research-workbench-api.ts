@@ -32,6 +32,7 @@ export function createResearchWorkbenchApi(store:ResearchWorkbench,csrf:{assert(
   read:(token:string,id:string)=>store.read(token,studyId(id)),
   progress:(token:string,id:string)=>store.progress(token,studyId(id)),
   methodProgress:(token:string,id:string)=>store.methodProgress(token,studyId(id)),
+  methodAnalytics:(token:string,id:string,group?:string,stage?:string)=>store.methodAnalytics(token,studyId(id),group,stage),
   change:(token:string,id:string,action:WorkbenchAction,input:unknown,proof:string)=>{csrf.assert(token,proof);const b=workbenchInput(action,input);return store.change(token,studyId(id),b.version,action,b.data);}
 };}
 export function createParticipantProfileApi(store:ParticipantProfiles,csrf:{assert(token:string,value:string):void}){return {

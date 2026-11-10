@@ -13,7 +13,15 @@ export function registerResearchWorkbench(app:FastifyInstance,origin:string,apis
   const base="/api/v2/researcher/studies/:id/workbench";
   app.get(base,async r=>apis.research.read(token(r,researcher),id(r)));
   app.get(base+"/progress",async r=>apis.research.progress(token(r,researcher),id(r)));
-  app.get(base+"/progress/methods",async r=>apis.research.methodProgress(token(r,researcher),id(r)));
+  app.get(base+"/progress/methods",async r=>{
+    const q=r.query as Record<string,unknown>;
+    if(Object.keys(q).some(k=>k!=="group_id"&&k!=="stage_id"))throw new ParticipationError(400,"INVALID_REQUEST");
+    const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+    const group=typeof q.group_id==="string"&&q.group_id?q.group_id:undefined;
+    const stage=typeof q.stage_id==="string"&&q.stage_id?q.stage_id:undefined;
+    if((group&&!uuid.test(group))||(stage&&!uuid.test(stage)))throw new ParticipationError(400,"INVALID_REQUEST");
+    return apis.research.methodAnalytics(token(r,researcher),id(r),group,stage);
+  });
   for(const action of ["initialize","group","stage","delete_stage","assign","copy_assignments","schema","remind"] as WorkbenchAction[])app.post(base+"/"+action,async r=>apis.research.change(token(r,researcher),id(r),action,r.body,proof(r)));
   app.get("/api/v2/participant/profile",async r=>apis.profile.read(token(r,participant)));
   for(const action of ["restart","save","complete"] as const)app.post("/api/v2/participant/profile/"+action,async r=>apis.profile.change(token(r,participant),action,r.body,proof(r)));
