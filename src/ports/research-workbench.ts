@@ -10,6 +10,9 @@ export interface MethodAnalyticsLevel {code:string;label:string;value:string;cou
 export interface MethodAnalyticsMeasure {code:string;label:string;n:number;mean:number|null;min?:number|null;max?:number|null}
 export interface MethodAnalyticsRow {release_id:string;method_id:string;method_version_id:string;completed:number;levels:MethodAnalyticsLevel[];measures:MethodAnalyticsMeasure[]}
 export interface WorkbenchMethodAnalytics {registered:number;completed_any:number;completed_all:number;rows:MethodAnalyticsRow[]}
+export interface ParticipantPassportValue {value:string;label:string;count:number|null}
+export interface ParticipantPassportField {key:string;label:string;kind:string;values:ParticipantPassportValue[]}
+export interface ParticipantPassportStats {total:number;average_age:number|null;fields:ParticipantPassportField[];age_buckets:{label:string;count:number|null}[]}
 export interface WorkbenchMethodProgress {registered:number;completed_any:number;rows:MethodProgressRow[]}
 export interface ResearchWorkbench {
   read(token:string,study:string):Promise<WorkbenchDesign>;
@@ -17,6 +20,7 @@ export interface ResearchWorkbench {
   progress(token:string,study:string):Promise<WorkbenchProgress>;
   methodProgress(token:string,study:string):Promise<WorkbenchMethodProgress>;
   methodAnalytics(token:string,study:string,group?:string,stage?:string):Promise<WorkbenchMethodAnalytics>;
+  participantStats(token:string,study:string):Promise<ParticipantPassportStats>;
 }
 export interface ProfileSnapshot {study_id:string;schema_version:number;revision:number;status:"not_started"|"draft"|"completed";fields:readonly PassportField[];values:Readonly<Record<string,string|number>>}
 export interface ParticipantProfiles {

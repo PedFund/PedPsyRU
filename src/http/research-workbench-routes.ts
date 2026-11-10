@@ -13,6 +13,7 @@ export function registerResearchWorkbench(app:FastifyInstance,origin:string,apis
   const base="/api/v2/researcher/studies/:id/workbench";
   app.get(base,async r=>apis.research.read(token(r,researcher),id(r)));
   app.get(base+"/progress",async r=>apis.research.progress(token(r,researcher),id(r)));
+  app.get(base+"/progress/participants",async r=>apis.research.participantStats(token(r,researcher),id(r)));
   app.get(base+"/progress/methods",async r=>{
     const q=r.query as Record<string,unknown>;
     if(Object.keys(q).some(k=>k!=="group_id"&&k!=="stage_id"))throw new ParticipationError(400,"INVALID_REQUEST");
