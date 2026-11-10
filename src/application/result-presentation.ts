@@ -312,6 +312,39 @@ const catalog: Catalog = {
         ]
       }
     },
+    "qlesq_36_vodopyanova@1.1.0-staging": {
+      "title": "Шкала оценки качества жизни",
+      "summary_position": "top",
+      "level_templates": {
+        "four": {"очень низкий": "", "низкий": "", "средний": "", "высокий": ""}
+      },
+      "measures": {
+        "work": {"label": "Работа", "min": 4, "max": 40, "colors": 2},
+        "achievement": {"label": "Достижения", "min": 4, "max": 40, "colors": 2},
+        "health": {"label": "Здоровье", "min": 4, "max": 40, "colors": 2},
+        "close_relations": {"label": "Близкие отношения", "min": 4, "max": 40, "colors": 2},
+        "support": {"label": "Поддержка", "min": 4, "max": 40, "colors": 2},
+        "optimism": {"label": "Оптимизм", "min": 4, "max": 40, "colors": 2},
+        "tension": {"label": "Напряжённость", "min": 4, "max": 40, "colors": 2},
+        "self_control": {"label": "Самоконтроль", "min": 4, "max": 40, "colors": 2},
+        "negative_emotions": {"label": "Негативные эмоции", "min": 4, "max": 40, "colors": 2},
+        "quality_of_life_index": {"label": "Индекс качества жизни", "min": 4, "max": 40, "colors": 4, "level_template": "four"}
+      },
+      "groups": [
+        {
+          "title": "Шкалы",
+          "description": null,
+          "measures": ["work", "achievement", "health", "close_relations", "support", "optimism", "tension", "self_control", "negative_emotions"]
+        }
+      ],
+      "summary": {
+        "title": "Индекс качества жизни",
+        "measures": ["quality_of_life_index"],
+        "level_code": "quality_of_life_index",
+        "colors": 4,
+        "levels_order": ["очень низкий", "низкий", "средний", "высокий"]
+      }
+    },
     "reflexivity_karpov_27@1.0.0-local": {
       "title": "Рефлексивность",
       "summary_position": "top",
