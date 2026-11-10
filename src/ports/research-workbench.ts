@@ -5,10 +5,13 @@ export interface WorkbenchSchema {schema_version:number;fields:readonly Passport
 export interface WorkbenchDesign extends StudyDesign {group_notes:Record<string,string>;stage_notes:Record<string,string>;profile_schemas:Record<string,WorkbenchSchema>}
 export interface ProgressRow {participant_id:string;group_id:string;stage_id:string;email:string;status:"not_started"|"in_progress"|"completed"}
 export interface WorkbenchProgress {openings:{group_id:string;stage_id:string}[];rows:ProgressRow[];reminders:{participant_id:string;stage_id:string;created_at:number}[]}
+export interface MethodProgressRow {release_id:string;method_id:string;completed:number}
+export interface WorkbenchMethodProgress {registered:number;completed_any:number;rows:MethodProgressRow[]}
 export interface ResearchWorkbench {
   read(token:string,study:string):Promise<WorkbenchDesign>;
   change(token:string,study:string,version:number,action:WorkbenchAction,input:Record<string,unknown>):Promise<WorkbenchDesign|{queued:number;mode:"synthetic"}>;
   progress(token:string,study:string):Promise<WorkbenchProgress>;
+  methodProgress(token:string,study:string):Promise<WorkbenchMethodProgress>;
 }
 export interface ProfileSnapshot {study_id:string;schema_version:number;revision:number;status:"not_started"|"draft"|"completed";fields:readonly PassportField[];values:Readonly<Record<string,string|number>>}
 export interface ParticipantProfiles {
