@@ -1,4 +1,4 @@
-﻿SET LOCAL search_path=pedpsy,pg_catalog;
+SET LOCAL search_path=pedpsy,pg_catalog;
 -- 080: aggregate the effective completed participant profile for the researcher.
 -- Current profiles live in research_profile_history; legacy synthetic rows still
 -- live in participant_passports. Only counts leave the DB; cells below three are nulled.
