@@ -71,6 +71,7 @@ test("presentation: PVQ keeps four Russian indexes and nineteen values",()=>{
   const indexes=["self_transcendence","self_enhancement","openness_to_change","conservation"];
   const view=buildPresentation("pvq_rr_57@1.0.0-staging",[...values,...indexes].map(code=>measure(code,3)),new Map());
   assert.equal(view.note,"Нормативные уровни для этой методики не утверждены.");
+  assert.equal(view.item_count,57);
   assert.equal(view.groups.length,4);
   assert.deepEqual(view.groups.map(group=>group.measures.length),[5,4,4,6]);
   assert.equal(view.groups[0].measures[0].label,"Универсализм / забота");

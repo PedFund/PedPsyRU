@@ -4,14 +4,14 @@ type LevelTable = Record<string, string>;
 type MeasureMeta = {label?: string; min: number; max: number; colors: number; description?: string | null; level_template?: string; level_code?: string; levels?: LevelTable};
 type GroupMeta = {title: string; description?: string | null; measures: string[]};
 type SummaryMeta = {title: string; measures: string[]; level_code: string; colors: number; level_template?: string; levels?: LevelTable; levels_order?: string[]};
-type MethodView = {title: string; note?: string; palette?: "positive" | "negative"; summary_position?: "top" | "bottom"; level_templates?: Record<string, LevelTable>; measures: Record<string, MeasureMeta>; groups: GroupMeta[]; summary?: SummaryMeta};
+type MethodView = {title: string; note?: string; item_count?: number; palette?: "positive" | "negative"; summary_position?: "top" | "bottom"; level_templates?: Record<string, LevelTable>; measures: Record<string, MeasureMeta>; groups: GroupMeta[]; summary?: SummaryMeta};
 type Catalog = {schema_version: string; note?: string; methods: Record<string, MethodView>};
 type MeasureInput = {code: string; label: string; value: number};
 export type PresentedMeasure = {code: string; label: string; value: number; min: number | null; max: number | null; colors: number; description: string | null; level: string | null; level_index: number; level_text: string | null};
 export type PresentedGroup = {title: string; description: string | null; measures: PresentedMeasure[]};
 export type PresentedLevel = {code: string; value: string; text: string | null; index: number; count: number};
 export type PresentedSummary = {title: string; colors: number; measures: PresentedMeasure[]; level: PresentedLevel | null};
-export type PresentationView = {method_version_id: string; title: string; note: string | null; palette: "positive" | "negative"; summary_position: "top" | "bottom"; groups: PresentedGroup[]; summary: PresentedSummary | null};
+export type PresentationView = {method_version_id: string; title: string; note: string | null; item_count: number | null; palette: "positive" | "negative"; summary_position: "top" | "bottom"; groups: PresentedGroup[]; summary: PresentedSummary | null};
 
 const LEVEL_LABELS: Record<string, string> = {
   low: "низкий",
@@ -313,8 +313,9 @@ const catalog: Catalog = {
       }
     },
     "pvq_rr_57@1.0.0-staging": {
-      "title": "Портретный ценностный опросник Шварца, 57 пунктов",
+      "title": "Портретный ценностный опросник Шварца",
       "note": "Нормативные уровни для этой методики не утверждены.",
+      "item_count": 57,
       "summary_position": "top",
       "measures": {
         "SDT": {"label": "Самостоятельность / мысли", "min": 1, "max": 6, "colors": 2},
@@ -672,5 +673,5 @@ export function buildPresentation(methodVersionId: string, measures: readonly Me
       }
     }
   }
-  return {method_version_id: methodVersionId, title: view.title, note: typeof view.note === "string" && view.note ? view.note : null, palette: view.palette === "negative" ? "negative" : "positive", summary_position: view.summary_position === "bottom" ? "bottom" : "top", groups, summary};
+  return {method_version_id: methodVersionId, title: view.title, note: typeof view.note === "string" && view.note ? view.note : null, item_count: typeof view.item_count === "number" ? view.item_count : null, palette: view.palette === "negative" ? "negative" : "positive", summary_position: view.summary_position === "bottom" ? "bottom" : "top", groups, summary};
 }
