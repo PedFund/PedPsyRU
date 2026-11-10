@@ -84,6 +84,7 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   assert.equal((await w.app.inject({method:"POST",url:"/api/v2/participant/attempts/"+id+"/complete",headers:h,payload:{expected_revision:1}})).statusCode,200);
   const done=await x.store.progress(x.r.session.token,x.d.id);assert.equal(done.rows.find(row=>row.stage_id===x.d.stages[0].id).status,"completed");
   const methodDone=await x.store.methodProgress(x.r.session.token,x.d.id);assert.equal(methodDone.registered,1);assert.equal(methodDone.completed_any,1);assert.equal(methodDone.rows.find(row=>row.release_id===x.f.seed.release_id).completed,1);
+  const analytics=await x.store.methodAnalytics(x.r.session.token,x.d.id);assert.equal(analytics.registered,1);assert.equal(analytics.completed_any,1);const analyticsRow=analytics.rows.find(row=>row.release_id===x.f.seed.release_id);assert.equal(analyticsRow.completed,1);assert.ok(analyticsRow.measures.length>0);
   const future=await enroll.enroll(p.session.token,{stage_id:x.d.stages[1].id,expected_opening_revision:1,expected_passport_schema_version:own.passport_schema_version,expected_consent_policy_revision:0});
   assert.equal((await x.f.admin.query("SELECT answers FROM pedpsy.attempt_profile_basis WHERE study_id=$1 AND attempt_id=$2",[x.d.id,future.attempts[0].attempt_id])).rows[0].answers.age,31);
   await assert.rejects(x.f.admin.query("UPDATE pedpsy.research_profile_history SET answers='{}' WHERE study_id=$1",[x.d.id]),e=>e.code==="23514");
