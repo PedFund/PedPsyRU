@@ -74,7 +74,7 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
 }
 function invitationRecord(dto: GroupInvitationRecord): GroupInvitationRecord {
   return {id: dto.id, study_id: dto.study_id, group_id: dto.group_id, revision: dto.revision,
-    status: dto.status, expires_at: dto.expires_at};
+    status: dto.status, expires_at: dto.expires_at, ...(dto.invite_token ? {invite_token: dto.invite_token} : {})};
 }
 export function createGroupInvitationApi(invitations: GroupInvitations, protection: MutationProtection) {
   return {
@@ -92,7 +92,7 @@ export function createGroupInvitationApi(invitations: GroupInvitations, protecti
       const b = object(input, ["expected_revision"]);
       if (!Number.isInteger(b.expected_revision) || Number(b.expected_revision) < 0 || Number(b.expected_revision) > 2147483646) invalid();
       return invitations.revoke(token, studyId(study), studyId(group), studyId(inviteId), {expected_revision: Number(b.expected_revision)})
-        .then(invitationRecord);
+        .then(dto => {const {invite_token, ...record} = invitationRecord(dto); return record;});
     }
   };
 }

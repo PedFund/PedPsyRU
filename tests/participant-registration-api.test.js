@@ -94,7 +94,7 @@ test("invitation management rejects client owner/scope/token and coerced CAS/exp
   assert.throws(() => api.create("session", id, id, {expires_at: 1234}, "wrong"), /csrf/);
   assert.throws(() => api.create("session", "other", id, {expires_at: 1234}, "csrf"), unavailable);
   assert.equal(calls.length, 0);
-  assert.deepEqual(await api.list("session", id, id), [record]);
+  assert.deepEqual(await api.list("session", id, id), [{...record, invite_token: invite}]);
   assert.deepEqual(await api.create("session", id, id, {expires_at: 1234}, "csrf"), {...record, invite_token: invite});
   assert.deepEqual(await api.revoke("session", id, id, id, {expected_revision: 0}, "csrf"), {...record, revision: 1, status: "revoked"});
   assert.deepEqual(calls, [["session", id, id, {expires_at: 1234}], ["session", id, id, id, {expected_revision: 0}]]);

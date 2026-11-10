@@ -61,9 +61,12 @@ export interface GroupInvitationRecord {
   readonly revision: number;
   readonly status: "active" | "revoked";
   readonly expires_at: number;
+  readonly token_hash?: string;
+  readonly invite_token?: string;
 }
-// Opaque join token is returned to the owning researcher only on creation.
-// Store only its digest; do not include it in list/read DTOs or audit payloads.
+// Opaque join token is shown to the owning researcher while the invitation is
+// active. The database stores only its digest; the adapter re-derives a
+// deterministic token from the digest for display.
 export interface CreatedGroupInvitation extends GroupInvitationRecord {readonly invite_token: string}
 export interface GroupInvitations {
   list(token: string, studyId: string, groupId: string): Promise<GroupInvitationRecord[]>;
