@@ -18,7 +18,7 @@ test("method dashboard toggles the panel by id, not by element",()=>{
   assert.match(html,/id="method-progress-stage"/);
   assert.match(html,/id="progress-invite-panel"/);
   assert.match(html,/id="copy-progress-invite"/);
-  assert.match(html,/id="participant-stats-panel"/);
+  assert.match(html,/id="method-compare-mode"/);assert.match(app,/runMethodCompare/);assert.match(html,/id="participant-stats-panel"/);
   assert.match(app,/loadParticipantStats/);
   assert.match(app,/loadParticipantStats.*workbenchPath\(\)\+"\/progress\/participants"/);
   assert.match(app,/passport-stat-card/);
