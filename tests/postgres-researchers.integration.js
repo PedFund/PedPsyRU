@@ -9,7 +9,7 @@ async function accepted(f,staff){const m=new PostgresResearcherManagement(f.runt
 scenario("both MFA staff roles invite/accept/login/block with durable default quota",async f=>{
   for(const role of ["administrator","superadministrator"]){const staff=await verifiedStaff(f,role),x=await accepted(f,staff);
     assert.equal(x.row.status,"active");assert.equal(x.row.active_study_quota,1);assert.equal((await new PostgresAccountAccess(f.runtime).session(x.session.token)).role,"researcher");
-    assert.deepEqual(await x.g.home(x.session.token),{active_study_quota:1,studies:[]});
+    assert.deepEqual(await x.g.home(x.session.token),{login_id:x.row.login_id,active_study_quota:1,studies:[]});
     await assert.rejects(x.g.accept({invite_code:x.invite.invite_code,password:password()}),e=>e.code==="INVALID_INVITE");
     const before=(await f.admin.query("SELECT count(*)::integer n FROM pedpsy.attempts")).rows[0].n;
     await x.m.block(staff.session.token,x.row.id);await assert.rejects(x.g.home(x.session.token),e=>e.status===401);await assert.rejects(x.g.login({login_id:x.invite.login_id,password:x.pw}),e=>e.code==="INVALID_LOGIN");

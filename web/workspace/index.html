@@ -43,6 +43,7 @@
 
     <section id="workspace-screen" hidden>
       <div class="toolbar"><button id="refresh" class="secondary">Обновить</button><button id="reauth" class="secondary">Подтвердить MFA заново</button><button id="logout" class="text">Выйти</button></div>
+      <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
       <section id="researcher-home" class="card" hidden>
         <h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div>
         <details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
