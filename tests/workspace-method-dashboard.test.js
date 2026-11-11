@@ -22,7 +22,7 @@ test("method dashboard toggles the panel by id, not by element",()=>{
   assert.match(app,/loadParticipantStats/);
   assert.match(app,/loadParticipantStats.*workbenchPath\(\)\+"\/progress\/participants"/);
   assert.match(app,/passport-stat-card/);
-  assert.doesNotMatch(app,/\["sex","education","city","organization"\]/);
+  assert.match(app,/\["sex","education","city","organization"\]/);
   assert.match(app,/study-methods-section"\)\.append\(\$\("group-invitations-panel"\)\)/);
   assert.doesNotMatch(app,/study-progress-section"\)\.append\([^)]*group-invitations-panel/);
   assert.match(app,/completion-ring/);
