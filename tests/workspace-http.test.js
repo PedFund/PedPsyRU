@@ -11,7 +11,7 @@ function fixture(){const denied=[],pending="p".repeat(43),staff="s".repeat(43),r
   const auth=()=>{throw new ParticipationError(401,"AUTH_REQUIRED");};
   const account=createAccountApi({access:{session:async t=>{if(t!==staff&&t!==researcher)auth();return {user_id:"synthetic",role:t===staff?"administrator":"researcher",session_version:1,expires_at:Date.now()+1800000};},check:async()=>{},denied:async(t,r)=>{denied.push([t,r]);}},
     auth:{password:async()=>({challenge:pending,status:"mfa_required",expiresAt:Date.now()+300000}),enroll:async()=>({secret:"synthetic-only",issuer:"PedPsy",account:"test"}),verify:async()=>({token:staff,csrf:csrfFor(staff),expiresAt:Date.now()+1800000}),logout:async()=>{}},
-    researchers:{accept:async()=>{},login:async()=>({token:researcher,csrf:csrfFor(researcher),expiresAt:Date.now()+1800000}),home:async t=>{if(t!==researcher)auth();return {active_study_quota:1,studies:[]};},logout:async()=>{}},
+    researchers:{accept:async()=>{},login:async()=>({token:researcher,csrf:csrfFor(researcher),expiresAt:Date.now()+1800000}),home:async t=>{if(t!==researcher)auth();return {login_id:"R-TEST",active_study_quota:1,studies:[]};},logout:async()=>{}},
     researcherManagement:{list:async t=>{if(t!==staff)auth();return [];},invite:async()=>({login_id:"SYNTHETIC",invite_code:"i".repeat(43),expires_at:Date.now()+86400000}),block:async()=>{}},
     staffManagement:{list:async()=>{throw new ParticipationError(403,"FORBIDDEN");},assign:async()=>{throw new ParticipationError(403,"FORBIDDEN");}},
     diagnostics:{list:async t=>{if(t!==staff)auth();return [];},read:async()=>{throw new Error("private SQL credentials");},download:async()=>({record_count:0,protocols:[]})}},
