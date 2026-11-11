@@ -27,8 +27,10 @@ BEGIN
   -- admission until the new required field is completed.
   IF state='completed' AND v<current_v THEN
     revision:=revision+1;v:=current_v;fields:=current_fields;state:='draft';
+    SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) INTO answers FROM jsonb_each(answers) WHERE key IN (SELECT f->>'key' FROM jsonb_array_elements(current_fields) f);
   ELSIF state='draft' AND v<current_v THEN
     v:=current_v;fields:=current_fields;state:='draft';
+    SELECT coalesce(jsonb_object_agg(key,value),'{}'::jsonb) INTO answers FROM jsonb_each(answers) WHERE key IN (SELECT f->>'key' FROM jsonb_array_elements(current_fields) f);
   END IF;
   IF action NOT IN ('read','restart','save','complete') OR action IS NULL THEN RAISE EXCEPTION 'INVALID_PASSPORT_VALUES' USING ERRCODE='22023';END IF;
   IF action<>'read' THEN
