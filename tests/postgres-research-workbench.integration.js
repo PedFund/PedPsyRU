@@ -70,7 +70,7 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   await change(x,"schema",{all:true,group_id:null,schema_version:schema,basic_fields:["sex","age"],fields:[education]});
   const updated=await p.profile.read(p.session.token);assert.equal(updated.status,"draft");assert.equal(updated.schema_version,profile.schema_version+1);assert.equal(updated.values.age,30);assert.equal(updated.fields.length,3);
   assert.equal((await stages.read(p.session.token)).passport_completed,false,"a new question closes admission until it is answered");
-  await assert.rejects(p.profile.change(p.session.token,"save",{schema_version:profile.schema_version,expected_revision:profile.revision,values:{sex:"female",age:31}}),e=>e.code==="PARTICIPATION_REQUIREMENTS_CHANGED");
+  await assert.rejects(p.profile.change(p.session.token,"save",{schema_version:profile.schema_version,expected_revision:updated.revision,values:{sex:"female",age:31}}),e=>e.code==="PARTICIPATION_REQUIREMENTS_CHANGED");
   profile=await p.profile.change(p.session.token,"save",{schema_version:updated.schema_version,expected_revision:updated.revision,values:{...updated.values,extra_education:"higher"}});profile=await p.profile.change(p.session.token,"complete",{schema_version:profile.schema_version,expected_revision:profile.revision});
   assert.equal((await stages.read(p.session.token)).passport_completed,true,"the new wave restores admission");
   const previous=profile;profile=await p.profile.change(p.session.token,"restart",{schema_version:profile.schema_version,expected_revision:profile.revision});assert.equal(profile.status,"draft");assert.equal(profile.fields.length,3);
