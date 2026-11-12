@@ -93,6 +93,16 @@
           <section hidden><form id="copy-stage-form"><select id="copy-source"></select><input id="copy-code"><input id="copy-ordinal" type="number"></form></section>
         </div></fieldset></div>
         <p class="muted">Перед активацией заполните назначения всех групп и этапов. Активный дизайн закрепляется; закрытие сохраняет записи и освобождает квоту.</p>
+        <section id="design-compare-panel" class="callout" hidden>
+          <h3>Сравнение групп и этапов</h3>
+          <div class="toolbar method-compare-controls">
+            <label>Сравнить<select id="method-compare-mode"><option value="">Не сравнивать</option><option value="group">Две группы</option><option value="stage">Два этапа</option></select></label>
+            <label id="method-compare-left-label">A<select id="method-compare-left"></select></label>
+            <label id="method-compare-right-label">B<select id="method-compare-right"></select></label>
+            <button id="method-compare-run" class="secondary" type="button">Сравнить</button>
+          </div>
+          <div id="method-compare-result" class="method-compare-result" hidden></div>
+        </section>
       </section>
 
       <section id="study-participants-section" class="card study-section" hidden>
@@ -129,13 +139,6 @@
             <label>Группа<select id="method-progress-group"><option value="">Все группы</option></select></label>
             <label>Этап<select id="method-progress-stage"><option value="">Все этапы</option></select></label>
           </div>
-          <div class="toolbar method-compare-controls">
-            <label>Сравнить<select id="method-compare-mode"><option value="">Не сравнивать</option><option value="group">Две группы</option><option value="stage">Два этапа</option></select></label>
-            <label id="method-compare-left-label">A<select id="method-compare-left"></select></label>
-            <label id="method-compare-right-label">B<select id="method-compare-right"></select></label>
-            <button id="method-compare-run" class="secondary" type="button">Сравнить</button>
-          </div>
-          <div id="method-compare-result" class="method-compare-result" hidden></div>
           <p id="method-progress-summary" class="muted"></p>
           <div id="method-progress-list"></div>
         </div>
