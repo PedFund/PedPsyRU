@@ -95,6 +95,7 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   await assert.rejects(x.f.admin.query("UPDATE pedpsy.research_profile_history SET answers='{}' WHERE study_id=$1",[x.d.id]),e=>e.code==="23514");
   const rh={...headers,cookie:"pedpsy_researcher_demo="+x.r.session.token,"x-pedpsy-csrf":csrfFor(x.r.session.token)},url="/api/v2/researcher/studies/"+x.d.id+"/workbench";
   assert.equal((await w.app.inject({url:url+"/progress",headers:rh})).statusCode,200);
+  assert.equal((await w.app.inject({url:url+"/progress/methods?group_id="+x.d.groups[0].id,headers:rh})).statusCode,200);
   assert.equal((await w.app.inject({url:url+"/progress?participant_id="+randomUUID(),headers:rh})).statusCode,400);
   assert.equal((await w.app.inject({method:"POST",url:url+"/remind",headers:{...rh,"x-pedpsy-csrf":"bad"},payload:{...input,expected_version:x.d.version}})).statusCode,403);
   assert.equal((await w.app.inject({url:url+"/progress",headers:{...rh,cookie:"pedpsy_researcher_demo="+x.staff.session.token}})).statusCode,401);

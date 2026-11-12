@@ -707,3 +707,6 @@ export function presentationMeasureBounds(methodVersionId: string, code: string)
   const meta = catalog.methods[methodVersionId]?.measures[code];
   return meta ? {min: meta.min, max: meta.max} : null;
 }
+export function presentationMeasureLabel(methodVersionId: string, code: string): string | null {
+  return catalog.methods[methodVersionId]?.measures[code]?.label ?? null;
+}

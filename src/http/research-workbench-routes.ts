@@ -21,7 +21,7 @@ export function registerResearchWorkbench(app:FastifyInstance,origin:string,apis
     const group=typeof q.group_id==="string"&&q.group_id?q.group_id:undefined;
     const stage=typeof q.stage_id==="string"&&q.stage_id?q.stage_id:undefined;
     if((group&&!uuid.test(group))||(stage&&!uuid.test(stage)))throw new ParticipationError(400,"INVALID_REQUEST");
-    return apis.research.methodAnalytics(token(r,researcher),id(r),group,stage);
+    return apis.research.methodAnalytics(readParticipantCookie(r.headers.cookie,researcher),id(r),group,stage);
   });
   for(const action of ["initialize","group","stage","delete_stage","assign","copy_assignments","schema","remind"] as WorkbenchAction[])app.post(base+"/"+action,async r=>apis.research.change(token(r,researcher),id(r),action,r.body,proof(r)));
   app.get("/api/v2/participant/profile",async r=>apis.profile.read(token(r,participant)));
