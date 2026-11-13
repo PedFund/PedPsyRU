@@ -15,8 +15,8 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
   private readonly dummySalt=randomBytes(16);
   private readonly dummyHash=randomBytes(64).toString("hex");
   private readonly issuance:PostgresRegistrationStart;
-  constructor(private readonly pool:Pool,vault:ContactTokenVault,private readonly derivePassword=derive){
-    this.issuance=new PostgresRegistrationStart(pool,vault,derivePassword);
+  constructor(private readonly pool:Pool,vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false){
+    this.issuance=new PostgresRegistrationStart(pool,vault,derivePassword,allowRealEmail);
   }
   landing(inviteToken:string){return this.issuance.landing(inviteToken);}
   async start(inviteToken:string,input:RegistrationStart,pendingToken:string):Promise<{status:"confirmation_requested"}>{
@@ -34,7 +34,7 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
   async login(input:ParticipantEmailLogin){
     if(!input||Array.isArray(input)||Object.keys(input).sort().join(",")!=="email,password,study_id"||typeof input.study_id!=="string"||
       !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(input.study_id)||!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
-    const email=participantEmail(input.email);if(!email.endsWith("@example.test"))throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
+    const email=participantEmail(input.email);if(!email.endsWith("@example.test")&&!this.allowRealEmail)throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
     if(this.deriving)throw new ParticipationError(429,"LOGIN_THROTTLED");this.deriving=true;
     try{
       const material=await accountTransaction(this.pool,async c=>(await c.query<Material>("SELECT * FROM pedpsy.participant_email_login_material($1,$2)",[input.study_id,email])).rows[0]);
