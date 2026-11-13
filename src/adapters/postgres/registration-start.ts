@@ -9,7 +9,7 @@ import {accountTransaction,tokenHash} from "./account-transaction.js";
 // First small persistence block only; confirmation/login/HTTP/delivery follow.
 export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"landing"|"start">{
   private deriving=false;
-  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly derivePassword=derive){}
+  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false){}
   async landing(inviteToken:string):Promise<RegistrationLanding>{
     if(!validToken(inviteToken))throw new ParticipationError(404,"NOT_AVAILABLE");
     return accountTransaction(this.pool,async c=>(await c.query<{data:RegistrationLanding}>("SELECT pedpsy.registration_landing($1) data",[tokenHash(inviteToken)])).rows[0]!.data);
@@ -21,7 +21,7 @@ export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"
     const email=participantEmail(input.email);
     // This approved contour contains fictitious contacts only. A future real
     // provider/legal release must explicitly replace this synthetic restriction.
-    if(!email.endsWith("@example.test"))throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
+    if(!email.endsWith("@example.test")&&!this.allowRealEmail)throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
     if(this.deriving)throw new ParticipationError(429,"REGISTRATION_THROTTLED");this.deriving=true;
     try{
       const id=await accountTransaction(this.pool,async c=>(await c.query<{id:string|null}>("SELECT pedpsy.reserve_registration_start($1,$2,$3,$4) id",

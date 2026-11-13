@@ -50,7 +50,7 @@ async function main(): Promise<void> {
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined;
     const origin=production?config!.origin:"http://127.0.0.1:4174";
-    try{if(contactKey)registration=registrationBoundary(pool,contactKey,origin);}finally{contactKey?.fill(0);}
+    try{if(contactKey)registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1");}finally{contactKey?.fill(0);}
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;
