@@ -33,6 +33,13 @@ scenario("invite expiry/block/unknown and forged input cannot activate or escala
   const i2=await m.invite(s.session.token),row=(await m.list(s.session.token)).find(r=>r.login_id===i2.login_id);await m.block(s.session.token,row.id);await assert.rejects(g.accept({invite_code:i2.invite_code,password:pw}),e=>e.code==="INVALID_INVITE");
   for(const table of ["researcher_invites","researcher_credentials","researcher_sessions"])await assert.rejects(f.runtime.query("SELECT * FROM pedpsy."+table),e=>e.code==="42501");
 });
+scenario("unknown invite hash is a clean denial and never reads an unassigned record",async f=>{
+  const unknown=randomBytes(32).toString("base64url");
+  const result=(await f.runtime.query("SELECT pedpsy.accept_researcher_invite($1,$2,$3) login_id",[sha256(unknown),randomBytes(16).toString("hex"),randomBytes(64).toString("hex")])).rows[0];
+  assert.equal(result.login_id,null);
+  const audit=(await f.admin.query("SELECT outcome,reason FROM pedpsy.access_audit_events WHERE action='invite_accept' ORDER BY at_ms DESC,id DESC LIMIT 1")).rows[0];
+  assert.equal(audit.outcome,"deny");assert.equal(audit.reason,"INVALID_INVITE");
+});
 scenario("invite controls require fresh MFA and have durable admission limit",async f=>{
   const s=await verifiedStaff(f),m=new PostgresResearcherManagement(f.runtime);for(let i=0;i<5;i++)await m.invite(s.session.token);await assert.rejects(m.invite(s.session.token),e=>e.code==="INVITE_THROTTLED");
   await f.admin.query("UPDATE pedpsy.staff_sessions SET created_at_ms=created_at_ms-360000,mfa_verified_at=mfa_verified_at-interval '6 minutes' WHERE token_hash=$1",[sha256(s.session.token)]);
