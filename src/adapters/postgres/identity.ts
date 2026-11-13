@@ -5,14 +5,19 @@ import {derive, SCRYPT, validLogin, validPassword, validToken, csrfFor, equalTex
 import {ParticipationError} from "../../ports/errors.js";
 import type {ParticipantGateway, ParticipantForm, PublicAttempt} from "../../ports/identity.js";
 import type {ParticipantContext} from "../../ports/participation.js";
+import {DEFAULT_PARTICIPANT_ADMISSION, type ParticipantAdmissionPolicy} from "../../ports/login-policy.js";
+import {DerivationGate} from "../derivation-gate.js";
 import {PostgresUnitOfWork, assertRuntimeClient, mapPostgresError} from "./unit-of-work.js";
 const hash = (token: string): string => "sha256:" + createHash("sha256").update(token).digest("hex");
 interface Material {throttled: boolean; credential_id: string; credential_version: number; salt: string; password_hash: string}
 export class PostgresParticipantGateway implements ParticipantGateway {
-  private deriving = false;
+  private readonly gate: DerivationGate;
   private readonly dummySalt = randomBytes(16);
   private readonly dummyHash = randomBytes(64).toString("hex");
-  constructor(private readonly pool: Pool, private readonly uow: PostgresUnitOfWork, private readonly derivePassword = derive) {}
+  constructor(private readonly pool: Pool, private readonly uow: PostgresUnitOfWork, private readonly derivePassword = derive,
+    private readonly admission: ParticipantAdmissionPolicy = DEFAULT_PARTICIPANT_ADMISSION) {
+    this.gate = new DerivationGate(admission.derivationConcurrency, admission.queueLimit, admission.queueTimeoutMs);
+  }
   private async query<T>(callback: (client: PoolClient) => Promise<T>): Promise<T> {
     const client = await this.pool.connect();
     try {
@@ -27,18 +32,17 @@ export class PostgresParticipantGateway implements ParticipantGateway {
     if (!input || typeof input !== "object" || Array.isArray(input) || Object.keys(input).sort().join(",") !== "login_id,password") throw new ParticipationError(400,"INVALID_LOGIN");
     const data = input as Record<string,unknown>;
     if (!validLogin(data.login_id) || !validPassword(data.password)) throw new ParticipationError(400,"INVALID_LOGIN");
-    if (this.deriving) throw new ParticipationError(429,"LOGIN_THROTTLED");
-    this.deriving = true;
-    try {
-      const material = await this.query(async client => (await client.query<Material>("SELECT * FROM pedpsy.participant_login_material($1)", [data.login_id])).rows[0]);
+    const loginId = data.login_id,password = data.password;
+    return this.gate.run(async () => {
+      const material = await this.query(async client => (await client.query<Material>("SELECT * FROM pedpsy.participant_login_material_v2($1,$2,$3)", [loginId,this.admission.globalLimit,this.admission.globalWindowMs])).rows[0]);
       if (material?.throttled) throw new ParticipationError(429,"LOGIN_THROTTLED");
-      const derived = await this.derivePassword(data.password, material ? Buffer.from(material.salt,"hex") : this.dummySalt,64,SCRYPT);
+      const derived = await this.derivePassword(password, material ? Buffer.from(material.salt,"hex") : this.dummySalt,64,SCRYPT);
       const matches = equalText(derived.toString("hex"), material?.password_hash ?? this.dummyHash); derived.fill(0);
       const token = randomBytes(32).toString("base64url");
       const expiry = await this.query(async client => (await client.query<{expiry: string | null}>("SELECT pedpsy.finish_participant_login($1,$2,$3,$4) expiry", [matches ? material?.credential_id : null,matches ? material?.credential_version : null,matches ? material?.password_hash : null,hash(token)])).rows[0]?.expiry);
       if (!expiry) throw new ParticipationError(401,"INVALID_LOGIN");
       return {token, csrf: csrfFor(token), expiresAt: Number(expiry)};
-    } finally {this.deriving = false;}
+    });
   }
   private async withSession<T>(token: string, callback: (client: PoolClient) => Promise<T>): Promise<T> {
     if (!validToken(token)) throw new ParticipationError(401,"AUTH_REQUIRED");

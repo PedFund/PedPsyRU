@@ -121,6 +121,14 @@ scenario("new current notice needs explicit reconfirmation, stores another conta
   await confirm(x,await requested(f,x,{browser:token(),input:{...body,password:"another new attempted password",contact_notice_version:"test-contact-change"}}));assert.ok(JSON.stringify(await identity(f,x.design.id))===JSON.stringify(original),"reconfirmation changed identity");
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_contact_acceptances WHERE study_id=$1",[x.design.id])).rows[0].n,2);await x.registration.login(input);await noClinical(f,x.design.id);
 });
+scenario("explicit pilot profile registers and logs in with a real email while the default adapter keeps synthetic contacts",async(f,x)=>{
+  const pilot={globalLimit:900,globalWindowMs:300000,derivationConcurrency:2,queueLimit:4,queueTimeoutMs:1000};
+  const registration=new PostgresParticipantRegistration(f.runtime,x.vault,undefined,true,pilot),pilotX={...x,registration},input={...body,email:"Real.Person@Example.org"};
+  const proof=await requested(f,pilotX,{input,browser:token()});await confirm(pilotX,proof);
+  assert.equal((await identity(f,x.design.id)).email_key,"Real.Person@example.org");
+  const session=await registration.login({study_id:x.design.id,email:input.email,password:body.password});assert.match(session.token,/^[A-Za-z0-9_-]{43}$/);
+  await assert.rejects(x.registration.login({study_id:x.design.id,email:input.email,password:body.password}),e=>e.code==="SYNTHETIC_CONTACT_REQUIRED");
+});
 scenario("contact-linked internal display/login code cannot bypass the new email/current notice route, even with correct password",async(f,x)=>{
   await confirm(x,await requested(f,x));const c=await identity(f,x.design.id),gateway=new PostgresParticipantGateway(f.runtime,new PostgresUnitOfWork(f.runtime)),input={login_id:c.login_id,password:body.password};
   await assert.rejects(gateway.login(input),e=>e.code==="INVALID_LOGIN");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,0);

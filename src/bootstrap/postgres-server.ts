@@ -31,12 +31,14 @@ import {registrationBoundary} from "./registration-boundary.js";
 import {passportBoundary} from "./passport-boundary.js";
 import {consentBoundary} from "./consent-boundary.js";
 import {admissionBoundary} from "./admission-boundary.js";
+import {participantAdmissionPolicy} from "./login-policy.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
     const production=process.env.PEDPSY_ENV==="production",config=production?productionConfig(process.env):undefined;
+    const admission=participantAdmissionPolicy(process.env);
     pool=new Pool(production?config!.db:demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
-    const api=createParticipantApi(new PostgresParticipantGateway(pool,uow),createParticipationService(uow,
+    const api=createParticipantApi(new PostgresParticipantGateway(pool,uow,undefined,admission),createParticipationService(uow,
       {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>instrumentResponsesDigest(ids,values)}));
     const encoded=production?config!.mfaKey:process.env.PEDPSY_MFA_KEY;
     if(!encoded||Buffer.from(encoded,"base64").length!==32||Buffer.from(encoded,"base64").toString("base64")!==encoded)throw new Error("EXPLICIT_MFA_KEY_REQUIRED");
@@ -50,7 +52,7 @@ async function main(): Promise<void> {
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined;
     const origin=production?config!.origin:"http://127.0.0.1:4174";
-    try{if(contactKey)registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1");}finally{contactKey?.fill(0);}
+    try{if(contactKey)registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1",admission);}finally{contactKey?.fill(0);}
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;

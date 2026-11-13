@@ -6,10 +6,15 @@ import {ParticipationError} from "../../ports/errors.js";
 import {derive,SCRYPT,validPassword,validToken} from "../../../storage/access.js";
 import {ContactTokenVault} from "../security/contact-token-vault.js";
 import {accountTransaction,tokenHash} from "./account-transaction.js";
+import {DEFAULT_PARTICIPANT_ADMISSION, type ParticipantAdmissionPolicy} from "../../ports/login-policy.js";
+import {DerivationGate} from "../derivation-gate.js";
 // First small persistence block only; confirmation/login/HTTP/delivery follow.
 export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"landing"|"start">{
-  private deriving=false;
-  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false){}
+  private readonly gate:DerivationGate;
+  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false,
+    private readonly admission:ParticipantAdmissionPolicy=DEFAULT_PARTICIPANT_ADMISSION){
+    this.gate=new DerivationGate(admission.derivationConcurrency,admission.queueLimit,admission.queueTimeoutMs,"REGISTRATION_THROTTLED");
+  }
   async landing(inviteToken:string):Promise<RegistrationLanding>{
     if(!validToken(inviteToken))throw new ParticipationError(404,"NOT_AVAILABLE");
     return accountTransaction(this.pool,async c=>(await c.query<{data:RegistrationLanding}>("SELECT pedpsy.registration_landing($1) data",[tokenHash(inviteToken)])).rows[0]!.data);
@@ -22,10 +27,9 @@ export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"
     // This approved contour contains fictitious contacts only. A future real
     // provider/legal release must explicitly replace this synthetic restriction.
     if(!email.endsWith("@example.test")&&!this.allowRealEmail)throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
-    if(this.deriving)throw new ParticipationError(429,"REGISTRATION_THROTTLED");this.deriving=true;
-    try{
-      const id=await accountTransaction(this.pool,async c=>(await c.query<{id:string|null}>("SELECT pedpsy.reserve_registration_start($1,$2,$3,$4) id",
-        [tokenHash(inviteToken),tokenHash(pendingToken),email,input.contact_notice_version])).rows[0]!.id);
+    return this.gate.run(async()=>{
+      const id=await accountTransaction(this.pool,async c=>(await c.query<{id:string|null}>("SELECT pedpsy.reserve_registration_start_v2($1,$2,$3,$4,$5,$6,$7) id",
+        [tokenHash(inviteToken),tokenHash(pendingToken),email,input.contact_notice_version,this.allowRealEmail,this.admission.globalLimit,this.admission.globalWindowMs])).rows[0]!.id);
       if(!id)throw new ParticipationError(429,"REGISTRATION_THROTTLED");
       const salt=randomBytes(16),bytes=await this.derivePassword(input.password,salt,64,SCRYPT);let passwordHash:string;
       try{passwordHash=bytes.toString("hex");}finally{bytes.fill(0);}
@@ -34,6 +38,6 @@ export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"
       await accountTransaction(this.pool,async c=>{await c.query("SELECT pedpsy.queue_registration_confirmation($1,$2,$3,$4,$5,$6,$7)",
         [id,tokenHash(pendingToken),salt.toString("hex"),passwordHash,tokenHash(confirmation),delivery,envelope]);});
       return {status:"confirmation_requested"};
-    }finally{this.deriving=false;}
+    });
   }
 }
