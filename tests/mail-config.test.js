@@ -11,14 +11,17 @@ test("Selectel SMTP defaults are bounded and never require a new dependency",()=
   const config=mailDeliveryConfig(base);
   assert.deepEqual(config.smtp,{host:"smtp.mail.selcloud.ru",port:1127,tls:"implicit",user:"smtp-user",password:"smtp-password",from:"Noreply@example.org",timeoutMs:15000});
   assert.equal(config.batch,10);assert.equal(config.pollMs,2000);assert.equal(config.allowlist,null);
+  assert.equal(config.rateLimit,20);assert.equal(config.rateWindowMs,300000);
   assert.equal(mailDeliveryConfig({...base,PEDPSY_SMTP_PORT:"465"}).smtp.port,465);
   assert.throws(()=>mailDeliveryConfig({...base,PEDPSY_SMTP_PORT:"1126"}),/MAIL_CONFIG_INVALID/);
   assert.equal(mailDeliveryConfig({...base,PEDPSY_MAIL_FROM_NAME:"МетодТест"}).smtp.fromName,"МетодТест");
 });
 test("allowlist and polling overrides are normalized and bounded",()=>{
   const config=mailDeliveryConfig({...base,PEDPSY_MAIL_ALLOWLIST:"First@Example.org, second@example.org",PEDPSY_MAIL_BATCH:"5",PEDPSY_MAIL_POLL_MS:"1000"});
-  assert.deepEqual([...config.allowlist].sort(),["First@example.org","second@example.org"]);
+  assert.deepEqual([...config.allowlist].sort(),["first@example.org","second@example.org"]);
   assert.equal(config.batch,5);assert.equal(config.pollMs,1000);
+  const custom=mailDeliveryConfig({...base,PEDPSY_MAIL_RATE_LIMIT:"5",PEDPSY_MAIL_RATE_WINDOW_MS:"60000"});
+  assert.equal(custom.rateLimit,5);assert.equal(custom.rateWindowMs,60000);
   for(const value of ["", "not-an-address", "a@example.org,,", "a@example.org, bad"]){
     assert.throws(()=>mailDeliveryConfig({...base,PEDPSY_MAIL_ALLOWLIST:value}),/MAIL_CONFIG_INVALID/);
   }
@@ -31,6 +34,7 @@ test("missing or invalid SMTP values fail closed",()=>{
   for(const override of [
     {PEDPSY_SMTP_USER:""},{PEDPSY_SMTP_PASSWORD:""},{PEDPSY_MAIL_FROM:"bad"},
     {PEDPSY_SMTP_PORT:"0"},{PEDPSY_SMTP_PORT:"70000"},{PEDPSY_MAIL_BATCH:"0"},
-    {PEDPSY_MAIL_POLL_MS:"100"},{PEDPSY_SMTP_HOST:"bad host"},{PEDPSY_MAIL_FROM_NAME:"bad\nname"}
+    {PEDPSY_MAIL_POLL_MS:"100"},{PEDPSY_SMTP_HOST:"bad host"},{PEDPSY_MAIL_FROM_NAME:"bad\nname"},
+    {PEDPSY_MAIL_RATE_LIMIT:"0"},{PEDPSY_MAIL_RATE_LIMIT:"1001"},{PEDPSY_MAIL_RATE_WINDOW_MS:"59999"},{PEDPSY_MAIL_RATE_WINDOW_MS:"3600001"}
   ]) assert.throws(()=>mailDeliveryConfig({...base,...override}),/MAIL_CONFIG_INVALID/);
 });

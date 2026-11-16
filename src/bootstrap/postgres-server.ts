@@ -31,12 +31,16 @@ import {registrationBoundary} from "./registration-boundary.js";
 import {passportBoundary} from "./passport-boundary.js";
 import {consentBoundary} from "./consent-boundary.js";
 import {admissionBoundary} from "./admission-boundary.js";
+import {ContactTokenVault} from "../adapters/security/contact-token-vault.js";
+import {SmtpTransport} from "../adapters/smtp/transport.js";
+import {ConfirmationMailWorker} from "../adapters/postgres/confirmation-mail-worker.js";
 import {participantAdmissionPolicy} from "./login-policy.js";
+import {mailDeliveryConfig} from "./mail-config.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
     const production=process.env.PEDPSY_ENV==="production",config=production?productionConfig(process.env):undefined;
-    const admission=participantAdmissionPolicy(process.env);
+    const admission=participantAdmissionPolicy(process.env),mail=mailDeliveryConfig(process.env);
     pool=new Pool(production?config!.db:demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
     const api=createParticipantApi(new PostgresParticipantGateway(pool,uow,undefined,admission),createParticipationService(uow,
       {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>instrumentResponsesDigest(ids,values)}));
@@ -50,16 +54,23 @@ async function main(): Promise<void> {
     const inviteKey=process.env.PEDPSY_CONTACT_KEY?Buffer.from(process.env.PEDPSY_CONTACT_KEY,"base64"):undefined;
     const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool,inviteKey),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-    const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined;
+    const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined,mailWorker:ConfirmationMailWorker|undefined;
     const origin=production?config!.origin:"http://127.0.0.1:4174";
-    try{if(contactKey)registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1",admission);}finally{contactKey?.fill(0);}
+    try{
+      if(contactKey){
+        registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1",admission,mail!==null);
+        if(mail)mailWorker=new ConfirmationMailWorker(pool,new ContactTokenVault(contactKey),new SmtpTransport(mail.smtp),
+          {batch:mail.batch,pollMs:mail.pollMs,allowlist:mail.allowlist,rateLimit:mail.rateLimit,rateWindowMs:mail.rateWindowMs},origin);
+      }else if(mail)throw new Error("MAIL_REQUIRES_REGISTRATION");
+    }finally{contactKey?.fill(0);}
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;
     const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool));
-    app.addHook("onClose",async()=>{await pool?.end();});
+    app.addHook("onClose",async()=>{mailWorker?.stop();await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:production?config!.host:"127.0.0.1",port:production?config!.port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}
+    mailWorker?.start();
   } catch {await pool?.end().catch(()=>{});process.exitCode=1;console.error("Synthetic PostgreSQL configuration required or unavailable; no data migrated.");}
 }
 void main();

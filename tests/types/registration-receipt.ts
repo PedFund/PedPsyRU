@@ -6,5 +6,5 @@ export const realReceipt:SyntheticRegistrationReceipt={synthetic:false,confirmat
 export const privateReceipt:SyntheticRegistrationReceipt={synthetic:true,confirmation_token:"synthetic",expires_at:1000,email:"a@example.test"};
 // @ts-expect-error Opt-in is mandatory, not an omitted/default production mode.
 new PostgresRegistrationReceipt({} as never,{} as never);
-// @ts-expect-error A false flag cannot enable the synthetic receiver.
+// A false flag explicitly disables the synthetic receiver in e-mail mode.
 new PostgresRegistrationReceipt({} as never,{} as never,false);

@@ -4,7 +4,8 @@ const {createRegistrationReceiptApi}=require("../dist/src/application/registrati
 const {PostgresRegistrationReceipt}=require("../dist/src/adapters/postgres/registration-receipt.js");
 const id="12345678-1234-1234-1234-123456789012",invite="i".repeat(43),browser="b".repeat(43),code="c".repeat(43);
 test("registration receipt API: explicit synthetic opt-in and protected empty request, no client authority",async()=>{
-  for(const flag of [false,undefined,"true",1])assert.throws(()=>new PostgresRegistrationReceipt({}, {},flag),/EXPLICIT_SYNTHETIC_RECEIPT_REQUIRED/);
+  for(const flag of [undefined,"true",1])assert.throws(()=>new PostgresRegistrationReceipt({}, {},flag),/EXPLICIT_SYNTHETIC_RECEIPT_REQUIRED/);
+  await assert.rejects(new PostgresRegistrationReceipt({}, {},false).receipt(invite,browser),e=>e.status===404);
   let calls=0;const api=createRegistrationReceiptApi({receipt:async()=>{calls++;return {synthetic:true,confirmation_token:code,expires_at:1234};}},
     {assert:(token,csrf)=>{if(token!==browser||csrf!=="csrf")throw Error("csrf");}});
   assert.throws(()=>api.receipt(invite,browser,{},"wrong"),/csrf/);
