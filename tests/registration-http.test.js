@@ -4,11 +4,11 @@ const {createWorkspaceApp}=require("../dist/src/http/workspace-app.js"),{createR
 const {csrfFor}=require("../storage/access.js");
 const origin="http://127.0.0.1:4174",headers={host:"127.0.0.1:4174",origin},assets={html:"<!doctype html><title>Workspace</title>",js:"'use strict';",css:"body{}"};
 const id="12345678-1234-1234-1234-123456789012",invite="i".repeat(43),confirmation="c".repeat(43),session="p".repeat(43),body={email:"HTTP.Owner@example.test",password:"synthetic HTTP password",contact_notice_version:"demo-contact-1",accept_contact_notice:true};
-function fixture({enabled=true,customOrigin=origin,auditFailure=false}={}){
+function fixture({enabled=true,customOrigin=origin,auditFailure=false,delivery="synthetic"}={}){
   const calls=[],audit=[],browser=new SignedRegistrationBrowser(randomBytes(32),customOrigin),deny=()=>{throw new ParticipationError(401,"AUTH_REQUIRED");};
   const core={landing:async()=>{},start:async(...a)=>{calls.push(["start",...a]);return {status:"confirmation_requested"};},confirm:async(...a)=>{calls.push(["confirm",...a]);return {status:"sign_in_required"};},login:async input=>{calls.push(["login",input]);return {token:session,csrf:csrfFor(session),expiresAt:Date.now()+1800000};}};
   const receipt={context:async()=>({study_id:id,study_title:"Synthetic",group_name:"КГ",contact_notice:{version:"demo-contact-1",text:"Synthetic only",legal_status:"synthetic_only"}}),receipt:async()=>({synthetic:true,confirmation_token:confirmation,expires_at:Date.now()+1800000})};
-  const api=enabled?createRegistrationHttpApi(core,receipt,browser,{record:async reason=>{if(auditFailure)throw Error("private audit details");audit.push(reason);}}):undefined;
+  const api=enabled?createRegistrationHttpApi(core,receipt,browser,{record:async reason=>{if(auditFailure)throw Error("private audit details");audit.push(reason);}},delivery):undefined;
   const accounts={denied:async(t,r)=>audit.push([t,r]),password:async()=>({challenge:"s".repeat(43),status:"mfa_required",expiresAt:Date.now()+300000}),pendingCsrf:csrfFor};
   const participant={denied:async()=>{},login:deny,session:async token=>{if(token!==session)deny();return {role:"participant",attempts:[]};}};
   return {app:createWorkspaceApp(participant,accounts,customOrigin,assets,undefined,undefined,undefined,api),browser,calls,audit};
@@ -20,6 +20,11 @@ test("registration HTTP: preflight/context are metadata only, dedicated cookie n
   const ctx=await f.app.inject({url:"/api/v2/registration/context",headers:p.headers});assert.equal(ctx.statusCode,200);assert.equal(ctx.json().study_id,id);assert.ok(!ctx.body.includes(invite));assert.equal(f.calls.length,0);
   for(const url of ["/api/v2/registration/context?invite_token="+invite,"/api/v2/registration/preflight?role=superadministrator"])assert.equal((await f.app.inject({url,headers:p.headers})).statusCode,400);
   assert.equal((await f.app.inject({url:"/api/v2/registration/context",headers})).statusCode,404);assert.equal(p.response.headers["cache-control"],"no-store");assert.equal(ctx.headers["referrer-policy"],"no-referrer");
+});
+test("registration HTTP: mail mode advertises e-mail delivery and does not claim a synthetic receipt",async t=>{
+  const f=fixture({delivery:"email"});t.after(()=>f.app.close());const p=await preflight(f);
+  assert.equal(p.response.json().delivery,"email");assert.equal(p.response.json().synthetic,false);
+  assert.equal(p.response.json().csrf.length>20,true);
 });
 test("registration HTTP: explicit start/receipt/confirm/login separate; only login sets participant cookie, session token never JSON",async t=>{
   const f=fixture();t.after(()=>f.app.close());const p=await preflight(f),h=p.headers;

@@ -30,6 +30,14 @@ test("participant UI: presentation result draws gradient bars, levels and no sco
   assert.equal(html.includes(">50<"),false);
 });
 
+test("participant UI: email delivery asks for the code and keeps the synthetic receipt separate",()=>{
+  const js=fs.readFileSync(path.join(__dirname,"../web/workspace/participant.js"),"utf8");
+  assert.match(js,/email-confirmation-code/);
+  assert.match(js,/confirm-email-code/);
+  assert.match(js,/delivery=p\.delivery==="email"\?"email":"synthetic"/);
+  assert.match(js,/synthetic-receipt-box/);
+  assert.match(js,/email-code-box/);
+});
 test("participant UI: ranking uses locked and legacy result copy is updated",()=>{
   const js=fs.readFileSync(path.join(__dirname,"../web/workspace/participant.js"),"utf8");
   assert.match(js,/node\.disabled=locked\|\|used/);

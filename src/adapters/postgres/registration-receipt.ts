@@ -11,14 +11,15 @@ function checkStatus(status:string):void{
   if(!["material","delivered"].includes(status))throw new ParticipationError(404,"NOT_AVAILABLE");
 }
 export class PostgresRegistrationReceipt implements RegistrationReceipt {
-  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,syntheticEnabled:true){
-    if(syntheticEnabled!==true)throw new Error("EXPLICIT_SYNTHETIC_RECEIPT_REQUIRED");
+  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly syntheticEnabled:boolean){
+    if(typeof syntheticEnabled!=="boolean")throw new Error("EXPLICIT_SYNTHETIC_RECEIPT_REQUIRED");
   }
   async context(inviteToken:string):Promise<RegistrationPublicContext>{
     if(!validToken(inviteToken))throw new ParticipationError(404,"NOT_AVAILABLE");
     return accountTransaction(this.pool,async c=>(await c.query<{data:RegistrationPublicContext}>("SELECT pedpsy.registration_context($1) data",[tokenHash(inviteToken)])).rows[0]!.data);
   }
   async receipt(inviteToken:string,browserToken:string):Promise<SyntheticRegistrationReceipt>{
+    if(!this.syntheticEnabled)throw new ParticipationError(404,"NOT_AVAILABLE");
     if(!validToken(inviteToken)||!validToken(browserToken)||inviteToken===browserToken)throw new ParticipationError(404,"NOT_AVAILABLE");
     const material=await accountTransaction(this.pool,async c=>(await c.query<{data:Material}>("SELECT pedpsy.registration_receipt_material($1,$2) data",[tokenHash(inviteToken),tokenHash(browserToken)])).rows[0]!.data);
     // Throttle/denial metadata commits before an error is returned.

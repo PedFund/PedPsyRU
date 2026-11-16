@@ -8,11 +8,13 @@ export interface MailDeliveryConfig {
   readonly batch: number;
   readonly pollMs: number;
   readonly allowlist: ReadonlySet<string> | null;
+  readonly rateLimit: number;
+  readonly rateWindowMs: number;
 }
 const MAIL_VARIABLES = [
   "PEDPSY_SMTP_HOST", "PEDPSY_SMTP_PORT", "PEDPSY_SMTP_USER", "PEDPSY_SMTP_PASSWORD",
   "PEDPSY_MAIL_FROM", "PEDPSY_MAIL_FROM_NAME", "PEDPSY_MAIL_REPLY_TO", "PEDPSY_MAIL_ALLOWLIST",
-  "PEDPSY_MAIL_BATCH", "PEDPSY_MAIL_POLL_MS"
+  "PEDPSY_MAIL_BATCH", "PEDPSY_MAIL_POLL_MS", "PEDPSY_MAIL_RATE_LIMIT", "PEDPSY_MAIL_RATE_WINDOW_MS"
 ] as const;
 function invalid(): never { throw new Error("MAIL_CONFIG_INVALID"); }
 function text(env: NodeJS.ProcessEnv, name: string, min: number, max: number): string {
@@ -49,15 +51,21 @@ export function mailDeliveryConfig(env: NodeJS.ProcessEnv): MailDeliveryConfig |
   if (env.PEDPSY_MAIL_ALLOWLIST !== undefined) {
     const raw = env.PEDPSY_MAIL_ALLOWLIST.split(",").map(value => value.trim());
     if (raw.some(value => !value)) invalid();
-    const entries = raw.map(address);
+    const entries = raw.map(address).map(value => value.toLowerCase());
     allowlist = new Set(entries);
   }
   const batch = integer(env, "PEDPSY_MAIL_BATCH", 10, 1, 20);
   const pollMs = integer(env, "PEDPSY_MAIL_POLL_MS", 2000, 500, 60000);
+  // Selectel Mail allows 20 messages per 5 minutes per resource by default.
+  // This stays local and fail-closed even if the provider limit is raised.
+  const rateLimit = integer(env, "PEDPSY_MAIL_RATE_LIMIT", 20, 1, 1000);
+  const rateWindowMs = integer(env, "PEDPSY_MAIL_RATE_WINDOW_MS", 300000, 60000, 3600000);
   return {
     smtp: {host, port, tls: "implicit", user, password, from, ...(fromName ? {fromName} : {}), ...(replyTo ? {replyTo} : {}), timeoutMs: 15000},
     batch,
     pollMs,
-    allowlist
+    allowlist,
+    rateLimit,
+    rateWindowMs
   };
 }
