@@ -58,6 +58,7 @@ function buildMessage(options: SmtpOptions, message: SmtpMessage): string {
     "Subject: " + encodedWord(subject),
     "Date: " + new Date().toUTCString(),
     "Message-ID: " + messageId(from),
+    "Precedence: transaction",
     "MIME-Version: 1.0",
     "Content-Type: text/plain; charset=UTF-8",
     "Content-Transfer-Encoding: base64",
