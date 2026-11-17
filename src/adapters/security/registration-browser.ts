@@ -1,7 +1,7 @@
 import {createHmac,hkdfSync,randomBytes,timingSafeEqual} from "node:crypto";
 import type {RegistrationBrowser} from "../../ports/registration-browser.js";
 import {ParticipationError} from "../../ports/errors.js";
-const TTL_MS=3600000;
+const TTL_MS=86400000;
 // The existing encrypted outbox key is retained unchanged. Derive a different,
 // purpose/origin-bound MAC key; never use the MFA key for this contour.
 export class SignedRegistrationBrowser implements RegistrationBrowser {
