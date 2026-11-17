@@ -18,7 +18,10 @@ function integer(name,fallback){const n=Number(process.env[name]??fallback);if(!
   const client=await pool.connect();
   try{
     const applied=await migratePostgres(client,path.join(__dirname,"../storage/postgres"));
-    await grantRuntime(client,runtimeRole);
+    // Migrations commit on their own; a later grant failure must not be reported
+    // as an unconfirmed database state.
     console.log("MIGRATIONS_APPLIED="+applied);
+    await grantRuntime(client,runtimeRole);
+    console.log("RUNTIME_GRANTS_APPLIED=1");
   }finally{client.release();await pool.end();}
-})().catch(()=>{console.error("Production migration failed; database state is not confirmed.");process.exitCode=1;});
+})().catch(error=>{console.error("Production migration failed: "+(error&&error.message?error.message:"unknown")+"; the schema may already be migrated and the runtime grants are not confirmed.");process.exitCode=1;});

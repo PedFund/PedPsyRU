@@ -37,6 +37,13 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   const membership = await client.query("SELECT 1 FROM pg_auth_members WHERE member=(SELECT oid FROM pg_roles WHERE rolname=$1)", [role]);
   const owner = await client.query("SELECT 1 FROM pg_class WHERE relowner=(SELECT oid FROM pg_roles WHERE rolname=$1) UNION ALL SELECT 1 FROM pg_database WHERE datname=current_database() AND datdba=(SELECT oid FROM pg_roles WHERE rolname=$1)", [role]);
   if (membership.rowCount || owner.rowCount) throw new Error("UNSAFE_RUNTIME_ROLE");
+  // Function-level GRANT/REVOKE requires ownership of the function. A role that
+  // owns only part of the schema fails mid-list, leaving some privileges applied
+  // and others missing, so the ownership precondition is checked before the
+  // first grant. The runtime role may never own schema objects itself.
+  const unowned = await client.query<{owner: string; functions: string}>(
+    "SELECT pg_get_userbyid(p.proowner) AS owner,count(*)::text AS functions FROM pg_proc p JOIN pg_namespace n ON n.oid=p.pronamespace WHERE n.nspname='pedpsy' AND pg_get_userbyid(p.proowner) IS DISTINCT FROM current_user GROUP BY 1 ORDER BY 1");
+  if (unowned.rowCount) throw new Error("GRANT_OWNER_MISMATCH: apply runtime grants as the role that owns the pedpsy functions; foreign owners: " + unowned.rows.map(r => r.owner + "(" + r.functions + ")").join(","));
   // Validated role identifier, never HTTP input; no GRANT ALL/table ownership.
   await client.query(`GRANT USAGE ON SCHEMA pedpsy TO "${role}"`);
   await client.query(`GRANT SELECT ON pedpsy.attempts,pedpsy.responses,pedpsy.attempt_results,pedpsy.release_presentation_corrections,pedpsy.instrument_releases,pedpsy.release_items TO "${role}"`);
