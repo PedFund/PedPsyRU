@@ -7,7 +7,7 @@
 
 - Коммерческая (не государственная) ИСПДн, развёрнута в Selectel; PostgreSQL 18 + Node/TypeScript.
 - Категория ПДн — **иные** (данные о здоровье не обрабатываются; результаты психологических шкал не относим к специальной категории).
-- Субъекты — участники-физлица, не сотрудники оператора; количество < 100 000.
+- Субъекты — участники-физлица, не сотрудники оператора; количество < 100 000. Дополнительно в системе есть учётные записи исследователей и staff (логин, хэш пароля, сессии) — это ПДн сотрудников/подрядчиков оператора.
 - Субъекты младше 18 лет по решению владельца не обрабатываются (см. раздел 11 — технически это пока не обеспечено глобально).
 - Биометрия, общедоступные источники, ГИС, КИИ — не применяются.
 
@@ -52,14 +52,14 @@
 | `payload`, `responses_digest` | `attempt_results` (`001_domain.sql:84`) | рассчитанный результат и контрольная сумма входных данных |
 | `status`, `revision`, `completed_at` | `attempts` (`001_domain.sql:68`) | факт и версия прохождения |
 
-Связь с субъектом — через `attempts.participant_id` и `stage_enrollments`; прямой email в этих таблицах нет.
+Связь с субъектом — через `attempts.enrollment_id` → `stage_enrollments.participant_id`; прямого email в этих таблицах нет.
 
 ### 2.5 Согласия и уведомления
 
 | Поле | Где | Назначение |
 |---|---|---|
 | `purpose`, `document_version`, `accepted_at_ms` | `participant_consent_acceptances` (`028_participant_consents.sql:46`) | факт согласия: `study_participation`, `secondary_research` |
-| `pending_id`, `contact_id`, `notice_version`, `confirmed_at_ms` | `participant_contact_acceptances` (`023_participant_contact_identity.sql:33`) | факт принятия условий обработки контакта |
+| `pending_id`, `contact_id`, `notice_version`, `confirmed_at_ms` | `participant_contact_acceptances` (`023_participant_contact_identity.sql:34`) | факт принятия условий обработки контакта |
 | `body_text`, `legal_status` | `consent_documents` (`028_participant_consents.sql:4`) | текст согласия |
 | `body`, `legal_status` | `contact_notices` (`022_registration_pending.sql:3`) | текст уведомления о контакте |
 | `contact_notice_version`, `participation_version`, `consent_policy_revision` | `stage_admissions` (`030_participant_stage_admission.sql:5`) | какая версия документов действовала на момент допуска |
