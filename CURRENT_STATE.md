@@ -8,10 +8,10 @@
 
 ## Git, PR и CI
 
-- Текущий `main`: `3a24ac5f02bbfa70d8f3ad801ebc3029dc04eaa9` – merge [PR №142](https://github.com/PedFund/PedPsyRU/pull/142) (TTL 24 часа). Перед ним: `6b4eee5` – [PR №141](https://github.com/PedFund/PedPsyRU/pull/141) (`Precedence: transaction`), `4154bac` – [PR №140](https://github.com/PedFund/PedPsyRU/pull/140) (регистрация через email).
-- [Контрольный CI после Merge](https://github.com/PedFund/PedPsyRU/actions/runs/44024219585) на `3a24ac5`: **6/6 jobs** (Node 22/24, PostgreSQL 18 с браузерными повторами, dependency audit, secret scan, Required checks).
-- Ранее в `main`: [№138](https://github.com/PedFund/PedPsyRU/pull/138) SMTP-транспорт, [№137](https://github.com/PedFund/PedPsyRU/pull/137) пилотный admission, [№136](https://github.com/PedFund/PedPsyRU/pull/136) P0 `accept_researcher_invite`.
-- Открытые PR: №139 (архив прежних фаз), черновики №97, №94, №88, №78, №72, №71 и Dependabot №58, №60, №61, №62. Их нельзя считать текущим состоянием `main`; объединять только отдельным решением.
+- Текущий `main`: `88de2dcf9210d948fe98fab1005c5dbeb60620a5` – merge [PR №144](https://github.com/PedFund/PedPsyRU/pull/144) (progress без почты участника, миграция 090). Перед ним: `ab651f1` – [PR №143](https://github.com/PedFund/PedPsyRU/pull/143) (docs), `3a24ac5` – [PR №142](https://github.com/PedFund/PedPsyRU/pull/142) (TTL 24 часа), `6b4eee5` – [PR №141](https://github.com/PedFund/PedPsyRU/pull/141) (`Precedence: transaction`).
+- [Контрольный CI после Merge](https://github.com/PedFund/PedPsyRU/actions/runs/44069751256) на `88de2dc`: **6/6 jobs** (Node 22/24, PostgreSQL 18 с браузерными повторами, dependency audit, secret scan, Required checks).
+- Ранее в `main`: [№140](https://github.com/PedFund/PedPsyRU/pull/140) регистрация через email, [№138](https://github.com/PedFund/PedPsyRU/pull/138) SMTP-транспорт, [№137](https://github.com/PedFund/PedPsyRU/pull/137) пилотный admission.
+- Избыточные PR закрыты 2026-11-17 без Merge: №139 (архив прежних фаз), черновики №97, №94, №88 и Dependabot №58, №60, №61, №62; ветки сохранены. Открытыми остаются черновики прежних фаз №78, №72, №71 – они не являются текущим состоянием `main`, решение по ним отдельное.
 - Состояние веток и CI изменяемо: проверяйте GitHub перед следующими действиями. Данный документ не заменяет живые проверки.
 
 ## Реализовано в интегрированном коде
@@ -21,21 +21,22 @@
 - Регистрация участника: пилотный admission (общий лимит и per-code/email), P0-исправление приглашения, SMTP-транспорт Selectel, outbox-воркер, письмо с одноразовым кодом, ввод кода в исходной вкладке.
 - TTL кода, pending-строки, outbox и браузерной привязки – **24 часа**. Браузерная привязка остаётся обязательной; synthetic-receipt в mail-режиме выключен.
 - Selectel добавляет bulk-заголовки; транспорт передаёт `Precedence: transaction`. `List-Unsubscribe`/`X-MSG-TYPE: bulk` полностью убираются только платной услугой «Выделенный сендер».
-- Доставка at-least-once, не более 10 попыток, аудит `participants.registration.email` без email/кода, локальный rate limit **20 писем/5 мин**.
+- Доставка at-least-once, не более 10 попыток, аудит `participants.registration.email` без email/кода, локальный rate limit **100 писем/5 мин** (`PEDPSY_MAIL_RATE_LIMIT=100`, применён на стенде 2026-11-17).
+- Экран «Ход исследования» и его DTO/HTTP-ответ не содержат почту участника: только `participant_id`, группа, этап и статус; в интерфейсе показывается псевдонимный код участника. Напоминания разрешают адрес получателя из контакта.
 - Библиотека: **50 архивных описаний**, **63 закреплённых архивных файла**, **23 назначаемых учебных выпуска**: 13 прежних и 10 из `methods/approved/v1` (Карпов 1.1.0, СЖО, Мадди, TTF/ATF, Шипилов-36, ШОКЖ-36, Рифф-84, ЦО-36, PVQ-RR-57, Мотков-18). TKI (`tki_ru_30_pairs`) остаётся `NO_PACKAGE`. Подробные ограничения в [methods/README.md](methods/README.md).
 - Версионированный runtime и реестр проверенных модулей [METHOD_EXTENSION_CONTRACT.md](METHOD_EXTENSION_CONTRACT.md). Раздел суперадминистратора «Перенос методик» показывает статусы, но не является универсальным загрузчиком/публикатором.
 
 ## Стенд
 
 - `https://mettest.vibemind.pro/workspace`; прежний `sslip.io`-адрес перенаправляется на новый.
-- `main`/стенд: `3a24ac5`; сервис active; миграция head **89**; проверка `/health` — `ok`.
+- `main`/стенд: `88de2dc`; сервис active; миграция head **90**; проверка `/health` — `ok`.
 - Selectel Mail: домен `vibemind.pro` **VERIFIED**, отправитель `noreply@vibemind.pro`, SMTP `smtp.mail.selcloud.ru:1127`.
 - `PEDPSY_MAIL_ENABLED=1`; allowlist после проверки снят; preflight отдаёт `synthetic:false`, `delivery:"email"`.
 - Реальное worker-письмо на Gmail доставлено: outbox `sent`, попытка 1, аудит `allow/SENT`; TTL pending 24 ч.
-- Rate limit пока **20/5мин**; для быстрой рассылки 200 участников нужен тикет Selectel до 200/5мин.
+- Rate limit **100/5мин**: Selectel подтвердил повышение с 20/5мин, значение применено на стенде и подтверждено по окружению процесса. Запрос на 500/5мин подан дополнительно (поэтапно, платно) и не блокирует работу.
 - Yandex: наблюдаются внешние задержки/неполадки Яндекс Почты; 24-часовой TTL покрывает задержку, но доставка не гарантируется на стороне получателя.
 - Данные стенда: 7 исследований, 38 участников, 229 попыток, 6242 ответа; тестовая pending-строка worker-теста участника не создаёт.
-- Последний backup перед миграцией 089: `/var/backups/mettest/pre-pilot-20261117T052718Z.dump`, 1.6 МБ, sha256 `36e6935b...`.
+- Последний backup перед миграцией 090: `/var/backups/mettest/pre-090-20261117T110744Z.dump`, 1.63 МБ, 849 объектов, sha256 `48d104e2...`; перед 089: `/var/backups/mettest/pre-pilot-20261117T052718Z.dump`.
 
 ## Архитектурные решения владельца
 
@@ -49,7 +50,7 @@
 - У остальных архивных методик не подтверждена полная готовность формы, ключа и онлайн-маршрута. MAAS отложена; для Лахвич и PSS нет подтверждённых по-пунктовых ключей.
 - Полноценное универсальное подключение произвольного нестандартного формата к HTTP/хранению/прохождению пока не завершено.
 - Отдельный крупный статистический модуль сейчас **не является порученной работой**.
-- Почта: нужен тикет Selectel на 200/5мин; Yandex может задерживать/фильтровать письма; API-key был показан на скриншоте и подлежит перевыпуску.
+- Почта: лимит 100/5мин применён; 500/5мин — отдельный платный запрос. Yandex может задерживать/фильтровать письма. API-key Selectel ротирован, значение вне репозитория, тестов и отчётов; worker отправляет письма новым ключом.
 - Сброс пароля по email и реальные напоминания исследователя ещё не реализованы.
 - Реальные персональные/научные данные, production-приёмка и перенос рабочей БД на Selectel требуют отдельных решений и проверок.
 
