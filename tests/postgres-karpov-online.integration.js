@@ -24,7 +24,7 @@ test('PostgreSQL mixed methods: authorized enrollment, resume/CAS, exact per-rel
  assert.equal((await w.app.inject({url:url(x.karpov)+'/result',headers:{...h,cookie:'pedpsy_v2_demo='+x.r.session.token}})).statusCode,401);
  assert.equal((await x.store.progress(x.r.session.token,x.d.id)).rows[0].status,'in_progress');
  const tki=Array.from({length:30},(_,i)=>({item_id:'q'+String(i+1).padStart(2,'0'),value:'A'}));assert.equal((await save(x.tki,0,tki)).statusCode,200);assert.equal((await w.app.inject({method:'POST',url:url(x.tki)+'/complete',headers:h,payload:{expected_revision:1}})).statusCode,200);
- const progress=(await x.store.progress(x.r.session.token,x.d.id)).rows[0];assert.equal(progress.status,'completed');assert.deepEqual(Object.keys(progress).sort(),['email','group_id','participant_id','stage_id','status']);
+ const progress=(await x.store.progress(x.r.session.token,x.d.id)).rows[0];assert.equal(progress.status,'completed');assert.deepEqual(Object.keys(progress).sort(),['group_id','participant_id','stage_id','status']);assert.doesNotMatch(JSON.stringify(progress),/@/);
  await assert.rejects(x.f.admin.query("UPDATE pedpsy.responses SET value='5' WHERE attempt_id=$1",[x.karpov]),e=>e.code==='23514');
  assert.equal((await x.f.admin.query('SELECT count(*)::int n FROM pedpsy.attempt_results WHERE attempt_id=$1',[x.karpov])).rows[0].n,1);
 });

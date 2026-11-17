@@ -30,4 +30,10 @@ test("method dashboard toggles the panel by id, not by element",()=>{
   assert.match(app,/scale-track/);
   assert.match(app,/analytics-legend/);
   assert.match(app,/скрыто \(<3\)/);
+  assert.match(app,/function participantCode\(id\)\{return String\(id\|\|""\)\.replace/);
+  assert.match(app,/row\(\$\("progress-people"\),"Участник "\+participantCode\(p\.participant_id\)/);
+  assert.doesNotMatch(app,/\bp\.email\b/,"the progress panel never renders a contact address");
+  assert.match(html,/id="progress-people"/);
+  assert.match(html,/Почта участников, ответы и индивидуальные баллы здесь недоступны\./);
+  assert.doesNotMatch(html,/progress-people[^<]*email/);
 });
