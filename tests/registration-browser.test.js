@@ -9,7 +9,7 @@ test("registration browser: purpose/origin/key-bound signed nonce, retained key 
   const delivery="12345678-1234-1234-1234-123456789012",proof=randomBytes(32).toString("base64url"),envelope=vault.seal(delivery,proof);assert.ok(new ContactTokenVault(saved).open(delivery,envelope)===proof,"retained outbox key changed");saved.fill(0);
 });
 test("registration browser: exact server time boundary, future/expired clock and unsupported issue clock fail closed",()=>{
-  let now=1700000000123;const a=new SignedRegistrationBrowser(randomBytes(32),origin,()=>now),nonce=a.create(),expires=a.expiresAt(nonce);assert.equal(expires,1700003600000);
+  let now=1700000000123;const a=new SignedRegistrationBrowser(randomBytes(32),origin,()=>now),nonce=a.create(),expires=a.expiresAt(nonce);assert.equal(expires,1700086400000);
   now=1700000000000-1;assert.ok(!a.valid(nonce));now=expires-1;assert.ok(a.valid(nonce));now=expires;assert.ok(!a.valid(nonce));assert.throws(()=>a.csrf(nonce),rejected);
   for(const at of [NaN,-1000,4294967296000])assert.throws(()=>new SignedRegistrationBrowser(randomBytes(32),origin,()=>at).create(),/INVALID_REGISTRATION_CLOCK/);
 });

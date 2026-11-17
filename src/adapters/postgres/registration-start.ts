@@ -35,7 +35,7 @@ export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"
       try{passwordHash=bytes.toString("hex");}finally{bytes.fill(0);}
       const confirmation=randomBytes(32).toString("base64url"),delivery=randomUUID(),envelope=this.vault.seal(delivery,confirmation);
       // Hashing/encryption and all eventual delivery are OUTSIDE SQL locks.
-      await accountTransaction(this.pool,async c=>{await c.query("SELECT pedpsy.queue_registration_confirmation($1,$2,$3,$4,$5,$6,$7)",
+      await accountTransaction(this.pool,async c=>{await c.query("SELECT pedpsy.queue_registration_confirmation_v2($1,$2,$3,$4,$5,$6,$7)",
         [id,tokenHash(pendingToken),salt.toString("hex"),passwordHash,tokenHash(confirmation),delivery,envelope]);});
       return {status:"confirmation_requested"};
     });
