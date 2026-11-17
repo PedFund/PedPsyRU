@@ -41,3 +41,11 @@ test("workbench and profile mutations require CSRF before storage, profile never
   const own=createParticipantProfileApi(store,{assert:()=>{}});
   assert.throws(()=>own.change("token","restart",{schema_version:1,expected_revision:2,participant_id:id},"proof"));
 });
+test("the progress contract stays pseudonymous",()=>{
+  const source=require("node:fs").readFileSync(require("node:path").join(__dirname,"../src/ports/research-workbench.ts"),"utf8");
+  const row=source.match(/export interface ProgressRow \{([^}]*)\}/);
+  assert.ok(row,"ProgressRow must stay declared in the port");
+  assert.doesNotMatch(row[1],/email/i,"the progress row must carry no contact address");
+  assert.match(row[1],/participant_id/);
+  assert.doesNotMatch(source,/email\s*:\s*string/,"no workbench DTO may expose a contact address");
+});

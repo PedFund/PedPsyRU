@@ -23,5 +23,5 @@ test('PRFQ participant registration and full enrollment use the same researcher 
  const resumed=await w.app.inject({url:base,headers:h});assert.equal(resumed.json().current_item_id,'q03');assert.equal(resumed.json().responses.length,2);
  const full=await w.app.inject({method:'PUT',url:base+'/draft',headers:h,payload:{expected_revision:1,current_item_id:'q16',responses:answers}});assert.equal(full.statusCode,200);
  const result=await w.app.inject({method:'POST',url:base+'/complete',headers:h,payload:{expected_revision:2}});assert.equal(result.statusCode,200);assert.deepEqual(result.json().measures.map(x=>x.value),[4,8,4,5,4,2]);
- const progress=await x.store.progress(x.r.session.token,x.d.id);assert.equal(progress.rows[0].status,'in_progress');assert.deepEqual(Object.keys(progress.rows[0]).sort(),['email','group_id','participant_id','stage_id','status']);
+ const progress=await x.store.progress(x.r.session.token,x.d.id);assert.equal(progress.rows[0].status,'in_progress');assert.deepEqual(Object.keys(progress.rows[0]).sort(),['group_id','participant_id','stage_id','status']);assert.doesNotMatch(JSON.stringify(progress),/@/);
 });

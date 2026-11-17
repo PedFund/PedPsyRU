@@ -3,7 +3,8 @@ import type {StudyDesign} from "./studies.js";
 export type WorkbenchAction = "initialize"|"group"|"stage"|"delete_stage"|"assign"|"copy_assignments"|"schema"|"remind";
 export interface WorkbenchSchema {schema_version:number;fields:readonly PassportField[];frozen:boolean;study_version:number;study_id:string}
 export interface WorkbenchDesign extends StudyDesign {group_notes:Record<string,string>;stage_notes:Record<string,string>;profile_schemas:Record<string,WorkbenchSchema>}
-export interface ProgressRow {participant_id:string;group_id:string;stage_id:string;email:string;status:"not_started"|"in_progress"|"completed"}
+// Pseudonymous progress projection: no contact email ever leaves PostgreSQL.
+export interface ProgressRow {participant_id:string;group_id:string;stage_id:string;status:"not_started"|"in_progress"|"completed"}
 export interface WorkbenchProgress {openings:{group_id:string;stage_id:string}[];rows:ProgressRow[];reminders:{participant_id:string;stage_id:string;created_at:number}[]}
 export interface MethodProgressRow {release_id:string;method_id:string;completed:number}
 export interface MethodAnalyticsLevel {code:string;label:string;value:string;count:number|null}

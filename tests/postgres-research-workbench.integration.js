@@ -78,8 +78,11 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   await assert.rejects(p.profile.change(p.session.token,"save",{schema_version:previous.schema_version,expected_revision:previous.revision,values:{sex:"female",age:31}}),e=>e.code==="PASSPORT_CONFLICT");
   profile=await p.profile.change(p.session.token,"save",{schema_version:profile.schema_version,expected_revision:profile.revision,values:{sex:"female",age:31,extra_education:"higher"}});profile=await p.profile.change(p.session.token,"complete",{schema_version:profile.schema_version,expected_revision:profile.revision});
   assert.equal((await x.f.admin.query("SELECT answers FROM pedpsy.attempt_profile_basis WHERE study_id=$1 AND attempt_id=$2",[x.d.id,admitted.attempts[0].attempt_id])).rows[0].answers.age,30);
-  const rows=await x.store.progress(x.r.session.token,x.d.id);assert.equal(rows.rows.length,2);assert.equal(rows.rows[0].email,"workbench@example.test");assert.deepEqual(Object.keys(rows.rows[0]).sort(),["email","group_id","participant_id","stage_id","status"]);
+  const rows=await x.store.progress(x.r.session.token,x.d.id);assert.equal(rows.rows.length,2);assert.deepEqual(Object.keys(rows.rows[0]).sort(),["group_id","participant_id","stage_id","status"]);
+  assert.doesNotMatch(JSON.stringify(rows),/@/,"the progress projection carries no contact address");
   const request=randomUUID(),input={group_id:x.d.groups[0].id,stage_id:x.d.stages[0].id,request_id:request};const sent=await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",input);assert.equal(sent.queued,1);assert.deepEqual(await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",input),sent);
+  const recipients=(await x.f.admin.query("SELECT email FROM pedpsy.research_reminder_outbox WHERE study_id=$1",[x.d.id])).rows.map(r=>r.email);assert.deepEqual(recipients,["workbench@example.test"],"the reminder queue still resolves the contact of record");
+  for(const fn of ["research_progress_rows","research_progress_rows_v2"]){const definition=(await x.f.admin.query("SELECT pg_get_functiondef(('pedpsy.'||$1||'(uuid)')::regprocedure) d",[fn])).rows[0].d;assert.doesNotMatch(definition,/"email"/,"the progress projection definition must not project an address");}
   assert.equal((await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",{...input,request_id:randomUUID()})).queued,0);
   const {workspaceFixture,headers}=require("./workspace-fixture.js"),{csrfFor}=require("../storage/access.js"),{responses}=require("./storage-contract-suite.js");
   const w=workspaceFixture(x.f,undefined,{workbench:true});t.after(()=>w.app.close());
@@ -94,7 +97,11 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   assert.equal((await x.f.admin.query("SELECT answers FROM pedpsy.attempt_profile_basis WHERE study_id=$1 AND attempt_id=$2",[x.d.id,future.attempts[0].attempt_id])).rows[0].answers.age,31);
   await assert.rejects(x.f.admin.query("UPDATE pedpsy.research_profile_history SET answers='{}' WHERE study_id=$1",[x.d.id]),e=>e.code==="23514");
   const rh={...headers,cookie:"pedpsy_researcher_demo="+x.r.session.token,"x-pedpsy-csrf":csrfFor(x.r.session.token)},url="/api/v2/researcher/studies/"+x.d.id+"/workbench";
-  assert.equal((await w.app.inject({url:url+"/progress",headers:rh})).statusCode,200);
+  const progressHttp=await w.app.inject({url:url+"/progress",headers:rh});assert.equal(progressHttp.statusCode,200);
+  const progressBody=progressHttp.json();assert.equal(progressBody.rows.length,2,"counts stay unchanged after dropping the address");
+  assert.deepEqual(Object.keys(progressBody.rows[0]).sort(),["group_id","participant_id","stage_id","status"]);
+  assert.doesNotMatch(JSON.stringify(progressBody),/@/,"no contact address may reach the researcher HTTP payload");
+  assert.equal(progressBody.rows.filter(r=>r.status==="completed").length,1,"per-stage statuses survive the DTO change");
   assert.equal((await w.app.inject({url:url+"/progress/methods?group_id="+x.d.groups[0].id,headers:rh})).statusCode,200);
   assert.equal((await w.app.inject({url:url+"/progress?participant_id="+randomUUID(),headers:rh})).statusCode,400);
   assert.equal((await w.app.inject({method:"POST",url:url+"/remind",headers:{...rh,"x-pedpsy-csrf":"bad"},payload:{...input,expected_version:x.d.version}})).statusCode,403);
