@@ -34,6 +34,7 @@ test("SMTP LOGIN sends a base64 UTF-8 message without exposing credentials",asyn
     assert.equal(server.messages.length,1);const raw=server.messages[0];
     assert.match(raw,/^From: =\?UTF-8\?B\?/m);assert.match(raw,/^Subject: =\?UTF-8\?B\?/m);
     assert.match(raw,/^To: <participant@example\.org>$/m);assert.match(raw,/Content-Transfer-Encoding: base64/);
+    assert.match(raw,/^Precedence: transaction$/m);
     const body=raw.split("\r\n\r\n").slice(1).join("\r\n\r\n").replace(/\r\n/g,"");
     assert.equal(Buffer.from(body,"base64").toString("utf8"),"Код: abc\nВторая строка");
     assert.ok(!raw.includes("smtp-password"));
