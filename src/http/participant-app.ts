@@ -1,5 +1,5 @@
 import type {FastifyRequest,FastifyInstance} from "fastify";
-import {createBaseApp} from "./app.js";
+import {createBaseApp, type AccessLogHook} from "./app.js";
 import type {createParticipantApi} from "../application/participant-api.js";
 import {ParticipationError} from "../ports/errors.js";
 import type {AttemptSnapshot,StoredResult} from "../ports/participation.js";
@@ -52,11 +52,11 @@ const resultDto = (r: StoredResult) => {
   if (presentation) dto.presentation = presentation;
   return dto;
 };
-export function createParticipantApp(api: Api, origin: string,extension?:{register:(app:FastifyInstance)=>void;denied:(request:FastifyRequest,reason:string)=>Promise<void>}) {
+export function createParticipantApp(api: Api, origin: string,extension?:{register:(app:FastifyInstance)=>void;denied:(request:FastifyRequest,reason:string)=>Promise<void>},accessLog?:AccessLogHook) {
   const url=new URL(origin),secure=url.protocol==="https:";
   if (url.origin!==origin || !secure && !(url.protocol==="http:" && ["127.0.0.1","localhost"].includes(url.hostname))) throw new Error("EXPLICIT_SAFE_ORIGIN_REQUIRED");
   const cookieName=secure?"__Host-pedpsy":"pedpsy_v2_demo";
-  const app=createBaseApp();
+  const app=createBaseApp(accessLog);
   const token=(r:FastifyRequest):string=>readParticipantCookie(r.headers.cookie,cookieName);
   const csrf=(r:FastifyRequest):string=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
   const cookie=(value:string,age:number):string=>`${cookieName}=${value}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${age}${secure?"; Secure":""}`;

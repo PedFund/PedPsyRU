@@ -1,4 +1,5 @@
 import {registerMethodLibrary,type MethodLibraryHttpApi} from "./method-library-routes.js";
+import type {AccessLogHook} from "./app.js";
 import {registerResearchWorkbench,type ResearchWorkbenchApis} from "./research-workbench-routes.js";
 import type {FastifyInstance,FastifyRequest} from "fastify";
 import type {createAccountApi} from "../application/account-api.js";
@@ -32,7 +33,7 @@ export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   app.setNotFoundHandler(async(_r,reply)=>reply.code(404).send({error:"NOT_AVAILABLE"}));
   app.setErrorHandler(async(_e,_r,reply)=>reply.code(500).send({error:"INTERNAL_ERROR"}));return app;
 }
-export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>,passports?:PassportHttpApis,consents?:ConsentHttpApi,admissions?:AdmissionHttpApi,workbench?:ResearchWorkbenchApis,library?:MethodLibraryHttpApi){
+export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>,passports?:PassportHttpApis,consents?:ConsentHttpApi,admissions?:AdmissionHttpApi,workbench?:ResearchWorkbenchApis,library?:MethodLibraryHttpApi,accessLog?:AccessLogHook){
   const names=workspaceCookies(origin),secure=new URL(origin).protocol==="https:";
   const token=(r:FastifyRequest,name:string)=>readParticipantCookie(r.headers.cookie,name);
   const csrf=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
@@ -130,5 +131,5 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
       });
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }
-  });
+  }, accessLog);
 }

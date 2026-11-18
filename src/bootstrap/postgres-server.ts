@@ -36,6 +36,7 @@ import {SmtpTransport} from "../adapters/smtp/transport.js";
 import {ConfirmationMailWorker} from "../adapters/postgres/confirmation-mail-worker.js";
 import {participantAdmissionPolicy} from "./login-policy.js";
 import {mailDeliveryConfig} from "./mail-config.js";
+import {accessLogConfig,createAccessLog} from "../http/access-log.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
@@ -66,7 +67,8 @@ async function main(): Promise<void> {
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;
-    const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool));
+    const accessLog=accessLogConfig(process.env);
+    const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool),accessLog?createAccessLog(accessLog):undefined);
     app.addHook("onClose",async()=>{mailWorker?.stop();await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:production?config!.host:"127.0.0.1",port:production?config!.port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}
