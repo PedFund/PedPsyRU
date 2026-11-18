@@ -34,8 +34,16 @@ test("passwords keep whitespace, use UTF-8 bounds and are not coerced or trimmed
   assert.equal(registrationStart({...good, password: spaced}).password, spaced);
   for (const password of [null, [], 123456789012, "short", "x".repeat(257), "Ж".repeat(129), "😀".repeat(65), "long\npassword", "long\u0000password"])
     assert.throws(() => registrationStart({...good, password}), invalid);
-  for (const password of ["x".repeat(256), "Ж".repeat(128), "😀".repeat(64)])
+  for (const password of ["Ab3!".padEnd(256, "x"), "Жж" + "д".repeat(126), "😀" + "😁".repeat(63)])
     assert.equal(registrationStart({...good, password}).password, password);
+});
+test("new passwords refuse common values and the login identity", () => {
+  const weak = value => assert.throws(() => registrationStart({...good, password: value}), e => e.code === "WEAK_PASSWORD");
+  for (const value of ["password1234", "PASSWORD123456", "qwerty123456", "пароль123456", "x".repeat(20), "1234567890123"]) weak(value);
+  for (const value of [good.email, "Demo.Owner+Tag@EXAMPLE.test", "demo.owner+tag"]) weak(value);
+  assert.equal(registrationStart({...good, password: "Синтетическая фраза 2026!"}).password, "Синтетическая фраза 2026!");
+  // Login must keep accepting already stored passwords, including weak ones.
+  assert.equal(participantEmailLogin({study_id: "11111111-1111-4111-8111-111111111111", email: good.email, password: "password1234"}).password, "password1234");
 });
 test("only opaque token strings are accepted; confirmation has no password/group/role replacement", () => {
   assert.equal(registrationToken(invite), invite);

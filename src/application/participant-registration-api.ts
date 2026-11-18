@@ -3,6 +3,7 @@ import type {GroupInvitations, ParticipantRegistration, RegistrationStart, Regis
   ParticipantEmailLogin, GroupInvitationRecord} from "../ports/participant-registration.js";
 import {studyId} from "./study-api.js";
 import {participantEmail} from "../ports/contact-email.js";
+import {weakNewPassword} from "../ports/password-policy.js";
 export {participantEmail} from "../ports/contact-email.js";
 
 const invalid = (): never => {throw new ParticipationError(400, "INVALID_REGISTRATION_INPUT");};
@@ -34,7 +35,11 @@ function password(input: unknown): string {
 export function registrationStart(input: unknown): RegistrationStart {
   const b = object(input, ["email", "password", "contact_notice_version", "accept_contact_notice"]);
   if (b.accept_contact_notice !== true) invalid();
-  return {email: participantEmail(b.email), password: password(b.password),
+  // New passwords only: a common password or one that repeats the login email is
+  // refused. Login keeps accepting existing passwords through password().
+  const email = participantEmail(b.email), secret = password(b.password);
+  if (weakNewPassword(secret, [email])) throw new ParticipationError(400, "WEAK_PASSWORD");
+  return {email, password: secret,
     contact_notice_version: version(b.contact_notice_version), accept_contact_notice: true};
 }
 export function registrationConfirmation(input: unknown): RegistrationConfirmation {
