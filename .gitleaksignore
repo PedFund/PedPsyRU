@@ -6,3 +6,5 @@ cd8d8f3e2d8df3c77c3f06cdc2ff7832e5697b21:core/tki-contract.js:generic-api-key:15
 # Reviewed historical test-count string after the scan-status word, not a key.
 # Exact commit/path/rule/line only; reproduction in SECURITY_AND_DEPENDENCIES.md.
 964458a575442053ef5d587bc5f50c807eaccc38:REGISTRATION_VALIDATION.md:generic-api-key:7
+# 2026-11-18: public weak-password blocklist; the previous quoting looked like a key/value pair.
+f259dc130c1e9c149b88b5893addbe79eec68a7d:src/ports/password-policy.ts:generic-api-key:10
