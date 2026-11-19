@@ -68,17 +68,17 @@ scenario("copy settings per group only, independent IDs and no participants/answ
   assert.equal((await f.admin.query("SELECT design_version FROM pedpsy.studies WHERE id=$1",[d.id])).rows[0].design_version,d.version);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_stages WHERE study_id=$1",[d.id])).rows[0].n,2);assert.deepEqual(await counts(),before);
 });
 async function readyStudy(x,f,title){const d=await x.studies.create(x.session.token,title);return x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});}
-scenario("activation completeness, atomic active quota race, closed frees quota but never rewrites design",async(f,x,s)=>{
-  // The product default is five active studies; pin one to exercise the race and the rejection.
-  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE user_id=$1",[x.row.user_id]);
+scenario("activation completeness, two active studies without a quota, closed stays closed and never rewrites design",async(f,x,s)=>{
   const incomplete=await x.studies.create(x.session.token,"Incomplete");await assert.rejects(x.studies.lifecycle(x.session.token,incomplete.id,{status:"active",expected_version:0}),e=>e.code==="DESIGN_INCOMPLETE");
-  const drafts=await Promise.all(["One","Two"].map(title=>readyStudy(x,f,title)));const result=await Promise.allSettled(drafts.map(d=>x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version})));
-  assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"STUDY_QUOTA");
-  let active=result.find(r=>r.status==="fulfilled").value;await assert.rejects(x.studies.title(x.session.token,active.id,{title:"Changed",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
+  const one=await readyStudy(x,f,"One"),two=await readyStudy(x,f,"Two");
+  // The owner removed the active-study limit: both studies activate, one after the other.
+  let active=await x.studies.lifecycle(x.session.token,one.id,{status:"active",expected_version:one.version});
+  const second=await x.studies.lifecycle(x.session.token,two.id,{status:"active",expected_version:two.version});assert.equal(second.status,"active");
+  await assert.rejects(x.studies.title(x.session.token,active.id,{title:"Changed",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
   await assert.rejects(x.studies.assign(x.session.token,active.id,{group_id:active.groups[0].id,stage_id:active.stages[0].id,release_ids:[],expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
   assert.deepEqual(await x.studies.lifecycle(s.session.token,active.id,{status:"active",expected_version:active.version}),active);
   active=await x.studies.lifecycle(x.session.token,active.id,{status:"closed",expected_version:active.version});assert.equal(active.status,"closed");await assert.rejects(x.studies.lifecycle(x.session.token,active.id,{status:"active",expected_version:active.version}),e=>e.code==="DESIGN_FROZEN");
-  const other=drafts.find(d=>d.id!==active.id),second=await x.studies.lifecycle(x.session.token,other.id,{status:"active",expected_version:other.version});assert.equal(second.status,"active");
+  const again=await x.studies.lifecycle(x.session.token,second.id,{status:"active",expected_version:second.version});assert.equal(again.status,"active");
   const renamed=await x.studies.title(x.session.token,incomplete.id,{title:"Новое название",expected_version:0});assert.equal(renamed.title,"Новое название");assert.equal(renamed.version,1);
 });
 scenario("close waits for participant scope writer; afterwards participant save is denied",async(f,x)=>{
@@ -144,9 +144,7 @@ scenario("lookalike release and malformed release sets cannot bypass the technic
   for(const release_ids of [[f.seed.release_id,f.seed.release_id],[null],Array.from({length:31},()=>randomUUID())])await assert.rejects(x.studies.assign(x.session.token,d.id,{...cell,release_ids}),e=>e.status===400);
   const after=await x.studies.read(x.session.token,d.id);assert.equal(after.version,d.version);assert.deepEqual(after.assignments,d.assignments);
 });
-scenario("activation and close audit failures roll back status/version/quota; repeats are idempotent",async(f,x)=>{
-  // The product default is five active studies; this scenario pins one to check quota rollback.
-  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE user_id=$1",[x.row.user_id]);
+scenario("activation and close audit failures roll back status/version; repeats are idempotent",async(f,x)=>{
   let d=await readyStudy(x,f,"Lifecycle rollback");
   await f.admin.query("CREATE FUNCTION pedpsy.synthetic_lifecycle_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.action='studies.lifecycle' THEN RAISE EXCEPTION 'synthetic lifecycle audit failure'; END IF;RETURN NEW;END $$;CREATE TRIGGER synthetic_lifecycle_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_lifecycle_audit_fail()");
   await assert.rejects(x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version}),/synthetic lifecycle audit failure/);
@@ -157,11 +155,11 @@ scenario("activation and close audit failures roll back status/version/quota; re
   await f.admin.query("ALTER TABLE pedpsy.access_audit_events ENABLE TRIGGER synthetic_lifecycle_audit_fail");
   await assert.rejects(x.studies.lifecycle(x.session.token,d.id,{status:"closed",expected_version:d.version}),/synthetic lifecycle audit failure/);
   assert.deepEqual(await x.studies.read(x.session.token,d.id),active);
-  const other=await readyStudy(x,f,"Quota still occupied");await assert.rejects(x.studies.lifecycle(x.session.token,other.id,{status:"active",expected_version:other.version}),e=>e.code==="STUDY_QUOTA");
   await f.admin.query("DROP TRIGGER synthetic_lifecycle_audit_fail ON pedpsy.access_audit_events;DROP FUNCTION pedpsy.synthetic_lifecycle_audit_fail()");
+  // No active-study limit: another study activates while the first stays active.
+  const other=await readyStudy(x,f,"Second active study");assert.equal((await x.studies.lifecycle(x.session.token,other.id,{status:"active",expected_version:other.version})).status,"active");
   d=await x.studies.lifecycle(x.session.token,d.id,{status:"closed",expected_version:d.version});assert.deepEqual(await x.studies.lifecycle(x.session.token,d.id,{status:"closed",expected_version:d.version}),d);
   await assert.rejects(x.studies.lifecycle(x.session.token,d.id,{status:"closed",expected_version:d.version-1}),e=>e.code==="DESIGN_CONFLICT");
-  assert.equal((await x.studies.lifecycle(x.session.token,other.id,{status:"active",expected_version:other.version})).status,"active");
 });
 scenario("attempt-bearing draft and closed designs reject every configuration route; helpers stay private",async(f,x)=>{
   await f.admin.query("INSERT INTO pedpsy.study_memberships(study_id,user_id,role) VALUES($1,$2,'researcher')",[f.studyId,x.row.user_id]);await f.admin.query("UPDATE pedpsy.studies SET status='draft' WHERE id=$1",[f.studyId]);
