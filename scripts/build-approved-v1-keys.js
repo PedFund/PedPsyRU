@@ -169,11 +169,47 @@ function motkovKey(pkg) {
     crossLevels: {gpk: {left: 'pk_A – уровень', right: 'pk_B – уровень', table: MOTKOV_GPK}}};
 }
 
+// MAIA-R describes its own scoring completely: eight means of recoded items on a
+// 0..5 scale, reverse items 5..9 recoded as "5 - response", and platform intervals
+// per subscale. The participant answers the author's six labelled options; the ui
+// values 1..6 map onto the 0..5 scores, so nothing about the answer set changes.
+const MAIA_SCALE_IDS = ['noticing', 'not_distracting', 'not_worrying', 'attention_regulation',
+  'emotional_awareness_negative', 'emotional_awareness_positive', 'body_listening', 'trusting'];
+
+function maiaKey(pkg) {
+  if (pkg.id !== 'maia_r_32') return null;
+  if (!Array.isArray(pkg.items) || pkg.items.length !== 32) throw new Error(pkg.id + ':ITEM_COUNT_MISMATCH');
+  if (!Array.isArray(pkg.scales) || pkg.scales.length !== MAIA_SCALE_IDS.length) throw new Error(pkg.id + ':SCALE_COUNT_MISMATCH');
+  const scales = {}, levels = {}, levelRounding = {};
+  pkg.scales.forEach((scale, index) => {
+    const id = MAIA_SCALE_IDS[index];
+    if (scale.id !== id) throw new Error(pkg.id + ':SCALE_ORDER_MISMATCH');
+    const direct = (scale.direct_items || []).slice().sort((a, b) => a - b);
+    const reverse = (scale.reverse_items || []).slice().sort((a, b) => a - b);
+    if (!direct.length && !reverse.length) throw new Error(pkg.id + ':EMPTY_SCALE');
+    scales[id] = {...(direct.length ? {direct} : {}), ...(reverse.length ? {reverse} : {}), reverseMax: 5, aggregate: 'mean'};
+    const rows = pkg.scoring && pkg.scoring.levels && pkg.scoring.levels[id];
+    if (!Array.isArray(rows) || !rows.length) throw new Error(pkg.id + ':SCALE_WITHOUT_LEVELS:' + id);
+    levels[id] = rows;
+    levelRounding[id] = 1;
+  });
+  const reverseItems = new Set();
+  for (const scale of pkg.scales) for (const number of scale.reverse_items || []) reverseItems.add(number);
+  if (reverseItems.size !== 5 || [5, 6, 7, 8, 9].some(number => !reverseItems.has(number))) {
+    throw new Error(pkg.id + ':REVERSE_ITEMS_MISMATCH');
+  }
+  return {id: pkg.id, key_version: '1.0.0-staging', type: 'passport', items: 32,
+    valid: [1, 2, 3, 4, 5, 6], answerMap: {'1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5},
+    reverseMax: 5, scoreRange: [0, 5], scales, levels, levelRounding};
+}
+
 function keyFromPackage(pkg) {
   const motkov = motkovKey(pkg);
   if (motkov) return motkov;
   const co36 = co36Key(pkg);
   if (co36) return co36;
+  const maia = maiaKey(pkg);
+  if (maia) return maia;
   const ids = PACKAGE_SCALE_IDS[pkg.id];
   if (!ids) return null;
   if (!Array.isArray(pkg.items) || !Array.isArray(pkg.scales) || pkg.scales.length !== ids.length) {

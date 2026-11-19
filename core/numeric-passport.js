@@ -107,7 +107,10 @@ function scoreNumericPassport(def, responses) {
   }
   for (const [name, ranges] of Object.entries(def.levels || {})) {
     if (!Number.isFinite(metrics[name])) throw new Error('Invalid level input');
-    const value = lookup(metrics[name], ranges);
+    // Some methods round before level assignment (MAIA-R: one decimal). Without this
+    // the two-decimal metric could land on a different side of a one-decimal boundary.
+    const digits = def.levelRounding && def.levelRounding[name];
+    const value = lookup(Number.isInteger(digits) ? rounded(metrics[name], digits) : metrics[name], ranges);
     if (value != null) metrics[name + ' – уровень'] = value;
   }
   for (const [name, rule] of Object.entries(def.crossLevels || {})) {

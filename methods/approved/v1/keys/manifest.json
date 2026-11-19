@@ -103,6 +103,16 @@
       "title": "Шкала психологического благополучия К. Рифф",
       "author": null,
       "items": 84
+    },
+    {
+      "method_id": "maia_r_32",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:691a44a03f40dcc26608670f79b5fda3b723c52ce76d56b53361eddd3274ecf2",
+      "package_file": "12_MAIA_R.json",
+      "package_version": "1.0.0-staging",
+      "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
+      "author": null,
+      "items": 32
     }
   ],
   "skipped": [
