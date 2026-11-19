@@ -146,8 +146,9 @@
         </div>
         <p id="method-library-count" class="muted"></p>
         <label>Поиск по названию, автору или показателю<input id="method-search" type="search" placeholder="Например, тревожность"></label>
-        <div class="toolbar"><label>Группа<select id="method-target-group"></select></label><label>Этап<select id="method-target-stage"></select></label><button id="save-method-selection" type="button">Сохранить выбранные методики</button></div>
-        <p class="muted">Отметьте несколько методик и сохраните набор для выбранной группы и этапа.</p>
+        <div class="toolbar" id="method-assignment-toolbar"><label>Группа<select id="method-target-group"></select></label><label>Этап<select id="method-target-stage"></select></label><button id="save-method-selection" type="button">Сохранить выбранные методики</button></div>
+        <p class="muted" id="method-assignment-hint">Отметьте несколько методик и сохраните набор для выбранной группы и этапа.</p>
+        <p class="muted" id="method-assignment-locked" hidden>Дизайн закреплён после активации: состав методик изменить нельзя. Чтобы назначить другой набор, закройте исследование и создайте новое.</p>
         <div id="method-catalog-list"></div>
       </section>
       <section id="study-progress-section" class="card study-section" hidden></section>
