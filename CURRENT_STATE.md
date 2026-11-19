@@ -8,8 +8,9 @@
 
 ## Git, PR и CI
 
-- Текущий `main`: `5efc29e31d00b49249b365a596bc6d1a08eaeb68` – merge [PR №150](https://github.com/PedFund/PedPsyRU/pull/150) (модель угроз и базовая оценка зрелости У_зи: 0.45, уровень 2). Перед ним: `2b438f9` – [PR №148](https://github.com/PedFund/PedPsyRU/pull/148) (допуск только с подтверждённым возрастом 18+, миграция 091), `add1868` – [PR №147](https://github.com/PedFund/PedPsyRU/pull/147) (инвентаризация ПДн и проект акта УЗ-3), `f68cc60` – [PR №145](https://github.com/PedFund/PedPsyRU/pull/145) (проверка владельцев функций при выдаче грантов), `88de2dc` – [PR №144](https://github.com/PedFund/PedPsyRU/pull/144) (progress без почты участника, миграция 090).
-- [Контрольный CI после Merge](https://github.com/PedFund/PedPsyRU/actions/runs/44106688212) на `2b438f9` (код и миграции): **6/6 jobs** (Node 22/24, PostgreSQL 18 с браузерными повторами, dependency audit, secret scan, Required checks). `5efc29e` – docs-only, CI того же состава.
+- Текущий `main`: `53aa5974793b75c12ed450205afa68bc1ec709b6` – merge [PR №159](https://github.com/PedFund/PedPsyRU/pull/159) (access-лог с хэшем IP, L-1; сроки хранения утверждены). Перед ним: `ebfadb0` – [№158](https://github.com/PedFund/PedPsyRU/pull/158) (аудит журналирования и тесты «в журналах нет ПДн»), `40b2759` – [№157](https://github.com/PedFund/PedPsyRU/pull/157) (аудит доступа и RLS), `5522d0c` – [№156](https://github.com/PedFund/PedPsyRU/pull/156) (F3 закрыт как неприменимый), `7f2dbc2` – [№155](https://github.com/PedFund/PedPsyRU/pull/155) (блокировка после серии неудачных входов, миграция 092), `ad9975c` – [№154](https://github.com/PedFund/PedPsyRU/pull/154) (политика пароля), `dc92ad1` – [№153](https://github.com/PedFund/PedPsyRU/pull/153) (аудит аутентификации).
+- Безопасность: в `docs/security/` восемь документов (инвентаризация ПДн, акт УЗ-3, модель угроз, оценка зрелости, матрица 41 меры, runbook, аудиты аутентификации/доступа/журналирования). Закрыты F1 (блокировка), F2 (слабые пароли), F3 (неприменим), L-1 (access-лог), L-2 (сроки хранения: аудит 3 года, journald 90 дней, access-лог 30 дней). Открыты: A-1 (RLS на 21 таблицу), A-2/L-3 (append-only аудит), A-3 (CI-инвариант авторизации), L-4/L-5 (реестр событий и регламент выгрузки), F4 (MFA исследователей — отложено владельцем), F5/F6/F8.
+- [Контрольный CI после Merge](https://github.com/PedFund/PedPsyRU/actions/runs/44106688212) на `2b438f9` (код и миграции): **6/6 jobs** (Node 22/24, PostgreSQL 18 с браузерными повторами, dependency audit, secret scan, Required checks). `ebfadb0` — 6/6; `53aa597` — CI запущен после Merge, статус проверяйте на GitHub.
 - Ранее в `main`: [№140](https://github.com/PedFund/PedPsyRU/pull/140) регистрация через email, [№138](https://github.com/PedFund/PedPsyRU/pull/138) SMTP-транспорт, [№137](https://github.com/PedFund/PedPsyRU/pull/137) пилотный admission.
 - Избыточные PR закрыты 2026-11-17 без Merge: №139 (архив прежних фаз), черновики №97, №94, №88 и Dependabot №58, №60, №61, №62; ветки сохранены. Открытыми остаются черновики прежних фаз №78, №72, №71 – они не являются текущим состоянием `main`, решение по ним отдельное.
 - Состояние веток и CI изменяемо: проверяйте GitHub перед следующими действиями. Данный документ не заменяет живые проверки.
@@ -32,14 +33,15 @@
 ## Стенд
 
 - `https://mettest.vibemind.pro/workspace`; прежний `sslip.io`-адрес перенаправляется на новый.
-- `main`/стенд: `2b438f9`; сервис active; миграция head **91**; проверка `/health` — `ok`. Стенд развёрнут на `2b438f9` (091 применена, сервис перезапущен и проверен 2026-11-17).
+- `main`/стенд: `53aa597`; сервис active; миграция head **92**; проверка `/health` — `ok`. Стенд развёрнут на `53aa597` (миграция 092 и access-лог применены, сервис перезапущен и проверен 2026-11-19).
+- Access-лог включён: `/var/log/mettest/access.log`, режим `640 mettest:mettest`, ротация 30 дней (`/etc/logrotate.d/mettest-access`); в строке только время, метод, шаблон маршрута, статус, длительность и HMAC-хэш IP — query, тело, заголовки и сырой адрес не пишутся.
 - Selectel Mail: домен `vibemind.pro` **VERIFIED**, отправитель `noreply@vibemind.pro`, SMTP `smtp.mail.selcloud.ru:1127`.
 - `PEDPSY_MAIL_ENABLED=1`; allowlist после проверки снят; preflight отдаёт `synthetic:false`, `delivery:"email"`.
 - Реальное worker-письмо на Gmail доставлено: outbox `sent`, попытка 1, аудит `allow/SENT`; TTL pending 24 ч.
 - Rate limit **100/5мин**: Selectel подтвердил повышение с 20/5мин, значение применено на стенде и подтверждено по окружению процесса. Запрос на 500/5мин подан дополнительно (поэтапно, платно) и не блокирует работу.
 - Yandex: наблюдаются внешние задержки/неполадки Яндекс Почты; 24-часовой TTL покрывает задержку, но доставка не гарантируется на стороне получателя.
 - Данные стенда: 7 исследований, 38 участников, 229 попыток, 6242 ответа; тестовая pending-строка worker-теста участника не создаёт.
-- Последний backup перед миграцией 091: `/var/backups/mettest/pre-091-20261117T144605Z.dump`, 1.64 МБ, 851 объект; перед 090: `pre-090-20261117T110744Z.dump` (1.63 МБ, 849 объектов, sha256 `48d104e2...`); перед выравниванием владельцев функций: `pre-owner-normalize-20261117T111845Z.dump`; перед 089: `pre-pilot-20261117T052718Z.dump`.
+- Последний backup перед выпуском 2026-11-19: `/var/backups/mettest/pre-53aa597-20261119T053720Z.dump` (1.66 МБ, 863 объекта); перед 092: `pre-092-20261118T092142Z.dump` (1.65 МБ, 851 объект); перед 091: `pre-091-20261117T144605Z.dump`, 1.64 МБ, 851 объект; перед 090: `pre-090-20261117T110744Z.dump` (1.63 МБ, 849 объектов, sha256 `48d104e2...`); перед выравниванием владельцев функций: `pre-owner-normalize-20261117T111845Z.dump`; перед 089: `pre-pilot-20261117T052718Z.dump`.
 - Владельцы функций `pedpsy` – владелец схемы `mettest_owner` (177 функций, 0 принадлежат `postgres`); `SECURITY DEFINER`-функции онбординга исполняются от владельца схемы, права runtime-роли сохранены.
 
 ## Архитектурные решения владельца
