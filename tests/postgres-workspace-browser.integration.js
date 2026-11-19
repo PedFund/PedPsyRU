@@ -131,6 +131,8 @@ test("PostgreSQL constructor browser: real CRUD/copy, two-tab conflict, quota, s
   assert.equal(await browser.evaluate("document.getElementById('stage-access-group').selectedOptions[0].textContent"),"Экспериментальная");
   await browser.evaluate("document.getElementById('reload-stage-access').click()");await browser.wait("document.querySelectorAll('#stage-access-list .row').length===3 && "+enabled);
   assert.deepEqual(await browser.evaluate("Array.from(document.querySelectorAll('#stage-access-list .row')).filter(r=>r.querySelector('small')?.textContent==='Открыт для выбранной группы').map(r=>r.firstChild.firstChild.textContent)"),["T1"]);
+  // The product default is five active studies; this scenario pins one to exercise the quota refusal.
+  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE login_id=$1",[invite.login_id]);
   await browser.evaluate("document.querySelector('#researcher-home details').open=true;document.getElementById('study-title').value='Второй черновик';document.getElementById('create-study-form').requestSubmit()");await browser.wait(saved(0));
   await browser.evaluate("document.querySelector('[data-study-section-open=methods]').click();document.querySelector('#method-catalog-list input[type=checkbox]').click();document.getElementById('save-method-selection').click()");await browser.wait(saved(1));
   await browser.evaluate("document.getElementById('activate-study').click()");await browser.confirmDialog();await browser.wait("document.getElementById('message').textContent.includes('Лимит активных') && "+enabled);assert.equal(await browser.evaluate(visible("design-edit")),true);
