@@ -39,6 +39,8 @@ for(const role of ["administrator","superadministrator"])scenario(role+" execute
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.researcher_sessions WHERE user_id=$1",[staff.user])).rows[0].n,0);
 });
 scenario("staff and owner race for the same quota/CAS; no bypass through a manager",async(f,w,x,s)=>{
+  // The product default is five active studies; pin one so the race exercises the quota refusal.
+  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE user_id=$1",[x.row.user_id]);
   const a=await configured(f,x,x.session.token),b=await configured(f,x,s.session.token,x.row.id);
   const results=await Promise.allSettled([[a,x.session.token],[b,s.session.token]].map(([d,token])=>x.studies.lifecycle(token,d.id,{status:"active",expected_version:d.version})));
   assert.equal(results.filter(r=>r.status==="fulfilled").length,1);assert.equal(results.find(r=>r.status==="rejected").reason.code,"STUDY_QUOTA");
