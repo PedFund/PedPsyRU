@@ -83,6 +83,9 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   const request=randomUUID(),input={group_id:x.d.groups[0].id,stage_id:x.d.stages[0].id,request_id:request};const sent=await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",input);assert.equal(sent.queued,1);assert.deepEqual(await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",input),sent);
   const recipients=(await x.f.admin.query("SELECT email FROM pedpsy.research_reminder_outbox WHERE study_id=$1",[x.d.id])).rows.map(r=>r.email);assert.deepEqual(recipients,["workbench@example.test"],"the reminder queue still resolves the contact of record");
   for(const fn of ["research_progress_rows","research_progress_rows_v2"]){const definition=(await x.f.admin.query("SELECT pg_get_functiondef(('pedpsy.'||$1||'(uuid)')::regprocedure) d",[fn])).rows[0].d;assert.doesNotMatch(definition,/"email"/,"the progress projection definition must not project an address");}
+  // Dashboards count every participant of the study; the old synthetic-domain filter
+  // silently excluded real addresses once real mail was enabled.
+  for(const fn of ["research_method_progress(uuid)","research_method_analytics(uuid,uuid,uuid)","research_participant_passport_stats(uuid)"]){const definition=(await x.f.admin.query("SELECT pg_get_functiondef($1::regprocedure) d",["pedpsy."+fn])).rows[0].d;assert.doesNotMatch(definition,/example\[\.\]test/,"dashboard must not filter by address domain for "+fn);}
   assert.equal((await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",{...input,request_id:randomUUID()})).queued,0);
   const {workspaceFixture,headers}=require("./workspace-fixture.js"),{csrfFor}=require("../storage/access.js"),{responses}=require("./storage-contract-suite.js");
   const w=workspaceFixture(x.f,undefined,{workbench:true});t.after(()=>w.app.close());
