@@ -203,6 +203,44 @@ function maiaKey(pkg) {
     reverseMax: 5, scoreRange: [0, 5], scales, levels, levelRounding};
 }
 
+// A package may carry a complete declarative scoring block: accepted values, an
+// optional answer map, reverse maximum, scales with their item lists, derived
+// composites and integer level tables. The key is built verbatim from it, so a new
+// owner package needs data, not a new branch in this script.
+function declarativeKey(pkg) {
+  const s = pkg.scoring || {};
+  if (s.declarative !== true) return null;
+  if (!Array.isArray(pkg.items) || !pkg.items.length) throw new Error(pkg.id + ':NO_ITEMS');
+  const valid = Array.isArray(s.response && s.response.valid) ? s.response.valid.map(Number) : [];
+  if (!valid.length || new Set(valid).size !== valid.length) throw new Error(pkg.id + ':INVALID_VALUES');
+  const reverseMax = Number(s.reverse_max);
+  const scales = {};
+  for (const [id, scale] of Object.entries(s.scales || {})) {
+    const direct = Array.isArray(scale.direct) ? scale.direct.slice().sort((a, b) => a - b) : [];
+    const reverse = Array.isArray(scale.reverse) ? scale.reverse.slice().sort((a, b) => a - b) : [];
+    if (!direct.length && !reverse.length) throw new Error(pkg.id + ':EMPTY_SCALE:' + id);
+    if (reverse.length && !Number.isFinite(reverseMax)) throw new Error(pkg.id + ':MISSING_REVERSE_MAX');
+    scales[id] = {...(direct.length ? {direct} : {}), ...(reverse.length ? {reverse} : {}),
+      aggregate: scale.aggregate === 'mean' ? 'mean' : 'sum'};
+  }
+  const derived = {};
+  for (const [name, item] of Object.entries(s.derived || {})) {
+    if (!item || !Array.isArray(item.inputs) || !item.inputs.length) throw new Error(pkg.id + ':INVALID_DERIVED:' + name);
+    derived[name] = {op: item.op === 'mean' ? 'mean' : 'sum', inputs: item.inputs.slice()};
+  }
+  const levels = {};
+  for (const [name, rows] of Object.entries(s.levels || {})) {
+    if (!Array.isArray(rows) || !rows.length || rows.some(row => !Array.isArray(row) || row.length < 3)) {
+      throw new Error(pkg.id + ':INVALID_LEVELS:' + name);
+    }
+    levels[name] = rows;
+  }
+  return {id: pkg.id, key_version: pkg.version || '1.0.0-staging', type: 'passport', items: pkg.items.length, valid,
+    ...(s.answer_map ? {answerMap: {...s.answer_map}} : {}), reverseMax,
+    ...(Number.isFinite(Number(s.score_min)) && Number.isFinite(Number(s.score_max)) ? {scoreRange: [Number(s.score_min), Number(s.score_max)]} : {}),
+    scales, ...(Object.keys(derived).length ? {derived} : {}), ...(Object.keys(levels).length ? {levels} : {})};
+}
+
 function keyFromPackage(pkg) {
   const motkov = motkovKey(pkg);
   if (motkov) return motkov;
@@ -210,6 +248,8 @@ function keyFromPackage(pkg) {
   if (co36) return co36;
   const maia = maiaKey(pkg);
   if (maia) return maia;
+  const declarative = declarativeKey(pkg);
+  if (declarative) return declarative;
   const ids = PACKAGE_SCALE_IDS[pkg.id];
   if (!ids) return null;
   if (!Array.isArray(pkg.items) || !Array.isArray(pkg.scales) || pkg.scales.length !== ids.length) {

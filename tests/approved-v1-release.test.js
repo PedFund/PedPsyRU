@@ -7,7 +7,7 @@ const {approvedV1Releases} = require("../storage/approved-v1-release.js");
 
 test("only packages with a pinned option set become releases", () => {
   const {releases, unsupported} = approvedV1Releases();
-  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "hardiness_leontiev_rasskazova_45", "maia_r_32", "motkov_psychological_culture_18", "pvq_rr_57", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
+  assert.deepEqual(releases.map(r => r.id).sort(), ["co36_kunitsyna_36", "darr_7", "ecv_15", "ffmq_39", "hardiness_leontiev_rasskazova_45", "maia_r_32", "motkov_psychological_culture_18", "pvq_rr_57", "qlesq_36_vodopyanova", "reflexivity_karpov_27", "ryff_pwb_84_shevelenkova_fesenko", "shpana_20", "sjo_20", "ttf_atf_10", "uvlk_shipilov"]);
   assert.deepEqual(unsupported, []);
 });
 

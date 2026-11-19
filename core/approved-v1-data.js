@@ -16,6 +16,10 @@ const keys = {
   pvq_rr_57: require('../methods/approved/v1/keys/pvq_rr_57.key.json'),
   ttf_atf_10: require('../methods/approved/v1/keys/ttf_atf_10.key.json'),
   maia_r_32: require('../methods/approved/v1/keys/maia_r_32.key.json'),
+  ffmq_39: require('../methods/approved/v1/keys/ffmq_39.key.json'),
+  shpana_20: require('../methods/approved/v1/keys/shpana_20.key.json'),
+  ecv_15: require('../methods/approved/v1/keys/ecv_15.key.json'),
+  darr_7: require('../methods/approved/v1/keys/darr_7.key.json'),
   ryff_pwb_84_shevelenkova_fesenko: require('../methods/approved/v1/keys/ryff_pwb_84_shevelenkova_fesenko.key.json')
 };
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');

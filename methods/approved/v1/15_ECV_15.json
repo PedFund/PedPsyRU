@@ -1,0 +1,314 @@
+{
+  "id": "ecv_15",
+  "version": "1.0.0-staging",
+  "library_number": 15,
+  "title": "Emotion Control Values (ECV), ценность и самоэффективность эмоционального контроля",
+  "short_title": "ECV",
+  "adaptation": "Панкратова А.А., Осин Е.Н.",
+  "language": "ru",
+  "item_count": 15,
+  "instructions": "Ниже приводятся вопросы, касающиеся переживаний и выражения эмоций, а также Вашего отношения к эмоциям. Пожалуйста, ответьте на каждый вопрос, используя шкалу от 0 (категорически не согласен) до 10 (полностью согласен).",
+  "response_options": [
+    {
+      "value": 1,
+      "label": "категорически не согласен"
+    },
+    {
+      "value": 2,
+      "label": "1"
+    },
+    {
+      "value": 3,
+      "label": "2"
+    },
+    {
+      "value": 4,
+      "label": "3"
+    },
+    {
+      "value": 5,
+      "label": "4"
+    },
+    {
+      "value": 6,
+      "label": "5"
+    },
+    {
+      "value": 7,
+      "label": "6"
+    },
+    {
+      "value": 8,
+      "label": "7"
+    },
+    {
+      "value": 9,
+      "label": "8"
+    },
+    {
+      "value": 10,
+      "label": "9"
+    },
+    {
+      "value": 11,
+      "label": "полностью согласен"
+    }
+  ],
+  "items": [
+    {
+      "number": 1,
+      "id": "q01",
+      "text": "Людям не следует выражать свои эмоции открыто.",
+      "required": true,
+      "scale": "ECV_VALUE",
+      "direction": "direct"
+    },
+    {
+      "number": 2,
+      "id": "q02",
+      "text": "Сильные эмоции очень трудно контролировать.",
+      "required": true,
+      "scale": "ECV_EFFICACY",
+      "direction": "reverse"
+    },
+    {
+      "number": 3,
+      "id": "q03",
+      "text": "По людям обычно видно, что они чувствуют.",
+      "required": true,
+      "direction": "direct",
+      "control": true
+    },
+    {
+      "number": 4,
+      "id": "q04",
+      "text": "Это неправильно – всегда показывать свои чувства.",
+      "required": true,
+      "scale": "ECV_VALUE",
+      "direction": "direct"
+    },
+    {
+      "number": 5,
+      "id": "q05",
+      "text": "Можно многому научиться, но нельзя научиться управлять своими эмоциями.",
+      "required": true,
+      "scale": "ECV_EFFICACY",
+      "direction": "reverse"
+    },
+    {
+      "number": 6,
+      "id": "q06",
+      "text": "Людям не следует сдерживать свои эмоции.",
+      "required": true,
+      "scale": "ECV_VALUE",
+      "direction": "reverse"
+    },
+    {
+      "number": 7,
+      "id": "q07",
+      "text": "Каждый может научиться управлять своими эмоциями.",
+      "required": true,
+      "scale": "ECV_EFFICACY",
+      "direction": "direct"
+    },
+    {
+      "number": 8,
+      "id": "q08",
+      "text": "Люди почти всегда контролируют свои эмоциональные реакции.",
+      "required": true,
+      "direction": "direct",
+      "control": true
+    },
+    {
+      "number": 9,
+      "id": "q09",
+      "text": "Чтобы справиться с сильными эмоциями, нужно дать им выход.",
+      "required": true,
+      "scale": "ECV_VALUE",
+      "direction": "reverse"
+    },
+    {
+      "number": 10,
+      "id": "q10",
+      "text": "Если человек захочет, он всегда может изменить свое эмоциональное состояние.",
+      "required": true,
+      "scale": "ECV_EFFICACY",
+      "direction": "direct"
+    },
+    {
+      "number": 11,
+      "id": "q11",
+      "text": "Людям следует лучше контролировать свои эмоции.",
+      "required": true,
+      "scale": "ECV_VALUE",
+      "direction": "direct"
+    },
+    {
+      "number": 12,
+      "id": "q12",
+      "text": "Как бы человек ни старался, он не может изменить свое эмоциональное состояние.",
+      "required": true,
+      "scale": "ECV_EFFICACY",
+      "direction": "reverse"
+    },
+    {
+      "number": 13,
+      "id": "q13",
+      "text": "Вполне допустимо выражать свои эмоции – и отрицательные, и положительные.",
+      "required": true,
+      "scale": "ECV_VALUE",
+      "direction": "reverse"
+    },
+    {
+      "number": 14,
+      "id": "q14",
+      "text": "На самом деле эмоции почти не поддаются контролю.",
+      "required": true,
+      "scale": "ECV_EFFICACY",
+      "direction": "reverse"
+    },
+    {
+      "number": 15,
+      "id": "q15",
+      "text": "Большинство людей не контролируют свои эмоции должным образом.",
+      "required": true,
+      "direction": "direct",
+      "control": true
+    }
+  ],
+  "scales": [
+    {
+      "id": "ECV_VALUE",
+      "label": "Ценность эмоционального контроля",
+      "items": [
+        1,
+        4,
+        6,
+        9,
+        11,
+        13
+      ],
+      "direct_items": [
+        1,
+        4,
+        11
+      ],
+      "reverse_items": [
+        6,
+        9,
+        13
+      ]
+    },
+    {
+      "id": "ECV_EFFICACY",
+      "label": "Самоэффективность эмоционального контроля",
+      "items": [
+        2,
+        5,
+        7,
+        10,
+        12,
+        14
+      ],
+      "direct_items": [
+        7,
+        10
+      ],
+      "reverse_items": [
+        2,
+        5,
+        12,
+        14
+      ]
+    }
+  ],
+  "scoring": {
+    "declarative": true,
+    "response": {
+      "valid": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "answer_map": {
+      "1": 0,
+      "2": 1,
+      "3": 2,
+      "4": 3,
+      "5": 4,
+      "6": 5,
+      "7": 6,
+      "8": 7,
+      "9": 8,
+      "10": 9,
+      "11": 10
+    },
+    "reverse_max": 10,
+    "score_min": 0,
+    "score_max": 10,
+    "scales": {
+      "ECV_VALUE": {
+        "direct": [
+          1,
+          4,
+          11
+        ],
+        "reverse": [
+          6,
+          9,
+          13
+        ]
+      },
+      "ECV_EFFICACY": {
+        "direct": [
+          7,
+          10
+        ],
+        "reverse": [
+          2,
+          5,
+          12,
+          14
+        ]
+      }
+    }
+  },
+  "source": {
+    "file": "ECV/паспорт_структура.json",
+    "citation": "Панкратова А.А., Осин Е.Н. Кросс-культурное исследование особенностей эмоционального контроля (Россия, Азербайджан) // Психологические исследования. 2015, 8(44); 7_ECV.pdf, с.4, 9–11.",
+    "verification": {
+      "item_count": 15,
+      "unique_keyed_items": 12,
+      "control_items": 3,
+      "item_coverage": "1–15 без пересечений",
+      "range_per_scale": [
+        0,
+        60
+      ],
+      "example_all_zero": {
+        "value": 30,
+        "efficacy": 40
+      },
+      "example_all_ten": {
+        "value": 30,
+        "efficacy": 20
+      },
+      "source_check": "стр.11 PDF",
+      "remaining_blockers": []
+    }
+  },
+  "review": {
+    "status": "owner_approved",
+    "approved_on": "2026-11-19",
+    "by": "пользователь, явное сообщение в чате"
+  }
+}

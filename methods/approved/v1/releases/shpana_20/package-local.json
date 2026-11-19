@@ -1,0 +1,741 @@
+{
+  "schema_version": "1.0",
+  "method_id": "shpana_20",
+  "package_version": "1.0.0",
+  "title": "Шкала позитивного аффекта и негативного аффекта (ШПАНА)",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "shpana_20_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Почти или совсем нет"
+        },
+        {
+          "value": "2",
+          "label": "Немного"
+        },
+        {
+          "value": "3",
+          "label": "Умеренно"
+        },
+        {
+          "value": "4",
+          "label": "Значительно"
+        },
+        {
+          "value": "5",
+          "label": "Очень сильно"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "pa",
+      "label": "Позитивный аффект (ПА)",
+      "min": 10,
+      "max": 50,
+      "direction": "not_specified"
+    },
+    {
+      "id": "na",
+      "label": "Негативный аффект (НА)",
+      "min": 10,
+      "max": 50,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "pa",
+          "value": 10
+        },
+        {
+          "scale_id": "na",
+          "value": 10
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "shpana_20_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 11912,
+      "sha256": "2f68d1bc84f2085bf48621b6664f96751c300bc1f941bca62ce116bdac0839a5",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 591,
+      "sha256": "19ba0dc5fe9c9ef882d9d649325fadb10cd6aee68d6d2afb60f249b4667d683d",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 495,
+      "sha256": "f551b7c5efb41aa2a30bf712f53533ad1facc766df5c55a8c0178ff14460c89c",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 257,
+      "sha256": "3494250a8eb6f6c1ec21cccfd3f7f1e05a9e56ce276ebd0f80045e73c57ae6fa",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

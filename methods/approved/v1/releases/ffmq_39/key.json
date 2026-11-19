@@ -1,0 +1,98 @@
+{
+  "id": "ffmq_39",
+  "key_version": "1.0.0-staging",
+  "type": "passport",
+  "items": 39,
+  "valid": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "reverseMax": 6,
+  "scoreRange": [
+    1,
+    5
+  ],
+  "scales": {
+    "observe": {
+      "direct": [
+        1,
+        6,
+        11,
+        15,
+        20,
+        26,
+        31,
+        36
+      ],
+      "aggregate": "sum"
+    },
+    "describe": {
+      "direct": [
+        2,
+        7,
+        27,
+        32,
+        37
+      ],
+      "reverse": [
+        12,
+        16,
+        22
+      ],
+      "aggregate": "sum"
+    },
+    "aware_action": {
+      "reverse": [
+        5,
+        8,
+        13,
+        18,
+        23,
+        28,
+        34,
+        38
+      ],
+      "aggregate": "sum"
+    },
+    "nonjudging": {
+      "reverse": [
+        3,
+        10,
+        14,
+        17,
+        25,
+        30,
+        35,
+        39
+      ],
+      "aggregate": "sum"
+    },
+    "nonreactivity": {
+      "direct": [
+        4,
+        9,
+        19,
+        21,
+        24,
+        29,
+        33
+      ],
+      "aggregate": "sum"
+    }
+  },
+  "derived": {
+    "total_5": {
+      "op": "sum",
+      "inputs": [
+        "observe",
+        "describe",
+        "aware_action",
+        "nonjudging",
+        "nonreactivity"
+      ]
+    }
+  }
+}

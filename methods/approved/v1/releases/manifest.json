@@ -68,6 +68,30 @@
       "package_version": "1.0.0-staging",
       "scales": 8,
       "artifacts": 4
+    },
+    {
+      "id": "ffmq_39",
+      "package_version": "1.0.0-staging",
+      "scales": 6,
+      "artifacts": 4
+    },
+    {
+      "id": "shpana_20",
+      "package_version": "1.0.0-staging",
+      "scales": 2,
+      "artifacts": 4
+    },
+    {
+      "id": "ecv_15",
+      "package_version": "1.0.0-staging",
+      "scales": 2,
+      "artifacts": 4
+    },
+    {
+      "id": "darr_7",
+      "package_version": "1.0.0-staging",
+      "scales": 3,
+      "artifacts": 4
     }
   ]
 }
