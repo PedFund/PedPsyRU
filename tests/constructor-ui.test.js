@@ -8,4 +8,8 @@ test("constructor UI IDs/escaping/uncertain-write guards are wired; actual DOM b
   assert.ok(!/innerHTML|localStorage|sessionStorage|\beval\(/.test(js));assert.match(js,/expected_version:design\.version/);assert.match(js,/designLocked=true/);assert.match(js,/creationLocked=true/);assert.match(js,/textContent=d\.title/);assert.match(js,/if\(design\)await openDesign\(design\.id\)/);assert.match(html,/Полная методическая и эксплуатационная приёмка впереди/);assert.match(html,/Индивидуальные ответы и баллы исследователю не выдаются/);
   assert.match(js,/for\(const release of design\.catalog\)/,"server-allowed releases, not optional metadata, drive the catalogue");
   assert.match(js,/study-link/);assert.match(js,/design-group/);assert.match(js,/design-line/);assert.doesNotMatch(js,/label:"Открыть",fn:\(\)=>openDesign/);
+  // After every design render the invitation panel is reloaded, and a create click
+  // reloads a stale panel instead of throwing "Перечитайте приглашения".
+  assert.match(js,/async function loadGroupInvitations\(\)\{[\s\S]*?finally\{invitationLocked=false/,"the invitation lock is always released");
+  assert.match(js,/async function createGroupInvitation\(\)\{if\(!design\)[\s\S]{0,160}if\(invitationLocked\)await loadGroupInvitations\(\)/,"a create click reloads a stale invitation panel");
 });
