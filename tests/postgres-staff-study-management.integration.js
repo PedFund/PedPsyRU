@@ -38,14 +38,11 @@ for(const role of ["administrator","superadministrator"])scenario(role+" execute
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participants WHERE study_id=$1",[d.id])).rows[0].n,0);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.researcher_sessions WHERE user_id=$1",[staff.user])).rows[0].n,0);
 });
-scenario("staff and owner race for the same quota/CAS; no bypass through a manager",async(f,w,x,s)=>{
-  // The product default is five active studies; pin one so the race exercises the quota refusal.
-  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE user_id=$1",[x.row.user_id]);
+scenario("staff and owner race for the same CAS; no bypass through a manager",async(f,w,x,s)=>{
   const a=await configured(f,x,x.session.token),b=await configured(f,x,s.session.token,x.row.id);
-  const results=await Promise.allSettled([[a,x.session.token],[b,s.session.token]].map(([d,token])=>x.studies.lifecycle(token,d.id,{status:"active",expected_version:d.version})));
-  assert.equal(results.filter(r=>r.status==="fulfilled").length,1);assert.equal(results.find(r=>r.status==="rejected").reason.code,"STUDY_QUOTA");
-  const draft=results[0].status==="fulfilled"?b:a;
-  const writes=await Promise.allSettled([x.session.token,s.session.token].map(token=>x.studies.title(token,draft.id,{title:"Synthetic updated",expected_version:draft.version})));
+  // No active-study limit: the first study activates while the second stays a draft.
+  assert.equal((await x.studies.lifecycle(x.session.token,a.id,{status:"active",expected_version:a.version})).status,"active");
+  const writes=await Promise.allSettled([x.session.token,s.session.token].map(token=>x.studies.title(token,b.id,{title:"Synthetic updated",expected_version:b.version})));
   assert.equal(writes.filter(r=>r.status==="fulfilled").length,1);assert.equal(writes.find(r=>r.status==="rejected").reason.code,"DESIGN_CONFLICT");
 });
 scenario("fresh MFA and current identity required; staff cannot forge participant writes or edit methods",async(f,w,x,s)=>{
