@@ -86,6 +86,9 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   // Dashboards count every participant of the study; the old synthetic-domain filter
   // silently excluded real addresses once real mail was enabled.
   for(const fn of ["research_method_progress(uuid)","research_method_analytics(uuid,uuid,uuid)","research_participant_passport_stats(uuid)"]){const definition=(await x.f.admin.query("SELECT pg_get_functiondef($1::regprocedure) d",["pedpsy."+fn])).rows[0].d;assert.doesNotMatch(definition,/example\[\.\]test/,"dashboard must not filter by address domain for "+fn);}
+  // Redefining the analytics functions must not resurrect the small-cell suppression
+  // removed by migration 084.
+  for(const fn of ["research_method_analytics(uuid,uuid,uuid)","research_participant_passport_stats(uuid)"]){const definition=(await x.f.admin.query("SELECT pg_get_functiondef($1::regprocedure) d",["pedpsy."+fn])).rows[0].d;assert.doesNotMatch(definition,/n>=3/,"small aggregate cells stay visible for "+fn);}
   assert.equal((await x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",{...input,request_id:randomUUID()})).queued,0);
   const {workspaceFixture,headers}=require("./workspace-fixture.js"),{csrfFor}=require("../storage/access.js"),{responses}=require("./storage-contract-suite.js");
   const w=workspaceFixture(x.f,undefined,{workbench:true});t.after(()=>w.app.close());

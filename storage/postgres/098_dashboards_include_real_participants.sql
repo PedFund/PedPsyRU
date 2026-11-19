@@ -1,6 +1,7 @@
 SET LOCAL search_path=pedpsy,pg_catalog;
 -- 098: real e-mail participants must appear in the researcher dashboards. The old
 -- synthetic-domain predicate excluded every real address once real mail was enabled.
+-- The analytics and passport-stats definitions also keep the 084 no-suppression rule.
 CREATE OR REPLACE FUNCTION research_method_progress(study uuid) RETURNS jsonb LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 DECLARE registered integer;completed_any integer;rows jsonb;
 BEGIN
@@ -88,8 +89,8 @@ BEGIN
   ), sums AS (
     SELECT x.release_id,r.method_id,r.method_version_id,
       (SELECT count(*)::integer FROM payloads p WHERE p.release_id=x.release_id) completed,
-      coalesce((SELECT jsonb_agg(jsonb_build_object('code',code,'label',label,'value',value,'count',CASE WHEN n>=3 THEN n END)) FROM (SELECT code,max(label) label,value,count(*) n FROM cls WHERE release_id=x.release_id GROUP BY code,value) q),'[]'::jsonb) levels,
-      coalesce((SELECT jsonb_agg(jsonb_build_object('code',code,'label',label,'n',n,'mean',CASE WHEN n>=3 THEN mean END)) FROM (SELECT code,max(label) label,count(*) n,avg(value) mean FROM ms WHERE release_id=x.release_id GROUP BY code) q),'[]'::jsonb) measures
+      coalesce((SELECT jsonb_agg(jsonb_build_object('code',code,'label',label,'value',value,'count',n)) FROM (SELECT code,max(label) label,value,count(*) n FROM cls WHERE release_id=x.release_id GROUP BY code,value) q),'[]'::jsonb) levels,
+      coalesce((SELECT jsonb_agg(jsonb_build_object('code',code,'label',label,'n',n,'mean',mean)) FROM (SELECT code,max(label) label,count(*) n,avg(value) mean FROM ms WHERE release_id=x.release_id GROUP BY code) q),'[]'::jsonb) measures
     FROM (SELECT DISTINCT release_id FROM filtered) x
     JOIN pedpsy.instrument_releases r ON r.id=x.release_id
   )
@@ -143,7 +144,7 @@ BEGIN
   SELECT coalesce(jsonb_agg(jsonb_build_object(
     'key',f->>'key','label',f->>'label','kind',f->>'kind',
     'values',coalesce((
-      SELECT jsonb_agg(jsonb_build_object('value',v.value,'label',coalesce(o.label,v.value),'count',CASE WHEN v.n>=3 THEN v.n END))
+      SELECT jsonb_agg(jsonb_build_object('value',v.value,'label',coalesce(o.label,v.value),'count',v.n))
       FROM (
         SELECT c.answers->>(f->>'key') value,count(*)::integer n
         FROM combined c
@@ -171,7 +172,7 @@ BEGIN
     SELECT l.participant_id,l.answers FROM legacy l
     WHERE NOT EXISTS(SELECT 1 FROM latest x WHERE x.participant_id=l.participant_id)
   )
-  SELECT coalesce(jsonb_agg(jsonb_build_object('label',b.bucket,'count',CASE WHEN b.n>=3 THEN b.n END) ORDER BY b.bucket),'[]'::jsonb)
+  SELECT coalesce(jsonb_agg(jsonb_build_object('label',b.bucket,'count',b.n) ORDER BY b.bucket),'[]'::jsonb)
   INTO age_data FROM (
     SELECT CASE WHEN age<25 THEN '18вЂ“24' WHEN age<35 THEN '25вЂ“34' WHEN age<45 THEN '35вЂ“44'
       WHEN age<55 THEN '45вЂ“54' ELSE '55+' END bucket,count(*)::integer n
