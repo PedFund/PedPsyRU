@@ -1,0 +1,946 @@
+{
+  "schema_version": "1.0",
+  "method_id": "ecv_15",
+  "package_version": "1.0.0",
+  "title": "Emotion Control Values (ECV), ценность и самоэффективность эмоционального контроля",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "ecv_15_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "1"
+        },
+        {
+          "value": "3",
+          "label": "2"
+        },
+        {
+          "value": "4",
+          "label": "3"
+        },
+        {
+          "value": "5",
+          "label": "4"
+        },
+        {
+          "value": "6",
+          "label": "5"
+        },
+        {
+          "value": "7",
+          "label": "6"
+        },
+        {
+          "value": "8",
+          "label": "7"
+        },
+        {
+          "value": "9",
+          "label": "8"
+        },
+        {
+          "value": "10",
+          "label": "9"
+        },
+        {
+          "value": "11",
+          "label": "полностью согласен"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "ecv_value",
+      "label": "Ценность эмоционального контроля",
+      "min": 0,
+      "max": 60,
+      "direction": "not_specified"
+    },
+    {
+      "id": "ecv_efficacy",
+      "label": "Самоэффективность эмоционального контроля",
+      "min": 0,
+      "max": 60,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "ecv_value",
+          "value": 30
+        },
+        {
+          "scale_id": "ecv_efficacy",
+          "value": 40
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "ecv_15_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 15964,
+      "sha256": "1c18d5c742d9f256170259852521d8f804661f02913feb329e3ed75b4a483bb8",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 767,
+      "sha256": "cbf848ad4856ec01af389e0775533f817a4dba028323092cf2b0d06f8ae02869",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 397,
+      "sha256": "a2820e6bca7156abcba4476e2df3bbe404af39a981c65de7e3a0e7a02cf7c884",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 288,
+      "sha256": "d333d6451817ba6355e1e30508eaf56449b047b212da42118d38ed18c9913e25",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

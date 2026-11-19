@@ -1,0 +1,349 @@
+{
+  "schema_version": "1.0",
+  "method_id": "darr_7",
+  "package_version": "1.0.0",
+  "title": "Пересмотренная шкала «Измерение реакций гнева»",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "darr_7_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "Категорически не согласен"
+        },
+        {
+          "value": "2",
+          "label": "Не согласен"
+        },
+        {
+          "value": "3",
+          "label": "Частично согласен"
+        },
+        {
+          "value": "4",
+          "label": "Согласен"
+        },
+        {
+          "value": "5",
+          "label": "Полностью согласен"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "ar",
+      "label": "Реагирование гневом",
+      "min": 0,
+      "max": 16,
+      "direction": "not_specified"
+    },
+    {
+      "id": "ai",
+      "label": "Нарушения, вызванные гневом",
+      "min": 0,
+      "max": 12,
+      "direction": "not_specified"
+    },
+    {
+      "id": "dar_r",
+      "label": "Общая реакция гнева",
+      "min": 0,
+      "max": 28,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "ar",
+          "value": 0
+        },
+        {
+          "scale_id": "ai",
+          "value": 0
+        },
+        {
+          "scale_id": "dar_r",
+          "value": 0
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "darr_7_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 5105,
+      "sha256": "1d55f44e89b3b1c24aa9f9116cbe423c1c9e5ebd406e82b0e89bd6d494ce6d16",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1732,
+      "sha256": "b4952f013ce007bb0bcb4e01302b0adb0c4e56a48dbc2f8f846f9c9cdf1a8ce8",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 157,
+      "sha256": "5221730df2d265ea40e0ac31c490e657aad360b5054964b8afde2d94fbfee9a2",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 283,
+      "sha256": "31ac0a6aea7f023d9cc825845970b0d23e58fcfb951b0a4ee68cde9dd6dca5d1",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

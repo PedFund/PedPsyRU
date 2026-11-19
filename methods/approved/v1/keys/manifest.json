@@ -113,6 +113,46 @@
       "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
       "author": "Попова Резеда Равилевна, Лопухова Ольга Геннадьевна",
       "items": 32
+    },
+    {
+      "method_id": "ffmq_39",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:8d6d22ac3d96f1f76a61b8fbc20e064f26994239a4c474a071fa14bf41f06b38",
+      "package_file": "13_FFMQ_39.json",
+      "package_version": "1.0.0-staging",
+      "title": "Пятифакторный опросник осознанности (FFMQ-39)",
+      "author": "А.М. Голубев, Е.А. Дорошева",
+      "items": 39
+    },
+    {
+      "method_id": "shpana_20",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:19ba0dc5fe9c9ef882d9d649325fadb10cd6aee68d6d2afb60f249b4667d683d",
+      "package_file": "14_SHPANA_20.json",
+      "package_version": "1.0.0-staging",
+      "title": "Шкала позитивного аффекта и негативного аффекта (ШПАНА)",
+      "author": "Е.Н. Осин",
+      "items": 20
+    },
+    {
+      "method_id": "ecv_15",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:cbf848ad4856ec01af389e0775533f817a4dba028323092cf2b0d06f8ae02869",
+      "package_file": "15_ECV_15.json",
+      "package_version": "1.0.0-staging",
+      "title": "Emotion Control Values (ECV), ценность и самоэффективность эмоционального контроля",
+      "author": "Панкратова А.А., Осин Е.Н.",
+      "items": 15
+    },
+    {
+      "method_id": "darr_7",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:b4952f013ce007bb0bcb4e01302b0adb0c4e56a48dbc2f8f846f9c9cdf1a8ce8",
+      "package_file": "16_DARR_7.json",
+      "package_version": "1.0.0-staging",
+      "title": "Пересмотренная шкала «Измерение реакций гнева»",
+      "author": "Шмарина Т.А., Блинова Л.Д.",
+      "items": 7
     }
   ],
   "skipped": [

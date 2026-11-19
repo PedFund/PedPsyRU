@@ -1,0 +1,1374 @@
+{
+  "schema_version": "1.0",
+  "method_id": "ffmq_39",
+  "package_version": "1.0.0",
+  "title": "Пятифакторный опросник осознанности (FFMQ-39)",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "ffmq_39_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "ordinal": 31,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "ordinal": 32,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "ordinal": 33,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "ordinal": 34,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q35",
+      "ordinal": 35,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q36",
+      "ordinal": 36,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q37",
+      "ordinal": 37,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q38",
+      "ordinal": 38,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    },
+    {
+      "id": "q39",
+      "ordinal": 39,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "никогда или очень редко"
+        },
+        {
+          "value": "2",
+          "label": "редко"
+        },
+        {
+          "value": "3",
+          "label": "иногда"
+        },
+        {
+          "value": "4",
+          "label": "часто"
+        },
+        {
+          "value": "5",
+          "label": "очень часто или всегда"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "observe",
+      "label": "Наблюдение",
+      "min": 8,
+      "max": 40,
+      "direction": "not_specified"
+    },
+    {
+      "id": "describe",
+      "label": "Описание",
+      "min": 8,
+      "max": 40,
+      "direction": "not_specified"
+    },
+    {
+      "id": "aware_action",
+      "label": "Осознанная активность",
+      "min": 8,
+      "max": 40,
+      "direction": "not_specified"
+    },
+    {
+      "id": "nonjudging",
+      "label": "Безоценочное отношение к опыту",
+      "min": 8,
+      "max": 40,
+      "direction": "not_specified"
+    },
+    {
+      "id": "nonreactivity",
+      "label": "Нереагирование",
+      "min": 7,
+      "max": 35,
+      "direction": "not_specified"
+    },
+    {
+      "id": "total_5",
+      "label": "Суммарный показатель по всему опроснику",
+      "min": 39,
+      "max": 195,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        },
+        {
+          "item_id": "q29",
+          "value": "1"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "1"
+        },
+        {
+          "item_id": "q33",
+          "value": "1"
+        },
+        {
+          "item_id": "q34",
+          "value": "1"
+        },
+        {
+          "item_id": "q35",
+          "value": "1"
+        },
+        {
+          "item_id": "q36",
+          "value": "1"
+        },
+        {
+          "item_id": "q37",
+          "value": "1"
+        },
+        {
+          "item_id": "q38",
+          "value": "1"
+        },
+        {
+          "item_id": "q39",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "observe",
+          "value": 8
+        },
+        {
+          "scale_id": "describe",
+          "value": 20
+        },
+        {
+          "scale_id": "aware_action",
+          "value": 40
+        },
+        {
+          "scale_id": "nonjudging",
+          "value": 40
+        },
+        {
+          "scale_id": "nonreactivity",
+          "value": 7
+        },
+        {
+          "scale_id": "total_5",
+          "value": 115
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "ffmq_39_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 27129,
+      "sha256": "0659e4b5de716313e2e53d77a22668b5492ee82ba06040c051f78211297b8bb2",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1293,
+      "sha256": "8d6d22ac3d96f1f76a61b8fbc20e064f26994239a4c474a071fa14bf41f06b38",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 292,
+      "sha256": "4b800b3bc71ca0d1a703f307625d2543de7569cdf1303a62354dd6b1ea62e070",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 387,
+      "sha256": "5a95144d179c1a5844d6e203813b78061b807dfbe6ab4b114e815110c43f2fe3",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}

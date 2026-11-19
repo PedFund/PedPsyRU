@@ -1,0 +1,582 @@
+{
+  "id": "ffmq_39",
+  "version": "1.0.0-staging",
+  "library_number": 13,
+  "title": "Пятифакторный опросник осознанности (FFMQ-39)",
+  "short_title": "FFMQ-39",
+  "adaptation": "А.М. Голубев, Е.А. Дорошева",
+  "language": "ru",
+  "item_count": 39,
+  "instructions": "Пожалуйста, оцените свою степень согласия с каждым утверждением по шкале: 1 – никогда или очень редко; 2 – редко; 3 – иногда; 4 – часто; 5 – очень часто или всегда.",
+  "response_options": [
+    {
+      "value": 1,
+      "label": "никогда или очень редко"
+    },
+    {
+      "value": 2,
+      "label": "редко"
+    },
+    {
+      "value": 3,
+      "label": "иногда"
+    },
+    {
+      "value": 4,
+      "label": "часто"
+    },
+    {
+      "value": 5,
+      "label": "очень часто или всегда"
+    }
+  ],
+  "items": [
+    {
+      "number": 1,
+      "id": "q01",
+      "text": "Когда я иду, я сознательно обращаю внимание на ощущения движения моего тела",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 2,
+      "id": "q02",
+      "text": "Я умею находить слова, чтобы описать свои чувства",
+      "required": true,
+      "scale": "describe",
+      "direction": "direct"
+    },
+    {
+      "number": 3,
+      "id": "q03",
+      "text": "Я критикую себя за беспричинные или неуместные эмоции",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 4,
+      "id": "q04",
+      "text": "Я воспринимаю свои чувства и эмоции, не погружаясь в размышления по их поводу",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 5,
+      "id": "q05",
+      "text": "Когда я чем-то занимаюсь, в моей голове возникают посторонние мысли, и я легко отвлекаюсь",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 6,
+      "id": "q06",
+      "text": "Когда я принимаю душ или ванну, я внимательно прислушиваюсь к ощущениям воды на моем теле",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 7,
+      "id": "q07",
+      "text": "Я могу легко выразить словами свое мнение, свои убеждения и ожидания",
+      "required": true,
+      "scale": "describe",
+      "direction": "direct"
+    },
+    {
+      "number": 8,
+      "id": "q08",
+      "text": "Я не сосредоточиваюсь на том, что делаю, потому что мечтаю или переживаю о чем-то либо отвлекаюсь каким-то еще образом",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 9,
+      "id": "q09",
+      "text": "Я осознаю свои чувства, не погружаясь в них",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 10,
+      "id": "q10",
+      "text": "Я говорю себе, что не должен испытывать чувства так, как испытываю сейчас",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 11,
+      "id": "q11",
+      "text": "Я замечаю, как еда и напитки влияют на мои мысли, эмоции, телесные ощущения",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 12,
+      "id": "q12",
+      "text": "Мне трудно выразить свои мысли словами",
+      "required": true,
+      "scale": "describe",
+      "direction": "reverse"
+    },
+    {
+      "number": 13,
+      "id": "q13",
+      "text": "Я легко отвлекаюсь",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 14,
+      "id": "q14",
+      "text": "Я считаю, что некоторые мои мысли бывают неправильными или плохими, и мне не следует думать таким образом",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 15,
+      "id": "q15",
+      "text": "Я обращаю внимание на свои ощущения, такие как ветер в моих волосах или солнце на моем лице",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 16,
+      "id": "q16",
+      "text": "Мне трудно подобрать правильные слова, чтобы выразить свои чувства к тому, что меня окружает",
+      "required": true,
+      "scale": "describe",
+      "direction": "reverse"
+    },
+    {
+      "number": 17,
+      "id": "q17",
+      "text": "Я оцениваю, хороши ли мои мысли или плохи",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 18,
+      "id": "q18",
+      "text": "Мне трудно быть сосредоточенным на том, что происходит в настоящий момент",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 19,
+      "id": "q19",
+      "text": "Когда появляются мысли или образы, внушающие беспокойство, я отстраняюсь от них и мысленно отмечаю их присутствие, не позволяя им овладеть мною",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 20,
+      "id": "q20",
+      "text": "Я замечаю окружающие меня звуки, такие как тиканье часов, щебет птиц или шум проезжающих машин",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 21,
+      "id": "q21",
+      "text": "В сложной ситуации я могу отсрочить немедленную эмоциональную реакцию и не думать о ней в этот момент",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 22,
+      "id": "q22",
+      "text": "Мне трудно описать возникающие в моем теле ощущения, потому что я не могу подобрать правильные слова",
+      "required": true,
+      "scale": "describe",
+      "direction": "reverse"
+    },
+    {
+      "number": 23,
+      "id": "q23",
+      "text": "Мне кажется, я действую «на автомате», не особо осознавая, что именно я делаю",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 24,
+      "id": "q24",
+      "text": "Я быстро успокаиваюсь, когда меня что-то расстраивает",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 25,
+      "id": "q25",
+      "text": "Я говорю себе, что не должен думать так, как думаю сейчас",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 26,
+      "id": "q26",
+      "text": "Я обращаю внимание на запахи и ароматы",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 27,
+      "id": "q27",
+      "text": "Даже если я очень сильно расстроен, я могу выразить словами свое состояние",
+      "required": true,
+      "scale": "describe",
+      "direction": "direct"
+    },
+    {
+      "number": 28,
+      "id": "q28",
+      "text": "Я выполняю дела быстро, не будучи в действительности сосредоточенным на каждом из них",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 29,
+      "id": "q29",
+      "text": "Когда у меня возникают расстраивающие меня мысли или образы, я в состоянии осознать их, не реагируя на них",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 30,
+      "id": "q30",
+      "text": "Я думаю, что некоторые мои эмоции плохие или неуместные и я не должен их испытывать",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 31,
+      "id": "q31",
+      "text": "Я замечаю визуальные элементы в природе или искусстве, такие как цвета, формы, текстуры, игра света и теней",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 32,
+      "id": "q32",
+      "text": "Для меня естественно выражать словами свои впечатления",
+      "required": true,
+      "scale": "describe",
+      "direction": "direct"
+    },
+    {
+      "number": 33,
+      "id": "q33",
+      "text": "Когда у меня возникают расстраивающие меня мысли или образы, я отмечаю их присутствие и позволяю им уйти",
+      "required": true,
+      "scale": "nonreactivity",
+      "direction": "direct"
+    },
+    {
+      "number": 34,
+      "id": "q34",
+      "text": "Я выполняю работу или задания автоматически, не задумываясь о том, что делаю",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 35,
+      "id": "q35",
+      "text": "Когда у меня возникают беспокоящие меня мысли или образы, я сужу о себе хорошо или плохо в зависимости от их содержания",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    },
+    {
+      "number": 36,
+      "id": "q36",
+      "text": "Я обращаю внимание на то, как мои эмоции влияют на мои мысли и мое поведение",
+      "required": true,
+      "scale": "observe",
+      "direction": "direct"
+    },
+    {
+      "number": 37,
+      "id": "q37",
+      "text": "Обычно я могу подробно описать то, что я чувствую в данный момент",
+      "required": true,
+      "scale": "describe",
+      "direction": "direct"
+    },
+    {
+      "number": 38,
+      "id": "q38",
+      "text": "Я ловлю себя на том, что занимаюсь делами не сосредоточенно",
+      "required": true,
+      "scale": "aware_action",
+      "direction": "reverse"
+    },
+    {
+      "number": 39,
+      "id": "q39",
+      "text": "Я осуждаю себя, когда мне приходят в голову абсурдные идеи",
+      "required": true,
+      "scale": "nonjudging",
+      "direction": "reverse"
+    }
+  ],
+  "scales": [
+    {
+      "id": "observe",
+      "label": "Наблюдение",
+      "items": [
+        1,
+        6,
+        11,
+        15,
+        20,
+        26,
+        31,
+        36
+      ],
+      "direct_items": [
+        1,
+        6,
+        11,
+        15,
+        20,
+        26,
+        31,
+        36
+      ],
+      "reverse_items": []
+    },
+    {
+      "id": "describe",
+      "label": "Описание",
+      "items": [
+        2,
+        7,
+        12,
+        16,
+        22,
+        27,
+        32,
+        37
+      ],
+      "direct_items": [
+        2,
+        7,
+        27,
+        32,
+        37
+      ],
+      "reverse_items": [
+        12,
+        16,
+        22
+      ]
+    },
+    {
+      "id": "aware_action",
+      "label": "Осознанная активность",
+      "items": [
+        5,
+        8,
+        13,
+        18,
+        23,
+        28,
+        34,
+        38
+      ],
+      "direct_items": [],
+      "reverse_items": [
+        5,
+        8,
+        13,
+        18,
+        23,
+        28,
+        34,
+        38
+      ]
+    },
+    {
+      "id": "nonjudging",
+      "label": "Безоценочное отношение к опыту",
+      "items": [
+        3,
+        10,
+        14,
+        17,
+        25,
+        30,
+        35,
+        39
+      ],
+      "direct_items": [],
+      "reverse_items": [
+        3,
+        10,
+        14,
+        17,
+        25,
+        30,
+        35,
+        39
+      ]
+    },
+    {
+      "id": "nonreactivity",
+      "label": "Нереагирование",
+      "items": [
+        4,
+        9,
+        19,
+        21,
+        24,
+        29,
+        33
+      ],
+      "direct_items": [
+        4,
+        9,
+        19,
+        21,
+        24,
+        29,
+        33
+      ],
+      "reverse_items": []
+    }
+  ],
+  "scoring": {
+    "declarative": true,
+    "response": {
+      "valid": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "reverse_max": 6,
+    "score_min": 1,
+    "score_max": 5,
+    "scales": {
+      "observe": {
+        "direct": [
+          1,
+          6,
+          11,
+          15,
+          20,
+          26,
+          31,
+          36
+        ],
+        "reverse": []
+      },
+      "describe": {
+        "direct": [
+          2,
+          7,
+          27,
+          32,
+          37
+        ],
+        "reverse": [
+          12,
+          16,
+          22
+        ]
+      },
+      "aware_action": {
+        "direct": [],
+        "reverse": [
+          5,
+          8,
+          13,
+          18,
+          23,
+          28,
+          34,
+          38
+        ]
+      },
+      "nonjudging": {
+        "direct": [],
+        "reverse": [
+          3,
+          10,
+          14,
+          17,
+          25,
+          30,
+          35,
+          39
+        ]
+      },
+      "nonreactivity": {
+        "direct": [
+          4,
+          9,
+          19,
+          21,
+          24,
+          29,
+          33
+        ],
+        "reverse": []
+      }
+    },
+    "derived": {
+      "total_5": {
+        "op": "sum",
+        "inputs": [
+          "observe",
+          "describe",
+          "aware_action",
+          "nonjudging",
+          "nonreactivity"
+        ]
+      }
+    }
+  },
+  "source": {
+    "file": "FFMQ/паспорт_структура.json",
+    "citation": "Сибирский психологический журнал, 2018, №69, с. 46–68",
+    "doi": "10.17223/17267080/69/3",
+    "original_authors": "R.A. Baer et al. (2006)"
+  },
+  "review": {
+    "status": "owner_approved",
+    "approval": {
+      "status": "Согласовано",
+      "date": "2026-11-19",
+      "by": "пользователь",
+      "decision": "Утвержден полный паспорт ППФО (FFMQ-39): 5 шкал, один общий показатель, авторские P25–P75, обязательный полный ввод"
+    }
+  }
+}
