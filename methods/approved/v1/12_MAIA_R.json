@@ -1,0 +1,679 @@
+{
+  "id": "maia_r_32",
+  "version": "1.0.0-staging",
+  "library_number": 12,
+  "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
+  "short_title": "MAIA-R",
+  "adaptation": "Попова Резеда Равилевна, Лопухова Ольга Геннадьевна",
+  "language": "ru",
+  "item_count": 32,
+  "instructions": "В приведенном ниже списке утверждений укажите, пожалуйста, как часто каждое из этих утверждений соответствует вашему состоянию в обычной жизни.\n\nОбведите одну цифру на каждой строчке",
+  "response_options": [
+    {
+      "value": 1,
+      "label": "Никогда"
+    },
+    {
+      "value": 2,
+      "label": "1"
+    },
+    {
+      "value": 3,
+      "label": "2"
+    },
+    {
+      "value": 4,
+      "label": "3"
+    },
+    {
+      "value": 5,
+      "label": "4"
+    },
+    {
+      "value": 6,
+      "label": "Всегда"
+    }
+  ],
+  "items": [
+    {
+      "number": 1,
+      "id": "q01",
+      "text": "Когда я испытываю напряжение, я замечаю, где в теле находится это напряжение.",
+      "required": true,
+      "scale": "noticing",
+      "direction": "direct"
+    },
+    {
+      "number": 2,
+      "id": "q02",
+      "text": "Я замечаю состояния телесного дискомфорта.",
+      "required": true,
+      "scale": "noticing",
+      "direction": "direct"
+    },
+    {
+      "number": 3,
+      "id": "q03",
+      "text": "Я замечаю, в какой части тела мне комфортно.",
+      "required": true,
+      "scale": "noticing",
+      "direction": "direct"
+    },
+    {
+      "number": 4,
+      "id": "q04",
+      "text": "Я замечаю изменения дыхания, например, когда оно учащается или замедляется.",
+      "required": true,
+      "scale": "emotional_awareness_positive",
+      "direction": "direct"
+    },
+    {
+      "number": 5,
+      "id": "q05",
+      "text": "Я не замечаю (игнорирую) физическое напряжение или дискомфорт до тех пор, пока оно не усиливается.",
+      "required": true,
+      "scale": "not_distracting",
+      "direction": "reverse"
+    },
+    {
+      "number": 6,
+      "id": "q06",
+      "text": "Я стараюсь отвлечься от ощущений дискомфорта.",
+      "required": true,
+      "scale": "not_distracting",
+      "direction": "reverse"
+    },
+    {
+      "number": 7,
+      "id": "q07",
+      "text": "Я стараюсь превозмочь ощущение боли или дискомфорта.",
+      "required": true,
+      "scale": "not_distracting",
+      "direction": "reverse"
+    },
+    {
+      "number": 8,
+      "id": "q08",
+      "text": "Я расстраиваюсь, когда испытываю физическую боль.",
+      "required": true,
+      "scale": "not_worrying",
+      "direction": "reverse"
+    },
+    {
+      "number": 9,
+      "id": "q09",
+      "text": "При любом ощущении дискомфорта я начинаю беспокоиться, что что-то не так.",
+      "required": true,
+      "scale": "not_worrying",
+      "direction": "reverse"
+    },
+    {
+      "number": 10,
+      "id": "q10",
+      "text": "Я умею замечать неприятные телесные ощущения и не беспокоиться об этом",
+      "required": true,
+      "scale": "not_worrying",
+      "direction": "direct"
+    },
+    {
+      "number": 11,
+      "id": "q11",
+      "text": "Я умею обращать внимание на собственное дыхание, не отвлекаясь на то, что происходит вокруг меня.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 12,
+      "id": "q12",
+      "text": "Я могу поддерживать осознавание моих внутренних телесных ощущений даже тогда, когда вокруг происходит много всего.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 13,
+      "id": "q13",
+      "text": "Я отслеживаю позу своего тела, когда говорю с другим человеком.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 14,
+      "id": "q14",
+      "text": "Я умею возвращаться к осознаванию собственного тела, если отвлекаюсь.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 15,
+      "id": "q15",
+      "text": "Я могу переносить внимание от мыслей к телесным ощущениям.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 16,
+      "id": "q16",
+      "text": "Я могу поддерживать осознавание всего тела даже тогда, когда испытываю боль или дискомфорт в какой-то его части.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 17,
+      "id": "q17",
+      "text": "Я способен осознанно сосредотачивать внимание целиком на своем теле.",
+      "required": true,
+      "scale": "attention_regulation",
+      "direction": "direct"
+    },
+    {
+      "number": 18,
+      "id": "q18",
+      "text": "Я замечаю изменения в теле, когда злюсь.",
+      "required": true,
+      "scale": "emotional_awareness_negative",
+      "direction": "direct"
+    },
+    {
+      "number": 19,
+      "id": "q19",
+      "text": "Когда в моей жизни происходит что-то неприятное, я могу почувствовать это в теле.",
+      "required": true,
+      "scale": "emotional_awareness_negative",
+      "direction": "direct"
+    },
+    {
+      "number": 20,
+      "id": "q20",
+      "text": "Я замечаю, что в спокойной ситуации мои телесные ощущения меняются.",
+      "required": true,
+      "scale": "emotional_awareness_negative",
+      "direction": "direct"
+    },
+    {
+      "number": 21,
+      "id": "q21",
+      "text": "Я замечаю, что мое дыхание становится свободным и легким, когда мне комфортно.",
+      "required": true,
+      "scale": "emotional_awareness_positive",
+      "direction": "direct"
+    },
+    {
+      "number": 22,
+      "id": "q22",
+      "text": "Я замечаю, как меняются мои телесные ощущения, когда я счастлив или радуюсь.",
+      "required": true,
+      "scale": "emotional_awareness_positive",
+      "direction": "direct"
+    },
+    {
+      "number": 23,
+      "id": "q23",
+      "text": "При избытке сильных впечатлений я могу найти спокойный уголок внутри себя.",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 24,
+      "id": "q24",
+      "text": "Когда я лучше осознаю свое тело, я чувствую себя спокойнее.",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 25,
+      "id": "q25",
+      "text": "Я умею контролировать дыхание для снятия напряжения.",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 26,
+      "id": "q26",
+      "text": "Когда меня одолевают мысли, я способен успокоиться, концентрируясь на своем теле/дыхании.",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 27,
+      "id": "q27",
+      "text": "Я умею извлекать информацию о моем эмоциональном состоянии из своих телесных ощущений",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 28,
+      "id": "q28",
+      "text": "Когда я расстроен, я не спеша исследую свои телесные ощущения.",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 29,
+      "id": "q29",
+      "text": "Я прислушиваюсь к своему телу, чтобы понять, что мне делать дальше.",
+      "required": true,
+      "scale": "body_listening",
+      "direction": "direct"
+    },
+    {
+      "number": 30,
+      "id": "q30",
+      "text": "Мне уютно в моем теле, как у себя дома",
+      "required": true,
+      "scale": "trusting",
+      "direction": "direct"
+    },
+    {
+      "number": 31,
+      "id": "q31",
+      "text": "В своем теле я чувствую себя в безопасности",
+      "required": true,
+      "scale": "trusting",
+      "direction": "direct"
+    },
+    {
+      "number": 32,
+      "id": "q32",
+      "text": "Я доверяю своим телесным ощущениям.",
+      "required": true,
+      "scale": "trusting",
+      "direction": "direct"
+    }
+  ],
+  "scales": [
+    {
+      "id": "noticing",
+      "label": "Наблюдение",
+      "items": [
+        1,
+        2,
+        3
+      ],
+      "direct_items": [
+        1,
+        2,
+        3
+      ],
+      "reverse_items": []
+    },
+    {
+      "id": "not_distracting",
+      "label": "Не отвлечение внимания от боли",
+      "items": [
+        5,
+        6,
+        7
+      ],
+      "direct_items": [],
+      "reverse_items": [
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "not_worrying",
+      "label": "Отсутствие беспокойства",
+      "items": [
+        8,
+        9,
+        10
+      ],
+      "direct_items": [
+        10
+      ],
+      "reverse_items": [
+        8,
+        9
+      ]
+    },
+    {
+      "id": "attention_regulation",
+      "label": "Регуляция внимания",
+      "items": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "direct_items": [
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17
+      ],
+      "reverse_items": []
+    },
+    {
+      "id": "emotional_awareness_negative",
+      "label": "Осознавание негативного эмоционального состояния",
+      "items": [
+        18,
+        19,
+        20
+      ],
+      "direct_items": [
+        18,
+        19,
+        20
+      ],
+      "reverse_items": []
+    },
+    {
+      "id": "emotional_awareness_positive",
+      "label": "Осознавание позитивного эмоционального состояния",
+      "items": [
+        4,
+        21,
+        22
+      ],
+      "direct_items": [
+        4,
+        21,
+        22
+      ],
+      "reverse_items": []
+    },
+    {
+      "id": "body_listening",
+      "label": "Саморегуляция на основе активного «слушания» тела",
+      "items": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "direct_items": [
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29
+      ],
+      "reverse_items": []
+    },
+    {
+      "id": "trusting",
+      "label": "Доверие",
+      "items": [
+        30,
+        31,
+        32
+      ],
+      "direct_items": [
+        30,
+        31,
+        32
+      ],
+      "reverse_items": []
+    }
+  ],
+  "scoring": {
+    "response": {
+      "valid": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    "reverse_formula": "5 - response",
+    "reverse_items": [
+      5,
+      6,
+      7,
+      8,
+      9
+    ],
+    "aggregation": "arithmetic_mean_of_recoded_items_per_scale",
+    "required_all_items": true,
+    "rounding": {
+      "decimal_places": 1,
+      "mode": "ROUND_HALF_UP",
+      "applied_before_level": true
+    },
+    "levels": {
+      "noticing": [
+        [
+          0,
+          1.7,
+          "Низкий"
+        ],
+        [
+          1.7,
+          2.7,
+          "Ниже среднего"
+        ],
+        [
+          2.7,
+          3.7,
+          "Средний"
+        ],
+        [
+          3.7,
+          4.7,
+          "Выше среднего"
+        ],
+        [
+          4.7,
+          5,
+          "Высокий"
+        ]
+      ],
+      "not_distracting": [
+        [
+          0,
+          0.7,
+          "Низкий"
+        ],
+        [
+          0.7,
+          1.3,
+          "Ниже среднего"
+        ],
+        [
+          1.3,
+          2.7,
+          "Средний"
+        ],
+        [
+          2.7,
+          4,
+          "Выше среднего"
+        ],
+        [
+          4,
+          5,
+          "Высокий"
+        ]
+      ],
+      "not_worrying": [
+        [
+          0,
+          0.7,
+          "Низкий"
+        ],
+        [
+          0.7,
+          1.7,
+          "Ниже среднего"
+        ],
+        [
+          1.7,
+          2.7,
+          "Средний"
+        ],
+        [
+          2.7,
+          3.7,
+          "Выше среднего"
+        ],
+        [
+          3.7,
+          5,
+          "Высокий"
+        ]
+      ],
+      "attention_regulation": [
+        [
+          0,
+          1.4,
+          "Низкий"
+        ],
+        [
+          1.4,
+          2.6,
+          "Ниже среднего"
+        ],
+        [
+          2.6,
+          3.4,
+          "Средний"
+        ],
+        [
+          3.4,
+          4.3,
+          "Выше среднего"
+        ],
+        [
+          4.3,
+          5,
+          "Высокий"
+        ]
+      ],
+      "emotional_awareness_negative": [
+        [
+          0,
+          1,
+          "Низкий"
+        ],
+        [
+          1,
+          2.3,
+          "Ниже среднего"
+        ],
+        [
+          2.3,
+          3.7,
+          "Средний"
+        ],
+        [
+          3.7,
+          4.7,
+          "Выше среднего"
+        ],
+        [
+          4.7,
+          5,
+          "Высокий"
+        ]
+      ],
+      "emotional_awareness_positive": [
+        [
+          0,
+          1.7,
+          "Низкий"
+        ],
+        [
+          1.7,
+          3.3,
+          "Ниже среднего"
+        ],
+        [
+          3.3,
+          4.3,
+          "Средний"
+        ],
+        [
+          4.3,
+          5,
+          "Выше среднего"
+        ]
+      ],
+      "body_listening": [
+        [
+          0,
+          1,
+          "Низкий"
+        ],
+        [
+          1,
+          2.1,
+          "Ниже среднего"
+        ],
+        [
+          2.1,
+          3.3,
+          "Средний"
+        ],
+        [
+          3.3,
+          4.1,
+          "Выше среднего"
+        ],
+        [
+          4.1,
+          5,
+          "Высокий"
+        ]
+      ],
+      "trusting": [
+        [
+          0,
+          1.7,
+          "Низкий"
+        ],
+        [
+          1.7,
+          3,
+          "Ниже среднего"
+        ],
+        [
+          3,
+          4.3,
+          "Средний"
+        ],
+        [
+          4.3,
+          5,
+          "Выше среднего"
+        ]
+      ]
+    }
+  },
+  "source": {
+    "raw_passport_digest": "sha256:386eb4abdc3d70ff631ec860939b935656e0923702c83209a976ae1cc47e1dc8",
+    "raw_passport_file": "MAIA-R_pasport.json",
+    "agreement": "MAIA-R_zaklyuchenie.md",
+    "revision": 4
+  },
+  "review": {
+    "status": "staging_for_owner_testing",
+    "rights": "Не обнаружено / не предоставлено. Согласие авторов оригинала на адаптацию указано на с. 228; это не описание условий использования сторонней платформой."
+  }
+}

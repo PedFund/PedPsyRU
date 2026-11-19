@@ -62,6 +62,12 @@
       "package_version": "1.0.0-staging",
       "scales": 7,
       "artifacts": 4
+    },
+    {
+      "id": "maia_r_32",
+      "package_version": "1.0.0-staging",
+      "scales": 8,
+      "artifacts": 4
     }
   ]
 }
