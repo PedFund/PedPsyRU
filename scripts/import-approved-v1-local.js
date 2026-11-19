@@ -92,7 +92,9 @@ async function importApprovedV1Local(client) {
       const count = (await client.query('SELECT count(*)::int AS n FROM pedpsy.release_items WHERE release_id=$1', [row.id])).rows[0].n;
       if (count !== release.itemCount) throw new Error('APPROVED_RELEASE_CHANGED');
     }
-    const authors = pkg.provenance && Array.isArray(pkg.provenance.sources) ? [pkg.provenance.sources[0].citation] : [];
+    // The package's own adaptation author wins; the provenance citation is only a fallback.
+    const authors = release.authors && release.authors.length ? release.authors.slice()
+      : pkg.provenance && Array.isArray(pkg.provenance.sources) ? [pkg.provenance.sources[0].citation] : [];
     await client.query('INSERT INTO pedpsy.method_library_catalog VALUES($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7::jsonb) ON CONFLICT(release_id) DO NOTHING',
       [row.id, release.id, pkg.package_version, release.title, JSON.stringify(authors), JSON.stringify(release.outputs.map(id => (release.labels && release.labels[id]) || id)), JSON.stringify([release.title])]);
     const allowed = (await client.query('SELECT pedpsy.constructor_release_allowed($1) allowed', [row.id])).rows[0].allowed;

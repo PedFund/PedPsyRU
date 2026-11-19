@@ -18,6 +18,12 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
     await client.query('BEGIN');
     ids = await importApprovedV1Local(client);
     assert.deepEqual(await importApprovedV1Local(client), ids);
+    // The catalog must show the adaptation author, not the provenance service citation.
+    for (const id of ["maia_r_32", "ffmq_39", "shpana_20", "ecv_15", "darr_7"]) {
+      const authors = (await client.query("SELECT authors FROM pedpsy.method_library_catalog WHERE method_id=$1", [id])).rows[0].authors;
+      assert.ok(Array.isArray(authors) && authors.length, "catalog authors for " + id);
+      assert.doesNotMatch(JSON.stringify(authors), /Issue #69/, "no service citation as author for " + id);
+    }
     await client.query('COMMIT');
   } finally { client.release(); }
   const {releases} = approvedV1Releases();
