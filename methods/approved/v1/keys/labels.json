@@ -1,6 +1,6 @@
 {
   "schema_version": "1.0.0",
-  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04; PVQ-RR scale names from the approved psytests source https://psytests.org/life/pvqrr-bl.html (2026-11-05); Motkov factor names from the author's article and owner-supplied package (2026-11-05)",
+  "source": "methods/legacy/library.json output labels; TTF/ATF wording approved by the owner 2026-11-04; PVQ-RR scale names from the approved psytests source https://psytests.org/life/pvqrr-bl.html (2026-11-05); Motkov factor names from the author's article and owner-supplied package (2026-11-05); MAIA-R subscale names from the owner passport 2026-11-19",
   "methods": {
     "reflexivity_karpov_27": {
       "reflexivity": "Рефлексивность"
@@ -85,6 +85,16 @@
       "pk_A": "Психологическая культура — стремления (общий)",
       "pk_B": "Психологическая культура — осуществление (общий)",
       "gpk": "Гармоничность психологической культуры"
+    },
+    "maia_r_32": {
+      "noticing": "Наблюдение",
+      "not_distracting": "Не отвлечение внимания от боли",
+      "not_worrying": "Отсутствие беспокойства",
+      "attention_regulation": "Регуляция внимания",
+      "emotional_awareness_negative": "Осознавание негативного эмоционального состояния",
+      "emotional_awareness_positive": "Осознавание позитивного эмоционального состояния",
+      "body_listening": "Саморегуляция на основе активного «слушания» тела",
+      "trusting": "Доверие"
     }
   }
 }

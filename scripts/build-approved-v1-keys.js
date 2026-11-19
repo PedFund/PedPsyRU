@@ -267,7 +267,9 @@ function main() {
     fs.writeFileSync(path.join(outDir, id + ".key.json"), text, "utf8");
     written.push({method_id: id, key_version: key.key_version, key_digest: sha(text),
       package_file: source.file, package_version: source.pkg.version, title: source.pkg.title,
-      author: stagingAuthor(id), items: key.items});
+      // A package-driven method carries its own author string (owner package); the pilot
+      // staging manifest only covers the original eleven.
+      author: stagingAuthor(id) || (typeof source.pkg.adaptation === "string" ? source.pkg.adaptation.trim() : null), items: key.items});
   }
 
   const manifest = {schema_version: "1.0.0", generated_by: "scripts/build-approved-v1-keys.js",

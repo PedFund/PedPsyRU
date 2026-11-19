@@ -69,6 +69,8 @@ scenario("copy settings per group only, independent IDs and no participants/answ
 });
 async function readyStudy(x,f,title){const d=await x.studies.create(x.session.token,title);return x.studies.assign(x.session.token,d.id,{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});}
 scenario("activation completeness, atomic active quota race, closed frees quota but never rewrites design",async(f,x,s)=>{
+  // The product default is five active studies; pin one to exercise the race and the rejection.
+  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE user_id=$1",[x.row.user_id]);
   const incomplete=await x.studies.create(x.session.token,"Incomplete");await assert.rejects(x.studies.lifecycle(x.session.token,incomplete.id,{status:"active",expected_version:0}),e=>e.code==="DESIGN_INCOMPLETE");
   const drafts=await Promise.all(["One","Two"].map(title=>readyStudy(x,f,title)));const result=await Promise.allSettled(drafts.map(d=>x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version})));
   assert.equal(result.filter(r=>r.status==="fulfilled").length,1);assert.equal(result.find(r=>r.status==="rejected").reason.code,"STUDY_QUOTA");
@@ -143,6 +145,8 @@ scenario("lookalike release and malformed release sets cannot bypass the technic
   const after=await x.studies.read(x.session.token,d.id);assert.equal(after.version,d.version);assert.deepEqual(after.assignments,d.assignments);
 });
 scenario("activation and close audit failures roll back status/version/quota; repeats are idempotent",async(f,x)=>{
+  // The product default is five active studies; this scenario pins one to check quota rollback.
+  await f.admin.query("UPDATE pedpsy.researcher_credentials SET active_study_quota=1 WHERE user_id=$1",[x.row.user_id]);
   let d=await readyStudy(x,f,"Lifecycle rollback");
   await f.admin.query("CREATE FUNCTION pedpsy.synthetic_lifecycle_audit_fail() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN IF NEW.action='studies.lifecycle' THEN RAISE EXCEPTION 'synthetic lifecycle audit failure'; END IF;RETURN NEW;END $$;CREATE TRIGGER synthetic_lifecycle_audit_fail BEFORE INSERT ON pedpsy.access_audit_events FOR EACH ROW EXECUTE FUNCTION pedpsy.synthetic_lifecycle_audit_fail()");
   await assert.rejects(x.studies.lifecycle(x.session.token,d.id,{status:"active",expected_version:d.version}),/synthetic lifecycle audit failure/);

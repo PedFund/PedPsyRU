@@ -8,8 +8,8 @@ async function accepted(f,staff){const m=new PostgresResearcherManagement(f.runt
   const accepted=await g.accept({invite_code:invite.invite_code,password:pw});assert.equal(accepted.login_id,invite.login_id);const session=await g.login({login_id:invite.login_id,password:pw});const row=(await m.list(staff.session.token)).find(x=>x.login_id===invite.login_id);return {m,g,invite,pw,session,row};}
 scenario("both MFA staff roles invite/accept/login/block with durable default quota",async f=>{
   for(const role of ["administrator","superadministrator"]){const staff=await verifiedStaff(f,role),x=await accepted(f,staff);
-    assert.equal(x.row.status,"active");assert.equal(x.row.active_study_quota,1);assert.equal((await new PostgresAccountAccess(f.runtime).session(x.session.token)).role,"researcher");
-    assert.deepEqual(await x.g.home(x.session.token),{login_id:x.row.login_id,active_study_quota:1,studies:[]});
+    assert.equal(x.row.status,"active");assert.equal(x.row.active_study_quota,5);assert.equal((await new PostgresAccountAccess(f.runtime).session(x.session.token)).role,"researcher");
+    assert.deepEqual(await x.g.home(x.session.token),{login_id:x.row.login_id,active_study_quota:5,studies:[]});
     await assert.rejects(x.g.accept({invite_code:x.invite.invite_code,password:password()}),e=>e.code==="INVALID_INVITE");
     const before=(await f.admin.query("SELECT count(*)::integer n FROM pedpsy.attempts")).rows[0].n;
     await x.m.block(staff.session.token,x.row.id);await assert.rejects(x.g.home(x.session.token),e=>e.status===401);await assert.rejects(x.g.login({login_id:x.invite.login_id,password:x.pw}),e=>e.code==="INVALID_LOGIN");

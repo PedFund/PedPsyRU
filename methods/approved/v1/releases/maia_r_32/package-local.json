@@ -1025,56 +1025,56 @@
   "scales": [
     {
       "id": "noticing",
-      "label": "noticing",
+      "label": "Наблюдение",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "not_distracting",
-      "label": "not_distracting",
+      "label": "Не отвлечение внимания от боли",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "not_worrying",
-      "label": "not_worrying",
+      "label": "Отсутствие беспокойства",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "attention_regulation",
-      "label": "attention_regulation",
+      "label": "Регуляция внимания",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "emotional_awareness_negative",
-      "label": "emotional_awareness_negative",
+      "label": "Осознавание негативного эмоционального состояния",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "emotional_awareness_positive",
-      "label": "emotional_awareness_positive",
+      "label": "Осознавание позитивного эмоционального состояния",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "body_listening",
-      "label": "body_listening",
+      "label": "Саморегуляция на основе активного «слушания» тела",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
     },
     {
       "id": "trusting",
-      "label": "trusting",
+      "label": "Доверие",
       "min": 0,
       "max": 5,
       "direction": "not_specified"
