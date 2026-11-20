@@ -1,0 +1,568 @@
+{
+  "id": "stai_ru_40_barkanova",
+  "version": "1.0.0-staging",
+  "library_number": 17,
+  "title": "Шкала ситуативной и личностной тревожности (STAI, редакция Баркановой)",
+  "short_title": "STAI",
+  "adaptation": "Ю.Л. Ханин; редакция О.В. Баркановой (2009)",
+  "language": "ru",
+  "item_count": 40,
+  "instructions": "Прочитайте внимательно каждое из приведенных ниже утверждений. Зачеркните цифру в соответствующей графе справа в зависимости от того, как Вы себя чувствуете в данный момент. Над заданиями долго не задумывайтесь, так как правильных или неправильных ответов нет. Для шкалы личностной тревожности отвечайте, исходя из того, как Вы чувствуете себя обычно.",
+  "response_options": [
+    {
+      "value": 1,
+      "label": "нет, это не так"
+    },
+    {
+      "value": 2,
+      "label": "пожалуй, так"
+    },
+    {
+      "value": 3,
+      "label": "верно"
+    },
+    {
+      "value": 4,
+      "label": "совершенно верно"
+    }
+  ],
+  "items": [
+    {
+      "number": 1,
+      "id": "q01",
+      "text": "Я спокоен",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 2,
+      "id": "q02",
+      "text": "Мне ничто не угрожает",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 3,
+      "id": "q03",
+      "text": "Я нахожусь в напряжении",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 4,
+      "id": "q04",
+      "text": "Я внутренне скован",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 5,
+      "id": "q05",
+      "text": "Я чувствую себя свободно",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 6,
+      "id": "q06",
+      "text": "Я расстроен",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 7,
+      "id": "q07",
+      "text": "Меня волнуют возможные неудачи",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 8,
+      "id": "q08",
+      "text": "Я ощущаю душевный покой",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 9,
+      "id": "q09",
+      "text": "Я встревожен",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 10,
+      "id": "q10",
+      "text": "Я испытываю чувство внутреннего удовлетворения",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 11,
+      "id": "q11",
+      "text": "Я уверен в себе",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 12,
+      "id": "q12",
+      "text": "Я нервничаю",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 13,
+      "id": "q13",
+      "text": "Я не нахожу себе места",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 14,
+      "id": "q14",
+      "text": "Я взвинчен",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 15,
+      "id": "q15",
+      "text": "Я не чувствую скованности, напряжения",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 16,
+      "id": "q16",
+      "text": "Я доволен",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 17,
+      "id": "q17",
+      "text": "Я озабочен",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 18,
+      "id": "q18",
+      "text": "Я слишком возбужден и мне не по себе",
+      "required": true,
+      "scale": "st",
+      "direction": "direct"
+    },
+    {
+      "number": 19,
+      "id": "q19",
+      "text": "Мне радостно",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 20,
+      "id": "q20",
+      "text": "Мне приятно",
+      "required": true,
+      "scale": "st",
+      "direction": "reverse"
+    },
+    {
+      "number": 21,
+      "id": "q21",
+      "text": "У меня бывает приподнятое настроение",
+      "required": true,
+      "scale": "lt",
+      "direction": "reverse"
+    },
+    {
+      "number": 22,
+      "id": "q22",
+      "text": "Я бываю раздражительным",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 23,
+      "id": "q23",
+      "text": "Я легко могу расстроиться",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 24,
+      "id": "q24",
+      "text": "Я хотел бы быть таким же удачливым, как и другие",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 25,
+      "id": "q25",
+      "text": "Я сильно переживаю неприятности и долго не могу о них забыть",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 26,
+      "id": "q26",
+      "text": "Я чувствую прилив сил, желание работать",
+      "required": true,
+      "scale": "lt",
+      "direction": "reverse"
+    },
+    {
+      "number": 27,
+      "id": "q27",
+      "text": "Я спокоен, хладнокровен и собран",
+      "required": true,
+      "scale": "lt",
+      "direction": "reverse"
+    },
+    {
+      "number": 28,
+      "id": "q28",
+      "text": "Меня тревожат возможные трудности",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 29,
+      "id": "q29",
+      "text": "Я слишком переживаю из-за пустяков",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 30,
+      "id": "q30",
+      "text": "Я бываю вполне счастлив",
+      "required": true,
+      "scale": "lt",
+      "direction": "reverse"
+    },
+    {
+      "number": 31,
+      "id": "q31",
+      "text": "Я все принимаю близко к сердцу",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 32,
+      "id": "q32",
+      "text": "Мне не хватает уверенности в себе",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 33,
+      "id": "q33",
+      "text": "Я чувствую себя беззащитным",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 34,
+      "id": "q34",
+      "text": "Я стараюсь избегать критических ситуаций и трудностей",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 35,
+      "id": "q35",
+      "text": "У меня бывает хандра",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 36,
+      "id": "q36",
+      "text": "Я бываю доволен",
+      "required": true,
+      "scale": "lt",
+      "direction": "reverse"
+    },
+    {
+      "number": 37,
+      "id": "q37",
+      "text": "Всякие пустяки отвлекают и волнуют меня",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 38,
+      "id": "q38",
+      "text": "Бывает, что я чувствую себя неудачником",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    },
+    {
+      "number": 39,
+      "id": "q39",
+      "text": "Я – уравновешенный человек",
+      "required": true,
+      "scale": "lt",
+      "direction": "reverse"
+    },
+    {
+      "number": 40,
+      "id": "q40",
+      "text": "Меня охватывает беспокойство, когда я думаю о своих делах и заботах",
+      "required": true,
+      "scale": "lt",
+      "direction": "direct"
+    }
+  ],
+  "scales": [
+    {
+      "id": "st",
+      "label": "Ситуативная тревожность (СТ)",
+      "items": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20
+      ],
+      "direct_items": [
+        3,
+        4,
+        6,
+        7,
+        9,
+        12,
+        13,
+        14,
+        17,
+        18
+      ],
+      "reverse_items": [
+        1,
+        2,
+        5,
+        8,
+        10,
+        11,
+        15,
+        16,
+        19,
+        20
+      ]
+    },
+    {
+      "id": "lt",
+      "label": "Личностная тревожность (ЛТ)",
+      "items": [
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39,
+        40
+      ],
+      "direct_items": [
+        22,
+        23,
+        24,
+        25,
+        28,
+        29,
+        31,
+        32,
+        33,
+        34,
+        35,
+        37,
+        38,
+        40
+      ],
+      "reverse_items": [
+        21,
+        26,
+        27,
+        30,
+        36,
+        39
+      ]
+    }
+  ],
+  "scoring": {
+    "declarative": true,
+    "response": {
+      "valid": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    "reverse_max": 5,
+    "score_min": 1,
+    "score_max": 4,
+    "scales": {
+      "st": {
+        "direct": [
+          3,
+          4,
+          6,
+          7,
+          9,
+          12,
+          13,
+          14,
+          17,
+          18
+        ],
+        "reverse": [
+          1,
+          2,
+          5,
+          8,
+          10,
+          11,
+          15,
+          16,
+          19,
+          20
+        ]
+      },
+      "lt": {
+        "direct": [
+          22,
+          23,
+          24,
+          25,
+          28,
+          29,
+          31,
+          32,
+          33,
+          34,
+          35,
+          37,
+          38,
+          40
+        ],
+        "reverse": [
+          21,
+          26,
+          27,
+          30,
+          36,
+          39
+        ]
+      }
+    },
+    "levels": {
+      "st": [
+        [
+          20,
+          30,
+          "Низкая тревожность"
+        ],
+        [
+          31,
+          44,
+          "Умеренная тревожность"
+        ],
+        [
+          45,
+          80,
+          "Высокая тревожность"
+        ]
+      ],
+      "lt": [
+        [
+          20,
+          30,
+          "Низкая тревожность"
+        ],
+        [
+          31,
+          44,
+          "Умеренная тревожность"
+        ],
+        [
+          45,
+          80,
+          "Высокая тревожность"
+        ]
+      ]
+    }
+  },
+  "source": {
+    "file": "New-meth1/паспорт_STAI.md",
+    "citation": "Методики диагностики эмоциональной сферы: психологический практикум / сост. О.В. Барканова. Красноярск: Литера-принт, 2009. С. 216–222.",
+    "original_author": "Ч.Д. Спилбергер",
+    "adaptation": "Ю.Л. Ханин",
+    "editorial_correction": "Пункт 23 кодируется прямо (1,2,3,4), а не обратно, как в печатном ключе на с. 222."
+  },
+  "review": {
+    "status": "owner_approved",
+    "note": "Правовой режим воспроизведения полного опросника в коммерческой платформе требует отдельной проверки."
+  }
+}

@@ -153,6 +153,16 @@
       "title": "Пересмотренная шкала «Измерение реакций гнева»",
       "author": "Шмарина Т.А., Блинова Л.Д.",
       "items": 7
+    },
+    {
+      "method_id": "stai_ru_40_barkanova",
+      "key_version": "1.0.0-staging",
+      "key_digest": "sha256:b32d2f61c8a7d62e63026c846a7f0ea6b1a169057437622109f4b296822a7d1f",
+      "package_file": "17_STAI_RU_40_BARKANOVA.json",
+      "package_version": "1.0.0-staging",
+      "title": "Шкала ситуативной и личностной тревожности (STAI, редакция Баркановой)",
+      "author": "Ю.Л. Ханин; редакция О.В. Баркановой (2009)",
+      "items": 40
     }
   ],
   "skipped": [

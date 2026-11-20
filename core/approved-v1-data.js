@@ -20,6 +20,7 @@ const keys = {
   shpana_20: require('../methods/approved/v1/keys/shpana_20.key.json'),
   ecv_15: require('../methods/approved/v1/keys/ecv_15.key.json'),
   darr_7: require('../methods/approved/v1/keys/darr_7.key.json'),
+  stai_ru_40_barkanova: require('../methods/approved/v1/keys/stai_ru_40_barkanova.key.json'),
   ryff_pwb_84_shevelenkova_fesenko: require('../methods/approved/v1/keys/ryff_pwb_84_shevelenkova_fesenko.key.json')
 };
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');
