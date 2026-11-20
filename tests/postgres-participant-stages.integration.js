@@ -14,7 +14,7 @@ async function configured(f){
  design=await r.studies.lifecycle(r.session.token,design.id,{status:"active",expected_version:design.version});
  const invitations=new PostgresGroupInvitations(f.runtime),invite=await invitations.create(r.session.token,design.id,design.groups[0].id,{expires_at:Date.now()+86400000});
  const vault=new ContactTokenVault(randomBytes(32)),registration=new PostgresParticipantRegistration(f.runtime,vault),browser=randomBytes(32).toString("base64url"),email="stage.discovery@example.test",password="synthetic discovery participant password";
- await registration.start(invite.invite_token,{email,password,contact_notice_version:"demo-contact-2",accept_contact_notice:true},browser);
+ await registration.start(invite.invite_token,{email,password,contact_notice_version:"demo-contact-3",accept_contact_notice:true},browser);
  const out=(await f.admin.query("SELECT o.id,o.token_envelope FROM pedpsy.contact_confirmation_outbox o JOIN pedpsy.registration_pending p ON p.id=o.pending_id WHERE p.study_id=$1 AND p.browser_hash=$2 AND p.status='pending'",[design.id,tokenHash(browser)])).rows[0];
  await registration.confirm(invite.invite_token,{confirmation_token:vault.open(out.id,out.token_envelope)},browser);
  const session=await registration.login({study_id:design.id,email,password}),identity=(await f.admin.query("SELECT c.id credential_id,c.participant_id FROM pedpsy.participant_contacts p JOIN pedpsy.participant_credentials c ON (c.study_id,c.participant_id)=(p.study_id,p.participant_id) WHERE p.study_id=$1 AND p.email_key=$2",[design.id,email])).rows[0];

@@ -4,7 +4,7 @@ const {postgresFixture}=require("./postgres-fixture.js"),{verifiedStaff}=require
 const {PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/participant-registration.js"),{ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js");
 const {PostgresParticipantGateway}=require("../dist/src/adapters/postgres/identity.js"),{PostgresUnitOfWork}=require("../dist/src/adapters/postgres/unit-of-work.js");
 const {tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js"),{derive}=require("../storage/access.js");
-const body={email:"Confirmed.Owner+tag@EXAMPLE.test",password:"synthetic participant password",contact_notice_version:"demo-contact-2",accept_contact_notice:true};
+const body={email:"Confirmed.Owner+tag@EXAMPLE.test",password:"synthetic participant password",contact_notice_version:"demo-contact-3",accept_contact_notice:true};
 const token=()=>randomBytes(32).toString("base64url");
 async function configured(f){const s=await verifiedStaff(f),x=await invitationResearcher(f,s),i=await x.invitations.create(x.session.token,x.design.id,x.design.groups[0].id,{expires_at:Date.now()+86400000}),vault=new ContactTokenVault(randomBytes(32));return {...x,s,i,vault,registration:new PostgresParticipantRegistration(f.runtime,vault),browser:token()};}
 function scenario(name,fn){test("PostgreSQL participant registration: "+name,async t=>{const f=await postgresFixture({runtimePoolSize:3});t.after(()=>f.close());await fn(f,await configured(f));});}
@@ -20,7 +20,7 @@ scenario("one-time proof creates salted credential/fixed group/private contact a
   const proof=await requested(f,x);assert.deepEqual(await confirm(x,proof),{status:"sign_in_required"});const c=await identity(f,x.design.id);
   assert.equal(c.group_id,x.design.groups[0].id);assert.equal(c.email_key,"Confirmed.Owner+tag@example.test");assert.equal(c.source_pending_id,proof.row.id);assert.equal(c.status,"active");assert.ok(c.salt===proof.row.salt&&c.password_hash===proof.row.password_hash,"pending material changed");assert.match(c.display_code,/^P-[A-F0-9]{32}$/);
   assert.equal((await f.admin.query("SELECT status FROM pedpsy.registration_pending WHERE id=$1",[proof.row.id])).rows[0].status,"confirmed");assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.participant_sessions WHERE credential_id=$1",[c.credential_id])).rows[0].n,0);
-  assert.equal((await f.admin.query("SELECT notice_version FROM pedpsy.participant_contact_acceptances WHERE pending_id=$1",[proof.row.id])).rows[0].notice_version,"demo-contact-2");
+  assert.equal((await f.admin.query("SELECT notice_version FROM pedpsy.participant_contact_acceptances WHERE pending_id=$1",[proof.row.id])).rows[0].notice_version,"demo-contact-3");
   const a=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE study_id=$1 AND action='participants.registration.confirmed'",[x.design.id])).rows[0];assert.equal(a.resource_id,proof.row.id);for(const v of [body.email,body.password,proof.code,proof.browser,proof.invite])assert.ok(!JSON.stringify(a).includes(v));
   await assert.rejects(confirm(x,proof),e=>e.status===404);await noClinical(f,x.design.id);
 });
