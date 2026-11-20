@@ -1,6 +1,6 @@
 import {randomBytes} from "node:crypto";
 import type {Pool} from "pg";
-import type {ParticipantRegistration,RegistrationStart,RegistrationConfirmation,ParticipantEmailLogin,RegistrationResend} from "../../ports/participant-registration.js";
+import type {ParticipantRegistration,RegistrationStart,RegistrationConfirmation,ParticipantEmailLogin,RegistrationResend,RegistrationPassword} from "../../ports/participant-registration.js";
 import {participantEmail} from "../../ports/contact-email.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {derive,SCRYPT,validPassword,validToken,equalText,csrfFor} from "../../../storage/access.js";
@@ -65,6 +65,18 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
     if(outcome==="throttled")throw new ParticipationError(429,"RESEND_THROTTLED");
     // 'none' is deliberately indistinguishable from 'ok': an unknown mailbox learns nothing.
     return {status:"accepted"};
+  }
+  async setPassword(inviteToken:string,input:RegistrationPassword,pendingToken:string):Promise<{status:"password_set"}>{
+    if(!validToken(inviteToken)||!validToken(pendingToken)||!input||Array.isArray(input)||
+      Object.keys(input).sort().join(",")!=="confirmation_token,password")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    if(!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    const salt=randomBytes(16),bytes=await this.derivePassword(input.password,salt,64,SCRYPT);let hash:string;
+    try{hash=bytes.toString("hex");}finally{bytes.fill(0);}
+    const outcome=await accountTransaction(this.pool,async c=>(await c.query<{outcome:string}>(
+      "SELECT pedpsy.complete_registration_password($1,$2,$3,$4,$5) outcome",
+      [tokenHash(inviteToken),tokenHash(input.confirmation_token),"scrypt-N131072-r8-p1-dk64",salt.toString("hex"),hash])).rows[0]?.outcome);
+    if(outcome!=="ok")throw new ParticipationError(404,"NOT_AVAILABLE");
+    return {status:"password_set"};
   }
   async login(input:ParticipantEmailLogin){
     if(!input||Array.isArray(input))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");

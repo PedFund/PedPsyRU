@@ -1,6 +1,6 @@
 import {ParticipationError} from "../ports/errors.js";
 import type {GroupInvitations, ParticipantRegistration, RegistrationStart, RegistrationConfirmation,
-  ParticipantEmailLogin, GroupInvitationRecord, RegistrationResend} from "../ports/participant-registration.js";
+  ParticipantEmailLogin, GroupInvitationRecord, RegistrationResend, RegistrationPassword} from "../ports/participant-registration.js";
 import {studyId} from "./study-api.js";
 import {participantEmail} from "../ports/contact-email.js";
 import {weakNewPassword} from "../ports/password-policy.js";
@@ -50,6 +50,10 @@ export function registrationResend(input: unknown): RegistrationResend {
   const b = object(input, ["email"]);
   return {email: participantEmail(b.email)};
 }
+export function registrationPassword(input: unknown): RegistrationPassword {
+  const b = object(input, ["confirmation_token", "password"]);
+  return {confirmation_token: registrationToken(b.confirmation_token), password: password(b.password)};
+}
 export function participantEmailLogin(input: unknown): ParticipantEmailLogin {
   // Without a study link the server resolves the study from the address when it
   // belongs to exactly one active study; the field is therefore optional.
@@ -85,6 +89,11 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
     resend: (invite: string, input: unknown) =>
       registration.resend(registrationToken(invite), registrationResend(input))
         .then(() => ({status: "accepted" as const})),
+    // The password is chosen after the code was confirmed; the code is the proof.
+    setPassword: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
+      protection.assert(pendingToken, csrf);
+      return registration.setPassword(registrationToken(invite), registrationPassword(input), registrationToken(pendingToken));
+    },
     login: async (input: unknown) => {
       const session = await registration.login(participantEmailLogin(input));
       return {token: session.token, csrf: session.csrf, expiresAt: session.expiresAt};

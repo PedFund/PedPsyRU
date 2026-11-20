@@ -1,6 +1,6 @@
 "use strict";
 const {test} = require("node:test"), assert = require("node:assert/strict");
-const {participantEmail, participantEmailLogin, registrationStart, registrationConfirmation, registrationResend, registrationToken,
+const {participantEmail, participantEmailLogin, registrationStart, registrationConfirmation, registrationResend, registrationPassword, registrationToken,
   createParticipantRegistrationApi, createGroupInvitationApi} = require("../dist/src/application/participant-registration-api.js");
 const id = "12345678-1234-1234-1234-123456789012", invite = "i".repeat(43), pending = "p".repeat(43), confirmation = "c".repeat(43);
 const good = {email: "Demo.Owner+tag@EXAMPLE.test", password: "synthetic password", contact_notice_version: "contact-1", accept_contact_notice: true};
@@ -123,4 +123,13 @@ test("invitation management rejects client owner/scope/token and coerced CAS/exp
   assert.deepEqual(await api.create("session", id, id, {expires_at: 1234}, "csrf"), {...record, invite_token: invite});
   assert.deepEqual(await api.revoke("session", id, id, id, {expected_revision: 0}, "csrf"), {...record, revision: 1, status: "revoked"});
   assert.deepEqual(calls, [["session", id, id, {expires_at: 1234}], ["session", id, id, id, {expected_revision: 0}]]);
+});
+
+test("registration password step requires a code and a policy password", () => {
+  const confirmation = "x".repeat(43);
+  assert.deepEqual(registrationPassword({confirmation_token: confirmation, password: "synthetic chosen password"}),
+    {confirmation_token: confirmation, password: "synthetic chosen password"});
+  for (const bad of [{confirmation_token: confirmation}, {confirmation_token: confirmation, password: "short"}])
+    assert.throws(() => registrationPassword(bad), e => e.code === "INVALID_REGISTRATION_INPUT");
+  assert.throws(() => registrationPassword({confirmation_token: "bad", password: "synthetic chosen password"}), e => e.code === "NOT_AVAILABLE");
 });
