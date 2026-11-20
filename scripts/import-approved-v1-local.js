@@ -97,6 +97,7 @@ async function importApprovedV1Local(client) {
       : pkg.provenance && Array.isArray(pkg.provenance.sources) ? [pkg.provenance.sources[0].citation] : [];
     await client.query('INSERT INTO pedpsy.method_library_catalog VALUES($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7::jsonb) ON CONFLICT(release_id) DO NOTHING',
       [row.id, release.id, pkg.package_version, release.title, JSON.stringify(authors), JSON.stringify(release.outputs.map(id => (release.labels && release.labels[id]) || id)), JSON.stringify([release.title])]);
+    await client.query("INSERT INTO pedpsy.release_allowlist(release_id,created_at_ms) VALUES($1,floor(extract(epoch FROM clock_timestamp())*1000)::bigint) ON CONFLICT(release_id) DO NOTHING", [row.id]);
     const allowed = (await client.query('SELECT pedpsy.constructor_release_allowed($1) allowed', [row.id])).rows[0].allowed;
     if (!allowed) throw new Error('APPROVED_RELEASE_NOT_ALLOWED');
     ids.push(row.id);

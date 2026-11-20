@@ -30,6 +30,7 @@ async function importGenchiLocal(client) {
   }
   await client.query("INSERT INTO pedpsy.method_library_catalog VALUES($1,'genchi_breath_hold','1.0.0','Проба Генчи',$2::jsonb,$3::jsonb,$4::jsonb) ON CONFLICT(release_id) DO NOTHING",
     [RELEASE_ID, JSON.stringify(["А.И. Пустозеров", "А.Г. Гостев"]), JSON.stringify(["Время задержки дыхания, с", "Оценка"]), JSON.stringify(["генчи", "задержка дыхания"])]);
+  await client.query("INSERT INTO pedpsy.release_allowlist(release_id,created_at_ms) VALUES($1,floor(extract(epoch FROM clock_timestamp())*1000)::bigint) ON CONFLICT(release_id) DO NOTHING",[RELEASE_ID]);
   if (!(await client.query("SELECT pedpsy.constructor_release_allowed($1) allowed", [RELEASE_ID])).rows[0].allowed) throw new Error("GENCHI_RELEASE_NOT_ALLOWED");
   return RELEASE_ID;
 }
