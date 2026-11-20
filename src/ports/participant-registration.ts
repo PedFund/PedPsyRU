@@ -86,12 +86,16 @@ export interface RegistrationStart {
   readonly accept_contact_notice: true;
 }
 export interface RegistrationConfirmation {readonly confirmation_token: string}
+export interface RegistrationResend {readonly email: string}
 export interface ParticipantEmailLogin {readonly study_id?: string; readonly email: string; readonly password: string}
 export interface ParticipantRegistration {
   landing(inviteToken: string): Promise<RegistrationLanding>;
   // Same response for a new or already-known mailbox. Recheck current scope
   // under DB locks, bind pending registration to browser/CSRF, and queue mail.
   start(inviteToken: string, input: RegistrationStart, pendingToken: string): Promise<{status: "confirmation_requested"}>;
+  // Repeat delivery for an application that already exists: rotates the one-time
+  // code, keeps study/group, answers neutrally for unknown mailboxes.
+  resend(inviteToken: string, input: RegistrationResend): Promise<{status: "accepted"}>;
   // Explicit POST only; no participation/session on GET or token preview.
   // Existing mailbox MUST NOT get a new password from a registration attempt.
   confirm(inviteToken: string, input: RegistrationConfirmation, pendingToken: string): Promise<{status: "sign_in_required"}>;

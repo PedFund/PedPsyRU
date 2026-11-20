@@ -1,6 +1,6 @@
 import {ParticipationError} from "../ports/errors.js";
 import type {GroupInvitations, ParticipantRegistration, RegistrationStart, RegistrationConfirmation,
-  ParticipantEmailLogin, GroupInvitationRecord} from "../ports/participant-registration.js";
+  ParticipantEmailLogin, GroupInvitationRecord, RegistrationResend} from "../ports/participant-registration.js";
 import {studyId} from "./study-api.js";
 import {participantEmail} from "../ports/contact-email.js";
 import {weakNewPassword} from "../ports/password-policy.js";
@@ -46,6 +46,10 @@ export function registrationConfirmation(input: unknown): RegistrationConfirmati
   const b = object(input, ["confirmation_token"]);
   return {confirmation_token: registrationToken(b.confirmation_token)};
 }
+export function registrationResend(input: unknown): RegistrationResend {
+  const b = object(input, ["email"]);
+  return {email: participantEmail(b.email)};
+}
 export function participantEmailLogin(input: unknown): ParticipantEmailLogin {
   // Without a study link the server resolves the study from the address when it
   // belongs to exactly one active study; the field is therefore optional.
@@ -76,6 +80,11 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
       return registration.confirm(registrationToken(invite), registrationConfirmation(input), registrationToken(pendingToken))
         .then(() => ({status: "sign_in_required" as const}));
     },
+    // Repeat delivery deliberately does not depend on the pending browser cookie:
+    // a reloaded page or a phone must be able to ask for the code again.
+    resend: (invite: string, input: unknown) =>
+      registration.resend(registrationToken(invite), registrationResend(input))
+        .then(() => ({status: "accepted" as const})),
     login: async (input: unknown) => {
       const session = await registration.login(participantEmailLogin(input));
       return {token: session.token, csrf: session.csrf, expiresAt: session.expiresAt};
