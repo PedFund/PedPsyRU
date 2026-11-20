@@ -92,6 +92,12 @@
       "package_version": "1.0.0-staging",
       "scales": 3,
       "artifacts": 4
+    },
+    {
+      "id": "stai_ru_40_barkanova",
+      "package_version": "1.0.0-staging",
+      "scales": 2,
+      "artifacts": 4
     }
   ]
 }

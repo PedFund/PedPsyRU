@@ -1,0 +1,1201 @@
+{
+  "schema_version": "1.0",
+  "method_id": "stai_ru_40_barkanova",
+  "package_version": "1.0.0",
+  "title": "Шкала ситуативной и личностной тревожности (STAI, редакция Баркановой)",
+  "language": "ru",
+  "provenance": {
+    "origin": "owner_materials",
+    "sources": [
+      {
+        "id": "stai_ru_40_barkanova_approved_package",
+        "citation": "Approved library package methods/approved/v1 (Issue #69 content decision).",
+        "url": null
+      }
+    ],
+    "missing": [
+      "rights"
+    ]
+  },
+  "rights": {
+    "status": "unknown",
+    "source_ids": []
+  },
+  "instruction": {
+    "artifact_id": "instruction"
+  },
+  "form": {
+    "artifact_id": "form",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "id": "q01",
+      "ordinal": 1,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q02",
+      "ordinal": 2,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q03",
+      "ordinal": 3,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q04",
+      "ordinal": 4,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q05",
+      "ordinal": 5,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q06",
+      "ordinal": 6,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q07",
+      "ordinal": 7,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q08",
+      "ordinal": 8,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q09",
+      "ordinal": 9,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q10",
+      "ordinal": 10,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q11",
+      "ordinal": 11,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q12",
+      "ordinal": 12,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q13",
+      "ordinal": 13,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q14",
+      "ordinal": 14,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q15",
+      "ordinal": 15,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q16",
+      "ordinal": 16,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q17",
+      "ordinal": 17,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q18",
+      "ordinal": 18,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q19",
+      "ordinal": 19,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q20",
+      "ordinal": 20,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q21",
+      "ordinal": 21,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q22",
+      "ordinal": 22,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q23",
+      "ordinal": 23,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q24",
+      "ordinal": 24,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q25",
+      "ordinal": 25,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q26",
+      "ordinal": 26,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q27",
+      "ordinal": 27,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q28",
+      "ordinal": 28,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q29",
+      "ordinal": 29,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q30",
+      "ordinal": 30,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q31",
+      "ordinal": 31,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q32",
+      "ordinal": 32,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q33",
+      "ordinal": 33,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q34",
+      "ordinal": 34,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q35",
+      "ordinal": 35,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q36",
+      "ordinal": 36,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q37",
+      "ordinal": 37,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q38",
+      "ordinal": 38,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q39",
+      "ordinal": 39,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    },
+    {
+      "id": "q40",
+      "ordinal": 40,
+      "kind": "single_choice",
+      "options": [
+        {
+          "value": "1",
+          "label": "нет, это не так"
+        },
+        {
+          "value": "2",
+          "label": "пожалуй, так"
+        },
+        {
+          "value": "3",
+          "label": "верно"
+        },
+        {
+          "value": "4",
+          "label": "совершенно верно"
+        }
+      ]
+    }
+  ],
+  "scales": [
+    {
+      "id": "st",
+      "label": "Ситуативная тревожность (СТ)",
+      "min": 20,
+      "max": 80,
+      "direction": "not_specified"
+    },
+    {
+      "id": "lt",
+      "label": "Личностная тревожность (ЛТ)",
+      "min": 20,
+      "max": 80,
+      "direction": "not_specified"
+    }
+  ],
+  "calculation": {
+    "kind": "special",
+    "adapter_id": "approved-numeric",
+    "adapter_version": "1.0.0",
+    "specification_artifact_id": "specification",
+    "key_artifact_id": "key"
+  },
+  "norms": {
+    "status": "absent",
+    "artifact_id": null,
+    "applicability_artifact_id": null,
+    "source_ids": []
+  },
+  "control_vectors": [
+    {
+      "id": "approved_key_vector",
+      "data_origin": "synthetic",
+      "responses": [
+        {
+          "item_id": "q01",
+          "value": "1"
+        },
+        {
+          "item_id": "q02",
+          "value": "1"
+        },
+        {
+          "item_id": "q03",
+          "value": "1"
+        },
+        {
+          "item_id": "q04",
+          "value": "1"
+        },
+        {
+          "item_id": "q05",
+          "value": "1"
+        },
+        {
+          "item_id": "q06",
+          "value": "1"
+        },
+        {
+          "item_id": "q07",
+          "value": "1"
+        },
+        {
+          "item_id": "q08",
+          "value": "1"
+        },
+        {
+          "item_id": "q09",
+          "value": "1"
+        },
+        {
+          "item_id": "q10",
+          "value": "1"
+        },
+        {
+          "item_id": "q11",
+          "value": "1"
+        },
+        {
+          "item_id": "q12",
+          "value": "1"
+        },
+        {
+          "item_id": "q13",
+          "value": "1"
+        },
+        {
+          "item_id": "q14",
+          "value": "1"
+        },
+        {
+          "item_id": "q15",
+          "value": "1"
+        },
+        {
+          "item_id": "q16",
+          "value": "1"
+        },
+        {
+          "item_id": "q17",
+          "value": "1"
+        },
+        {
+          "item_id": "q18",
+          "value": "1"
+        },
+        {
+          "item_id": "q19",
+          "value": "1"
+        },
+        {
+          "item_id": "q20",
+          "value": "1"
+        },
+        {
+          "item_id": "q21",
+          "value": "1"
+        },
+        {
+          "item_id": "q22",
+          "value": "1"
+        },
+        {
+          "item_id": "q23",
+          "value": "1"
+        },
+        {
+          "item_id": "q24",
+          "value": "1"
+        },
+        {
+          "item_id": "q25",
+          "value": "1"
+        },
+        {
+          "item_id": "q26",
+          "value": "1"
+        },
+        {
+          "item_id": "q27",
+          "value": "1"
+        },
+        {
+          "item_id": "q28",
+          "value": "1"
+        },
+        {
+          "item_id": "q29",
+          "value": "1"
+        },
+        {
+          "item_id": "q30",
+          "value": "1"
+        },
+        {
+          "item_id": "q31",
+          "value": "1"
+        },
+        {
+          "item_id": "q32",
+          "value": "1"
+        },
+        {
+          "item_id": "q33",
+          "value": "1"
+        },
+        {
+          "item_id": "q34",
+          "value": "1"
+        },
+        {
+          "item_id": "q35",
+          "value": "1"
+        },
+        {
+          "item_id": "q36",
+          "value": "1"
+        },
+        {
+          "item_id": "q37",
+          "value": "1"
+        },
+        {
+          "item_id": "q38",
+          "value": "1"
+        },
+        {
+          "item_id": "q39",
+          "value": "1"
+        },
+        {
+          "item_id": "q40",
+          "value": "1"
+        }
+      ],
+      "expected": [
+        {
+          "scale_id": "st",
+          "value": 50
+        },
+        {
+          "scale_id": "lt",
+          "value": 38
+        }
+      ],
+      "basis": {
+        "kind": "independent",
+        "source_ids": [
+          "stai_ru_40_barkanova_approved_package"
+        ]
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "id": "form",
+      "path": "form.json",
+      "bytes": 20935,
+      "sha256": "05f2b1d13656da93f4cff9875d3b6d0e54c4ea5373f1b83ab7a7ba2d65e85f40",
+      "media_type": "application/json"
+    },
+    {
+      "id": "key",
+      "path": "key.json",
+      "bytes": 1481,
+      "sha256": "b32d2f61c8a7d62e63026c846a7f0ea6b1a169057437622109f4b296822a7d1f",
+      "media_type": "application/json"
+    },
+    {
+      "id": "instruction",
+      "path": "instruction.txt",
+      "bytes": 647,
+      "sha256": "e855e7e7557d4800e98319dfc0816fae3200f46dc31511f05a4b56d184bb6d9a",
+      "media_type": "text/plain"
+    },
+    {
+      "id": "specification",
+      "path": "specification.txt",
+      "bytes": 255,
+      "sha256": "3e23c26962c1e75391cf33dba31226d0d456afa777d7dcfacc01c8077d6ae23a",
+      "media_type": "text/plain"
+    }
+  ],
+  "review": {
+    "technical": "unverified",
+    "scientific": "draft",
+    "publication": "draft"
+  }
+}
