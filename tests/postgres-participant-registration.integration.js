@@ -28,10 +28,16 @@ scenario("wrong confirmation attempts persist across adapters, fifth cancels own
   const p=await requested(f,x);for(let n=0;n<5;n++){const r=new PostgresParticipantRegistration(f.runtime,x.vault);await assert.rejects(r.confirm(p.invite,{confirmation_token:token()},p.browser),e=>e.status===404);assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE id=$1",[p.row.id])).rows[0].attempts_remaining,4-n);}
   const row=(await f.admin.query("SELECT p.status,o.status delivery_status FROM pedpsy.registration_pending p JOIN pedpsy.contact_confirmation_outbox o ON o.pending_id=p.id WHERE p.id=$1",[p.row.id])).rows[0];assert.deepEqual(row,{status:"cancelled",delivery_status:"cancelled"});await assert.rejects(confirm(x,p),e=>e.status===404);assert.equal(await identity(f,x.design.id),undefined);
 });
-scenario("wrong browser/invite/purpose/body cannot consume another request; replay cannot decrement a newer pending request",async(f,x)=>{
-  const p=await requested(f,x);for(const [invite,code,browser] of [[p.invite,p.code,token()],[token(),p.code,p.browser],[p.invite,p.invite,p.browser],[p.invite,p.browser,p.browser]])await assert.rejects(x.registration.confirm(invite,{confirmation_token:code},browser),e=>[400,404].includes(e.status));
+scenario("wrong invite/code cannot consume another request; the code itself may confirm once from another browser",async(f,x)=>{
+  const p=await requested(f,x);
+  // Wrong invitation, a token used as a code, and the browser proof used as a code stay denied.
+  for(const [invite,code] of [[token(),p.code],[p.invite,p.invite],[p.invite,p.browser]])await assert.rejects(x.registration.confirm(invite,{confirmation_token:code},p.browser),e=>[400,404].includes(e.status));
   await assert.rejects(x.registration.confirm(p.invite,{confirmation_token:p.code,role:"administrator"},p.browser),e=>e.status===404);assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE id=$1",[p.row.id])).rows[0].attempts_remaining,5);
-  await confirm(x,p);const next=await requested(f,x);await assert.rejects(confirm(x,p),e=>e.status===404);assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE id=$1",[next.row.id])).rows[0].attempts_remaining,5);
+  // Possession of the one-time code is the proof of ownership: a phone or another
+  // browser may confirm the same application exactly once.
+  assert.deepEqual(await x.registration.confirm(p.invite,{confirmation_token:p.code},token()),{status:"sign_in_required"});
+  await assert.rejects(confirm(x,p),e=>e.status===404);
+  const next=await requested(f,x);assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE id=$1",[next.row.id])).rows[0].attempts_remaining,5);
 });
 scenario("concurrent confirmation consumes exactly once and one identity/audit/ack; no duplicate session or enrollment",async(f,x)=>{
   const p=await requested(f,x),results=await Promise.allSettled([confirm(x,p),new PostgresParticipantRegistration(f.runtime,x.vault).confirm(p.invite,{confirmation_token:p.code},p.browser)]);
