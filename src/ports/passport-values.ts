@@ -8,7 +8,9 @@ export function passportScalars(input:unknown):Record<string,string|number>{
   if(!input||typeof input!=="object"||Array.isArray(input)||Object.keys(input).length>8)invalid();
   const out:Record<string,string|number>={};
   for(const [key,value] of Object.entries(input)){
-    if(!/^(sex|age|city|extra_[a-z][a-z0-9_]{0,31})$/.test(key))invalid();
+    // Schedule-defined fields may use any safe token (for example "organization");
+    // the caller checks the key against the pinned schema before writing.
+    if(!/^[a-z][a-z0-9_]{0,63}$/.test(key))invalid();
     if(typeof value==="number"){
       if(!Number.isInteger(value)||value< -1000000||value>1000000)invalid();out[key]=value;
     }else if(typeof value==="string"){

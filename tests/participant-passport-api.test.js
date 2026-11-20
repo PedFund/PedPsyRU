@@ -14,8 +14,9 @@ test("own passport: complete requires mandatory sex/age and configured city/cust
   assert.deepEqual(passportValues(required,{sex:"male",age:42,city:"Town",extra_years:0},true),{sex:"male",age:42,city:"Town",extra_years:0});
 });
 test("own passport: exact scalar/key whitelist, no scope/authority/nested values",()=>{
-  for(const value of [null,[],"x",{age:null},{age:true},{age:[]},{age:{}},{email:"owner@example.test"},{study_id:"study"},{role:"participant"},{extra_a:"x",extra_b:"x",extra_c:"x",extra_d:"x",extra_e:"x",extra_f:"x",sex:"male",age:42,city:"Town"},JSON.parse('{"__proto__":"x"}')])invalid(()=>passportScalars(value));
+  for(const value of [null,[],"x",{age:null},{age:true},{age:[]},{age:{}},{extra_a:"x",extra_b:"x",extra_c:"x",extra_d:"x",extra_e:"x",extra_f:"x",sex:"male",age:42,city:"Town"},JSON.parse('{"__proto__":"x"}')])invalid(()=>passportScalars(value));
   invalid(()=>passportValues(fields,{extra_unknown:"x"}));
+  invalid(()=>passportValues(fields,{email:"owner@example.test"}));invalid(()=>passportValues(fields,{study_id:"study"}));invalid(()=>passportValues(fields,{role:"participant"}));
 });
 test("own passport: no string-number/coercion/fraction/nonfinite/range substitution",()=>{
   for(const value of [{age:"42"},{age:42.5},{age:NaN},{age:Infinity},{age:-1},{age:131},{extra_years:11},{extra_years:-11},{age:1000001}])invalid(()=>passportValues(fields,value));
@@ -43,4 +44,11 @@ test("own passport API: own session only, exact normalized DTO and saved-only co
   const api=createParticipantPassportApi({read:async token=>{seen.push(["read",token]);return state;},save:async(token,input)=>{seen.push(["save",token,input]);return state;},complete:async(token,input)=>{seen.push(["complete",token,input]);return {...state,status:"completed",revision:2};}},{assert:(t,c)=>assert.equal(c,"csrf")});
   assert.equal(await api.read("own"),state);await api.save("own",{schema_version:1,expected_revision:0,values:{city:" Town ",age:42}},"csrf");await api.complete("own",{schema_version:1,expected_revision:1},"csrf");
   assert.deepEqual(seen,[["read","own"],["save","own",{schema_version:1,expected_revision:0,values:{city:"Town",age:42}}],["complete","own",{schema_version:1,expected_revision:1}]]);
+});
+
+test("own passport: schedule-defined keys such as organization are accepted", () => {
+  const withOrganization = [...fields, {key: "organization", label: "Организация", kind: "text", required: false, max_length: 200}];
+  assert.deepEqual(passportValues(withOrganization, {organization: "  АНО  "}), {organization: "АНО"});
+  assert.equal(passportScalars({organization: "АНО"}).organization, "АНО");
+  invalid(() => passportValues(fields, {organization: "АНО"}));
 });
