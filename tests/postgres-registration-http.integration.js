@@ -22,9 +22,12 @@ scenario("unconfirmed email and legacy internal code cannot bypass confirmation;
   const code=await proof(x,h);assert.equal((await post(x,h,"confirm",{confirmation_token:code})).statusCode,200);const loginId=(await f.admin.query("SELECT k.login_id FROM pedpsy.participant_credentials k WHERE k.study_id=$1",[x.design.id])).rows[0].login_id;
   const legacy=await x.w.app.inject({method:"POST",url:"/api/v2/participant/login",headers,payload:{login_id:loginId,password:body.password}});assert.equal(legacy.statusCode,401);assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.participant_sessions WHERE study_id=$1",[x.design.id])).rows[0].n,"0");assert.equal((await post(x,h,"login",input)).statusCode,200);await noClinical(f,x);
 });
-scenario("another real HTTP browser cannot receive/consume own proof or decrement attempts; denial contains metadata only",async(f,x)=>{
-  const a=await preflight(x),b=await preflight(x);await started(x,a);const code=await proof(x,a);assert.equal((await post(x,b,"receipt",{})).statusCode,404);assert.equal((await post(x,b,"confirm",{confirmation_token:code})).statusCode,404);
-  assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE study_id=$1",[x.design.id])).rows[0].attempts_remaining,5);assert.equal((await post(x,a,"confirm",{confirmation_token:code})).statusCode,200);
+scenario("the receipt stays browser-scoped while the e-mailed code confirms the application once from another browser",async(f,x)=>{
+  const a=await preflight(x),b=await preflight(x);await started(x,a);const code=await proof(x,a);assert.equal((await post(x,b,"receipt",{})).statusCode,404);
+  // The code is the ownership proof: another browser may use it exactly once.
+  assert.equal((await post(x,b,"confirm",{confirmation_token:code})).statusCode,200);
+  assert.equal((await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE study_id=$1",[x.design.id])).rows[0].attempts_remaining,5);
+  assert.equal((await post(x,a,"confirm",{confirmation_token:code})).statusCode,404);
   const audit=(await f.admin.query("SELECT * FROM pedpsy.access_audit_events WHERE action='participants.registration.http_denied'")).rows;assert.ok(audit.length>=2);for(const v of [body.email,body.password,code,x.i.invite_token,a.cookie,b.cookie])assert.ok(!JSON.stringify(audit).includes(v),"private value in denial audit");assert.ok(audit.every(r=>r.study_id===null&&r.credential_id===null&&r.actor_role===null));await noClinical(f,x);
 });
 scenario("renamed staff/session nonce, forged scope and wrong Origin denied before registration identity writes",async(f,x)=>{
