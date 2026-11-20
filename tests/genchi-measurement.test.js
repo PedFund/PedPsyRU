@@ -41,7 +41,7 @@ test("Genchi: release digest pins the registered handler key", () => {
 });
 test("Genchi: q01/q02 responses produce a scored instrument result", () => {
   const request = {contract_version: "1.0", method_version_id: "genchi_breath_hold@1.0.0", handler_version: "genchi-measurement-1.0.0",
-    responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "female"}]};
+    responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "2"}]};
   const result = scoreGenchiResponses(request);
   assert.equal(result.status, "scored");
   assert.deepEqual(result.measures[0], {code: "duration_seconds", label: "Время задержки дыхания, с", value: 25,
@@ -50,8 +50,8 @@ test("Genchi: q01/q02 responses produce a scored instrument result", () => {
   assert.equal(result.calculation.key_digest, GENCHI_KEY_DIGEST);
   assert.equal(genchiMeasurementModule.calculate(request).status, "scored");
   assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}]}).status, "invalid");
-  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "other"}]}).status, "invalid");
-  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "601"}, {item_id: "q02", value: "male"}]}).status, "invalid");
+  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "3"}]}).status, "invalid");
+  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "601"}, {item_id: "q02", value: "1"}]}).status, "invalid");
 });
 
 test("Genchi: key file mirrors the calculation core", () => {

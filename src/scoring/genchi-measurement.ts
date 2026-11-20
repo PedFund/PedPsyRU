@@ -47,10 +47,11 @@ export function scoreGenchiResponses(input: unknown): InstrumentResult {
     if ((item.item_id !== "q01" && item.item_id !== "q02") || typeof item.value !== "string" || values[item.item_id]) return invalid("INVALID_RESPONSES");
     values[item.item_id] = item.value;
   }
-  if (!/^\d{1,3}$/.test(values.q01 ?? "") || !isSex(values.q02)) return invalid("INVALID_RESPONSES");
+  if (!/^\d{1,3}$/.test(values.q01 ?? "") || (values.q02 !== "1" && values.q02 !== "2")) return invalid("INVALID_RESPONSES");
   const duration = Number(values.q01);
   if (!isDuration(duration)) return invalid("INVALID_RESPONSES");
-  const rating = ratingFor(values.q02 as GenchiSex, duration);
+  const sex: GenchiSex = values.q02 === "1" ? "male" : "female";
+  const rating = ratingFor(sex, duration);
   return {contract_version: "1.0", method_version_id: GENCHI_METHOD_VERSION_ID, handler_version: GENCHI_HANDLER_VERSION,
     status: "scored", validation_state: "legacy_checked", warnings: [],
     measures: [{code: "duration_seconds", label: "Время задержки дыхания, с", value: duration, value_type: "number", representation: "raw", precision: 0}],

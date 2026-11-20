@@ -16,7 +16,7 @@ const form = {
   rules: {require_all: true},
   items: [
     {id: "q01", number: 1, text: "Время задержки дыхания, с", options: Array.from({length: 601}, (_, value) => option(value))},
-    {id: "q02", number: 2, text: "Пол", options: [{value: "male", text: "Мужской"}, {value: "female", text: "Женский"}]}
+    {id: "q02", number: 2, text: "Пол", options: [{value: "1", text: "Мужской"}, {value: "2", text: "Женский"}]}
   ]
 };
 function genchiReleasePackage() {

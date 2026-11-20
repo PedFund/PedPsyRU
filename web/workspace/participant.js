@@ -143,8 +143,10 @@
   function renderMeasurement(){
     const c=$("participant-content"),answers=new Map((draft.responses||[]).map(r=>[r.item_id,r.value]));
     const sexField=(passport&&passport.fields||[]).find(f=>/пол/i.test(String(f.label||f.key||"")));
-    const sexKnown=(sexField&&((profileValues&&profileValues[sexField.key])||sexField.value))||answers.get("q02")||"";
-    c.innerHTML='<section class="card"><h2 id="method-title"></h2><p id="method-instruction" class="muted"></p><label>Время задержки дыхания, с<input id="measurement-seconds" type="number" inputmode="numeric" min="0" max="600" step="1" required></label><p class="muted">Замеряйте секундомером. Допустимо от 0 до 600 секунд.</p><label>Пол<select id="measurement-sex"><option value="">Выберите</option><option value="male">Мужской</option><option value="female">Женский</option></select></label><p id="measurement-hint" class="muted"></p><div class="toolbar"><button id="measurement-complete">Завершить и получить результат</button></div><button id="question-overview" class="text">К этапам</button></section>';
+    const rawSex=(sexField&&((profileValues&&profileValues[sexField.key])||sexField.value))||answers.get("q02")||"";
+    const normalizeSex=value=>{const x=String(value||"").toLowerCase();if(x==="1"||x==="male"||x==="м"||x.indexOf("муж")===0)return "1";if(x==="2"||x==="female"||x==="ж"||x.indexOf("жен")===0)return "2";return "";};
+    const sexKnown=normalizeSex(rawSex);
+    c.innerHTML='<section class="card"><h2 id="method-title"></h2><p id="method-instruction" class="muted"></p><label>Время задержки дыхания, с<input id="measurement-seconds" type="number" inputmode="numeric" min="0" max="600" step="1" required></label><p class="muted">Замеряйте секундомером. Допустимо от 0 до 600 секунд.</p><label>Пол<select id="measurement-sex"><option value="">Выберите</option><option value="1">Мужской</option><option value="2">Женский</option></select></label><p id="measurement-hint" class="muted"></p><div class="toolbar"><button id="measurement-complete">Завершить и получить результат</button></div><button id="question-overview" class="text">К этапам</button></section>';
     $("method-title").textContent=form.title||"Проба Генчи";$("method-instruction").textContent=form.instruction||"";
     $("measurement-seconds").value=answers.get("q01")||"";if(sexKnown)$("measurement-sex").value=sexKnown;
     if(!sexKnown)$("measurement-hint").textContent="Пол нужен для оценки результата: в анкете он не заполнен.";
@@ -153,7 +155,7 @@
       if(locked)throw Error("Перечитайте прохождение.");
       const seconds=$("measurement-seconds").value.trim(),sex=$("measurement-sex").value;
       if(!/^\d{1,3}$/.test(seconds)||Number(seconds)<0||Number(seconds)>600)throw Error("Введите целое число секунд от 0 до 600.");
-      if(sex!=="male"&&sex!=="female")throw Error("Выберите пол: без него оценка не рассчитывается.");
+      if(sex!=="1"&&sex!=="2")throw Error("Выберите пол: без него оценка не рассчитывается.");
       const responses=[{item_id:"q01",value:String(Number(seconds))},{item_id:"q02",value:sex}];
       draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:"q01",responses},"PUT");
       renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));
