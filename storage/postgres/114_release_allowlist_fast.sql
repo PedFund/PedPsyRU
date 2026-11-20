@@ -15,7 +15,9 @@ CREATE OR REPLACE FUNCTION constructor_release_allowed(release uuid) RETURNS boo
 LANGUAGE sql STABLE SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
   SELECT EXISTS(SELECT 1 FROM pedpsy.release_allowlist a
     JOIN pedpsy.instrument_releases r ON r.id=a.release_id
-    WHERE a.release_id=release AND r.publication_state='draft')
+    WHERE a.release_id=release AND r.publication_state='draft'
+      AND (SELECT count(*) FROM pedpsy.release_items i WHERE i.release_id=r.id)
+        = coalesce(jsonb_array_length(r.form_snapshot->'items'), -1))
 $$;
 REVOKE ALL ON FUNCTION constructor_release_allowed(uuid) FROM PUBLIC;
 REVOKE ALL ON TABLE release_allowlist FROM PUBLIC;
