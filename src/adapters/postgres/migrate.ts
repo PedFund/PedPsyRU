@@ -83,6 +83,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.save_method_library_draft(integer,text,text,jsonb,jsonb),pedpsy.list_method_library(),pedpsy.read_method_library(text,text),pedpsy.read_available_methods(),pedpsy.read_method_planning_catalogue(),pedpsy.method_transfer_status() TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_research_workbench(uuid),pedpsy.change_research_workbench(uuid,integer,text,jsonb),pedpsy.close_research_stage(uuid,integer,uuid),pedpsy.change_research_profile_schema(uuid,integer,jsonb),pedpsy.research_progress(uuid),pedpsy.research_method_progress(uuid),pedpsy.research_method_analytics(uuid,uuid,uuid),pedpsy.research_participant_passport_stats(uuid),pedpsy.own_profile(text,integer,integer,jsonb) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.login_lock_blocked(text,text),pedpsy.login_lock_failure(text,text),pedpsy.login_lock_success(text,text) TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.participant_login_study(text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_own_stages() TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.enroll_own_stage(uuid,integer,integer,integer) TO "${role}"`);
 }

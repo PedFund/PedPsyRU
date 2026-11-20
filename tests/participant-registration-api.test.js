@@ -45,6 +45,15 @@ test("new passwords refuse common values and the login identity", () => {
   // Login must keep accepting already stored passwords, including weak ones.
   assert.equal(participantEmailLogin({study_id: "11111111-1111-4111-8111-111111111111", email: good.email, password: "password1234"}).password, "password1234");
 });
+test("login without a study link is accepted; the server resolves the study", () => {
+  const withoutStudy = participantEmailLogin({email: good.email, password: "password1234"});
+  assert.equal(withoutStudy.study_id, undefined);
+  assert.equal(withoutStudy.email, "Demo.Owner+tag@example.test");
+  assert.equal(participantEmailLogin({study_id: "11111111-1111-4111-8111-111111111111", email: good.email, password: "password1234"}).study_id, "11111111-1111-4111-8111-111111111111");
+  for (const bad of [{email: good.email}, {email: good.email, password: "password1234", extra: 1}])
+    assert.throws(() => participantEmailLogin(bad), e => e.code === "INVALID_REGISTRATION_INPUT");
+  assert.throws(() => participantEmailLogin({study_id: "not-a-uuid", email: good.email, password: "password1234"}), e => e.code === "NOT_AVAILABLE");
+});
 test("only opaque token strings are accepted; confirmation has no password/group/role replacement", () => {
   assert.equal(registrationToken(invite), invite);
   assert.deepEqual(registrationConfirmation({confirmation_token: confirmation}), {confirmation_token: confirmation});
@@ -54,10 +63,13 @@ test("only opaque token strings are accepted; confirmation has no password/group
     {confirmation_token: confirmation, group_id: id}, {confirmation_token: confirmation, study_id: id}, {}, null])
     assert.throws(() => registrationConfirmation(input), invalid);
 });
-test("email login is explicitly study-scoped and accepts no cross-study/global realm selection", () => {
+test("email login accepts a study link or resolves by address, and no other fields", () => {
   assert.deepEqual(participantEmailLogin({study_id: id, email: good.email, password: good.password}),
     {study_id: id, email: "Demo.Owner+tag@example.test", password: good.password});
-  for (const input of [{email: good.email, password: good.password}, {study_id: id, email: good.email, password: good.password, group_id: id},
+  // Without a link the study is resolved on the server from the address.
+  assert.deepEqual(participantEmailLogin({email: good.email, password: good.password}),
+    {email: "Demo.Owner+tag@example.test", password: good.password});
+  for (const input of [{study_id: id, email: good.email, password: good.password, group_id: id},
     {study_id: id, email: good.email, password: good.password, role: "researcher"}]) assert.throws(() => participantEmailLogin(input), invalid);
   assert.throws(() => participantEmailLogin({study_id: "*", email: good.email, password: good.password}), unavailable);
 });

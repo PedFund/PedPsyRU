@@ -86,7 +86,7 @@ export interface RegistrationStart {
   readonly accept_contact_notice: true;
 }
 export interface RegistrationConfirmation {readonly confirmation_token: string}
-export interface ParticipantEmailLogin {readonly study_id: string; readonly email: string; readonly password: string}
+export interface ParticipantEmailLogin {readonly study_id?: string; readonly email: string; readonly password: string}
 export interface ParticipantRegistration {
   landing(inviteToken: string): Promise<RegistrationLanding>;
   // Same response for a new or already-known mailbox. Recheck current scope

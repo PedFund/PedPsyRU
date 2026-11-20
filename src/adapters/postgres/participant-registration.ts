@@ -37,15 +37,33 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
     if(!accepted)throw new ParticipationError(404,"NOT_AVAILABLE");
     return {status:"sign_in_required"};
   }
+  // Resolution by address is only allowed when it is unambiguous. Several active
+  // studies with the same address must send the participant back to the group link.
+  private async studyForEmail(email:string):Promise<string|undefined>{
+    try{
+      const row=await accountTransaction(this.pool,async c=>(await c.query<{study:string|null}>("SELECT pedpsy.participant_login_study($1) study",[email])).rows[0]);
+      return row?.study??undefined;
+    }catch(error){
+      const code=(error as {code?:string}).code,message=(error as {message?:string}).message;
+      if(code==="P0001"&&message==="AMBIGUOUS_PARTICIPANT_STUDY")throw new ParticipationError(409,"AMBIGUOUS_PARTICIPANT_STUDY");
+      throw error;
+    }
+  }
   async login(input:ParticipantEmailLogin){
-    if(!input||Array.isArray(input)||Object.keys(input).sort().join(",")!=="email,password,study_id"||typeof input.study_id!=="string"||
-      !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(input.study_id)||!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    if(!input||Array.isArray(input))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    const keys=Object.keys(input).sort().join(",");
+    if(keys!=="email,password"&&keys!=="email,password,study_id")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    if(input.study_id!==undefined&&(typeof input.study_id!=="string"||
+      !/^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$/i.test(input.study_id)))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    if(!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
     const email=participantEmail(input.email);if(!email.endsWith("@example.test")&&!this.allowRealEmail)throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
     const scope="participant-email",identity=email;
     if(await this.lock.blocked(scope,identity))throw new ParticipationError(429,"LOGIN_LOCKED");
     try{
+      const studyId=input.study_id??await this.studyForEmail(email);
+      if(!studyId)throw new ParticipationError(401,"INVALID_LOGIN");
       const session=await this.gate.run(async()=>{
-        const material=await accountTransaction(this.pool,async c=>(await c.query<Material>("SELECT * FROM pedpsy.participant_email_login_material_v2($1,$2,$3,$4,$5)",[input.study_id,email,this.allowRealEmail,this.admission.globalLimit,this.admission.globalWindowMs])).rows[0]);
+        const material=await accountTransaction(this.pool,async c=>(await c.query<Material>("SELECT * FROM pedpsy.participant_email_login_material_v2($1,$2,$3,$4,$5)",[studyId,email,this.allowRealEmail,this.admission.globalLimit,this.admission.globalWindowMs])).rows[0]);
         if(material?.throttled)throw new ParticipationError(429,"LOGIN_THROTTLED");
         const bytes=await this.derivePassword(input.password,material?Buffer.from(material.salt,"hex"):this.dummySalt,64,SCRYPT);let matches:boolean;
         try{matches=equalText(bytes.toString("hex"),material?.password_hash??this.dummyHash);}finally{bytes.fill(0);}
