@@ -1,7 +1,8 @@
 "use strict";
 // Genchi breath-hold: sex-dependent thresholds from the owner's passport (max exclusive).
 const {test} = require("node:test"), assert = require("node:assert/strict");
-const {scoreGenchi, ratingFor, readMeasurement} = require("../dist/src/scoring/genchi-measurement.js");
+const {scoreGenchi, ratingFor, readMeasurement, scoreGenchiResponses, genchiMeasurementModule, GENCHI_KEY_DIGEST} = require("../dist/src/scoring/genchi-measurement.js");
+const {genchiReleasePackage} = require("../storage/genchi-release.js");
 test("Genchi: male thresholds switch exactly at 20, 30 and 40 seconds", () => {
   assert.equal(ratingFor("male", 0), "неудовлетворительно");
   assert.equal(ratingFor("male", 19), "неудовлетворительно");
@@ -28,4 +29,27 @@ test("Genchi: missing sex, negative, fractional and too long durations are rejec
 test("Genchi: the scored result carries seconds and rating only", () => {
   const result = scoreGenchi({duration_seconds: 25, sex: "female"});
   assert.deepEqual(result, {duration_seconds: 25, rating: "хорошо"});
+});
+
+test("Genchi: release digest pins the registered handler key", () => {
+  const release = genchiReleasePackage();
+  assert.equal(release.keyDigest, GENCHI_KEY_DIGEST);
+  assert.match(release.formDigest, /^sha256:[a-f0-9]{64}$/);
+  assert.equal(release.form.items.length, 2);
+  assert.equal(release.form.items[0].options.length, 601);
+  assert.equal(release.form.presentation.id, "pedpsy/breath-hold");
+});
+test("Genchi: q01/q02 responses produce a scored instrument result", () => {
+  const request = {contract_version: "1.0", method_version_id: "genchi_breath_hold@1.0.0", handler_version: "genchi-measurement-1.0.0",
+    responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "female"}]};
+  const result = scoreGenchiResponses(request);
+  assert.equal(result.status, "scored");
+  assert.deepEqual(result.measures[0], {code: "duration_seconds", label: "Время задержки дыхания, с", value: 25,
+    value_type: "number", representation: "raw", precision: 0});
+  assert.deepEqual(result.classifications[0], {code: "rating", label: "Оценка", value: "хорошо", basis: "genchi_thresholds"});
+  assert.equal(result.calculation.key_digest, GENCHI_KEY_DIGEST);
+  assert.equal(genchiMeasurementModule.calculate(request).status, "scored");
+  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}]}).status, "invalid");
+  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "other"}]}).status, "invalid");
+  assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "601"}, {item_id: "q02", value: "male"}]}).status, "invalid");
 });

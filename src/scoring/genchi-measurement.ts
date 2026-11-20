@@ -1,31 +1,28 @@
+import {readFileSync} from "node:fs";
+import {createHash} from "node:crypto";
+import {resolve} from "node:path";
+import type {InstrumentResult} from "../ports/instruments.js";
 import type {MethodData,MethodRuntimeDescriptor,MethodRuntimeModule} from "../ports/method-runtime.js";
 
-// Genchi breath-hold probe (passport of 2026-11-19). This is a functional measurement,
-// not a questionnaire: one duration in seconds and a sex-dependent rating.
+// Genchi breath-hold probe. A functional measurement, not a questionnaire: two
+// technical fields carry it through the existing attempt protocol (seconds and the
+// sex used for the rating). Thresholds come from the owner's passport.
 export type GenchiSex = "male" | "female";
 export interface GenchiMeasurement {readonly duration_seconds: number; readonly sex: GenchiSex}
 export interface GenchiResult {readonly duration_seconds: number; readonly rating: string}
-
-// Thresholds are copied from the owner's passport: max is exclusive.
-const THRESHOLDS: Record<GenchiSex, readonly {min: number; max: number | null; rating: string}[]> = {
-  male: [
-    {min: 0, max: 20, rating: "неудовлетворительно"},
-    {min: 20, max: 30, rating: "удовлетворительно"},
-    {min: 30, max: 40, rating: "хорошо"},
-    {min: 40, max: null, rating: "отлично"}
-  ],
-  female: [
-    {min: 0, max: 15, rating: "неудовлетворительно"},
-    {min: 15, max: 20, rating: "удовлетворительно"},
-    {min: 20, max: 30, rating: "хорошо"},
-    {min: 30, max: null, rating: "отлично"}
-  ]
-};
-const MAX_SECONDS = 600;
+interface GenchiKey {
+  readonly id: string; readonly type: string; readonly handler: string; readonly max_seconds: number;
+  readonly thresholds: Record<GenchiSex, readonly {max_exclusive: number | null; rating: string}[]>;
+}
+export const GENCHI_METHOD_VERSION_ID = "genchi_breath_hold@1.0.0";
+export const GENCHI_HANDLER_VERSION = "genchi-measurement-1.0.0";
+export const GENCHI_KEY: GenchiKey = JSON.parse(readFileSync(resolve(__dirname, "../../methods/genchi/key.json"), "utf8"));
+export const GENCHI_KEY_DIGEST = "sha256:" + createHash("sha256").update(JSON.stringify(GENCHI_KEY)).digest("hex");
+const MAX_SECONDS = GENCHI_KEY.max_seconds;
 const isSex = (value: unknown): value is GenchiSex => value === "male" || value === "female";
 const isDuration = (value: unknown): value is number => Number.isSafeInteger(value) && Number(value) >= 0 && Number(value) <= MAX_SECONDS;
 export function ratingFor(sex: GenchiSex, duration: number): string {
-  const band = THRESHOLDS[sex].find(item => duration >= item.min && (item.max === null || duration < item.max));
+  const band = GENCHI_KEY.thresholds[sex].find(item => item.max_exclusive === null || duration < item.max_exclusive);
   if (!band) throw new Error("GENCHI_RATING_OUT_OF_RANGE");
   return band.rating;
 }
@@ -40,9 +37,39 @@ export function scoreGenchi(data: unknown): GenchiResult {
   const measurement = readMeasurement(data);
   return {duration_seconds: measurement.duration_seconds, rating: ratingFor(measurement.sex, measurement.duration_seconds)};
 }
+function invalid(warning: string): InstrumentResult {
+  return {contract_version: "1.0", method_version_id: GENCHI_METHOD_VERSION_ID, handler_version: GENCHI_HANDLER_VERSION,
+    status: "invalid", validation_state: "legacy_checked", warnings: [{code: warning, severity: "error", details: {}}],
+    measures: [], classifications: [], quality: {valid_response_count: 0, complete: false, usable_for_aggregation: false},
+    calculation: {algorithm_id: GENCHI_HANDLER_VERSION, key_digest: GENCHI_KEY_DIGEST}};
+}
+export function scoreGenchiResponses(input: unknown): InstrumentResult {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return invalid("INVALID_RESPONSES");
+  const request = input as {contract_version?: unknown; method_version_id?: unknown; handler_version?: unknown; responses?: unknown};
+  if (request.contract_version !== "1.0" || request.method_version_id !== GENCHI_METHOD_VERSION_ID ||
+    request.handler_version !== GENCHI_HANDLER_VERSION || !Array.isArray(request.responses)) return invalid("INVALID_RESPONSES");
+  if (request.responses.length !== 2) return invalid("INVALID_RESPONSES");
+  const values: Record<string, string> = {};
+  for (const response of request.responses) {
+    if (!response || typeof response !== "object" || Array.isArray(response)) return invalid("INVALID_RESPONSES");
+    const item = response as {item_id?: unknown; value?: unknown};
+    if ((item.item_id !== "q01" && item.item_id !== "q02") || typeof item.value !== "string" || values[item.item_id]) return invalid("INVALID_RESPONSES");
+    values[item.item_id] = item.value;
+  }
+  if (!/^\d{1,3}$/.test(values.q01 ?? "") || !isSex(values.q02)) return invalid("INVALID_RESPONSES");
+  const duration = Number(values.q01);
+  if (!isDuration(duration)) return invalid("INVALID_RESPONSES");
+  const rating = ratingFor(values.q02 as GenchiSex, duration);
+  return {contract_version: "1.0", method_version_id: GENCHI_METHOD_VERSION_ID, handler_version: GENCHI_HANDLER_VERSION,
+    status: "scored", validation_state: "legacy_checked", warnings: [],
+    measures: [{code: "duration_seconds", label: "Время задержки дыхания, с", value: duration, value_type: "number", representation: "raw", precision: 0}],
+    classifications: [{code: "rating", label: "Оценка", value: rating, basis: "genchi_thresholds"}],
+    quality: {valid_response_count: 2, complete: true, usable_for_aggregation: true},
+    calculation: {algorithm_id: GENCHI_HANDLER_VERSION, key_digest: GENCHI_KEY_DIGEST}};
+}
 const descriptor: MethodRuntimeDescriptor = {
-  contract_version: "1.0", method_version_id: "genchi_breath_hold@1.0.0", handler_version: "genchi-measurement-1.0.0",
-  key_digest: "sha256:" + "0".repeat(64), title: "Проба Генчи", authors: ["А.И. Пустозеров", "А.Г. Гостев"],
+  contract_version: "1.0", method_version_id: GENCHI_METHOD_VERSION_ID, handler_version: GENCHI_HANDLER_VERSION,
+  key_digest: GENCHI_KEY_DIGEST, title: "Проба Генчи", authors: ["А.И. Пустозеров", "А.Г. Гостев"],
   presentation: {id: "pedpsy/breath-hold", version: "1.0.0"}, response_schema: {id: "pedpsy/measurement", version: "1.0.0"},
   result_schema: {id: "pedpsy/measurement-result", version: "1.0.0"},
   outputs: [{id: "duration_seconds", label: "Время задержки дыхания, с", kind: "raw"}, {id: "rating", label: "Оценка", kind: "level"}]
@@ -50,17 +77,18 @@ const descriptor: MethodRuntimeDescriptor = {
 export const genchiMeasurementModule: MethodRuntimeModule = {
   descriptor,
   checkDraft(data: MethodData) {
-    try {readMeasurement(data); return {valid: true, complete: true, issues: []};}
-    catch (error) {return {valid: false, complete: false, issues: [(error as Error).message]};}
+    const result = scoreGenchiResponses(data);
+    return {valid: result.status === "scored", complete: result.status === "scored", issues: result.status === "scored" ? [] : ["INVALID_RESPONSES"]};
   },
-  calculate(data: MethodData) {return scoreGenchi(data) as unknown as MethodData;},
+  calculate(data: MethodData) {return scoreGenchiResponses(data) as unknown as MethodData;},
   acceptsResult(result: MethodData) {
-    try {const r = result as unknown as GenchiResult; return typeof r.duration_seconds === "number" && typeof r.rating === "string" && isDuration(r.duration_seconds);}
-    catch {return false;}
+    const value = result as unknown as InstrumentResult;
+    return Boolean(value && value.status === "scored" && value.calculation?.key_digest === GENCHI_KEY_DIGEST &&
+      Array.isArray(value.measures) && Array.isArray(value.classifications));
   },
-  // The sex used for the rating is not exposed to the participant-facing projection.
   participantResult(result: MethodData) {
-    const r = result as unknown as GenchiResult;
-    return {duration_seconds: r.duration_seconds, rating: r.rating} as unknown as MethodData;
+    const value = result as unknown as InstrumentResult;
+    return {measures: value.measures.map(m => ({code: m.code, label: m.label, value: m.value, representation: m.representation})),
+      classifications: (value.classifications as {code: string; label: string; value: string}[]).map(c => ({code: c.code, label: c.label, value: c.value}))} as unknown as MethodData;
   }
 };
