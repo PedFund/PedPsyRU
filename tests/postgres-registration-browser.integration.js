@@ -19,7 +19,7 @@ test("registration browser: reload and a second tab confirm the code once, a rep
   const email = "browser.resend@example.test", password = "synthetic browser resend password";
   const page = await browser.tab("http://127.0.0.1:4174/workspace#join=" + x.invite.invite_token);
   await page.wait("document.getElementById('participant-register-form') && !document.getElementById('participant-signin').disabled");
-  await page.evaluate(`document.getElementById('registration-email').value=${JSON.stringify(email)};document.getElementById('registration-password').value=${JSON.stringify(password)};document.getElementById('contact-approval').checked=true;document.getElementById('participant-register-form').requestSubmit();`);
+  await page.evaluate(`document.getElementById('registration-email').value=${JSON.stringify(email)};document.getElementById('contact-approval').checked=true;document.getElementById('participant-register-form').requestSubmit();`);
   await page.wait("!document.getElementById('confirmation-box').hidden");
   await page.evaluate("document.getElementById('show-receipt').click()");
   await page.wait("!document.getElementById('confirm-contact').hidden");
@@ -33,7 +33,9 @@ test("registration browser: reload and a second tab confirm the code once, a rep
   const second = await browser.tab("http://127.0.0.1:4174/workspace#join=" + x.invite.invite_token);
   await second.wait("document.getElementById('resume-code')");
   await second.evaluate(`document.getElementById('resume-code').open=true;document.getElementById('resume-code-value').value=${JSON.stringify(code)};document.getElementById('resume-code-confirm').click()`);
-  await second.wait("document.getElementById('message').textContent.includes('Email подтверждён')");
+  await second.wait("document.getElementById('new-password') && !document.getElementById('save-password').disabled");
+  await second.evaluate(`document.getElementById('new-password').value=${JSON.stringify(password)};document.getElementById('save-password').click()`);
+  await second.wait("document.getElementById('message').textContent.includes('Пароль сохранён')");
   // The reloaded tab replays the same code and is refused.
   await page.evaluate(`document.getElementById('resume-code').open=true;document.getElementById('resume-code-value').value=${JSON.stringify(code)};document.getElementById('resume-code-confirm').click()`);
   await page.wait("document.getElementById('message').textContent.includes('Доступ недоступен')");

@@ -87,6 +87,7 @@ export interface RegistrationStart {
 }
 export interface RegistrationConfirmation {readonly confirmation_token: string}
 export interface RegistrationResend {readonly email: string}
+export interface RegistrationPassword {readonly confirmation_token: string; readonly password: string}
 export interface ParticipantEmailLogin {readonly study_id?: string; readonly email: string; readonly password: string}
 export interface ParticipantRegistration {
   landing(inviteToken: string): Promise<RegistrationLanding>;
@@ -96,6 +97,9 @@ export interface ParticipantRegistration {
   // Repeat delivery for an application that already exists: rotates the one-time
   // code, keeps study/group, answers neutrally for unknown mailboxes.
   resend(inviteToken: string, input: RegistrationResend): Promise<{status: "accepted"}>;
+  // After the code is confirmed the participant chooses the password. The confirmed
+  // code identifies the application; the step is single-use.
+  setPassword(inviteToken: string, input: RegistrationPassword, pendingToken: string): Promise<{status: "password_set"}>;
   // Explicit POST only; no participation/session on GET or token preview.
   // Existing mailbox MUST NOT get a new password from a registration attempt.
   confirm(inviteToken: string, input: RegistrationConfirmation, pendingToken: string): Promise<{status: "sign_in_required"}>;
