@@ -1,6 +1,6 @@
 "use strict";
 const {test} = require("node:test"), assert = require("node:assert/strict");
-const {participantEmail, participantEmailLogin, registrationStart, registrationConfirmation, registrationToken,
+const {participantEmail, participantEmailLogin, registrationStart, registrationConfirmation, registrationResend, registrationToken,
   createParticipantRegistrationApi, createGroupInvitationApi} = require("../dist/src/application/participant-registration-api.js");
 const id = "12345678-1234-1234-1234-123456789012", invite = "i".repeat(43), pending = "p".repeat(43), confirmation = "c".repeat(43);
 const good = {email: "Demo.Owner+tag@EXAMPLE.test", password: "synthetic password", contact_notice_version: "contact-1", accept_contact_notice: true};
@@ -53,6 +53,11 @@ test("login without a study link is accepted; the server resolves the study", ()
   for (const bad of [{email: good.email}, {email: good.email, password: "password1234", extra: 1}])
     assert.throws(() => participantEmailLogin(bad), e => e.code === "INVALID_REGISTRATION_INPUT");
   assert.throws(() => participantEmailLogin({study_id: "not-a-uuid", email: good.email, password: "password1234"}), e => e.code === "NOT_AVAILABLE");
+});
+test("resend accepts only an e-mail of the application", () => {
+  assert.deepEqual(registrationResend({email: good.email}), {email: "Demo.Owner+tag@example.test"});
+  for (const bad of [{}, {email: good.email, password: "password1234"}, {email: "not-an-email"}])
+    assert.throws(() => registrationResend(bad), e => e.code === "INVALID_REGISTRATION_INPUT");
 });
 test("only opaque token strings are accepted; confirmation has no password/group/role replacement", () => {
   assert.equal(registrationToken(invite), invite);

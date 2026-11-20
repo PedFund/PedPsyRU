@@ -1,6 +1,6 @@
 import {randomBytes} from "node:crypto";
 import type {Pool} from "pg";
-import type {ParticipantRegistration,RegistrationStart,RegistrationConfirmation,ParticipantEmailLogin} from "../../ports/participant-registration.js";
+import type {ParticipantRegistration,RegistrationStart,RegistrationConfirmation,ParticipantEmailLogin,RegistrationResend} from "../../ports/participant-registration.js";
 import {participantEmail} from "../../ports/contact-email.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {derive,SCRYPT,validPassword,validToken,equalText,csrfFor} from "../../../storage/access.js";
@@ -19,7 +19,7 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
   private readonly dummyHash=randomBytes(64).toString("hex");
   private readonly issuance:PostgresRegistrationStart;
   private readonly lock:LoginLock;
-  constructor(private readonly pool:Pool,vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false,
+  constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false,
     private readonly admission:ParticipantAdmissionPolicy=DEFAULT_PARTICIPANT_ADMISSION){
     this.issuance=new PostgresRegistrationStart(pool,vault,derivePassword,allowRealEmail,admission);
     this.gate=new DerivationGate(admission.derivationConcurrency,admission.queueLimit,admission.queueTimeoutMs);
@@ -48,6 +48,23 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
       if(code==="P0001"&&message==="AMBIGUOUS_PARTICIPANT_STUDY")throw new ParticipationError(409,"AMBIGUOUS_PARTICIPANT_STUDY");
       throw error;
     }
+  }
+  async resend(inviteToken:string,input:RegistrationResend):Promise<{status:"accepted"}>{
+    if(!validToken(inviteToken)||!input||Array.isArray(input)||Object.keys(input).join(",")!=="email")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    const email=participantEmail(input.email);
+    if(!email.endsWith("@example.test")&&!this.allowRealEmail)throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
+    // The queued letter keeps its identity: the envelope is sealed for the same
+    // delivery row that will carry the refreshed code.
+    const deliveryId=await accountTransaction(this.pool,async c=>
+      (await c.query<{id:string|null}>("SELECT pedpsy.registration_resend_target($1,$2) id",[tokenHash(inviteToken),email])).rows[0]?.id);
+    if(!deliveryId)return {status:"accepted"};
+    const code=randomBytes(32).toString("base64url");
+    const outcome=await accountTransaction(this.pool,async c=>
+      (await c.query<{outcome:string}>("SELECT pedpsy.reserve_registration_resend($1,$2,$3,$4,$5) outcome",
+        [tokenHash(inviteToken),email,deliveryId,tokenHash(code),this.vault.seal(deliveryId,code)])).rows[0]?.outcome);
+    if(outcome==="throttled")throw new ParticipationError(429,"RESEND_THROTTLED");
+    // 'none' is deliberately indistinguishable from 'ok': an unknown mailbox learns nothing.
+    return {status:"accepted"};
   }
   async login(input:ParticipantEmailLogin){
     if(!input||Array.isArray(input))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
