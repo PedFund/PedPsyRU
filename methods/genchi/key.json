@@ -1,0 +1,20 @@
+{
+  "id": "genchi_breath_hold",
+  "type": "functional_measurement",
+  "handler": "genchi-measurement-1.0.0",
+  "max_seconds": 600,
+  "thresholds": {
+    "male": [
+      {"max_exclusive": 20, "rating": "неудовлетворительно"},
+      {"max_exclusive": 30, "rating": "удовлетворительно"},
+      {"max_exclusive": 40, "rating": "хорошо"},
+      {"max_exclusive": null, "rating": "отлично"}
+    ],
+    "female": [
+      {"max_exclusive": 15, "rating": "неудовлетворительно"},
+      {"max_exclusive": 20, "rating": "удовлетворительно"},
+      {"max_exclusive": 30, "rating": "хорошо"},
+      {"max_exclusive": null, "rating": "отлично"}
+    ]
+  }
+}

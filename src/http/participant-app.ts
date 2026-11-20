@@ -48,6 +48,13 @@ const resultDto = (r: StoredResult) => {
   if (r.payload.handler_version === "approved-numeric-1.0.0") {
     dto.classifications = [...levels].map(([code, level]) => ({code: code + LEVEL_SUFFIX, label: level.label, value: level.value}));
   }
+  // Functional measurement: expose the rating classification and keep the seconds
+  // measure; the sex used for the rating never reaches the participant projection.
+  if (r.payload.handler_version === "genchi-measurement-1.0.0") {
+    dto.classifications = (r.payload.classifications as {code?: unknown; label?: unknown; value?: unknown}[])
+      .filter(c => c && typeof c.code === "string" && typeof c.label === "string" && typeof c.value === "string")
+      .map(c => ({code: c.code, label: c.label, value: c.value}));
+  }
   const presentation = buildPresentation(r.payload.method_version_id, r.payload.measures, levels);
   if (presentation) dto.presentation = presentation;
   return dto;

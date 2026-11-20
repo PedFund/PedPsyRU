@@ -9,6 +9,7 @@ import {scoreLegacyNumeric} from "../../core/legacy-batch-contract.js";
 import {entries as legacyNumericEntries} from "../../core/legacy-batch-data.js";
 import {entries as approvedV1Entries} from "../../core/approved-v1-data.js";
 import {createApprovedNumericScorer, HANDLER_VERSION as APPROVED_NUMERIC_HANDLER} from "../../core/approved-v1-contract.js";
+import {genchiMeasurementModule} from "./genchi-measurement.js";
 const scoreApprovedNumeric=createApprovedNumericScorer(approvedV1Entries);
 const TKI_DIGEST="sha256:45bc0c8a1b3f154fb3da5df629da6c42613609633594c4f5f54014a301cded7d";
 
@@ -53,5 +54,8 @@ export const builtinInstrumentRegistry=createMethodRuntimeRegistry([
     return choices({method:entry.methodVersionId,handler:APPROVED_NUMERIC_HANDLER,digest:entry.pins.key,title:entry.title,
       authors:entry.authors.length?[...entry.authors]:[entry.title],count:entry.itemCount,values:[...entry.valid].map(String),
       score:scoreApprovedNumeric,outputs});
-  })
+  }),
+  // Functional measurement: the same attempt protocol carries two technical fields
+  // (seconds and sex) behind a dedicated numeric screen.
+  genchiMeasurementModule
 ]);
