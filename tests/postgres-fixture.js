@@ -47,6 +47,8 @@ async function postgresFixture({runtimePoolSize = 1, seedData = true, initialize
           const columns = Object.keys(row); const values = columns.map(key => row[key]);
           await seedClient.query(`INSERT INTO pedpsy.${table}(${columns.map(x => '"' + x + '"').join(",")}) VALUES(${columns.map((_, i) => "$" + (i + 1)).join(",")})`, values);
         }
+        // The synthetic seed inserts releases directly; mark them allowed for admission.
+        await seedClient.query("INSERT INTO pedpsy.release_allowlist(release_id,created_at_ms) SELECT id,floor(extract(epoch FROM clock_timestamp())*1000)::bigint FROM pedpsy.instrument_releases ON CONFLICT(release_id) DO NOTHING");
         await seedClient.query("COMMIT");
       } catch (error) {await seedClient.query("ROLLBACK"); throw error;} finally {seedClient.release();}
     } finally {sqlite.close();}

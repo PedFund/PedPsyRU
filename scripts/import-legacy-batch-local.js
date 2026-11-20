@@ -13,6 +13,7 @@ async function importLegacyBatchLocal(client){
   const indicators=p.outputs.map(o=>o.label);if(p.hasNorms)indicators.push('Станайны при наличии однозначной таблицы');if(p.hasCriteria)indicators.push('Показатели относительно критерия');
   await client.query('INSERT INTO pedpsy.method_library_catalog VALUES($1,$2,$3,$4,$5::jsonb,$6::jsonb,$7::jsonb) ON CONFLICT(release_id) DO NOTHING',[r.id,p.id,x.pkg.package_version,p.title,JSON.stringify(p.authors),JSON.stringify(indicators),JSON.stringify(p.search)]);
   if(p.id==='fhs_lf_32_ru')await client.query("INSERT INTO pedpsy.method_library_catalog_corrections(release_id,authors,reason,created_at_ms) VALUES($1,$2::jsonb,'corrected_russian_adaptation_attribution',floor(extract(epoch FROM clock_timestamp())*1000)::bigint) ON CONFLICT(release_id) DO NOTHING",[r.id,JSON.stringify(p.authors)]);
+  await client.query("INSERT INTO pedpsy.release_allowlist(release_id,created_at_ms) VALUES($1,floor(extract(epoch FROM clock_timestamp())*1000)::bigint) ON CONFLICT(release_id) DO NOTHING",[r.id]);
   if(!(await client.query('SELECT pedpsy.constructor_release_allowed($1) allowed',[r.id])).rows[0].allowed)throw Error('LOCAL_RELEASE_NOT_ALLOWED');ids.push(r.id);
  }
  return ids;
