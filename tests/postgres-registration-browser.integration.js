@@ -26,7 +26,7 @@ test("registration browser: reload and a second tab confirm the code once, a rep
   const code = await page.evaluate("document.getElementById('receipt-token').textContent");
   assert.match(code, /^[A-Za-z0-9_-]{20,80}$/);
   // A reload must not lose the application: the code entry stays reachable.
-  await page.reload("document.getElementById('participant-screen') && !document.getElementById('participant-screen').hidden");
+  await page.reload("document.getElementById('participant-content') && document.getElementById('participant-content').children.length>0");
   const afterReload = await page.evaluate("JSON.stringify({message:document.getElementById('message').textContent,resume:Boolean(document.getElementById('resume-code')),hint:Boolean(document.getElementById('entry-register-hint')),hintHidden:document.getElementById('entry-register-hint')?.hidden,hash:location.hash})");
   assert.match(afterReload, /"resume":true/, "the reloaded page keeps the code entry: " + afterReload);
   // Another tab (a phone in real life) confirms the same application with the code.
