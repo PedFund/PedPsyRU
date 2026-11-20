@@ -3,11 +3,15 @@
 // numeric screen payload, completion, rating and idempotent repeat.
 const {test} = require('node:test'), assert = require('node:assert/strict'), {randomUUID} = require('node:crypto');
 const {postgresFixture} = require('./postgres-fixture.js'), {workspaceFixture, headers} = require('./workspace-fixture.js');
+const {importGenchiLocal} = require('../scripts/import-genchi-local.js');
 const {csrfFor} = require('../storage/access.js');
 test('PostgreSQL Genchi: assigned measurement completes into seconds and a sex rating', async t => {
   const f = await postgresFixture({runtimePoolSize: 3}); t.after(() => f.close());
+  const imported = await importGenchiLocal(f.admin);
   const release = (await f.admin.query("SELECT id FROM pedpsy.instrument_releases WHERE method_id='genchi_breath_hold'")).rows[0];
-  assert.ok(release, 'the release is seeded by migration 111');
+  assert.equal(release.id, imported);
+  assert.ok(release, 'the release is imported by import-genchi-local');
+  assert.deepEqual(await importGenchiLocal(f.admin), imported, 'the import is idempotent');
   assert.equal((await f.admin.query('SELECT pedpsy.constructor_release_allowed($1) allowed', [release.id])).rows[0].allowed, true);
   const group = f.seed.studies[0].groups[0], stage = f.seed.studies[0].stages[0], participant = f.participant;
   const enrollment = (await f.admin.query('SELECT id FROM pedpsy.stage_enrollments WHERE study_id=$1 AND participant_id=$2 AND group_id=$3 AND stage_id=$4',
@@ -41,6 +45,7 @@ test('PostgreSQL Genchi: assigned measurement completes into seconds and a sex r
 });
 test('PostgreSQL Genchi: incomplete payload and out-of-range seconds are refused', async t => {
   const f = await postgresFixture({runtimePoolSize: 3}); t.after(() => f.close());
+  await importGenchiLocal(f.admin);
   const release = (await f.admin.query("SELECT id FROM pedpsy.instrument_releases WHERE method_id='genchi_breath_hold'")).rows[0];
   const group = f.seed.studies[0].groups[0], stage = f.seed.studies[0].stages[0], participant = f.participant;
   const enrollment = (await f.admin.query('SELECT id FROM pedpsy.stage_enrollments WHERE study_id=$1 AND participant_id=$2 AND group_id=$3 AND stage_id=$4',
