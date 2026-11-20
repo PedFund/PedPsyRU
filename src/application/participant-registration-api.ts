@@ -47,8 +47,13 @@ export function registrationConfirmation(input: unknown): RegistrationConfirmati
   return {confirmation_token: registrationToken(b.confirmation_token)};
 }
 export function participantEmailLogin(input: unknown): ParticipantEmailLogin {
-  const b = object(input, ["study_id", "email", "password"]);
-  return {study_id: studyId(b.study_id), email: participantEmail(b.email), password: password(b.password)};
+  // Without a study link the server resolves the study from the address when it
+  // belongs to exactly one active study; the field is therefore optional.
+  if (!input || typeof input !== "object" || Array.isArray(input)) invalid();
+  const b = input as Record<string, unknown>, keys = Object.keys(b).sort().join(",");
+  if (keys !== "email,password" && keys !== "email,password,study_id") invalid();
+  return {...(b.study_id === undefined ? {} : {study_id: studyId(b.study_id)}),
+    email: participantEmail(b.email), password: password(b.password)};
 }
 
 interface MutationProtection {assert(token: string, csrf: string): void}
