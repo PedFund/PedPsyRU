@@ -5,6 +5,7 @@
 const {createHash} = require("node:crypto");
 const key = require("../methods/genchi/key.json");
 const {canonicalJson} = require("./releases.js");
+const {GENCHI_KEY_DIGEST: keyDigest} = require("../core/genchi-key.js");
 const sha = value => "sha256:" + createHash("sha256").update(value).digest("hex");
 const option = value => ({value: String(value), text: String(value)});
 const form = {
@@ -18,7 +19,6 @@ const form = {
     {id: "q02", number: 2, text: "Пол", options: [{value: "male", text: "Мужской"}, {value: "female", text: "Женский"}]}
   ]
 };
-const keyDigest = sha(JSON.stringify(key));
 function genchiReleasePackage() {
   return {methodVersionId: "genchi_breath_hold@1.0.0", handlerVersion: key.handler, verificationState: "key_verified",
     form, formSnapshot: canonicalJson(form), formDigest: sha(canonicalJson(form)), keyDigest};

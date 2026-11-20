@@ -1,6 +1,4 @@
-import {readFileSync} from "node:fs";
-import {createHash} from "node:crypto";
-import {resolve} from "node:path";
+import {GENCHI_KEY, GENCHI_KEY_DIGEST, ratingFor as ratingFromKey} from "../../core/genchi-key.js";
 import type {InstrumentResult} from "../ports/instruments.js";
 import type {MethodData,MethodRuntimeDescriptor,MethodRuntimeModule} from "../ports/method-runtime.js";
 
@@ -10,21 +8,14 @@ import type {MethodData,MethodRuntimeDescriptor,MethodRuntimeModule} from "../po
 export type GenchiSex = "male" | "female";
 export interface GenchiMeasurement {readonly duration_seconds: number; readonly sex: GenchiSex}
 export interface GenchiResult {readonly duration_seconds: number; readonly rating: string}
-interface GenchiKey {
-  readonly id: string; readonly type: string; readonly handler: string; readonly max_seconds: number;
-  readonly thresholds: Record<GenchiSex, readonly {max_exclusive: number | null; rating: string}[]>;
-}
 export const GENCHI_METHOD_VERSION_ID = "genchi_breath_hold@1.0.0";
 export const GENCHI_HANDLER_VERSION = "genchi-measurement-1.0.0";
-export const GENCHI_KEY: GenchiKey = JSON.parse(readFileSync(resolve(__dirname, "../../methods/genchi/key.json"), "utf8"));
-export const GENCHI_KEY_DIGEST = "sha256:" + createHash("sha256").update(JSON.stringify(GENCHI_KEY)).digest("hex");
+export {GENCHI_KEY, GENCHI_KEY_DIGEST};
 const MAX_SECONDS = GENCHI_KEY.max_seconds;
 const isSex = (value: unknown): value is GenchiSex => value === "male" || value === "female";
 const isDuration = (value: unknown): value is number => Number.isSafeInteger(value) && Number(value) >= 0 && Number(value) <= MAX_SECONDS;
 export function ratingFor(sex: GenchiSex, duration: number): string {
-  const band = GENCHI_KEY.thresholds[sex].find(item => item.max_exclusive === null || duration < item.max_exclusive);
-  if (!band) throw new Error("GENCHI_RATING_OUT_OF_RANGE");
-  return band.rating;
+  return ratingFromKey(sex, duration);
 }
 export function readMeasurement(data: unknown): GenchiMeasurement {
   if (!data || typeof data !== "object" || Array.isArray(data)) throw new Error("GENCHI_MEASUREMENT_INVALID");

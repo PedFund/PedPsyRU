@@ -1,7 +1,7 @@
 "use strict";
 // Genchi breath-hold: sex-dependent thresholds from the owner's passport (max exclusive).
 const {test} = require("node:test"), assert = require("node:assert/strict");
-const {scoreGenchi, ratingFor, readMeasurement, scoreGenchiResponses, genchiMeasurementModule, GENCHI_KEY_DIGEST} = require("../dist/src/scoring/genchi-measurement.js");
+const {scoreGenchi, ratingFor, readMeasurement, scoreGenchiResponses, genchiMeasurementModule, GENCHI_KEY, GENCHI_KEY_DIGEST} = require("../dist/src/scoring/genchi-measurement.js");
 const {genchiReleasePackage} = require("../storage/genchi-release.js");
 test("Genchi: male thresholds switch exactly at 20, 30 and 40 seconds", () => {
   assert.equal(ratingFor("male", 0), "неудовлетворительно");
@@ -52,4 +52,10 @@ test("Genchi: q01/q02 responses produce a scored instrument result", () => {
   assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}]}).status, "invalid");
   assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "25"}, {item_id: "q02", value: "other"}]}).status, "invalid");
   assert.equal(scoreGenchiResponses({...request, responses: [{item_id: "q01", value: "601"}, {item_id: "q02", value: "male"}]}).status, "invalid");
+});
+
+test("Genchi: key file mirrors the calculation core", () => {
+  const fs = require("node:fs"), path = require("node:path");
+  const mirrored = JSON.parse(fs.readFileSync(path.join(__dirname, "../methods/genchi/key.json"), "utf8"));
+  assert.deepEqual(mirrored, GENCHI_KEY);
 });
