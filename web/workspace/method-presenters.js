@@ -16,7 +16,7 @@
   ]);
   const bipolarCaptions=new Map([["-3","абсолютно"],["-2","согласен"],["-1","скорее"],["0","оба верны"],["1","скорее"],["2","согласен"],["3","абсолютно"]]);
   function optionKey(option){return String(option.text).replace(/−/g,"-").trim();}
-  function optionText(option){return bipolarLabels.get(optionKey(option))||option.text;}
+  function optionText(option,item){return isBipolar(item)?(bipolarLabels.get(optionKey(option))||option.text):option.text;}
   function isBipolar(item){return item.options.some(option=>optionKey(option)==="-3");}
   function radio(doc,option,selected,disabled,onChange){const input=doc.createElement("input");input.type="radio";input.name="response";input.value=option.value;input.checked=selected===option.value;input.disabled=disabled;input.onchange=()=>onChange(input.value);return input;}
   const singleChoice=Object.freeze({id:"pedpsy/single-choice",version:"1.0",mount({container,item,selected,disabled,onChange}){
@@ -28,16 +28,16 @@
       const second=doc.createElement("span");second.textContent="Абсолютно согласен со вторым";
       poles.append(first,second);
       const track=doc.createElement("div");track.className="bipolar-track";
-      for(const option of item.options){const label=doc.createElement("label");label.className="bipolar-point";label.title=optionText(option);
+      for(const option of item.options){const label=doc.createElement("label");label.className="bipolar-point";label.title=optionText(option,item);
         const number=doc.createElement("span");number.className="bipolar-number";number.textContent=option.text;
         const caption=doc.createElement("small");caption.textContent=bipolarCaptions.get(optionKey(option))||"";
         label.append(radio(doc,option,selected,disabled,onChange),number,caption);track.append(label);}
       scale.append(poles,track);container.append(scale);return;
     }
     for(const option of item.options){const label=doc.createElement("label");label.className="question-option";
-      label.append(radio(doc,option,selected,disabled,onChange),doc.createTextNode(optionText(option)));container.append(label);}
+      label.append(radio(doc,option,selected,disabled,onChange),doc.createTextNode(optionText(option,item)));container.append(label);}
   }});
-  const api={createMethodPresenters,singleChoice};
+  const api={createMethodPresenters,singleChoice,optionText,isBipolar};
   if(typeof module==="object"&&module.exports){module.exports=api;return;}
   // New renderers are first-party modules explicitly composed here; a form cannot
   // load JavaScript, an iframe or an external URL to install its own renderer.

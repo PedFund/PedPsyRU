@@ -49,7 +49,12 @@ test('Release adapter verifies original snapshots while publishing only explicit
 });
 
 test('Browser presenter registry supports an independent renderer and rejects missing or duplicate versions',()=>{
- const {createMethodPresenters,singleChoice}=require('../web/workspace/method-presenters.js');let received;
+ const {createMethodPresenters,singleChoice,optionText}=require('../web/workspace/method-presenters.js');let received;
+ // Numeric 1..10 scales keep plain numbers; bipolar labels apply only to -3..3 forms.
+ const numeric={options:Array.from({length:10},(_,i)=>({value:String(i+1),text:String(i+1)}))};
+ assert.equal(optionText(numeric.options[0],numeric),'1');assert.equal(optionText(numeric.options[2],numeric),'3');
+ const bipolar={options:['-3','-2','-1','0','1','2','3'].map(value=>({value,text:value}))};
+ assert.match(optionText(bipolar.options[6],bipolar),/абсолютно согласен со вторым/);assert.equal(optionText(bipolar.options[3],bipolar),'0 — оба утверждения одинаково верны');
  const custom={id:'synthetic/drawing-with-timer',version:'v5',mount:context=>{received=context;return {state:'custom'};}};
  const registry=createMethodPresenters([singleChoice,custom]),context={asset_ref:'synthetic:owned',time_limit:15};assert.deepEqual(registry.mount(custom,context),{state:'custom'});assert.equal(received,context);
  assert.throws(()=>registry.mount({...custom,version:'v6'},context));assert.throws(()=>createMethodPresenters([custom,custom]),/DUPLICATE/);
