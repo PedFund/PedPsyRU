@@ -195,11 +195,18 @@
     else if(result.method_version_id==="umics_pi_ru_13@1.0.0-local")note="Учебный результат: суммы и средние по трём шкалам. Нормативные уровни и общий балл не рассчитываются.";
     else if(result.method_version_id==="prfq_ru_16_kamskaya_2023@1.0.0-local")note="Учебный результат: средние значения шкал, станайны и уровни по таблицам исходного процессора. Применимость норм отдельно не утверждена.";
     else if(result.method_version_id==="reflexivity_karpov_27@1.0.0-local")note="Учебный результат. Стен и уровень рассчитаны по таблице исходного процессора; применимость норм отдельно не утверждена.";
+    else if(String(result.method_version_id).startsWith("shpana_20@"))note="Сырые баллы: по 10 пунктов в каждой шкале, диапазон 10–50. Утверждённых норм для этой адаптации нет, поэтому ниже — только описательное соотношение шкал, не диагноз.";
     else if(hasLevels)note="Уровень определяется как положение балла относительно количественных границ ключа. Не является психологическим диагнозом.";
     else note="Сырые баллы. Нормативная интерпретация для этой методики не утверждена.";
     $("result-note").textContent=note;
     for(const m of result.measures){const p=document.createElement("div");p.className="measure";p.textContent=m.label;const value=document.createElement("strong");value.textContent=m.value;p.append(value);const level=levels.get(m.code);if(level){const small=document.createElement("small");small.className="measure-level";small.textContent="Уровень: "+level+" — "+({низкий:"ниже среднего диапазона ключа",средний:"внутри среднего диапазона ключа",высокий:"выше среднего диапазона ключа"}[level]||"по ключу методики");p.append(small);}else if(!hasLevels&&!classifications.length){const small=document.createElement("small");small.className="measure-level";small.textContent="Нормативная интерпретация не утверждена.";p.append(small);}$("own-measures").append(p);}
     for(const m of classifications.filter(x=>!String(x.code).endsWith(suffix))){const p=document.createElement("div");p.className="measure";p.textContent=m.label;const value=document.createElement("strong");value.textContent=m.value;p.append(value);$("own-measures").append(p);}
+    if(String(result.method_version_id).startsWith("shpana_20@")){const val=code=>Number((result.measures.find(m=>m.code===code)||{}).value),pa=val("PA"),na=val("NA");
+      if(Number.isFinite(pa)&&Number.isFinite(na)){const p=document.createElement("p");p.className="muted";p.id="shpana-interpretation";
+        p.textContent=(pa>na?"Позитивный аффект выражен сильнее негативного: в последние недели вы чаще отмечали интерес, энергию и удовольствие, чем напряжение и раздражение."
+          :pa<na?"Негативный аффект выражен сильнее позитивного: в последние недели чаще отмечались напряжение, раздражение или тревога, чем интерес и удовольствие."
+          :"Обе шкалы выражены одинаково.")+" Это описательное соотношение сырых баллов, а не норма и не диагноз: утверждённых норм для этой адаптации нет.";
+        c.querySelector("section.card").append(p);}}
     bind("result-methods",backToMethods);}
   function clear(){for(const i of root.querySelectorAll('input[type="password"]'))i.value="";csrf="";pendingCsrf="";invite="";sessionStorage.removeItem("pedpsy_invite");context=null;passport=null;consents=null;stages=null;form=null;draft=null;profileValues={};root.replaceChildren();}
   window.addEventListener("pagehide",clear);window.addEventListener("pageshow",e=>{if(e.persisted)location.reload();});
