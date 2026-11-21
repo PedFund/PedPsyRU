@@ -15,6 +15,7 @@ export function createParticipantApi(identity: ParticipantGateway, service: Part
       const session=await identity.session(token);identity.assertCsrf(token,csrf);return service.complete(session.context,id,input);
     },
     result: async (token: string,id: string) => service.result((await identity.session(token)).context,id),
+    invalidated: async (token: string,id: string) => service.invalidated((await identity.session(token)).context,id),
     denied: (token: string,reason: string) => identity.denied(token,reason)
   };
 }

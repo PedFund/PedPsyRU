@@ -49,6 +49,9 @@ export interface AttemptRepository {
   getAuthorized(id: string): Promise<AttemptSnapshot | null>;
   compareAndSave(id: string, input: DraftInput): Promise<AttemptSnapshot>;
   markCompleted(id: string, expectedRevision: number, resultId: string, calculatedAt: string): Promise<void>;
+  // A completed attempt may be marked unusable; the participant sees the notice on
+  // the result screen while the historical result stays unchanged.
+  invalidated(id: string): Promise<boolean>;
 }
 export interface ReleaseRepository { getPinned(releaseId: string): Promise<PinnedRelease> }
 export interface ResultRepository {

@@ -91,6 +91,7 @@ export class SqliteUnitOfWork implements UnitOfWork {
               pendingAudit.add(id + ":draft_saved");
               return get(id);
             },
+            invalidated: async () => false,
             markCompleted: async (id, revision, resultId, at) => {
               const state = get(id);
               if (state.status !== "draft" || state.revision !== revision) throw new ParticipationError(409, "REVISION_CONFLICT");
