@@ -22,6 +22,8 @@ export function registerRegistrationRoutes(app:FastifyInstance,origin:string,api
   app.post("/api/v2/registration/confirm",async r=>{const a=configured();noQuery(r);return a.confirm(invite(r),r.body,token(r),csrf(r));});
   app.post("/api/v2/registration/resend",async r=>{const a=configured();noQuery(r);return a.resend(invite(r),r.body);});
   app.post("/api/v2/registration/password",async r=>{const a=configured();noQuery(r);return a.setPassword(invite(r),r.body,token(r),csrf(r));});
+  app.post("/api/v2/registration/password/forgot",async r=>{const a=configured();noQuery(r);return a.forgotPassword(invite(r),r.body,token(r),csrf(r));});
+  app.post("/api/v2/registration/password/reset",async r=>{const a=configured();noQuery(r);return a.resetPassword(invite(r),r.body,token(r),csrf(r));});
   app.post("/api/v2/registration/login",async(r,reply)=>{const a=configured();noQuery(r);const s=await a.login(r.body,token(r),csrf(r));
     reply.header("Set-Cookie",[cookie(participantName,s.token,s.expiresAt),cookie(name,"",0)]);
     // Does not create/impersonate/revoke administrative sessions. Realms remain

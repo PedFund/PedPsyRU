@@ -59,7 +59,7 @@ async function main(): Promise<void> {
     const origin=production?config!.origin:"http://127.0.0.1:4174";
     try{
       if(contactKey){
-        registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1",admission,mail!==null);
+        registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1",admission,mail!==null,mail?new SmtpTransport(mail.smtp):undefined);
         if(mail)mailWorker=new ConfirmationMailWorker(pool,new ContactTokenVault(contactKey),new SmtpTransport(mail.smtp),
           {batch:mail.batch,pollMs:mail.pollMs,allowlist:mail.allowlist,rateLimit:mail.rateLimit,rateWindowMs:mail.rateWindowMs},origin);
       }else if(mail)throw new Error("MAIL_REQUIRES_REGISTRATION");

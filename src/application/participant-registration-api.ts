@@ -1,6 +1,6 @@
 import {ParticipationError} from "../ports/errors.js";
 import type {GroupInvitations, ParticipantRegistration, RegistrationStart, RegistrationConfirmation,
-  ParticipantEmailLogin, GroupInvitationRecord, RegistrationResend, RegistrationPassword} from "../ports/participant-registration.js";
+  ParticipantEmailLogin, GroupInvitationRecord, RegistrationResend, RegistrationPassword, PasswordResetRequest, PasswordResetConfirmation} from "../ports/participant-registration.js";
 import {studyId} from "./study-api.js";
 import {participantEmail} from "../ports/contact-email.js";
 import {weakNewPassword} from "../ports/password-policy.js";
@@ -54,6 +54,15 @@ export function registrationPassword(input: unknown): RegistrationPassword {
   const b = object(input, ["confirmation_token", "password"]);
   return {confirmation_token: registrationToken(b.confirmation_token), password: password(b.password)};
 }
+export function passwordResetRequest(input: unknown): PasswordResetRequest {
+  const b = object(input, ["email"]);
+  return {email: participantEmail(b.email)};
+}
+export function passwordResetConfirmation(input: unknown): PasswordResetConfirmation {
+  const b = object(input, ["email", "code", "password"]);
+  if (typeof b.code !== "string" || !/^[A-Za-z0-9_-]{20,80}$/.test(b.code)) throw new ParticipationError(400, "INVALID_REGISTRATION_INPUT");
+  return {email: participantEmail(b.email), code: b.code, password: password(b.password)};
+}
 export function participantEmailLogin(input: unknown): ParticipantEmailLogin {
   // Without a study link the server resolves the study from the address when it
   // belongs to exactly one active study; the field is therefore optional.
@@ -93,6 +102,14 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
     setPassword: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
       protection.assert(pendingToken, csrf);
       return registration.setPassword(registrationToken(invite), registrationPassword(input), registrationToken(pendingToken));
+    },
+    forgotPassword: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
+      protection.assert(pendingToken, csrf);
+      return registration.forgotPassword(registrationToken(invite), passwordResetRequest(input), registrationToken(pendingToken), csrf);
+    },
+    resetPassword: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
+      protection.assert(pendingToken, csrf);
+      return registration.resetPassword(registrationToken(invite), passwordResetConfirmation(input), registrationToken(pendingToken), csrf);
     },
     login: async (input: unknown) => {
       const session = await registration.login(participantEmailLogin(input));
