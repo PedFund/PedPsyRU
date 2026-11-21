@@ -1,6 +1,6 @@
 import {randomBytes} from "node:crypto";
 import type {Pool} from "pg";
-import type {ParticipantRegistration,RegistrationStart,RegistrationConfirmation,ParticipantEmailLogin,RegistrationResend,RegistrationPassword} from "../../ports/participant-registration.js";
+import type {ParticipantRegistration,RegistrationStart,RegistrationConfirmation,ParticipantEmailLogin,RegistrationResend,RegistrationPassword,PasswordResetRequest,PasswordResetConfirmation} from "../../ports/participant-registration.js";
 import {participantEmail} from "../../ports/contact-email.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {derive,SCRYPT,validPassword,validToken,equalText,csrfFor} from "../../../storage/access.js";
@@ -20,7 +20,8 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
   private readonly issuance:PostgresRegistrationStart;
   private readonly lock:LoginLock;
   constructor(private readonly pool:Pool,private readonly vault:ContactTokenVault,private readonly derivePassword=derive,private readonly allowRealEmail=false,
-    private readonly admission:ParticipantAdmissionPolicy=DEFAULT_PARTICIPANT_ADMISSION){
+    private readonly admission:ParticipantAdmissionPolicy=DEFAULT_PARTICIPANT_ADMISSION,
+    private readonly mailer?:{send(message:{to:string;subject:string;text:string}):Promise<void>}){
     this.issuance=new PostgresRegistrationStart(pool,vault,derivePassword,allowRealEmail,admission);
     this.gate=new DerivationGate(admission.derivationConcurrency,admission.queueLimit,admission.queueTimeoutMs);
     this.lock=new LoginLock(pool);
@@ -78,8 +79,38 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
     if(outcome!=="ok")throw new ParticipationError(404,"NOT_AVAILABLE");
     return {status:"password_set"};
   }
-  async login(input:ParticipantEmailLogin){
-    if(!input||Array.isArray(input))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+  async forgotPassword(inviteToken:string,input:PasswordResetRequest,pendingToken:string,csrf:string):Promise<{status:"accepted"}>{
+    void csrf;if(!validToken(inviteToken)||!validToken(pendingToken)||!input||Array.isArray(input)||Object.keys(input).join(",")!=="email")
+      throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    const email=participantEmail(input.email),code=randomBytes(32).toString("base64url");
+    const created=await accountTransaction(this.pool,async c=>(await c.query<{created:boolean}>(
+      "SELECT pedpsy.create_password_reset($1,$2,$3,$4) created",
+      [tokenHash(inviteToken),email,tokenHash(code),1800000])).rows[0]?.created);
+    if(created&&this.mailer){
+      try{await this.mailer.send({to:email,subject:"Сброс пароля — МетодТест",text:[
+        "Здравствуйте!","","Код для смены пароля: "+code,"",
+        "Вернитесь на страницу входа по групповой ссылке исследования, выберите «Забыли пароль?» и введите этот код вместе с новым паролем.",
+        "Код действует 30 минут и допускает пять попыток.",
+        "Если вы не запрашивали смену пароля, просто проигнорируйте письмо."].join("\r\n")});}
+      catch{/* delivery is best effort; the response stays neutral */}
+    }
+    return {status:"accepted"};
+  }
+  async resetPassword(inviteToken:string,input:PasswordResetConfirmation,pendingToken:string,csrf:string):Promise<{status:"password_reset"}>{
+    void csrf;    if(!validToken(inviteToken)||!validToken(pendingToken)||!input||Array.isArray(input)||
+      Object.keys(input).sort().join(",")!=="code,email,password")
+      throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    if(!/^[A-Za-z0-9_-]{20,80}$/.test(input.code)||!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))
+      throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    const salt=randomBytes(16),bytes=await this.derivePassword(input.password,salt,64,SCRYPT);let hash:string;
+    try{hash=bytes.toString("hex");}finally{bytes.fill(0);}
+    const outcome=await accountTransaction(this.pool,async c=>(await c.query<{outcome:string}>(
+      "SELECT pedpsy.consume_password_reset($1,$2,$3,$4,$5,$6) outcome",
+      [tokenHash(inviteToken),participantEmail(input.email),tokenHash(input.code),"scrypt-N131072-r8-p1-dk64",salt.toString("hex"),hash])).rows[0]?.outcome);
+    if(outcome!=="ok")throw new ParticipationError(404,"NOT_AVAILABLE");
+    return {status:"password_reset"};
+  }
+  async login(input:ParticipantEmailLogin){    if(!input||Array.isArray(input))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
     const keys=Object.keys(input).sort().join(",");
     if(keys!=="email,password"&&keys!=="email,password,study_id")throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
     if(input.study_id!==undefined&&(typeof input.study_id!=="string"||

@@ -88,6 +88,8 @@ export interface RegistrationStart {
 export interface RegistrationConfirmation {readonly confirmation_token: string}
 export interface RegistrationResend {readonly email: string}
 export interface RegistrationPassword {readonly confirmation_token: string; readonly password: string}
+export interface PasswordResetRequest {readonly email: string}
+export interface PasswordResetConfirmation {readonly email: string; readonly code: string; readonly password: string}
 export interface ParticipantEmailLogin {readonly study_id?: string; readonly email: string; readonly password: string}
 export interface ParticipantRegistration {
   landing(inviteToken: string): Promise<RegistrationLanding>;
@@ -100,6 +102,9 @@ export interface ParticipantRegistration {
   // After the code is confirmed the participant chooses the password. The confirmed
   // code identifies the application; the step is single-use.
   setPassword(inviteToken: string, input: RegistrationPassword, pendingToken: string): Promise<{status: "password_set"}>;
+  // Reset by e-mail: the request is neutral, the code is single-use and short-lived.
+  forgotPassword(inviteToken: string, input: PasswordResetRequest, pendingToken: string, csrf: string): Promise<{status: "accepted"}>;
+  resetPassword(inviteToken: string, input: PasswordResetConfirmation, pendingToken: string, csrf: string): Promise<{status: "password_reset"}>;
   // Explicit POST only; no participation/session on GET or token preview.
   // Existing mailbox MUST NOT get a new password from a registration attempt.
   confirm(inviteToken: string, input: RegistrationConfirmation, pendingToken: string): Promise<{status: "sign_in_required"}>;
