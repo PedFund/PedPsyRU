@@ -1,5 +1,5 @@
 import type {Pool} from "pg";
-import type {ResearchWorkbench,WorkbenchAction,WorkbenchDesign,WorkbenchProgress,WorkbenchMethodProgress,WorkbenchMethodAnalytics,ParticipantPassportStats,ParticipantProfiles,ProfileSnapshot} from "../../ports/research-workbench.js";
+import type {ResearchWorkbench,WorkbenchAction,WorkbenchDesign,WorkbenchProgress,WorkbenchMethodProgress,WorkbenchMethodAnalytics,ParticipantPassportStats,ParticipantProfiles,ProfileSnapshot,ResearchResultsExport} from "../../ports/research-workbench.js";
 import {ParticipationError} from "../../ports/errors.js";
 import {accountTransaction,tokenHash} from "./account-transaction.js";
 class WorkbenchConnection {
@@ -20,6 +20,7 @@ export class PostgresResearchWorkbench extends WorkbenchConnection implements Re
   methodProgress(token:string,study:string){return this.call<WorkbenchMethodProgress>(token,"SELECT pedpsy.research_method_progress($1) data",[study]);}
   methodAnalytics(token:string,study:string,group?:string,stage?:string){return this.call<WorkbenchMethodAnalytics>(token,"SELECT pedpsy.research_method_analytics($1,$2,$3) data",[study,group??null,stage??null]);}
   participantStats(token:string,study:string){return this.call<ParticipantPassportStats>(token,"SELECT pedpsy.research_participant_passport_stats($1) data",[study]);}
+  exportResults(token:string,study:string){return this.call<ResearchResultsExport>(token,"SELECT pedpsy.research_results_export($1) data",[study]);}
 }
 export class PostgresParticipantProfiles extends WorkbenchConnection implements ParticipantProfiles {
   read(token:string){return this.call<ProfileSnapshot>(token,"SELECT pedpsy.own_profile('read',NULL,NULL,NULL) data",[]);}
