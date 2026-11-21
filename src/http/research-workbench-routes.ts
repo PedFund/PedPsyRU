@@ -14,7 +14,12 @@ export function registerResearchWorkbench(app:FastifyInstance,origin:string,apis
   app.get(base,async r=>apis.research.read(token(r,researcher),id(r)));
   app.get(base+"/progress",async r=>apis.research.progress(token(r,researcher),id(r)));
   app.get(base+"/progress/participants",async r=>apis.research.participantStats(token(r,researcher),id(r)));
-  app.get(base+"/progress/methods",async r=>{
+  app.get(base+"/export",async(r,reply)=>{
+    const study=id(r),data=await apis.research.exportResults(readParticipantCookie(r.headers.cookie,researcher),study);
+    reply.header("Content-Disposition",'attachment; filename="study-'+study+'-results.json"');
+    reply.header("Cache-Control","no-store");
+    return data;
+  });  app.get(base+"/progress/methods",async r=>{
     const q=r.query as Record<string,unknown>;
     if(Object.keys(q).some(k=>k!=="group_id"&&k!=="stage_id"))throw new ParticipationError(400,"INVALID_REQUEST");
     const uuid=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;

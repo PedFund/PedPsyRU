@@ -15,6 +15,8 @@ export interface ParticipantPassportValue {value:string;label:string;count:numbe
 export interface ParticipantPassportField {key:string;label:string;kind:string;values:ParticipantPassportValue[]}
 export interface ParticipantPassportStats {total:number;average_age:number|null;fields:ParticipantPassportField[];age_buckets:{label:string;count:number|null}[]}
 export interface WorkbenchMethodProgress {registered:number;completed_any:number;rows:MethodProgressRow[]}
+export interface ResultExportRow {participant_id:string;release_id:string;method_id:string;method_version_id:string;attempt_id:string;completed_at:string;measures:readonly unknown[];classifications:readonly unknown[]}
+export interface ResearchResultsExport {study_id:string;rows:ResultExportRow[]}
 export interface ResearchWorkbench {
   read(token:string,study:string):Promise<WorkbenchDesign>;
   change(token:string,study:string,version:number,action:WorkbenchAction,input:Record<string,unknown>):Promise<WorkbenchDesign|{queued:number;mode:"synthetic"}>;
@@ -22,6 +24,7 @@ export interface ResearchWorkbench {
   methodProgress(token:string,study:string):Promise<WorkbenchMethodProgress>;
   methodAnalytics(token:string,study:string,group?:string,stage?:string):Promise<WorkbenchMethodAnalytics>;
   participantStats(token:string,study:string):Promise<ParticipantPassportStats>;
+  exportResults(token:string,study:string):Promise<ResearchResultsExport>;
 }
 export interface ProfileSnapshot {study_id:string;schema_version:number;revision:number;status:"not_started"|"draft"|"completed";fields:readonly PassportField[];values:Readonly<Record<string,string|number>>}
 export interface ParticipantProfiles {
