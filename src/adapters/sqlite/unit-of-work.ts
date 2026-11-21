@@ -92,6 +92,7 @@ export class SqliteUnitOfWork implements UnitOfWork {
               return get(id);
             },
             invalidated: async () => false,
+            retryInvalidated: async () => { throw new ParticipationError(404, "NOT_AVAILABLE"); },
             markCompleted: async (id, revision, resultId, at) => {
               const state = get(id);
               if (state.status !== "draft" || state.revision !== revision) throw new ParticipationError(409, "REVISION_CONFLICT");

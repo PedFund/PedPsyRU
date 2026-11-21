@@ -61,7 +61,11 @@ export function exportDemoSnapshot(source: DatabaseSync): DemoSnapshot {
 }
 export async function inspectPostgresSnapshot(client: PoolClient): Promise<DemoSnapshot> {
   const tables = {} as DemoSnapshot["tables"];
-  for (const table of DOMAIN_TABLES) tables[table] = normalized((await client.query<Row>("SELECT * FROM pedpsy." + table)).rows);
+  for (const table of DOMAIN_TABLES) {
+    tables[table] = normalized((await client.query<Row>("SELECT * FROM pedpsy." + table)).rows);
+    // Demo snapshots predate attempt numbering; the column is not part of their shape.
+    if (table === "attempts") tables[table] = normalized(tables[table].map(({attempt_no:ignored,...row}) => row));
+  }
   return verified(tables);
 }
 export async function importDemoSnapshot(client: PoolClient, snapshot: DemoSnapshot): Promise<void> {
@@ -90,6 +94,8 @@ export async function importDemoSnapshot(client: PoolClient, snapshot: DemoSnaps
     if(snapshot.format==="pedpsy-demo-snapshot-1"){
       if(imported.tables.studies.some(s=>s.design_version!==0))throw new Error("IMPORTED_SNAPSHOT_MISMATCH");
       imported.tables.studies=normalized(imported.tables.studies.map(({design_version:ignored,...s})=>s));
+      // Older demo snapshots predate attempt numbering; the column defaults to 1.
+      imported.tables.attempts=normalized(imported.tables.attempts.map(({attempt_no:ignored,...a})=>a));
     }
     if(digest(imported.tables)!==snapshot.digest)throw new Error("IMPORTED_SNAPSHOT_MISMATCH");
     await client.query("COMMIT");

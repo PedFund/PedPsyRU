@@ -135,6 +135,12 @@ export class PostgresUnitOfWork implements UnitOfWork {
               const r = await client.query("SELECT pedpsy.attempt_invalidated($1) value", [id]);
               return Boolean(r.rows[0]?.value);
             },
+            retryInvalidated: async id => {
+              const r = await client.query("SELECT pedpsy.retry_own_attempt($1) attempt_id", [id]);
+              const attempt_id = r.rows[0]?.attempt_id;
+              if (!attempt_id) throw new ParticipationError(404, "NOT_AVAILABLE");
+              return attempt_id;
+            },
             markCompleted: async (id, revision, resultId, at) => {
               await get(id);
               const updated = await client.query("UPDATE pedpsy.attempts SET status='completed',revision=revision+1,completion_result_id=$1,completed_at=$2,updated_at=$2 WHERE id=$3 AND status='draft' AND revision=$4", [resultId, at, id, revision]);
