@@ -66,6 +66,13 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
         await ports.audit.appendRequired({event: "result_read", resourceId: id});
         return result;
       });
+    },
+    invalidated(context: ParticipantContext, id: string) {
+      return uow.run(context, async ports => {
+        const state = await ports.attempts.getAuthorized(id);
+        if (!state) throw new ParticipationError(404, "NOT_AVAILABLE");
+        return ports.attempts.invalidated(id);
+      });
     }
   };
 }

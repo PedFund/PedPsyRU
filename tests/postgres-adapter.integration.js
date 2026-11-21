@@ -109,3 +109,14 @@ scenario("rollback and successful transactions return pool without session state
     assert.equal((await b.query("SELECT * FROM pedpsy.attempts")).rowCount, 0);
   } finally {a.release(); b.release();}
 });
+
+scenario("invalidated completed attempt is reported without rewriting the result", async f => {
+  const before = await f.service.read(f.context, f.attemptId);
+  const saved = await f.service.save(f.context, f.attemptId, {expected_revision: before.revision, current_item_id: "q30", responses: responses()});
+  await f.service.complete(f.context, f.attemptId, {expected_revision: saved.revision});
+  assert.equal(await f.service.invalidated(f.context, f.attemptId), false);
+  await f.admin.query("INSERT INTO pedpsy.attempt_invalidations(attempt_id,reason,created_at_ms) VALUES($1,'presentation_labels_1_3',$2)", [f.attemptId, Date.now()]);
+  assert.equal(await f.service.invalidated(f.context, f.attemptId), true);
+  const row = (await f.admin.query("SELECT status,revision FROM pedpsy.attempts WHERE id=$1", [f.attemptId])).rows[0];
+  assert.equal(row.status, "completed"); assert.equal(Number(row.revision), saved.revision + 1);
+});

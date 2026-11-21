@@ -130,6 +130,11 @@ export class PostgresUnitOfWork implements UnitOfWork {
               const responses=input.responses.map(r=>({item_id:r.item_id,value:r.value})).sort((a,b)=>a.item_id.localeCompare(b.item_id));
               return {...state,revision:state.revision+1,currentItemId:input.current_item_id,responses};
             },
+            invalidated: async id => {
+              await ensure();
+              const r = await client.query("SELECT pedpsy.attempt_invalidated($1) value", [id]);
+              return Boolean(r.rows[0]?.value);
+            },
             markCompleted: async (id, revision, resultId, at) => {
               await get(id);
               const updated = await client.query("UPDATE pedpsy.attempts SET status='completed',revision=revision+1,completion_result_id=$1,completed_at=$2,updated_at=$2 WHERE id=$3 AND status='draft' AND revision=$4", [resultId, at, id, revision]);
