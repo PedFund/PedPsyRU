@@ -73,6 +73,15 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
         if (!state) throw new ParticipationError(404, "NOT_AVAILABLE");
         return ports.attempts.invalidated(id);
       });
+    },
+    retry(context: ParticipantContext, id: string) {
+      return uow.run(context, async ports => {
+        const state = await ports.attempts.getAuthorized(id);
+        if (!state) throw new ParticipationError(404, "NOT_AVAILABLE");
+        const attempt_id = await ports.attempts.retryInvalidated(id);
+        await ports.audit.appendRequired({event: "draft_saved", resourceId: id});
+        return {attempt_id};
+      });
     }
   };
 }

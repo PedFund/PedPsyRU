@@ -184,9 +184,11 @@
   }
   async function backToMethods(){if(!activeStageId){await reload();return;}const s=await request("participant/stages");const stage=(s.stages||[]).find(x=>x.stage_id===activeStageId);if(!stage){await reload();return;}stages=s;try{await openStage(stage);}catch{await reload();}}
   async function markInvalidated(){if(!attempt)return;const info=await request("participant/attempts/"+attempt+"/invalidated");if(!info.invalidated)return;
-    const c=$("participant-content"),card=document.createElement("section");card.className="card";
-    card.innerHTML='<h2>Результат недействителен</h2><p class="muted">При прохождении варианты 1–3 показывали неверные подписи, поэтому этот результат нельзя использовать. Он сохранён в истории как недействительный; исследователь назначит повторное прохождение.</p>';
-    c.append(card);}
+    const c=$("participant-content"),card=document.createElement("section"),button=document.createElement("button");card.className="card";
+    card.innerHTML='<h2>Результат недействителен</h2><p class="muted">При прохождении варианты 1–3 показывали неверные подписи, поэтому этот результат нельзя использовать. Пройдите методику заново — прежний результат сохранится в истории как недействительный.</p>';
+    button.id="retry-attempt";button.type="button";button.textContent="Пройти заново";
+    button.addEventListener("click",()=>run(async()=>{const r=await request("participant/attempts/"+attempt+"/retry",{});await openAttempt({attempt_id:r.attempt_id,status:"draft"});}));
+    card.append(button);c.append(card);}
   function renderResult(result){const c=$("participant-content");if(result.presentation){c.innerHTML=resultMarkup(result.presentation);bind("result-methods",backToMethods);markInvalidated().catch(()=>{});return;}c.innerHTML='<section class="card"><h2>Ваш результат</h2><p class="muted" id="result-note"></p><div id="own-measures" class="measures"></div><button id="result-methods" class="secondary">К методикам</button></section>';markInvalidated().catch(()=>{});
     const classifications=result.classifications||[],suffix=" – уровень",levels=new Map();
     for(const x of classifications){if(x&&typeof x.code==="string"&&x.code.endsWith(suffix))levels.set(x.code.slice(0,-suffix.length).trim(),String(x.value));}

@@ -117,6 +117,12 @@ scenario("invalidated completed attempt is reported without rewriting the result
   assert.equal(await f.service.invalidated(f.context, f.attemptId), false);
   await f.admin.query("INSERT INTO pedpsy.attempt_invalidations(attempt_id,reason,created_at_ms) VALUES($1,'presentation_labels_1_3',$2)", [f.attemptId, Date.now()]);
   assert.equal(await f.service.invalidated(f.context, f.attemptId), true);
+  const {attempt_id} = await f.service.retry(f.context, f.attemptId);
+  const created = (await f.admin.query("SELECT status,attempt_no,release_id,assignment_id,current_item_id FROM pedpsy.attempts WHERE id=$1", [attempt_id])).rows[0];
+  const original = (await f.admin.query("SELECT release_id,assignment_id FROM pedpsy.attempts WHERE id=$1", [f.attemptId])).rows[0];
+  assert.equal(created.status, "draft"); assert.equal(created.attempt_no, 2);
+  assert.equal(created.release_id, original.release_id); assert.equal(created.assignment_id, original.assignment_id);
+  assert.ok(created.current_item_id);
   const row = (await f.admin.query("SELECT status,revision FROM pedpsy.attempts WHERE id=$1", [f.attemptId])).rows[0];
   assert.equal(row.status, "completed"); assert.equal(Number(row.revision), saved.revision + 1);
 });

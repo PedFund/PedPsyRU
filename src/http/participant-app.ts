@@ -97,6 +97,7 @@ export function createParticipantApp(api: Api, origin: string,extension?:{regist
   app.post("/api/v2/participant/attempts/:id/complete",async request=>resultDto(await api.complete(token(request),id(request),request.body,csrf(request))));
   app.get("/api/v2/participant/attempts/:id/result",async request=>resultDto(await api.result(token(request),id(request))));
   app.get("/api/v2/participant/attempts/:id/invalidated",async request=>({invalidated:await api.invalidated(token(request),id(request))}));
+  app.post("/api/v2/participant/attempts/:id/retry",async request=>api.retry(token(request),id(request),csrf(request)));
   // Standalone participant app has no staff/library/SQL routes; composition may
   // explicitly register the separately authenticated workspace boundary.
   extension?.register(app);
