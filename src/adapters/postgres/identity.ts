@@ -67,7 +67,11 @@ export class PostgresParticipantGateway implements ParticipantGateway {
   async session(token: string): Promise<{context: ParticipantContext; csrf: string; attempts: PublicAttempt[]}> {
     const context = await this.uow.context(token);
     const attempts = await this.withSession(token, async client => {
-      const rows = await client.query<{id: string; status: "draft" | "completed"; revision: string; current_item_id: string}>("SELECT id,status,revision,current_item_id FROM pedpsy.attempts ORDER BY id");
+      // Scope the scan to the current participant before RLS evaluates the
+      // per-row ownership policy (121). Without the predicate this read was
+      // O(all attempts in the database); the policy itself is unchanged.
+      const rows = await client.query<{id: string; status: "draft" | "completed"; revision: string; current_item_id: string}>(
+        "SELECT id,status,revision,current_item_id FROM pedpsy.attempts WHERE study_id=$1 AND enrollment_id=ANY(pedpsy.own_enrollment_ids()) ORDER BY id", [context.studyId]);
       await client.query("INSERT INTO pedpsy.access_audit_events(id,at_ms,credential_id,study_id,action,outcome,reason,record_count) SELECT gen_random_uuid(),floor(extract(epoch FROM clock_timestamp())*1000)::bigint,credential_id,study_id,'session_read','allow','OWN_SCOPE',$1 FROM pedpsy.session_actor()",[rows.rowCount]);
       await client.query("SELECT pedpsy.touch_session()");
       return rows.rows.map(r => ({id:r.id,status:r.status,revision:Number(r.revision),current_item_id:r.current_item_id}));
