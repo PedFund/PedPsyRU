@@ -71,7 +71,7 @@
 | D | Конфликты | `conflict.js` | 10 VU, 2 сессии | 17 с |
 | — | Завершение | `completion.js` | 30 VU | ~1 мин |
 
-Сценарии E (mixed), stress, spike, soak, breakpoint подготовлены; часть не запускалась из-за выявленного потолка (см. 4.6).
+Сценарии stress, spike, soak, breakpoint подготовлены и не запускались; E (mixed) позднее выполнен — см. 4.6b и `PERFORMANCE_COMPARISON.md` §9.
 
 ---
 
