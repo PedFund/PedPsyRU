@@ -7,7 +7,7 @@ import {assertSafeTarget, INVITE, json, loginParticipant, newSession, request} f
 import {createExam} from "./lib/exam-scenario.js";
 
 assertSafeTarget();
-const participants = JSON.parse(open("./data/accounts.json"));
+const participants = JSON.parse(open("./fixtures/accounts.json"));
 const RUN = __ENV.RUN_ID || String(Date.now());
 const registrationThrottled = new Counter("mixed_registration_throttled");
 const loginThrottled = new Counter("mixed_login_throttled");

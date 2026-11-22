@@ -7,7 +7,7 @@ import {Counter} from "k6/metrics";
 import {assertSafeTarget, BASE, cookieHeader, JSON_HEADERS, json, loginParticipant, newSession, ORIGIN, request} from "./lib/common.js";
 
 assertSafeTarget();
-const participants = JSON.parse(open("./data/participants.json"));
+const participants = JSON.parse(open("./fixtures/participants.json"));
 const VUS = Number(__ENV.VUS || "20");
 const conflicts = new Counter("expected_revision_conflicts");
 const duplicates = new Counter("duplicate_write_rejected");

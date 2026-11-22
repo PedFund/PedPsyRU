@@ -3,7 +3,7 @@
 import {check, sleep} from "k6";
 import {assertSafeTarget, BASE, json, loginParticipant, newSession, request} from "./lib/common.js";
 
-const attempts = JSON.parse(open("./data/attempts.json"));
+const attempts = JSON.parse(open("./fixtures/attempts.json"));
 assertSafeTarget();
 
 export const options = {

@@ -6,7 +6,7 @@ import {Counter} from "k6/metrics";
 import {assertSafeTarget, loginParticipant, newSession} from "./lib/common.js";
 
 assertSafeTarget();
-const participants = JSON.parse(open("./data/accounts.json"));
+const participants = JSON.parse(open("./fixtures/accounts.json"));
 const VUS = Number(__ENV.VUS || "200");
 const OFFSET = Number(__ENV.OFFSET || "0");
 const throttled = new Counter("login_throttled");

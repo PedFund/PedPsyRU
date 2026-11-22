@@ -5,7 +5,7 @@ import {Counter} from "k6/metrics";
 import {assertSafeTarget, json, loginParticipant, newSession, request} from "./lib/common.js";
 
 assertSafeTarget();
-const attempts = JSON.parse(open("./data/attempts.json"));
+const attempts = JSON.parse(open("./fixtures/attempts.json"));
 const VUS = Number(__ENV.VUS || "100");
 const scored = new Counter("attempts_scored");
 const incomplete = new Counter("attempts_incomplete");

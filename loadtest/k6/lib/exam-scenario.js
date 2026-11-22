@@ -4,7 +4,7 @@ import {check, sleep} from "k6";
 import {Counter} from "k6/metrics";
 import {json, loginParticipant, newSession, request} from "./common.js";
 
-const attempts = JSON.parse(open("../data/attempts.json"));
+const attempts = JSON.parse(open("../fixtures/attempts.json"));
 
 export function createExam(thinkMin, thinkMax, offset = 0) {
   let session = null, participant = null, form = null, draft = null, cursor = 0, failures = 0, logins = 0;

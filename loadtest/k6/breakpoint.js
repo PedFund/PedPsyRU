@@ -6,7 +6,7 @@ import {Counter} from "k6/metrics";
 import {assertSafeTarget, json, loginParticipant, newSession, request} from "./lib/common.js";
 
 assertSafeTarget();
-const attempts = JSON.parse(open("./data/attempts.json"));
+const attempts = JSON.parse(open("./fixtures/attempts.json"));
 const rejected = new Counter("breakpoint_rejected");
 
 export const options = {
