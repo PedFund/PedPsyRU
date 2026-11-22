@@ -7,7 +7,7 @@ import {Counter} from "k6/metrics";
 import {assertSafeTarget, BASE, cookieHeader, JSON_HEADERS, json, loginParticipant, newSession, ORIGIN, request} from "./lib/common.js";
 
 assertSafeTarget();
-const participants = JSON.parse(open("./fixtures/participants.json"));
+const attempts = JSON.parse(open("./fixtures/attempts.json"));
 const VUS = Number(__ENV.VUS || "20");
 const conflicts = new Counter("expected_revision_conflicts");
 const duplicates = new Counter("duplicate_write_rejected");
@@ -22,7 +22,7 @@ export const options = {
 };
 
 export default function () {
-  const participant = participants[(Number(__ENV.OFFSET || "0") + __VU - 1) % participants.length];
+  const participant = attempts[(Number(__ENV.OFFSET || "0") + __VU - 1) % attempts.length];
   const first = newSession();
   if (loginParticipant(first, participant.email, participant.password).response.status !== 200) return;
 
