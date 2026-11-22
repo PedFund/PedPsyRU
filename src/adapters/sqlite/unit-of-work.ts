@@ -26,6 +26,11 @@ export class SqliteUnitOfWork implements UnitOfWork {
       studyId: actor.study_id, participantId: actor.participant_id, sessionId: actor.token_hash, sessionVersion: Number(row.credential_version)});
     this.contexts.set(context, token); return context;
   }
+  // Legacy synchronous adapter: one dedicated connection, so resolving the
+  // context and running the callback is already a single unit of work.
+  runWithToken<T>(token: string, callback: (ports: TransactionPorts) => Promise<T>): Promise<T> {
+    return this.run(this.context(token), callback);
+  }
   async run<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>): Promise<T> {
     if (this.local.getStore()) throw new Error("NESTED_TRANSACTION");
     const token = this.contexts.get(context);

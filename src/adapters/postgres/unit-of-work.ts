@@ -55,13 +55,39 @@ export class PostgresUnitOfWork implements UnitOfWork {
       } catch (error) {await client.query("ROLLBACK"); throw error;}
     } finally {client.release();}
   }
-  async run<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>): Promise<T> {
+  // One transaction for the whole participant request: resolve the session,
+  // lock the identity and run the callback on the same pooled client. This
+  // replaces the historical context -> session -> write chain of three
+  // transactions (P0-2). The caller owns BEGIN/COMMIT.
+  async runWithToken<T>(token: string, callback: (ports: TransactionPorts) => Promise<T>): Promise<T> {
+    if (!/^[A-Za-z0-9_-]{43}$/.test(token)) throw new ParticipationError(401, "AUTH_REQUIRED");
     if (this.local.getStore()) throw new Error("NESTED_TRANSACTION");
-    const hash = this.contexts.get(context); if (!hash) throw new ParticipationError(401, "AUTH_REQUIRED");
+    const hash = "sha256:" + createHash("sha256").update(token).digest("hex");
     const client = await this.pool.connect(); let open = false;
     try {
       await this.assertRuntime(client); await client.query("BEGIN"); open = true;
       await client.query("SELECT set_config('app.session_hash',$1,true),set_config('statement_timeout','5000',true),set_config('lock_timeout','3000',true),set_config('idle_in_transaction_session_timeout','10000',true)", [hash]);
+      const actor = await this.actor(client);
+      await client.query("SELECT pedpsy.lock_participant_identity()");
+      const context: ParticipantContext = Object.freeze({realm: "participant", actorId: actor.credential_id, studyId: actor.study_id,
+        participantId: actor.participant_id, sessionId: hash, sessionVersion: actor.credential_version});
+      this.contexts.set(context, hash);
+      const result = await this.run(context, callback, {client});
+      await client.query("COMMIT"); open = false; return result;
+    } catch (error) {
+      if (open) await client.query("ROLLBACK");
+      throw mapPostgresError(error);
+    } finally { client.release(); }
+  }
+  async run<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>, shared?: {client: PoolClient}): Promise<T> {
+    if (this.local.getStore()) throw new Error("NESTED_TRANSACTION");
+    const hash = this.contexts.get(context); if (!hash) throw new ParticipationError(401, "AUTH_REQUIRED");
+    const client = shared ? shared.client : await this.pool.connect(); let open = false;
+    try {
+      if (!shared) {
+        await this.assertRuntime(client); await client.query("BEGIN"); open = true;
+        await client.query("SELECT set_config('app.session_hash',$1,true),set_config('statement_timeout','5000',true),set_config('lock_timeout','3000',true),set_config('idle_in_transaction_session_timeout','10000',true)", [hash]);
+      }
       return await this.local.run(true, async () => {
         // One attempt per transaction; the snapshot is invalidated after any write.
         let live = true, attemptScope: string | null = null, attemptCache: {id:string;snapshot:AttemptSnapshot} | undefined;
@@ -168,10 +194,12 @@ export class PostgresUnitOfWork implements UnitOfWork {
         try {
           await ensure(); const result = await callback(ports); await ensure();
           if (pendingAudit.size) throw new Error("MANDATORY_AUDIT_MISSING");
-          await client.query("SELECT pedpsy.touch_session()"); await client.query("COMMIT"); open = false; return result;
+          await client.query("SELECT pedpsy.touch_session()");
+          if (!shared) { await client.query("COMMIT"); open = false; }
+          return result;
         } finally {live = false;}
       });
     } catch (error) {if (open) await client.query("ROLLBACK"); throw mapPostgresError(error);}
-    finally {client.release();}
+    finally {if (!shared) client.release();}
   }
 }
