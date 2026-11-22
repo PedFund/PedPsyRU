@@ -28,6 +28,14 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
         return result;
       });
     },
+    // Hot path: one transaction instead of context + session + write (P0-2).
+    saveWithToken(token: string, id: string, input: unknown) {
+      return uow.runWithToken(token, async ports => {
+        const result = await ports.attempts.compareAndSave(id, input as DraftInput);
+        await ports.audit.appendRequired({event: "draft_saved", resourceId: id});
+        return result;
+      });
+    },
     complete(context: ParticipantContext, id: string, input: unknown) {
       return uow.run(context, async ports => {
         const state = await ports.attempts.getAuthorized(id);

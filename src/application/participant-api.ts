@@ -9,7 +9,7 @@ export function createParticipantApi(identity: ParticipantGateway, service: Part
     form: (token: string, id: string) => identity.form(token,id),
     read: async (token: string,id: string) => service.read((await identity.session(token)).context,id),
     save: async (token: string,id: string,input: unknown,csrf: string) => {
-      const session=await identity.session(token);identity.assertCsrf(token,csrf);return service.save(session.context,id,input);
+      identity.assertCsrf(token,csrf);return service.saveWithToken(token,id,input);
     },
     complete: async (token: string,id: string,input: unknown,csrf: string) => {
       const session=await identity.session(token);identity.assertCsrf(token,csrf);return service.complete(session.context,id,input);
