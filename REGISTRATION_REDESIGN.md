@@ -101,7 +101,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | валидность invite и scope | `lock_registration_invite` (022:78) | study active, group active, invitation active и не истекла |
 | создание записи | `register_participant_v3` (124) | email, пароль (scrypt в Node), принятие уведомления, идемпотентность |
 | вход | `participant_email_login_material_v3` + `finish_…_v2` (128) | активный контакт и credential; подтверждение адреса не требуется |
-| допуск | `lock_own_stage_requirements` (030) + 091 | паспорт, согласие `study_participation`, 18+, открытый этап, назначения; плюс Д-1 |
+| допуск | `lock_own_stage_requirements` (030) + 091 | паспорт, согласие `study_participation`, 18+, открытый этап, назначения; `verified_at_ms` **не требуется** (Policy-2) |
 | прохождение | `lock_participant_scope` (030:88) | admitted-базис и own-scope |
 | восстановление по почте | `create_password_reset` (120 + 128) | подтверждённый адрес |
 | восстановление по коду | `consume_recovery_code` (126) | активный recovery-код этой эры |
@@ -256,7 +256,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 |---|---|---|---|
 | `POST /api/v2/registration/start` | `{email, password, contact_notice_version, accept_contact_notice:true, idempotency_key, recovery_code_acknowledged:true}` | `202 {status:"accepted"}` (всегда одинаково) | `400 INVALID_REGISTRATION_INPUT / WEAK_PASSWORD`, `403 CSRF_REJECTED / ORIGIN_REJECTED`, `404 NOT_AVAILABLE`, `409 PARTICIPATION_REQUIREMENTS_CHANGED / IDEMPOTENCY_CONFLICT`, `413 REGISTRATION_LIMIT`, `429 REGISTRATION_THROTTLED` |
 | `POST /api/v2/registration/verify/request` | `{email}` | `202 {status:"accepted"}` | `429 RESEND_THROTTLED` |
-| `POST /api/v2/registration/verify/confirm` | `{verification_token}` | `200 {status:"email_verified"}` | `404 NOT_AVAILABLE` (неверный/просроченный код), `409 PARTICIPATION_REQUIREMENTS_CHANGED` |
+| `POST /api/v2/registration/verify/confirm` | `{verification_token}`; своя сессия участника опциональна | `200 {status:"email_verified"}` при действующей сессии этой записи; `202 {status:"accepted"}` без сессии (контакт `contested`, входа нет) | `404 NOT_AVAILABLE` (неверный/просроченный код), `409 PARTICIPATION_REQUIREMENTS_CHANGED` |
 | `POST /api/v2/registration/recover` | `{email, recovery_code, password}` | `200 {status:"password_rotated"}` | `400 INVALID_REGISTRATION_INPUT`, `401 INVALID_RECOVERY`, `429 LOGIN_THROTTLED` |
 | `POST /api/v2/registration/login` | `{email, password}` \| `{email, password, study_id}` | `200 {csrf, expires_at, state, email_verified}` + participant cookie | `401 INVALID_LOGIN`, `429 LOGIN_THROTTLED / LOGIN_LOCKED` |
 | `POST /api/v2/registration/email/change/request` | `{email, password}` (аутентифицированная сессия) | `202 {status:"accepted"}` | `401 AUTH_REQUIRED`, `403 CSRF_REJECTED`, `409 EMAIL_CHANGE_CONFLICT` |
@@ -266,7 +266,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | `POST /api/v2/registration/password/forgot` \| `…/password/reset` | без изменений | без изменений | `202` нейтральный; сброс теперь только для подтверждённого адреса |
 | устаревают (заморожены, не удаляются) | `…/receipt`, `…/confirm`, `…/password`, `…/resend` | сохраняют прежнее поведение для legacy-сценария и нагрузки | — |
 
-Правила: `409` не используется для «адрес занят»; `404` — единственный ответ на невалидный invite; ответы не содержат email, кодов, `participant_id` чужих исследований; при выключенной почте `start` всё равно создаёт запись и отвечает `202`, а `verify/request` возвращает `503 VERIFICATION_DELIVERY_DISABLED`, чтобы UI честно показал состояние и предложил recovery-код.
+Правила: `409` не используется для «адрес занят»; `404` — единственный ответ на невалидный invite; ответы не содержат email, кодов, `participant_id` чужих исследований; `verify/confirm` не принимает `participant_id`/`study_id` и никогда не выдаёт сессию: в своей сессии он только фиксирует `verified_at_ms`, без сессии — отвязывает адрес как `contested` и не открывает данные. При выключенной почте `start` всё равно создаёт запись и отвечает `202`, а `verify/request` возвращает `503 VERIFICATION_DELIVERY_DISABLED`, чтобы UI честно показал состояние и предложил recovery-код.
 
 ### 7.1 Почему `start` всегда отвечает `202`
 
