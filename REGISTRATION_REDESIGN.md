@@ -1,6 +1,6 @@
 # Регистрация без обязательного ожидания письма: целевая модель
 
-> **Статус: проект.** Ничего из нижеописанного не реализовано: код, схема и рабочая БД не изменялись. База анализа — локальное `main` `863671d` (контрольная точка [CURRENT_STATE.md](CURRENT_STATE.md) фиксирует `50825b6`), head миграций `120`; ссылки на строки относятся к этому состоянию. Все изменения схемы предлагаются только новыми append-only миграциями `121+`; прикладной код (adapters / application / http / web) меняется отдельными PR по разделу 10.
+> **Статус: проект.** Ничего из нижеописанного не реализовано: код, схема и рабочая БД не изменялись. База анализа — локальное `main` `863671d` (контрольная точка [CURRENT_STATE.md](CURRENT_STATE.md) фиксирует `50825b6`), head миграций `120`; ссылки на строки относятся к этому состоянию. Все изменения схемы предлагаются только новыми append-only миграциями `122+`; прикладной код (adapters / application / http / web) меняется отдельными PR по разделу 10.
 >
 > До реализации требуется решение владельца по разделу 11, прежде всего **Д-1** (является ли подтверждённый адрес условием допуска к исследованию).
 
@@ -37,9 +37,9 @@
 6. **Восстановления для неподтверждённых нет.** `create_password_reset` требует активный `participant_contacts` и активный credential (120:29–34), а контакт создаётся только при `confirm`. Кто не получил письмо — не имеет ни входа, ни восстановления; остаётся ручной сброс оператором.
 7. **Второй вход отзывает первую сессию.** `finish_participant_login` отзывает все активные сессии credential (004:39), то же в SQLite-контуре (`storage/access.js:152`). Работа с телефона и ноутбука одновременно невозможна; вход на втором устройстве молча выкидывает первое.
 8. **Нет понятия «адрес подтверждён»** отдельно от факта создания контакта: контакт появляется уже подтверждённым. Как только запись начнёт создаваться до письма, эта неявность превратится в вектор захвата через `create_password_reset`.
-9. **Смена версии уведомления = отказ входа.** Проверка принятия привязана к текущей версии политики (023:130, 087:69, 027:91), а миграции 042 и 104 меняли версию для всех исследований; маршрута повторного принятия уведомления нет. Участник, зарегистрированный под прежней версией, получает `401` на вход и `409 PARTICIPATION_REQUIREMENTS_CHANGED` на паспорт без возможности исправить.
+9. **Смена версии уведомления = отказ входа.** Проверка принятия привязана к текущей версии политики (023:131, 087:69, 027:91), а миграции 042 и 104 меняли версию для всех исследований; маршрута повторного принятия уведомления нет. Участник, зарегистрированный под прежней версией, получает `401` на вход и `409 PARTICIPATION_REQUIREMENTS_CHANGED` на паспорт без возможности исправить.
 10. **Нормализация адреса расходится между записью и чтением.** При записи local part сохраняется как введён (`participantEmail`), а `participant_login_study`, `registration_resend_target` и `create_password_reset` сравнивают с `lower(btrim(email))` (103:13, 106:12, 120:28). Для `Real.Person@…` вход по явному `study_id` работает, а разрешение исследования по адресу и сброс пароля — нет.
-11. **Нет идемпотентности.** Повтор `start` после сетевой ошибки отменяет прежнюю заявку и письмо (022:130–138, повторено в 087:97–103) и создаёт новое: код из первого письма становится недействительным, писем два. Тот же эффект даёт `resend` (106:36–38).
+11. **Нет идемпотентности.** Повтор `start` после сетевой ошибки отменяет прежнюю заявку и письмо (022:131–138, повторено в 087:97–103) и создаёт новое: код из первого письма становится недействительным, писем два. Тот же эффект даёт `resend` (106:36–38).
 12. **Ограничения, которые надо сохранить, а не переписать:** invite-scope и запрет выбора чужого исследования/группы (`lock_registration_invite`, 022:78–95), RLS на всех таблицах регистрации, аудит без email/кодов, лимиты per-email/per-browser, `LoginLock` с эскалацией 10/20/30 ошибок (092:35), существующая схема ответов и результатов.
 
 ### 1.3 Почему лимит receipt нельзя просто отключить
@@ -62,9 +62,10 @@
 | Состояние | Источник истины | Что разрешено | Что запрещено |
 |---|---|---|---|
 | `invited` | активное `group_invitations` + активные study/group; строки `participants` ещё нет | `preflight`, `context`, `start` | любой доступ к данным исследования |
-| `registered_unverified` | `participants` + `participant_group_bindings` + `participant_credentials` + `participant_contacts(status='active', verified_at_ms IS NULL)` | вход по email+паролю, чтение/заполнение паспорта, принятие согласий и уведомления о контакте, `verify/*`, recovery-код | допуск (`enroll_own_stage`), T0/T1/T2, смена email, сброс пароля по почте, выгрузки |
+| `registered_unverified` | `participants` + `participant_group_bindings` + `participant_credentials` + `participant_contacts(status='active', verified_at_ms IS NULL)` | вход по email+паролю, паспорт, согласия и уведомление о контакте, `verify/*` **в своей сессии**, recovery-код, **допуск и прохождение T0/T1/T2** (Policy-2) | смена email, сброс пароля по почте, claim-вход без пароля, передача данных другому лицу |
 | `admitted` | строка `stage_admissions` (неизменяемая, 030) существует | допуск на открытые этапы своей группы, создание/продолжение попыток T0/T1/T2 | чужие этапы, чужие данные, смена группы |
 | `active` | есть `stage_enrollments` и хотя бы одна попытка (draft/completed) | прохождение, результаты own-scope, повторное прохождение (118) | всё, что вне own-scope |
+| `detached_unverified` | `participant_contacts.status='contested'` (адрес отвязан без передачи записи) | ничего через email; данные и результаты сохраняются, доступ — только recovery-код/оператор | вход по email, сброс по почте, передача результатов, удаление данных |
 
 Ортогонально, без изменения перечисленных состояний: `participants.status='excluded'`, `participant_contacts.status='withdrawn'`, блокировки `login_locks`.
 
@@ -75,15 +76,18 @@
 - **И-3.** Исследование и группа берутся только из invite (заголовок + `lock_registration_invite`); тело запроса их не содержит.
 - **И-4.** Допуск остаётся серверным гейтом: паспорт завершён, согласие `study_participation` принято, возраст ≥ 18 (091), этап открыт, назначения активны (030).
 - **И-5.** `participant_contacts.verified_at_ms` — единственный признак владения адресом; никакой другой флаг его не заменяет.
+- **И-6.** Результаты, попытки, паспорт и согласия принадлежат `(study_id, participant_id)` и credential. Подтверждение адреса **никогда** не меняет `participant_id`, не переносит и не удаляет эти строки.
+- **И-7.** Подтверждение адреса из чужой сессии (без пароля/действующей сессии записи) не аутентифицирует в запись: адрес отвязывается как `contested`, данные остаются, новый владелец адреса может создать свою запись; разбор — оператором.
 
 ### 2.1 Переходы
 
 ```text
 invited --start--> registered_unverified
-registered_unverified --verify/confirm + паспорт + согласия + 18+--> admitted
+registered_unverified --verify в своей сессии + паспорт + согласия + 18+--> admitted (Policy-2: verify не обязателен для допуска)
+registered_unverified --enroll--> admitted (Policy-2, адрес ещё не подтверждён)
 admitted --enroll--> active
 registered_unverified --recover--> registered_unverified (новый пароль, те же данные)
-registered_unverified --claim (код владельца ящика)--> registered_unverified (новая эра, провизорные данные удалены)
+registered_unverified --подтверждение без сессии (код владельца ящика)--> detached_unverified (адрес отвязан; данные сохранены)
 admitted|active --email/change/confirm--> тот же participant_id, новый адрес
 любое состояние --excluded/withdrawn--> без допуска (ортогонально, не «назад»)
 ```
@@ -95,14 +99,24 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | Проверка | Где выполняется | Что требует |
 |---|---|---|
 | валидность invite и scope | `lock_registration_invite` (022:78) | study active, group active, invitation active и не истекла |
-| создание записи | `register_participant_v3` (123) | email, пароль (scrypt в Node), принятие уведомления, идемпотентность |
-| вход | `participant_email_login_material_v3` + `finish_…_v2` (127) | активный контакт и credential; подтверждение адреса не требуется |
+| создание записи | `register_participant_v3` (124) | email, пароль (scrypt в Node), принятие уведомления, идемпотентность |
+| вход | `participant_email_login_material_v3` + `finish_…_v2` (128) | активный контакт и credential; подтверждение адреса не требуется |
 | допуск | `lock_own_stage_requirements` (030) + 091 | паспорт, согласие `study_participation`, 18+, открытый этап, назначения; плюс Д-1 |
 | прохождение | `lock_participant_scope` (030:88) | admitted-базис и own-scope |
-| восстановление по почте | `create_password_reset` (120 + 127) | подтверждённый адрес |
-| восстановление по коду | `consume_recovery_code` (125) | активный recovery-код этой эры |
+| восстановление по почте | `create_password_reset` (120 + 128) | подтверждённый адрес |
+| восстановление по коду | `consume_recovery_code` (126) | активный recovery-код этой эры |
 
-**Д-1 (владелец).** Рекомендуемый вариант **Policy-1**: `admitted` требует и подтверждённого адреса. Тогда ожидание письма затрагивает только шаг допуска, а не регистрацию и вход; в неподтверждённой эре не бывает `stage_admissions`, попыток и результатов, поэтому «захват» неподтверждённой записи не уничтожает исследовательские данные. Альтернатива **Policy-2**: допуск без подтверждения адреса (тогда обязательны компенсирующие меры из Д-2: результаты до подтверждения помечаются невыгружаемыми, а отбор адреса у сквоттера требует решения по Д-3).
+**Д-1 (решение владельца, 22.11.2026).** Принята **Policy-2**: подтверждение адреса **не** является условием допуска; участник начинает тестирование сразу после регистрации. Policy-1 (допуск только после подтверждения) отклонена как противоречащая требованию немедленного старта.
+
+Компенсирующие меры обязательны и входят в объём реализации:
+
+1. **Владение результатами.** Попытки, ответы, результаты, паспорт и согласия принадлежат `(study_id, participant_id)` и credential, а не адресу. Подтверждение адреса никогда не меняет `participant_id`, не переносит и не удаляет эти строки (И-6).
+2. **Подтверждение в своей сессии.** Если пользователь вошёл в запись и ввёл код, проставляется `verified_at_ms`; данные, попытки и результаты не изменяются.
+3. **Подтверждение без сессии.** Владелец ящика, вводящий код с нового устройства без пароля/сессии, **не** получает доступ к записи: адрес помечается `contested`, отвязывается (`participant_contacts.status='contested'`), запись переходит в `detached_unverified`. Её данные и результаты сохраняются; доступ к ним — только по recovery-коду или через оператора. Владелец адреса может создать свою запись; чужие психологические результаты ему не показываются и не передаются.
+4. **Никакого удаления научных данных.** `detached_unverified` не каскадирует удаление попыток, ответов, результатов и аудита. Удаление возможно только по действующему регламенту и отдельному решению, а не как побочный эффект claim.
+5. **Один активный контакт на исследование.** Уникальность активного `email_key` сохраняется; `contested`-строки исключаются из уникального индекса, чтобы владелец адреса мог зарегистрироваться, а старая запись не потеряла данные.
+6. **Восстановление.** Сброс пароля по почте — только для подтверждённого адреса; для неподтверждённого — recovery-код (раздел 5). Прежний владелец `detached_unverified` не может вернуть запись через чужой ящик.
+7. **Выгрузки и аналитика.** Исследователь по-прежнему видит псевдонимного участника; email в выгрузку не попадает; статус контакта (`contested`/`detached`) не меняет и не исключает научные результаты, если иное не задано исследованием.
 
 ## 3. Модель безопасности и угрозы
 
@@ -110,7 +124,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 
 | ID | Угроза | Проектная мера | Остаточный риск |
 |---|---|---|---|
-| Т-18 | Захват чужого адреса (сквоттинг) | адрес считается **заявленным**, а не принадлежащим; вход и данные неподтверждённой эры отделены от `admitted`; при подтверждении кодом адрес переходит владельцу ящика (claim), credential ротируется, все сессии отзываются, провизорные паспорт/согласия/принятия удаляются с аудитом | владелец ящика теряет данные, введённые до claim (не более провизорной эры) |
+| Т-18 | Захват чужого адреса (сквоттинг) при Policy-2 | адрес считается **заявленным**, а не принадлежащим; результаты принадлежат participant_id, не адресу; подтверждение в чужой сессии не аутентифицирует, а помечает контакт `contested` и переводит запись в `detached_unverified`; данные не удаляются и не передаются; владелец адреса создаёт свою запись | старая запись остаётся псевдонимной и доступна только по recovery-коду/оператору; нужен регламент разбора |
 | Т-19 | Перебор пароля/кода | scrypt без изменений, dummy-соль и сравнение в постоянном времени, buckets 5/15 мин на email и browser, `LoginLock` 10/20/30 → 15 мин/1 ч/4 ч, коды 256 бит, 5 попыток на код | общий bucket на процесс (как сейчас) |
 | Т-20 | Enumeration | `start` отвечает одинаково (`202`) для нового, неподтверждённого, подтверждённого и исключённого адреса; `login` не различает «нет записи» и «неверный пароль»; `resend`/`verify/request` нейтральны; dummy-hash для несуществующих | тайминги писем и очередей; аудит содержит только коды причин |
 | Т-21 | Спам-регистрация | buckets `global` (пилот 900/5 мин, default 30/5 мин), `browser` 5/15 мин, `email+study` 5/15 мин, квота неподтверждённых на исследование, идемпотентность, глобальный лимит писем 100/5 мин не повышается | распределённые адреса/браузеры; нужен внешний WAF (вне кода) |
@@ -129,7 +143,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 - Считать адрес доказанным по факту ввода, по совпадению с приглашением или по наличию записи.
 - Выдавать допуск, результаты или выгрузку до выполнения всех условий `admitted`.
 - Принимать `study_id`, `group_id`, `participant_id` из тела запроса как решение о scope.
-- Позволять сброс пароля, смену адреса или claim по неподтверждённому адресу.
+- Позволять вход, сброс пароля или передачу данных по неподтверждённому адресу; подтверждение без сессии может только отвязать адрес (`contested`), не давая доступа.
 - Отключать, повышать или обходить лимит receipt, buckets `login_throttles`, `LoginLock`, RLS, CSRF, проверки Origin/Host.
 
 ## 4. Правила повторной регистрации
@@ -143,7 +157,8 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | `registered_unverified`, другое тело | запись не меняется, пароль **не** перезаписывается; выдаётся новый код подтверждения (прежний отменяется) | `202 accepted` |
 | адрес подтверждён (`admitted`/`active`) | новый аккаунт не создаётся, пароль не меняется; не более одного служебного письма «запись уже существует» за 24 ч на (study, адрес) | `202 accepted` |
 | `participants.status='excluded'` / `contact='withdrawn'` | ничего не создаётся и не реактивируется; только аудит | `202 accepted` |
-| валидный код предъявлен владельцем ящика (claim) | credential ротируется на пароль из этой заявки, `era++`, провизорные паспорт/согласия/принятия удаляются, все сессии отзываются, recovery-код перевыпускается | `200 email_verified` |
+| валидный код предъявлен владельцем ящика **в своей сессии** (есть пароль/сессия записи) | проставляется `verified_at_ms`; данные, попытки и результаты не меняются | `200 email_verified` |
+| валидный код предъявлен **без сессии** (пароля записи нет) | запись не аутентифицируется: контакт `contested`, отвязка адреса, `detached_unverified`, данные сохранены; владелец адреса может создать свою запись | `202 accepted` (нейтрально) |
 | тот же `idempotency_key` с другим телом | конфликт | `409 IDEMPOTENCY_CONFLICT` |
 
 `idempotency_key` — обязательное поле DTO (`UUIDv4` или 43 символа base64url); сервер хранит только HMAC-дайджест ключа, `request_hash` и сохранённый ответ, TTL 24 ч. Явный `409` для «адрес занят» не используется: он превращает endpoint в оракул существования записи.
@@ -167,7 +182,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | C. Оператор | внеполосная идентификация, затем выдача одноразового recovery-кода (не пароля) с аудитом `participants.recovery.operator` | привилегированное действие, не раскрывает данные и не позволяет войти от имени участника | обязательный резерв при утрате и кода, и почты; требует регламента (Д-4) |
 | D. Через неподтверждённый адрес | — | — | **запрещено** |
 
-Правила: 5 попыток на код / 15 мин, затем `LoginLock`; сравнение в постоянном времени; успешная операция ротирует `credential.version` (все сессии недействительны), отзывает recovery-код и пишет аудит без значений. Recovery-код перевыпускается при claim и при подтверждении адреса и после этого не действует — восстановление подтверждённой записи идёт только через почту (120).
+Правила: 5 попыток на код / 15 мин, затем `LoginLock`; сравнение в постоянном времени; успешная операция ротирует `credential.version` (все сессии недействительны), отзывает recovery-код и пишет аудит без значений. Recovery-код перевыпускается только при подтверждении адреса **в своей сессии** и после этого не действует — восстановление подтверждённой записи идёт через почту (120); `contested`-переход код не перевыпускает.
 
 ### 5.1 Сценарии восстановления
 
@@ -177,22 +192,48 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | адрес не подтверждён, recovery-код есть | `recover` с `email` + `recovery_code` | пароль меняется, код одноразовый; адрес остаётся неподтверждённым |
 | адрес не подтверждён, recovery-код утерян, почта недоступна | оператор: внеполосная проверка → выдача нового recovery-кода | данные не раскрываются, вход от имени участника не выполняется |
 | адрес не подтверждён, сменилась версия уведомления | `reaccept_contact_notice` из аутентифицированной сессии | принятие добавляется, историческое не перезаписывается |
-| запись занята сквоттером | `verify/confirm` владельцем ящика | claim: пароль владельца, `era++`, провизорные данные удалены |
+| запись занята сквоттером (Policy-2) | `verify/confirm` владельцем ящика без сессии | запись **не** аутентифицируется: контакт `contested`, адрес отвязан, `detached_unverified`; данные и результаты сохранены; владелец адреса создаёт свою запись |
 
-## 6. Изменения схемы (append-only, ≥121)
+### 5.2 Подтверждение адреса при Policy-2
+
+Различаются два потока; смешивать их нельзя.
+
+**A. Подтверждение в своей сессии.** Пользователь уже вошёл в запись (пароль) и вводит код:
+`consume_contact_verification` проставляет `verified_at_ms`, отзывает recovery-код и пишет аудит. `participant_id`, попытки, ответы, результаты, паспорт и согласия **не меняются**. Сессия сохраняется.
+
+**B. Подтверждение без сессии.** Владелец ящика ввёл код с нового устройства, пароля записи не знает:
+- ответ нейтральный (`202`), никакой сессии не выдаётся;
+- `participant_contacts` помечается `contested_at_ms`, `email_key` исключается из активной уникальности; запись переходит в `detached_unverified`;
+- попытки, ответы, результаты и аудит **сохраняются**; никакого каскадного удаления, переноса или слияния;
+- владелец адреса может зарегистрировать новую запись в этом исследовании;
+- доступ к старой записи — только по recovery-коду (если он сохранился) или через оператора; чужие психологические результаты не показываются.
+
+**Правила для обоих потоков:**
+
+- `consume_contact_verification` не принимает `participant_id`/`study_id` из тела — только `(invite, browser, code)` и вычисляет запись сам;
+- блокировка порядка `study → contact → verification`; при гонке двух подтверждений побеждает одно, второе получает нейтральный ответ и аудит;
+- подтверждение адреса никогда не является основанием для выдачи результатов, выгрузки или impersonation;
+- оператор выдаёт только одноразовый recovery-код после внеполосной проверки; факт и причина — в аудите, без email и кодов;
+- если запись уже `admitted`/`active` и контакт `contested`, научные результаты остаются в исследовании и учитываются аналитикой как псевдонимные, если исследователь не решил иначе отдельным правилом.
+
+
+
+## 6. Изменения схемы (append-only, ≥122)
+
+Номера ниже учитывают фактическую `main` от 22.11.2026: миграция **121** занята P0-1 (`fix/perf-p0-1-attempt-scope`, PR #196). Планируемые миграции регистрации начинаются с **122**; при появлении новых миграций в `main` их нужно сдвинуть перед реализацией.
 
 | Миграция | Таблицы и поля | Индексы / ограничения | Функции |
 |---|---|---|---|
-| 121 `participant_contact_verification` | `participant_contacts` + `verified_at_ms bigint NULL`, + `era integer NOT NULL DEFAULT 1`; backfill `verified_at_ms = confirmed_at_ms` для исторических строк (все они созданы при `confirm`); новая `participant_contact_verifications(id, study_id, contact_id, era, code_hash, created_at_ms, expires_at_ms, attempts_remaining 0..5, status pending/used/cancelled)` | частичный уникальный `(study_id,contact_id)` где `status='pending'`; индекс `(study_id,contact_id,created_at_ms DESC)`; RLS + `REVOKE ALL` | `issue_contact_verification`, `consume_contact_verification` (ровно один переход `NULL→value`), `contact_verification_state`; `CREATE OR REPLACE guard_participant_contact` (разрешает только верификацию и claim, как 107 для pending) |
-| 122 `participant_email_outbox` | `participant_email_outbox(id, verification_id, recipient, token_envelope, status ready/sent/failed/cancelled, attempts 0..10, next_attempt_at_ms, created_at_ms, expires_at_ms)` | индекс `(next_attempt_at_ms,id) WHERE status='ready'`; RLS | `claim_email_verifications(batch)`, `finish_email_verification`, `fail_stale_email_verifications` — копия контракта 088, отдельный контур |
-| 123 `registration_immediate_account` | `register_participant_v3(…)`: атомарно `participants`, `participant_group_bindings`, `participant_credentials`, `participant_contacts(unverified)`, `participant_contact_acceptances`, `issue_contact_verification`, outbox; квоты неподтверждённых на исследование и на сутки | уникальность `(study_id, email_key)` уже есть (023); новый канонический ключ `email_key_ci` + уникальный `(study_id,email_key_ci)` после проверки дублей | `register_participant_v3`, `claim_unverified_participant`, `participant_email_key(text) IMMUTABLE` |
-| 124 `registration_idempotency` | `registration_requests(idempotency_hash PK, study_id, email_key_ci, request_hash, outcome jsonb, participant_id, created_at_ms, expires_at_ms)` | индекс `(expires_at_ms)` для уборки | `begin_registration_request`, `finish_registration_request` |
-| 125 `participant_recovery_codes` | `participant_recovery_codes(id, study_id, participant_id, era, code_hash, status active/used/revoked, created_at_ms, expires_at_ms, used_at_ms)` | частичный уникальный `(study_id,participant_id) WHERE status='active'` | `issue_recovery_code`, `consume_recovery_code` (ротация credential, отзыв всех сессий, аудит) |
-| 126 `participant_email_change` | `participant_email_changes(id, study_id, participant_id, old_email_key, new_email_key, code_hash, status, created_at_ms, expires_at_ms, attempts_remaining)` | один pending на участника; уникальность нового адреса проверяется по `(study_id,email_key_ci)` | `request_email_change` (только verified-сессия + пароль), `confirm_email_change` (`era++`, отзыв прочих сессий) |
-| 127 `participant_login_v3` | без новых таблиц | — | `participant_email_login_material_v3` (учитывает неподтверждённые контакты и возвращает `notice_required`), `finish_participant_email_login_v2` (без требования `stage_admissions`, лимит сессий), `participant_login_study_v2` (канонический ключ), `CREATE OR REPLACE create_password_reset` с `verified_at_ms IS NOT NULL` |
-| 128 `participant_session_limit` | без новых таблиц | индекс `(credential_id, created_at_ms DESC)` при отсутствии | `finish_participant_email_login_v3(credential, version, hash, contact, session_hash, max_sessions)`, `revoke_other_participant_sessions` |
-| 129 `participant_registration_state` | представление над `participant_contacts`, `stage_admissions`, `stage_enrollments`, `attempts` | — | `participant_registration_state(study, participant)`; `reaccept_contact_notice(version)` для смены версии уведомления |
-| 130 `registration_policy` | `registration_policy(kind, limit_n, window_ms)` с `CHECK` на допустимые диапазоны (creation 1..1200, verification mail 1..1000) | PK `(kind)` | чтение политики функциями 123/122; жёсткие receipt-лимиты 024 **не** трогаются |
+| 122 `participant_contact_verification` | `participant_contacts` + `verified_at_ms bigint NULL`, + `contested_at_ms bigint NULL`, + `era integer NOT NULL DEFAULT 1`; backfill `verified_at_ms = confirmed_at_ms` для исторических строк (все они созданы при `confirm`); новая `participant_contact_verifications(id, study_id, contact_id, era, code_hash, created_at_ms, expires_at_ms, attempts_remaining 0..5, status pending/used/cancelled)` | заменить уникальность `(study_id,email_key)` на частичный уникальный индекс `WHERE status='active' AND contested_at_ms IS NULL` (иначе `contested`-строка блокирует регистрацию владельца адреса); частичный уникальный `(study_id,contact_id)` где `status='pending'`; индекс `(study_id,contact_id,created_at_ms DESC)`; RLS + `REVOKE ALL` | `issue_contact_verification`, `consume_contact_verification` (в сессии — только `verified_at_ms`; без сессии — `contested`), `contact_verification_state`; `CREATE OR REPLACE guard_participant_contact` (разрешает только верификацию и `contested`-отвязку, как 107 для pending) |
+| 123 `participant_email_outbox` | `participant_email_outbox(id, verification_id, recipient, token_envelope, status ready/sent/failed/cancelled, attempts 0..10, next_attempt_at_ms, created_at_ms, expires_at_ms)` | индекс `(next_attempt_at_ms,id) WHERE status='ready'`; RLS | `claim_email_verifications(batch)`, `finish_email_verification`, `fail_stale_email_verifications` — копия контракта 088, отдельный контур |
+| 124 `registration_immediate_account` | `register_participant_v3(…)`: атомарно `participants`, `participant_group_bindings`, `participant_credentials`, `participant_contacts(unverified)`, `participant_contact_acceptances`, `issue_contact_verification`, outbox; квоты неподтверждённых на исследование и на сутки; допуск к этапу не требует `verified_at_ms` (Policy-2) | уникальность `(study_id, email_key)` уже есть (023); новый канонический ключ `email_key_ci` + частичный уникальный `(study_id,email_key_ci) WHERE status='active' AND contested_at_ms IS NULL` после проверки дублей | `register_participant_v3`, `attach_verified_contact` (в сессии), `detach_contested_contact` (без сессии; данные не удаляются), `participant_email_key(text) IMMUTABLE` |
+| 125 `registration_idempotency` | `registration_requests(idempotency_hash PK, study_id, email_key_ci, request_hash, outcome jsonb, participant_id, created_at_ms, expires_at_ms)` | индекс `(expires_at_ms)` для уборки | `begin_registration_request`, `finish_registration_request` |
+| 126 `participant_recovery_codes` | `participant_recovery_codes(id, study_id, participant_id, era, code_hash, status active/used/revoked, created_at_ms, expires_at_ms, used_at_ms)` | частичный уникальный `(study_id,participant_id) WHERE status='active'` | `issue_recovery_code`, `consume_recovery_code` (ротация credential, отзыв всех сессий, аудит) |
+| 127 `participant_email_change` | `participant_email_changes(id, study_id, participant_id, old_email_key, new_email_key, code_hash, status, created_at_ms, expires_at_ms, attempts_remaining)` | один pending на участника; уникальность нового адреса проверяется по `(study_id,email_key_ci)` | `request_email_change` (только verified-сессия + пароль), `confirm_email_change` (`era++`, отзыв прочих сессий) |
+| 128 `participant_login_v3` | без новых таблиц | — | `participant_email_login_material_v3` (учитывает неподтверждённые контакты и возвращает `notice_required`), `finish_participant_email_login_v2` (без требования `stage_admissions`, лимит сессий), `participant_login_study_v2` (канонический ключ), `CREATE OR REPLACE create_password_reset` с `verified_at_ms IS NOT NULL` |
+| 129 `participant_session_limit` | без новых таблиц | индекс `(credential_id, created_at_ms DESC)` при отсутствии | `finish_participant_email_login_v3(credential, version, hash, contact, session_hash, max_sessions)`, `revoke_other_participant_sessions` |
+| 130 `participant_registration_state` | представление над `participant_contacts`, `stage_admissions`, `stage_enrollments`, `attempts` | — | `participant_registration_state(study, participant)`; `reaccept_contact_notice(version)` для смены версии уведомления |
+| 131 `registration_policy` | `registration_policy(kind, limit_n, window_ms)` с `CHECK` на допустимые диапазоны (creation 1..1200, verification mail 1..1000) | PK `(kind)` | чтение политики функциями 124/123; жёсткие receipt-лимиты 024 **не** трогаются |
 
 Требования к каждой миграции: `SET LOCAL search_path`, `SECURITY DEFINER` с фиксированным `search_path`, `REVOKE ALL FROM PUBLIC`, RLS на новых таблицах, `GRANT EXECUTE` только нужных функций в `grantRuntime` ([migrate.ts](src/adapters/postgres/migrate.ts)), неизменные байты миграций `001–120`.
 
@@ -248,22 +289,22 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | провайдер вернул лимит | `RATE_DEFERRED`, повтор по backoff, письмо не теряется (at-least-once) |
 | воркер упал между отправкой и отметкой | повторная отправка того же кода; новый код не выпускается |
 | код просрочен | `404 NOT_AVAILABLE` на `verify/confirm`; запись остаётся, доступен новый `verify/request` |
-| адрес так и не подтверждён | запись остаётся `registered_unverified`; допуска нет при Policy-1; действует политика хранения (Д-9) |
+| адрес так и не подтверждён | запись остаётся `registered_unverified`; допуск и прохождение разрешены (Policy-2); действует политика хранения (Д-9) |
 | чужой или несуществующий invite | `404 NOT_AVAILABLE`, аудит с фиксированной причиной |
 
 ## 9. Совместимость
 
-- **Существующие аккаунты.** Контакты создавались только при `confirm`, поэтому backfill `verified_at_ms = confirmed_at_ms` (121) фактически точен; пароли, `display_code`, `participant_id`, группа и `stage_admissions` не меняются.
+- **Существующие аккаунты.** Контакты создавались только при `confirm`, поэтому backfill `verified_at_ms = confirmed_at_ms` (122) фактически точен; пароли, `display_code`, `participant_id`, группа и `stage_admissions` не меняются.
 - **Сессии.** Развёртывание не отзывает активные сессии; лимит одновременных сессий действует начиная со следующего входа. Смена пароля по-прежнему инвалидирует сессии через `credential.version` (002:64).
 - **Исследования, группы, этапы, назначения, ответы, результаты, инвалидации, выгрузки.** Не затрагиваются: новые таблицы не пересекаются с существующими ограничениями, а новые функции только читают их.
-- **Согласия и паспорт.** Принятие уведомления о контакте переносится на `start`; исторические принятия не переписываются. `409` при смене версии уведомления заменяется экраном повторного принятия (`reaccept_contact_notice`), что устраняет текущий тупик (023:130, 027:91).
+- **Согласия и паспорт.** Принятие уведомления о контакте переносится на `start`; исторические принятия не переписываются. `409` при смене версии уведомления заменяется экраном повторного принятия (`reaccept_contact_notice`), что устраняет текущий тупик (023:131, 027:91).
 - **Legacy-вход по коду.** `participant_login_material` остаётся только для аккаунтов без контакта (023:177–180); новые аккаунты этим маршрутом не пользуются.
 - **Синтетический контур.** `receipt` остаётся только для `@example.test` и для нагрузочных сценариев; после переключения UI на v3 он не используется онбордингом.
-- **Стенд.** Требуется отдельное решение владельца о применении миграций 121+ к рабочей PostgreSQL и проверенная резервная копия; код не деплоится в рамках этого документа.
+- **Стенд.** Требуется отдельное решение владельца о применении миграций 122+ к рабочей PostgreSQL и проверенная резервная копия; код не деплоится в рамках этого документа.
 
 ### 9.1 Выкатка и откат
 
-- Миграции `121–130` аддитивны: новые таблицы, представление, `CREATE OR REPLACE` функций; существующие таблицы получают только новые nullable-колонки (121) и backfill одного поля.
+- Миграции `122–131` аддитивны: новые таблицы, представление, `CREATE OR REPLACE` функций; существующие таблицы получают только новые nullable-колонки (122) и backfill одного поля.
 - Новое поведение включается флагом `PEDPSY_REGISTRATION_V3` (fail-closed: неизвестное значение останавливает старт), поэтому откат поведения — снятие флага без отката схемы.
 - Legacy-маршруты остаются рабочими на всё время совместимости; их удаление — отдельный PR после периода наблюдения.
 - Применение к рабочей PostgreSQL — только с проверенной резервной копией и отдельным разрешением владельца; документ такого разрешения не даёт.
@@ -272,13 +313,13 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 
 | PR | Содержание | Тесты | Критерий приёмки |
 |---|---|---|---|
-| P1 | 121 + 122 + адаптер верификации; backfill `verified_at_ms` | unit: `tests/registration-browser.test.js`; PG: `tests/postgres-contact-verification.integration.js` (создать/подтвердить/просрочить/неверный код ×5/повтор с другого устройства/чужой контакт) | старые сценарии `confirm` не регрессируют; дубли `email_key_ci` обнаружены и отчёт отдельный |
-| P2 | 123 + 124: атомарная регистрация и идемпотентность; `register_participant_v3` | unit DTO: `tests/participant-registration-api.test.js`; PG: `tests/postgres-registration-v3.integration.js` (создание, replay, другое тело, гонка двух браузеров, квоты, чужой invite) | после `start` вход работает сразу; повтор не создаёт второго `participant_id` |
-| P3 | 127 + 125: вход v3, recovery-код, `create_password_reset` только для подтверждённых | PG: `tests/postgres-recovery-code.integration.js`, `tests/postgres-password-reset.integration.js` (негатив: recovery для verified, сброс для unverified, повторное использование кода) | сброс по почте невозможен для неподтверждённого адреса |
-| P4 | claim и уничтожение провизорных данных (123/129) | PG: `tests/postgres-registration-claim.integration.js` (claim с паролем заявителя, отзыв сессий, purge паспорта/согласий, аудит, отсутствие допуска до claim) | захват подтверждённой записи невозможен; провизорная эра не содержит `admissions` |
-| P5 | 128: лимит сессий, «выйти на других устройствах» | PG: `tests/postgres-session-multi-device.integration.js` (6-й вход, отзыв самого старого, отзыв прочих, смена пароля) | второй вход не выкидывает первый |
-| P6 | 126: смена email | PG: `tests/postgres-email-change.integration.js` (только verified, только с паролем, код на новый адрес, занятый адрес, гонка) | старый адрес перестаёт быть логином после подтверждения |
-| P7 | HTTP v3 и переключение UI | `tests/registration-http.test.js` (нейтральные ответы, коды, размеры, `no-store`, CSRF/Origin), browser: `tests/postgres-workspace-browser.integration.js` (регистрация → вход до письма → recovery → письмо → подтверждение → допуск) | все регистрационные ответы неразличимы для внешнего наблюдателя |
+| P1 | 122 + 123 + адаптер верификации; backfill `verified_at_ms` | unit: `tests/registration-browser.test.js`; PG: `tests/postgres-contact-verification.integration.js` (создать/подтвердить/просрочить/неверный код ×5/повтор с другого устройства/чужой контакт) | старые сценарии `confirm` не регрессируют; дубли `email_key_ci` обнаружены и отчёт отдельный |
+| P2 | 124 + 125: атомарная регистрация и идемпотентность; `register_participant_v3` | unit DTO: `tests/participant-registration-api.test.js`; PG: `tests/postgres-registration-v3.integration.js` (создание, replay, другое тело, гонка двух браузеров, квоты, чужой invite) | после `start` вход работает сразу; повтор не создаёт второго `participant_id` |
+| P3 | 128 + 126: вход v3, recovery-код, `create_password_reset` только для подтверждённых | PG: `tests/postgres-recovery-code.integration.js`, `tests/postgres-password-reset.integration.js` (негатив: recovery для verified, сброс для unverified, повторное использование кода) | сброс по почте невозможен для неподтверждённого адреса |
+| P4 | `contested`-контакт и сохранение данных (124/130): подтверждение без сессии отвязывает адрес, не аутентифицирует и не удаляет | PG: `tests/postgres-registration-contested.integration.js` (confirm без пароля → `contested`/`detached`, сессия не выдана, результаты и попытки на месте, владелец адреса регистрирует новую запись, аудит, гонка двух confirm) | захват чужой записи невозможен; научные результаты не переданы и не удалены |
+| P5 | 129: лимит сессий, «выйти на других устройствах» | PG: `tests/postgres-session-multi-device.integration.js` (6-й вход, отзыв самого старого, отзыв прочих, смена пароля) | второй вход не выкидывает первый |
+| P6 | 127: смена email | PG: `tests/postgres-email-change.integration.js` (только verified, только с паролем, код на новый адрес, занятый адрес, гонка) | старый адрес перестаёт быть логином после подтверждения |
+| P7 | HTTP v3 и переключение UI | `tests/registration-http.test.js` (нейтральные ответы, коды, размеры, `no-store`, CSRF/Origin), browser: `tests/postgres-workspace-browser.integration.js` (регистрация → вход до письма → паспорт/согласия → допуск и прохождение → письмо → подтверждение в своей сессии → `contested` в чужой) | все регистрационные ответы неразличимы для внешнего наблюдателя |
 | P8 | зачистка: `verify/request` вместо `resend` в UI, документация, план удаления legacy-маршрутов | регрессия полного набора; `tests/postgres-registration-*.integration.js` | legacy-маршруты не используются UI, но остаются рабочими |
 
 Правила приёмки: изолированная синтетическая PostgreSQL (`pedpsy_ci_*`), отдельные позитивные и негативные кейсы на каждое ограничение, браузерные прогоны без «retry-to-success», обязательный аудит в каждом негативном SQL-кейсе, отсутствие email/кодов в ответах и логах.
@@ -295,15 +336,15 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 
 | ID | Решение | Варианты | Рекомендация |
 |---|---|---|---|
-| Д-1 | Является ли подтверждённый адрес условием допуска к исследованию | Policy-1 (да) / Policy-2 (нет, компенсирующие меры) | Policy-1: сохраняет смысл claim и исключает чужие данные в исследовании |
-| Д-2 | Что можно вводить до подтверждения адреса | только вход и просмотр / паспорт и согласия / всё, кроме результатов | паспорт и согласия разрешить, результаты — нет |
-| Д-3 | Судьба провизорных данных при claim | удалить / сохранить и передать владельцу ящика | удалить с аудитом: данные мог ввести посторонний |
+| Д-1 | Является ли подтверждённый адрес условием допуска к исследованию | Policy-1 (да) / Policy-2 (нет, компенсирующие меры) | **Policy-2 принята владельцем 22.11.2026**: немедленный старт; защита — И-6/И-7, `contested`/`detached`, без передачи и удаления результатов |
+| Д-2 | Что можно вводить до подтверждения адреса | только вход / паспорт и согласия / допуск и прохождение | паспорт, согласия, допуск и прохождение разрешены (Policy-2); смена email и сброс по почте — запрещены |
+| Д-3 | Судьба данных при подтверждении адреса другим лицом | удалить / передать владельцу ящика / сохранить псевдонимно | **сохранить псевдонимно**: запись `detached_unverified`, результаты не передаются и не удаляются; разбор оператором |
 | Д-4 | Полномочия оператора при восстановлении | нет / выдача recovery-кода после внеполосной проверки | да, с обязательным аудитом и запретом входа от имени участника |
 | Д-5 | Лимит одновременных сессий | 1 / 3 / 5 | 5 с отзывом самой старой |
 | Д-6 | Срок сессии | оставить 30 мин + 10 мин простоя / удлинить | оставить: T0/T1/T2 прерываются редко, риск кражи cookie важнее |
 | Д-7 | Дубли `email_key_ci` в рабочей БД | остановить миграцию и разобрать вручную / автоматически слить | остановить и разобрать: слияние участников недопустимо без решения |
 | Д-8 | Служебное письмо «запись уже существует» | отправлять / не отправлять | отправлять не чаще 1/24 ч на (study, адрес) |
-| Д-9 | Срок хранения неподтверждённых записей | бессрочно / 30 / 90 дней | 90 дней, затем удаление провизорной эры с аудитом |
+| Д-9 | Срок хранения неподтверждённых записей | бессрочно / 30 / 90 дней | через 90 дней — отвязка контакта (`contested`) и запрет email-входа; попытки, ответы и результаты **не удаляются**, действует научный срок хранения |
 | Д-10 | Ответ при выключенной почте | `503` с отдельным кодом / тихий отказ | `503 VERIFICATION_DELIVERY_DISABLED`, чтобы UI не врал про отправленное письмо |
 
 Инженерные риски: (1) квота неподтверждённых записей может стать инструментом блокировки регистрации — нужны мониторинг и ручная разблокировка; (2) письма подтверждения конкурируют с напоминаниями за 100/5 мин — нужен приоритет очереди; (3) переключение UI на v3 затрагивает `web/workspace/participant.js` и требует браузерных повторов; (4) удаление legacy-маршрутов — отдельное решение после периода совместимости; (5) миграция нормализации адреса может остановиться на дублях в рабочей БД (Д-7).
@@ -313,28 +354,28 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 - receipt-вызовов на одну регистрацию — 0;
 - писем на одну регистрацию — не более 1 (плюс не более 1 служебного за 24 ч);
 - доля записей, дошедших до `admitted` без ручного вмешательства;
-- число claim-событий и удалённых провизорных записей (индикатор сквоттинга);
+- число `contested`/`detached`-событий и записей (индикатор сквоттинга); результаты по ним не удаляются и не передаются;
 - доля `429` по bucket'ам `start`, `verify`, `login` от общего числа запросов.
 
 ## 12. Требование → проектное решение → миграция/маршрут → тест
 
 | Требование | Проектное решение | Миграция / маршрут | Тест |
 |---|---|---|---|
-| Регистрация без ожидания письма | запись, `participant_id` и пароль создаются в `start` | 123 / `POST …/start` | `postgres-registration-v3.integration.js` |
-| Email как логин | `participant_contacts.email_key_ci` + вход по email | 123, 127 / `POST …/login` | `postgres-login-by-email.integration.js` |
+| Регистрация без ожидания письма | запись, `participant_id` и пароль создаются в `start` | 124 / `POST …/start` | `postgres-registration-v3.integration.js` |
+| Email как логин | `participant_contacts.email_key_ci` + вход по email | 124, 128 / `POST …/login` | `postgres-login-by-email.integration.js` |
 | Собственный пароль | пароль задаётся при регистрации, окно «после кода» больше не нужно | 113 остаётся, UI переключается | `participant-registration-api.test.js` |
-| Немедленный постоянный `participant_id` | создание в `register_participant_v3` | 123 | `postgres-registration-v3.integration.js` |
+| Немедленный постоянный `participant_id` | создание в `register_participant_v3` | 124 | `postgres-registration-v3.integration.js` |
 | Допуск после паспорта/согласий/18+ | `stage_admissions` + 091 без изменений, плюс Д-1 | 030, 091 / `POST …/stages/*/enroll` | `postgres-admission-age.integration.js` |
-| Подтверждение email отдельно и асинхронно | отдельные verification + outbox + воркер | 121, 122 / `POST …/verify/*` | `postgres-contact-verification.integration.js` |
-| Восстановление только через подтверждённый email | `create_password_reset` с `verified_at_ms` | 127 / `…/password/forgot`, `…/password/reset` | `postgres-password-reset.integration.js` |
-| Безопасный путь для неподтверждённых | recovery-код + процедура оператора | 125 / `POST …/recover` | `postgres-recovery-code.integration.js` |
-| Не хранить пароли обратимо | scrypt без изменений, хеш только в `participant_credentials` | 123 (удаление `password_hash` из pending) | `postgres-registration-v3.integration.js` |
+| Подтверждение email отдельно и асинхронно | отдельные verification + outbox + воркер | 122, 123 / `POST …/verify/*` | `postgres-contact-verification.integration.js` |
+| Восстановление только через подтверждённый email | `create_password_reset` с `verified_at_ms` | 128 / `…/password/forgot`, `…/password/reset` | `postgres-password-reset.integration.js` |
+| Безопасный путь для неподтверждённых | recovery-код + процедура оператора | 126 / `POST …/recover` | `postgres-recovery-code.integration.js` |
+| Не хранить пароли обратимо | scrypt без изменений, хеш только в `participant_credentials` | 124 (удаление `password_hash` из pending) | `postgres-registration-v3.integration.js` |
 | Не снижать стойкость scrypt | параметры зафиксированы схемой `scrypt-N131072-r8-p1-dk64` | без изменений | `migrate-grants.test.js`, PG-тесты |
-| Нет восстановления по неподтверждённому адресу | проверка `verified_at_ms` в SQL | 127 | `postgres-password-reset.integration.js` (негатив) |
-| Нет захвата чужой записи | claim только по коду из ящика + purge провизорной эры | 123, 129 | `postgres-registration-claim.integration.js` |
+| Нет восстановления по неподтверждённому адресу | проверка `verified_at_ms` в SQL | 128 | `postgres-password-reset.integration.js` (негатив) |
+| Нет захвата чужой записи | подтверждение без сессии → `contested`/`detached`; данные не передаются и не удаляются | 124, 130 | `postgres-registration-contested.integration.js` |
 | Нет выбора чужого исследования/группы | scope только из invite, `study_id` проверяется | без изменений / `POST …/login` | `postgres-registration-http.integration.js` |
-| Нет неограниченного автосоздания | buckets + квоты + идемпотентность | 124, 130 | `postgres-registration-v3.integration.js` |
+| Нет неограниченного автосоздания | buckets + квоты + идемпотентность | 125, 131 | `postgres-registration-v3.integration.js` |
 | Независимость от receipt 100/5 мин | receipt вне онбординга, лимит не меняется | 024 без изменений / `…/receipt` legacy | `postgres-registration-receipt.integration.js` |
-| RLS, CSRF, аудит, сессии, антиперебор | сохраняются и распространяются на новые таблицы | 121–128 | `registration-http.test.js`, `postgres-login-lock.integration.js` |
+| RLS, CSRF, аудит, сессии, антиперебор | сохраняются и распространяются на новые таблицы | 122–129 | `registration-http.test.js`, `postgres-login-lock.integration.js` |
 | T0/T1/T2 и история | не изменяются | без изменений | `postgres-participant-stages.integration.js`, `postgres-admission-age.integration.js` |
-| Несколько устройств | лимит сессий и явный отзыв | 128 | `postgres-session-multi-device.integration.js` |
+| Несколько устройств | лимит сессий и явный отзыв | 129 | `postgres-session-multi-device.integration.js` |
