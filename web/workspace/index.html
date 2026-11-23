@@ -41,11 +41,20 @@
     <section id="recovery-screen" class="card narrow" hidden><h2>Сохраните резервные коды</h2><p>Каждый код используется один раз вместе с паролем. После закрытия они больше не будут показаны.</p><pre id="recovery-codes"></pre><button id="dismiss-recovery" type="button">Коды сохранены — продолжить</button></section>
 
     <section id="workspace-screen" hidden>
-      <div class="toolbar"><button id="refresh" class="secondary">Обновить</button><button id="reauth" class="secondary">Подтвердить MFA заново</button><button id="logout" class="text">Выйти</button></div>
+      <div class="toolbar home-toolbar"><details class="user-menu"><summary>Меню</summary><button id="reauth" class="secondary" type="button">Подтвердить MFA заново</button><button id="logout" class="text" type="button">Выйти</button></details></div>
+      <button id="refresh" class="secondary" hidden type="button">Обновить</button>
       <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
       <section id="researcher-home" class="card" hidden>
-        <h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div>
-        <details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
+        <h2>Мои исследования</h2>
+        <p id="quota" class="muted" hidden></p>
+        <details class="create-study"><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
+        <nav id="study-filters" class="tabs study-filters" aria-label="Фильтр исследований">
+          <button type="button" data-study-filter="all" class="active">Все</button>
+          <button type="button" data-study-filter="active">Активные</button>
+          <button type="button" data-study-filter="closed">Закрытые</button>
+          <button type="button" data-study-filter="archived">Архивные</button>
+        </nav>
+        <div id="studies"></div>
         <p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку.</p>
       </section>
 
@@ -67,10 +76,10 @@
       </header>
       <nav id="study-tabs" class="tabs study-tabs" aria-label="Разделы исследования">
         <button type="button" id="study-tab-launch" data-study-section-open="launch" hidden>Запуск</button>
-        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden>Ход</button>
-        <button type="button" data-study-section-open="design">Дизайн</button>
+        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden>Обзор</button>
+        <button type="button" data-study-section-open="design">План исследования</button>
         <button type="button" data-study-section-open="participants">Участники</button>
-        <button type="button" data-study-section-open="methods">Методики</button>
+        <button type="button" data-study-section-open="methods">Результаты</button>
       </nav>
 
       <section id="study-hub" class="card study-section" hidden>
@@ -81,7 +90,7 @@
       </section>
 
       <section id="study-design-section" class="card study-section" hidden>
-        <h2>Дизайн исследования</h2>
+        <h2>План исследования</h2>
         <div id="design-matrix" class="matrix"></div>
         <p id="design-lock-note" class="error" hidden>Запись остановлена: состояние исследования изменилось. Вернитесь в «Мои исследования» и откройте его снова.</p>
         <div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
@@ -106,7 +115,7 @@
       </section>
 
       <section id="study-participants-section" class="card study-section" hidden>
-        <h2>Сведения об участниках</h2>
+        <h2>Участники</h2>
         <section id="participant-stats-panel" hidden><h3>Сводная паспортичка</h3><p class="muted">Только завершённые анкеты; ячейки меньше 3 человек скрыты.</p><div id="participant-stats"></div></section>
         <section id="passport-schema-panel">
           <p id="passport-schema-meta" class="muted"></p>
@@ -128,11 +137,11 @@
         </section>
         <section id="stage-access-panel" hidden><h3>Открыть этап для группы</h3><p class="muted">Этапы открываются вручную и независимо для каждой группы.</p><label>Группа<select id="stage-access-group"></select></label><button id="reload-stage-access" class="secondary" type="button">Обновить этапы</button><div id="stage-access-list"></div></section>
         <section id="group-invitations-panel" hidden><h3>Приглашение участников</h3><p class="muted">Одна ссылка для группы. Участники регистрируются индивидуально; группа определяется сервером.</p><label>Группа<select id="invitation-group"></select></label><label>Срок действия, дней<input id="invitation-days" type="number" min="1" max="30" step="1" value="7"></label><div class="toolbar"><button id="create-group-invitation" type="button">Создать групповую ссылку</button><button id="reload-group-invitations" type="button" class="secondary">Обновить приглашения</button></div><div id="group-link-box" class="callout" hidden><label>Ссылка для группы<input id="group-invitation-link" readonly autocomplete="off"></label><button id="copy-group-link" type="button" class="secondary">Скопировать ссылку</button><div id="group-invitation-qr"></div><p id="group-qr-note" class="muted"></p><button id="hide-group-link" type="button" class="text">Скрыть ссылку и QR</button></div><div id="group-invitation-list"></div></section>
-        <section id="research-progress-panel" hidden><h3>Ход исследования</h3><p class="muted">По группам и этапам: зарегистрировались, не начали, проходят, завершили. Почта участников, ответы и индивидуальные баллы здесь недоступны.</p><section id="progress-invite-panel" class="callout" hidden><h4>Ссылка для участников</h4><p id="progress-invite-note" class="muted"></p><label>Ссылка<input id="progress-invite-link" readonly autocomplete="off"></label><button id="copy-progress-invite" type="button" class="secondary">Скопировать ссылку</button></section><div class="toolbar"><label>Группа<select id="progress-group"></select></label><label>Этап<select id="progress-stage"></select></label><button id="reload-progress" class="secondary" type="button">Обновить</button></div><p id="progress-stage-note" class="muted"></p><div id="progress-counts" class="measures"></div><div id="progress-people"></div><button id="preview-reminder" type="button">Напомнить о прохождении</button><section id="reminder-preview" class="callout" hidden><h4>Проверьте напоминание</h4><p id="reminder-count"></p><p id="reminder-text">Пожалуйста, завершите прохождение этапа исследования. Если вы уже завершили его, повторное заполнение не требуется.</p><p class="muted">Учебный режим: запись в локальную очередь, без отправки настоящих писем.</p><button id="confirm-reminder" type="button">Записать учебные напоминания</button><button id="cancel-reminder" class="text" type="button">Отмена</button></section></section>
+        <section id="research-progress-panel" hidden><h3>Обзор</h3><p class="muted">По группам и этапам: зарегистрировались, не начали, проходят, завершили. Почта участников, ответы и индивидуальные баллы здесь недоступны.</p><section id="progress-invite-panel" class="callout" hidden><h4>Ссылка для участников</h4><p id="progress-invite-note" class="muted"></p><label>Ссылка<input id="progress-invite-link" readonly autocomplete="off"></label><button id="copy-progress-invite" type="button" class="secondary">Скопировать ссылку</button></section><div class="toolbar"><label>Группа<select id="progress-group"></select></label><label>Этап<select id="progress-stage"></select></label><button id="reload-progress" class="secondary" type="button">Обновить</button></div><p id="progress-stage-note" class="muted"></p><div id="progress-counts" class="measures"></div><div id="progress-people"></div><button id="preview-reminder" type="button">Напомнить о прохождении</button><section id="reminder-preview" class="callout" hidden><h4>Проверьте напоминание</h4><p id="reminder-count"></p><p id="reminder-text">Пожалуйста, завершите прохождение этапа исследования. Если вы уже завершили его, повторное заполнение не требуется.</p><p class="muted">Учебный режим: запись в локальную очередь, без отправки настоящих писем.</p><button id="confirm-reminder" type="button">Записать учебные напоминания</button><button id="cancel-reminder" class="text" type="button">Отмена</button></section></section>
       </section>
 
       <section id="study-methods-section" class="card study-section" hidden>
-        <h2>Методики</h2>
+        <h2>Результаты</h2>
         <div id="method-progress-panel" hidden>
           <h3>Прохождение методик</h3>
           <div class="toolbar method-analytics-filters">

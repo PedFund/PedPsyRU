@@ -20,7 +20,7 @@ function fixture(){const denied=[],pending="p".repeat(43),staff="s".repeat(43),r
 test("workspace assets are bounded, no-store, CSP protected; preview cannot authenticate",async t=>{
   const app=createWorkspacePreviewApp(assets);t.after(()=>app.close());
   const r=await app.inject({url:"/workspace"});assert.equal(r.statusCode,200);assert.match(r.body,/МетодТест/);assert.doesNotMatch(r.body,/ПедПси|ПЕДПСИ/);assert.equal(r.headers["cache-control"],"no-store");assert.match(r.headers["content-security-policy"],/frame-ancestors 'none'/);assert.match(r.headers["content-security-policy"],/script-src 'self'/);assert.equal(r.headers["referrer-policy"],"no-referrer");
-  const actual=workspaceAssets();assert.match(actual.html,/Дизайн исследования/);assert.match(actual.html,/Сведения об участниках/);assert.doesNotMatch(actual.html+actual.js,/Перечитать дизайн|Что получится после обработки|Можно назначить участникам|href="https?:/);
+  const actual=workspaceAssets();assert.match(actual.html,/План исследования/);assert.match(actual.html,/Результаты/);assert.match(actual.html,/Участники/);assert.match(actual.html,/data-study-filter="all"/);assert.match(actual.html,/data-study-filter="active"/);assert.doesNotMatch(actual.html,/Дизайн исследования|Сведения об участниках/);assert.doesNotMatch(actual.html+actual.js,/Перечитать дизайн|Что получится после обработки|Можно назначить участникам|href="https?:/);
   for(const url of ["/workspace/private","/storage/access.js","/methods/tki/keys"])assert.equal((await app.inject({url})).statusCode,404);
   assert.deepEqual((await app.inject({method:"POST",url:"/api/v2/staff/password",payload:{}})).json(),{error:"DATABASE_NOT_CONFIGURED"});
 });
