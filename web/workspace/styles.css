@@ -94,3 +94,17 @@
 #method-catalog-list details[open]>summary::before{content:"▾"}
 .method-selected-badge{margin-left:auto;flex:none;display:inline-flex;align-items:center;padding:2px 9px;border-radius:999px;background:#e3f1ee;color:#0f5d55;font-size:11px;font-weight:700;letter-spacing:.02em}
 #method-catalog-list details.is-selected{border-color:#167a83;box-shadow:inset 0 0 0 1px #167a83}
+
+/* Home and study navigation, 23.11.2026 */
+.home-toolbar{display:flex;justify-content:flex-end;align-items:center;margin:0 0 8px}
+.user-menu{position:relative;margin-left:auto}
+.user-menu summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid #cfe0e3;border-radius:8px;background:#fff;color:#123f4c;font-size:13px;font-weight:600}
+.user-menu summary::-webkit-details-marker{display:none}
+.user-menu summary::after{content:"▾";font-size:11px;color:#167a83}
+.user-menu[open] summary::after{content:"▴"}
+.user-menu button{display:block;width:100%;margin-top:6px;text-align:left}
+.study-filters{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 8px;padding:0;border:0;background:none}
+.study-filters button{padding:6px 11px;border:1px solid #d5e3e6;border-radius:999px;background:#fff;color:#3c5e66;font-size:12px;font-weight:600;cursor:pointer}
+.study-filters button.active{background:#123f4c;border-color:#123f4c;color:#fff}
+.method-card-meta{margin-left:auto;color:#5e7a81;font-size:12px;font-weight:500;white-space:nowrap;order:2}
+@media (max-width:640px){.home-toolbar{margin-bottom:4px}.study-filters button{font-size:11px;padding:5px 9px}.method-card-meta{display:none}}

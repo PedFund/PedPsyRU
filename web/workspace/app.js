@@ -5,7 +5,9 @@
   if(window.pedpsyParticipantPage)return;
   const $=id=>document.getElementById(id);
   for(const id of ["research-progress-panel","stage-access-panel"])$("study-progress-section").append($(id));
-  $("study-methods-section").append($("group-invitations-panel"));
+  $("study-participants-section").append($("group-invitations-panel"));
+  $("study-design-section").append($("method-search").closest("label"));
+  for(const id of ["method-library-count","method-assignment-toolbar","method-assignment-hint","method-assignment-locked","method-catalog-list"])$("study-design-section").append($(id));
   let realm="",csrf="",pendingCsrf="",session=null,selectedProtocol="",researchers=[],staffStudies=[],design=null,designLocked=false,creationLocked=false;
   const labels={administrator:"Администратор",superadministrator:"Суперадминистратор",researcher:"Исследователь"};
   const studyStates={draft:"Черновик",active:"Активно",closed:"Закрыто"};
@@ -29,6 +31,12 @@
   function row(container,title,subtitle,actions=[],strongTitle=false){const node=document.createElement("div");node.className="row";const info=document.createElement("div");info.textContent=title;if(strongTitle)info.className="row-title";const small=document.createElement("small");small.textContent=subtitle;info.append(small);node.append(info);const tools=document.createElement("div");tools.className="row-actions";
     for(const action of actions){const button=document.createElement("button");button.type="button";button.className="secondary";button.textContent=action.label;if(action.stageOpen)button.dataset.stageOpen="true";button.addEventListener("click",()=>run(action.fn));tools.append(button);}node.append(tools);container.append(node);}
   function studyRows(id,studies){const container=$(id);container.replaceChildren();if(!studies.length)container.textContent="Исследований пока нет.";for(const s of studies){const node=document.createElement("div"),info=document.createElement("div"),link=document.createElement("button"),small=document.createElement("small");node.className="row";link.type="button";link.className="study-link";link.textContent=s.title;link.addEventListener("click",()=>run(()=>openDesign(s.id)));small.textContent=studyStates[s.status]||s.status;info.append(link,small);node.append(info);container.append(node);}}
+  let homeStudies=[],studyFilter="all";
+  function renderHomeStudies(){
+    const list=homeStudies.filter(s=>studyFilter==="all"||(studyFilter==="active"&&(s.status==="draft"||s.status==="active"))||(studyFilter==="closed"&&s.status==="closed")||(studyFilter==="archived"&&s.status==="archived"));
+    studyRows("studies",list);
+    if(!list.length)status(studyFilter==="all"?"Исследований пока нет.":"В этом фильтре исследований нет.");
+  }
   function selectOptions(id,items,label,createLabel){const select=$(id);select.replaceChildren();if(createLabel){const o=document.createElement("option");o.value="";o.textContent=createLabel;select.append(o);}for(const item of items){const o=document.createElement("option");o.value=item.id;o.textContent=label(item);select.append(o);}}
   function renderHubActivation(){
     if(!design||realm!=="researcher"){$("hub-activation").hidden=true;return;}
@@ -65,11 +73,11 @@
     show("back-study-hub",secondary&&realm==="researcher");show("study-crumb-sep",secondary&&realm==="researcher");
     $("back-study-hub").textContent=draft?"К запуску":"К ходу";
     for(const b of document.querySelectorAll("#study-tabs [data-study-section-open]")){const active=b.dataset.studySectionOpen===section;b.classList.toggle("active",active);b.setAttribute("aria-selected",active?"true":"false");}
-    if(section==="design"){const active=!!design&&design.status!=="draft";show("design-compare-panel",active);if(active)populateCompareOptions();}
-    if(section==="methods"){renderMethodCatalog();if(design&&design.status!=="draft"){run(loadMethodProgress);loadGroupInvitations().catch(e=>status(e.message,true));}}
-    if(section==="participants"){show("participant-stats-panel",!!design&&design.status!=="draft");if(design&&design.status!=="draft")loadParticipantStats().catch(e=>status(e.message,true));}
+    if(section==="design"){const active=!!design&&design.status!=="draft";show("design-compare-panel",active);if(active)populateCompareOptions();if(design)renderMethodCatalog();}
+    if(section==="methods"){renderMethodCatalog();if(design&&design.status!=="draft")run(loadMethodProgress);}
+    if(section==="participants"){show("participant-stats-panel",!!design&&design.status!=="draft");if(design&&design.status!=="draft")loadParticipantStats().catch(e=>status(e.message,true));loadGroupInvitations().catch(e=>status(e.message,true));}
     if(section==="launch")renderHubActivation();
-    $("heading").textContent=section==="launch"?"Запуск исследования":({design:"Дизайн исследования",participants:"Сведения об участниках",methods:"Методики",progress:"Ход исследования"}[section]||"Исследование");
+    $("heading").textContent=section==="launch"?"Запуск исследования":({design:"План исследования",participants:"Участники",methods:"Результаты",progress:"Обзор"}[section]||"Исследование");
   }
   function closeStudy(){clearDesign();show("researcher-home",realm==="researcher");$("heading").textContent=realm==="researcher"?"Мои исследования":"Рабочий кабинет";}
   let libraryMethods=[],planningMethods=[];
@@ -85,6 +93,7 @@
       const author=Array.isArray(m.authors)?m.authors.join(", "):m.authors||"Не указан",card=document.createElement("details"),title=document.createElement("summary");title.textContent=m.title;const selectedBadge=document.createElement("span");selectedBadge.className="method-selected-badge";selectedBadge.textContent="Выбрано";selectedBadge.hidden=!methodSelection.has(release.id);card.classList.toggle("is-selected",!selectedBadge.hidden);title.append(selectedBadge);card.append(title);const paragraph=text=>{const p=document.createElement("p");p.textContent=text;card.append(p);};
       paragraph("Автор: "+(author||"не указан"));if(m.adaptation)paragraph("Адаптация: "+m.adaptation);if(m.item_count)paragraph(m.item_unit?"Количество: "+m.item_count+" "+m.item_unit:"Вопросов: "+m.item_count);if(m.summary)paragraph(m.summary);
       const indicators=[...(m.indicators||[]),...(m.subscales||[]).filter(name=>!(m.indicators||[]).includes(name))];if(indicators.length){const h=document.createElement("h4"),ul=document.createElement("ul");h.textContent="Показатели";for(const value of indicators){const li=document.createElement("li");li.textContent=value;ul.append(li);}card.append(h,ul);}
+      const meta=document.createElement("span");meta.className="method-card-meta";const metaParts=[];if(m.item_count)metaParts.push(m.item_count+" "+(m.item_unit||"вопросов"));if(indicators.length)metaParts.push(indicators.length+" "+(indicators.length===1?"показатель":"показателей"));meta.textContent=metaParts.join(" · ");if(metaParts.length)title.insertBefore(meta,selectedBadge);
       const assigned=design.assignments.filter(a=>a.release_id===release.id&&a.status==="active").map(a=>{const g=design.groups.find(x=>x.id===a.group_id),s=design.stages.find(x=>x.id===a.stage_id);return g&&s?g.name+" / "+s.code:null;}).filter(Boolean);if(assigned.length)paragraph("Назначено: "+assigned.join(", "));
       if(design.status==="draft"){const label=document.createElement("label"),box=document.createElement("input");label.className="check-label";box.type="checkbox";box.value=release.id;box.checked=methodSelection.has(release.id);box.onchange=()=>{if(box.checked)methodSelection.add(release.id);else methodSelection.delete(release.id);selectedBadge.hidden=!box.checked;card.classList.toggle("is-selected",box.checked);};label.append(box,document.createTextNode("Выбрать для текущей группы и этапа"));card.append(label);}list.append(card);}
     $("method-library-count").textContent=(draft?"Доступные методики: ":"Назначенные методики: ")+count+".";if(!count)list.textContent=draft?"Методик по этому запросу нет.":"Ни одной методики не назначено.";
@@ -141,7 +150,7 @@
     catch(e){if(["DESIGN_CONFLICT","STORAGE_BUSY","INTERNAL_ERROR"].includes(e.code)||!e.code){designLocked=true;renderDesign();}throw e;}}
   async function refresh(){
     libraryMethods=await request(realm+"/methods");planningMethods=await request(realm+"/method-library/catalogue");
-    if(realm==="researcher"){session=await request("researcher/session");csrf=session.csrf;$("researcher-login-value").textContent=session.home.login_id||"";show("researcher-login-line",!!session.home.login_id);studyRows("studies",session.home.studies);$("quota").textContent="Лимит активных исследований: "+session.home.active_study_quota;creationLocked=false;$("create-study-fields").disabled=false;
+    if(realm==="researcher"){session=await request("researcher/session");csrf=session.csrf;show("researcher-login-line",false);homeStudies=session.home.studies;renderHomeStudies();$("quota").hidden=true;creationLocked=false;$("create-study-fields").disabled=false;
     }else{session=await request("staff/session");csrf=session.csrf;show("researcher-login-line",false);researchers=await request("staff/researchers");const protocols=await request("staff/protocols");$("researchers").replaceChildren();$("protocols").replaceChildren();
       if(!researchers.length)$("researchers").textContent="Пригласите первого исследователя.";
       for(const r of researchers)row($("researchers"),r.login_id,r.status==="active"?"Активен · без ограничения числа исследований":"Приглашён или заблокирован",r.status==="active"?[{label:"Заблокировать",fn:async()=>{if(!(await askConfirm("Заблокировать доступ исследователя? Исследования и ответы сохранятся.")))return;await request("staff/researchers/"+r.id+"/block",{});await refresh();status("Доступ исследователя заблокирован.");}}]:[]);
@@ -165,6 +174,7 @@
   $("dismiss-recovery").onclick=()=>run(async()=>{$("recovery-codes").textContent="";await refresh();});
   $("cancel-mfa").onclick=()=>loginScreen();$("reauth").onclick=()=>{loginScreen();$("realm").value="staff";status("Подтвердите пароль и новый код MFA; повтор уже использованного кода не принимается.");};
   $("refresh").onclick=()=>run(refresh);$("logout").onclick=()=>run(async()=>{await request(realm+"/logout",{});loginScreen();status("Вы вышли из платформы.");});
+  for(const button of document.querySelectorAll("#study-filters [data-study-filter]"))button.onclick=()=>{studyFilter=button.dataset.studyFilter;for(const item of document.querySelectorAll("#study-filters [data-study-filter]")){const active=item===button;item.classList.toggle("active",active);item.setAttribute("aria-selected",active?"true":"false");}renderHomeStudies();};
   $("invite").onclick=()=>run(async()=>{const i=await request("staff/researchers/invite",{});await refresh();lastInviteLink=location.origin+"/workspace#researcher-invite="+i.invite_code;$("invite-details").textContent="Ссылка для входа: "+lastInviteLink+"\nКод доступа: "+i.login_id+"\nПриглашение: "+i.invite_code+"\nДо: "+new Date(i.expires_at).toLocaleString("ru-RU");show("invite-preview");status("Ссылка-приглашение создана. Отправьте её исследователю; email не отправляется.");});
   $("copy-invite-link").onclick=()=>{if(!lastInviteLink)return;if(navigator.clipboard?.writeText)navigator.clipboard.writeText(lastInviteLink).then(()=>status("Ссылка скопирована."),()=>status("Скопируйте ссылку из блока выше.",true));else status("Скопируйте ссылку из блока выше.",true);};
   $("clear-invite").onclick=()=>{lastInviteLink="";$("invite-details").textContent="";show("invite-preview",false);};$("copy-researcher-login").onclick=()=>{const login=$("researcher-login-value").textContent;if(!login)return status("Логин пока недоступен.",true);if(navigator.clipboard?.writeText)navigator.clipboard.writeText(login).then(()=>status("Логин скопирован."),()=>status("Скопируйте логин из строки выше.",true));else status("Скопируйте логин из строки выше.",true);};
