@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>МетодТест — кабинет</title>
-  <link rel="stylesheet" href="/workspace/styles.css?v=20261123-1">
+  <link rel="stylesheet" href="/workspace/styles.css?v=20261123-2">
   <script src="/workspace/qr.js?v=20261106-5" defer></script>
-  <script src="/workspace/participant.js?v=20261123-1" defer></script>
-  <script src="/workspace/app.js?v=20261110-1" defer></script>
+  <script src="/workspace/participant.js?v=20261123-2" defer></script>
+  <script src="/workspace/app.js?v=20261123-2" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -15,7 +15,6 @@
     <a class="brand" href="/workspace">МетодТест<span>Исследовательская платформа</span></a>
     <div class="stage">Кабинет исследователя</div>
     <p>От исследования —<br>к проверенным данным</p>
-    <div class="note">Учебный контур<br>Только синтетические данные</div>
   </aside>
   <main>
     <header><div><span class="eyebrow">ПЛАТФОРМА МЕТОДТЕСТ</span><h1 id="heading">Ваш рабочий кабинет</h1></div><div id="identity" class="badge">Вход в платформу</div></header>
@@ -47,7 +46,7 @@
       <section id="researcher-home" class="card" hidden>
         <h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div>
         <details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
-        <p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку. Пока доступны только учебные данные @example.test, без настоящих писем.</p>
+        <p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку.</p>
       </section>
 
       <div id="staff-home" hidden>
@@ -83,7 +82,6 @@
 
       <section id="study-design-section" class="card study-section" hidden>
         <h2>Дизайн исследования</h2>
-        <p id="design-warning" class="callout">Учебный контур: результаты не публикуются.</p>
         <div id="design-matrix" class="matrix"></div>
         <p id="design-lock-note" class="error" hidden>Запись остановлена: состояние исследования изменилось. Вернитесь в «Мои исследования» и откройте его снова.</p>
         <div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
@@ -157,7 +155,6 @@
       <dialog id="confirm-dialog"><form method="dialog"><h3>Подтвердите действие</h3><p id="confirm-text"></p><div class="toolbar"><button value="ok">Подтвердить</button><button value="cancel" class="secondary">Отмена</button></div></form></dialog>
     </section>
 
-    <footer>Учебная платформа · Данные не размещены в Selectel · Полная методическая и эксплуатационная приёмка впереди</footer>
   </main>
 </div>
 </body>

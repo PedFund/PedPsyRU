@@ -2,6 +2,8 @@
 const {test}=require("node:test");
 const assert=require("node:assert/strict");
 const {createParticipantApp}=require("../dist/src/http/participant-app.js");
+const {scoreNumericPassport}=require("../core/numeric-passport.js");
+const maiaKey=require("../methods/approved/v1/keys/maia_r_32.key.json");
 
 const origin="http://127.0.0.1:4174";
 const headers={host:"127.0.0.1:4174",origin,"content-type":"application/json"};
@@ -73,4 +75,27 @@ test("participant result: methods without a catalog keep the legacy shape",async
   const body=await complete(stored("legacy_method@1.0.0-local",[measure("goals",30)],[level("goals","low")]));
   assert.equal(body.presentation,undefined);
   assert.equal(body.measures[0].value,30);
+});
+
+test("participant result: MAIA-R projects eight approved levels and keeps raw values",async()=>{
+  const codes=Object.keys(maiaKey.scales);
+  const metrics=scoreNumericPassport(maiaKey,Array.from({length:32},()=>1)).metrics;
+  const body=await complete(stored("maia_r_32@1.0.0-staging",
+    codes.map(code=>measure(code,metrics[code])),
+    codes.map(code=>level(code,metrics[code+" – уровень"]))));
+  assert.equal(body.presentation.variant,"level-numeric");
+  assert.equal(body.presentation.subtitle,"Уровни выраженности показателей интероцептивного осознавания");
+  assert.equal(body.presentation.footer_note,"Результаты отражают особенности самооценки и не предназначены для постановки психологического диагноза");
+  assert.equal(body.presentation.groups[0].measures.length,8);
+  assert.deepEqual(body.presentation.groups[0].measures.map(item=>item.label),[
+    "Наблюдение","Не отвлечение внимания от боли","Отсутствие беспокойства","Регуляция внимания",
+    "Осознавание негативного эмоционального состояния","Осознавание позитивного эмоционального состояния",
+    "Саморегуляция на основе активного «слушания» тела","Доверие"
+  ]);
+  assert.deepEqual(body.presentation.groups[0].measures.map(item=>item.level),[
+    "Низкий","Высокий","Выше среднего","Низкий","Низкий","Низкий","Низкий","Низкий"
+  ]);
+  assert.equal(body.presentation.groups[0].measures[2].value,3.33);
+  assert.equal(body.presentation.groups[0].measures[1].value,5);
+  assert.equal(body.presentation.groups[0].measures[0].value,0);
 });
