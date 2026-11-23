@@ -1,0 +1,71 @@
+name: Autonomy PR gate
+
+on:
+  schedule:
+    - cron: '47 */2 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Audit only, or opt-in merge (also requires repository variable)'
+        type: choice
+        required: true
+        default: report
+        options:
+          - report
+          - merge
+
+concurrency:
+  group: autonomy-gate-main
+  cancel-in-progress: false
+
+jobs:
+  audit:
+    name: Autonomous merge eligibility (read-only)
+    if: github.repository == 'PedFund/PedPsyRU'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Audit all candidate PRs without modifying anything
+        run: node scripts/autonomy-gate.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AUTONOMY_MODE: report
+
+  merge:
+    name: Autonomous merge (explicitly enabled only)
+    needs: audit
+    if: >
+      github.repository == 'PedFund/PedPsyRU' &&
+      vars.AUTONOMY_AUTOMERGE_ENABLED == 'true' &&
+      (github.event_name == 'schedule' || inputs.mode == 'merge')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: read
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: '24'
+          package-manager-cache: false
+      - name: Recheck live base, CI, independent review and file paths
+        run: node scripts/autonomy-gate.mjs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          AUTONOMY_MODE: merge
+          AUTONOMY_AUTOMERGE_ENABLED: ${{ vars.AUTONOMY_AUTOMERGE_ENABLED }}
