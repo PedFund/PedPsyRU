@@ -9,10 +9,10 @@ const js=fs.readFileSync(path.join(root,"web/workspace/app.js"),"utf8");
 const css=fs.readFileSync(path.join(root,"web/workspace/styles.css"),"utf8");
 
 test("researcher navigation has one overview tab per lifecycle state, plan and participants",()=>{
-  assert.match(html,/id="study-tab-launch"[^>]*data-study-section-open="launch"[^>]*>Обзор<\/button>/);
-  assert.match(html,/id="study-tab-progress"[^>]*data-study-section-open="progress"[^>]*>Обзор<\/button>/);
-  assert.match(html,/data-study-section-open="design">План исследования<\/button>/);
-  assert.match(html,/data-study-section-open="participants">Участники<\/button>/);
+  assert.match(html,/id="study-tab-launch"[^>]*data-study-section-open="launch"[^>]*>[\s\S]*?<span>Обзор<\/span><\/button>/);
+  assert.match(html,/id="study-tab-progress"[^>]*data-study-section-open="progress"[^>]*>[\s\S]*?<span>Обзор<\/span><\/button>/);
+  assert.match(html,/data-study-section-open="design">[\s\S]*?<span>План исследования<\/span><\/button>/);
+  assert.match(html,/data-study-section-open="participants">[\s\S]*?<span>Участники<\/span><\/button>/);
   assert.match(js,/show\("study-tab-launch",draft\)/);
   assert.match(js,/show\("study-tab-progress",!draft\)/);
   for(const id of ["study-hub","study-progress-section","study-design-section","study-participants-section","study-methods-section","back-study-hub"]){
@@ -46,4 +46,12 @@ test("color hierarchy retains existing teal accents and distinct semantic text r
   assert.match(css,/\.study-status-draft\{color:/);
   assert.match(css,/#study-tabs button\.active\{background:#167a83;color:#fff\}/);
   assert.match(css,/@media\(max-width:640px\)/);
+});
+
+test("vector icons inherit semantic UI text color without external dependencies",()=>{
+  assert.match(html,/<nav id="study-tabs"[\\s\\S]*?<svg viewBox="0 0 24 24"/);
+  assert.match(css,/#study-tabs button svg\{stroke:currentColor\}/);
+  assert.match(css,/#study-tabs button\.active\{background:#167a83;color:#fff/);
+  assert.match(css,/#researcher-home \.study-list-item:has\(\.study-status-active\)/);
+  assert.doesNotMatch(html,/<img[^>]+src="https?:/);
 });
