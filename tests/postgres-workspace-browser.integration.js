@@ -132,7 +132,7 @@ test("PostgreSQL constructor browser: real CRUD/copy, two-tab conflict, quota, s
   await browser.evaluate("document.getElementById('stage-access-group').selectedIndex=0;document.getElementById('stage-access-group').dispatchEvent(new Event('change'))");
   await browser.wait("document.querySelectorAll('#stage-access-list .row').length===3 && "+enabled);
   assert.equal(await browser.evaluate("document.getElementById('stage-access-group').selectedOptions[0].textContent"),"Экспериментальная");
-  await browser.evaluate("document.getElementById('reload-stage-access').click()");await browser.wait("document.querySelectorAll('#stage-access-list .row').length===3 && "+enabled);
+  await browser.wait("document.querySelectorAll('#stage-access-list .row').length===3 && "+enabled);
   assert.deepEqual(await browser.evaluate("Array.from(document.querySelectorAll('#stage-access-list .row')).filter(r=>r.querySelector('small')?.textContent==='Открыт для выбранной группы').map(r=>r.firstChild.firstChild.textContent)"),["T1"]);
   // No active-study limit: the second draft activates while the first study is active.
   await browser.evaluate("document.querySelector('#researcher-home details').open=true;document.getElementById('study-title').value='Второй черновик';document.getElementById('create-study-form').requestSubmit()");await browser.wait(saved(0));
