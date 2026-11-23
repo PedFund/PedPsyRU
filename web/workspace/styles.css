@@ -143,3 +143,6 @@
 .method-result-card>h4{margin:12px 0 6px;font-size:13px}
 .method-result-card>.analytics-scales{padding-bottom:12px}
 @media (max-width:640px){.design-line{grid-template-columns:1fr;gap:4px;padding-left:10px}.method-result-progress{width:64px}.method-result-meta{font-size:11px}}
+
+/* One heading per area: the page header carries the section name. */
+#back-study-hub,#study-crumb-sep{display:none!important}
