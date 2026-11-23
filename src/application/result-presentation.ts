@@ -4,14 +4,17 @@ type LevelTable = Record<string, string>;
 type MeasureMeta = {label?: string; min: number; max: number; colors: number; description?: string | null; level_template?: string; level_code?: string; levels?: LevelTable};
 type GroupMeta = {title: string; description?: string | null; measures: string[]};
 type SummaryMeta = {title: string; measures: string[]; level_code: string; colors: number; level_template?: string; levels?: LevelTable; levels_order?: string[]};
-type MethodView = {title: string; note?: string; item_count?: number; item_unit?: string; palette?: "positive" | "negative"; summary_position?: "top" | "bottom"; level_templates?: Record<string, LevelTable>; measures: Record<string, MeasureMeta>; groups: GroupMeta[]; summary?: SummaryMeta};
+// Only level-numeric is implemented now. The other names are reserved so a method
+// can opt into a future presentation without changing the result pipeline.
+export type PresentationVariant = "profile" | "level-only" | "level-numeric" | "level-graphic" | "extended-text";
+type MethodView = {title: string; heading?: string; subtitle?: string; footer_note?: string; variant?: PresentationVariant; note?: string; item_count?: number; item_unit?: string; palette?: "positive" | "negative"; summary_position?: "top" | "bottom"; level_templates?: Record<string, LevelTable>; measures: Record<string, MeasureMeta>; groups: GroupMeta[]; summary?: SummaryMeta};
 type Catalog = {schema_version: string; note?: string; methods: Record<string, MethodView>};
 type MeasureInput = {code: string; label: string; value: number};
 export type PresentedMeasure = {code: string; label: string; value: number; min: number | null; max: number | null; colors: number; description: string | null; level: string | null; level_index: number; level_text: string | null};
 export type PresentedGroup = {title: string; description: string | null; measures: PresentedMeasure[]};
 export type PresentedLevel = {code: string; value: string; text: string | null; index: number; count: number};
 export type PresentedSummary = {title: string; colors: number; measures: PresentedMeasure[]; level: PresentedLevel | null};
-export type PresentationView = {method_version_id: string; title: string; note: string | null; item_count: number | null; item_unit: string | null; palette: "positive" | "negative"; summary_position: "top" | "bottom"; groups: PresentedGroup[]; summary: PresentedSummary | null};
+export type PresentationView = {method_version_id: string; title: string; heading: string | null; subtitle: string | null; footer_note: string | null; variant: PresentationVariant; note: string | null; item_count: number | null; item_unit: string | null; palette: "positive" | "negative"; summary_position: "top" | "bottom"; groups: PresentedGroup[]; summary: PresentedSummary | null};
 
 const LEVEL_LABELS: Record<string, string> = {
   low: "низкий",
@@ -43,6 +46,37 @@ const catalog: Catalog = {
   "schema_version": "1.0.0",
   "note": "Participant-facing presentation for approved releases. Display data only: it does not change forms, keys, scoring or norms.",
   "methods": {
+    "maia_r_32@1.0.0-staging": {
+      "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
+      "subtitle": "Уровни выраженности показателей интероцептивного осознавания",
+      "footer_note": "Результаты отражают особенности самооценки и не предназначены для постановки психологического диагноза",
+      "variant": "level-numeric",
+      "measures": {
+        "noticing": {"label": "Наблюдение", "min": 0, "max": 5, "colors": 2},
+        "not_distracting": {"label": "Не отвлечение внимания от боли", "min": 0, "max": 5, "colors": 2},
+        "not_worrying": {"label": "Отсутствие беспокойства", "min": 0, "max": 5, "colors": 2},
+        "attention_regulation": {"label": "Регуляция внимания", "min": 0, "max": 5, "colors": 2},
+        "emotional_awareness_negative": {"label": "Осознавание негативного эмоционального состояния", "min": 0, "max": 5, "colors": 2},
+        "emotional_awareness_positive": {"label": "Осознавание позитивного эмоционального состояния", "min": 0, "max": 5, "colors": 2},
+        "body_listening": {"label": "Саморегуляция на основе активного «слушания» тела", "min": 0, "max": 5, "colors": 2},
+        "trusting": {"label": "Доверие", "min": 0, "max": 5, "colors": 2}
+      },
+      "groups": [
+        {
+          "title": "Показатели",
+          "measures": [
+            "noticing",
+            "not_distracting",
+            "not_worrying",
+            "attention_regulation",
+            "emotional_awareness_negative",
+            "emotional_awareness_positive",
+            "body_listening",
+            "trusting"
+          ]
+        }
+      ]
+    },
     "motkov_psychological_culture_18@1.0.0-staging": {
       "title": "Психологическая культура личности",
       "summary_position": "bottom",
@@ -701,7 +735,7 @@ export function buildPresentation(methodVersionId: string, measures: readonly Me
       }
     }
   }
-  return {method_version_id: methodVersionId, title: view.title, note: typeof view.note === "string" && view.note ? view.note : null, item_count: typeof view.item_count === "number" ? view.item_count : null, item_unit: typeof view.item_unit === "string" && view.item_unit ? view.item_unit : null, palette: view.palette === "negative" ? "negative" : "positive", summary_position: view.summary_position === "bottom" ? "bottom" : "top", groups, summary};
+  return {method_version_id: methodVersionId, title: view.title, heading: typeof view.heading === "string" && view.heading ? view.heading : null, subtitle: typeof view.subtitle === "string" && view.subtitle ? view.subtitle : null, footer_note: typeof view.footer_note === "string" && view.footer_note ? view.footer_note : null, variant: view.variant ?? "profile", note: typeof view.note === "string" && view.note ? view.note : null, item_count: typeof view.item_count === "number" ? view.item_count : null, item_unit: typeof view.item_unit === "string" && view.item_unit ? view.item_unit : null, palette: view.palette === "negative" ? "negative" : "positive", summary_position: view.summary_position === "bottom" ? "bottom" : "top", groups, summary};
 }
 export function presentationMeasureBounds(methodVersionId: string, code: string): {min: number; max: number} | null {
   const meta = catalog.methods[methodVersionId]?.measures[code];
