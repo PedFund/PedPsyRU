@@ -109,13 +109,13 @@ END $$;
 -- A display name is presentation metadata: it may be changed after activation
 -- without touching code, ordinal, assignments, attempts, responses or results.
 -- The audit records who changed what; design_version stays unchanged.
-CREATE FUNCTION set_stage_display_name(study uuid,target_stage uuid,display_name text) RETURNS jsonb
+CREATE FUNCTION set_stage_display_name(study uuid,target_stage uuid,new_display_name text) RETURNS jsonb
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 BEGIN
   PERFORM pedpsy.lock_research_workbench(study);
-  IF display_name IS NOT NULL AND (length(display_name)>200 OR display_name ~ '[[:cntrl:]]') THEN RAISE EXCEPTION 'INVALID_STUDY_INPUT' USING ERRCODE='22023';END IF;
+  IF new_display_name IS NOT NULL AND (length(new_display_name)>200 OR new_display_name ~ '[[:cntrl:]]') THEN RAISE EXCEPTION 'INVALID_STUDY_INPUT' USING ERRCODE='22023';END IF;
   IF NOT EXISTS(SELECT 1 FROM pedpsy.research_stages WHERE study_id=study AND id=target_stage) THEN RAISE EXCEPTION 'NOT_AVAILABLE' USING ERRCODE='P0002';END IF;
-  UPDATE pedpsy.research_stages SET display_name=nullif(trim(display_name),''),updated_at=clock_timestamp()
+  UPDATE pedpsy.research_stages SET display_name=nullif(trim(new_display_name),''),updated_at=clock_timestamp()
     WHERE study_id=study AND id=target_stage;
   PERFORM pedpsy.constructor_audit('studies.stage.display_name',study);
   RETURN pedpsy.research_workbench_snapshot(study);
