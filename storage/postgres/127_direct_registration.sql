@@ -43,3 +43,27 @@ BEGIN
   RETURN true;
 END $$;
 REVOKE ALL ON FUNCTION complete_registration_direct(uuid,text,text,text,text) FROM PUBLIC;
+
+-- The original guard only allowed reserved -> pending (then pending -> confirmed).
+-- Direct registration commits a fully materialized reserved row straight to
+-- confirmed; all frozen scope columns stay unchanged and the transition is
+-- accepted only with the complete password material.
+CREATE OR REPLACE FUNCTION guard_registration_pending() RETURNS trigger LANGUAGE plpgsql SET search_path=pg_catalog,pedpsy AS $$
+BEGIN
+  IF TG_OP='DELETE' OR (NEW.id,NEW.study_id,NEW.group_id,NEW.invitation_id,NEW.invitation_revision,NEW.browser_hash,NEW.email_key,NEW.contact_notice_version,NEW.created_at_ms)
+    IS DISTINCT FROM (OLD.id,OLD.study_id,OLD.group_id,OLD.invitation_id,OLD.invitation_revision,OLD.browser_hash,OLD.email_key,OLD.contact_notice_version,OLD.created_at_ms)
+    THEN RAISE EXCEPTION 'registration scope frozen' USING ERRCODE='23514';END IF;
+  IF OLD.status='reserved' AND NEW.status='pending' AND NEW.attempts_remaining=OLD.attempts_remaining THEN RETURN NEW;END IF;
+  IF OLD.status='reserved' AND NEW.status='confirmed' AND NEW.attempts_remaining=OLD.attempts_remaining
+    AND NEW.scheme IS NOT NULL AND NEW.salt IS NOT NULL AND NEW.password_hash IS NOT NULL
+    AND NEW.confirmation_hash IS NOT NULL AND NEW.ready_at_ms IS NOT NULL AND NEW.confirmed_at_ms IS NOT NULL
+    THEN RETURN NEW;END IF;
+  IF (NEW.scheme,NEW.salt,NEW.password_hash,NEW.confirmation_hash,NEW.ready_at_ms,NEW.expires_at_ms)
+    IS NOT DISTINCT FROM (OLD.scheme,OLD.salt,OLD.password_hash,OLD.confirmation_hash,OLD.ready_at_ms,OLD.expires_at_ms) THEN
+    IF OLD.status IN ('reserved','pending') AND NEW.status='cancelled' AND NEW.attempts_remaining=OLD.attempts_remaining THEN RETURN NEW;END IF;
+    IF OLD.status='pending' AND NEW.status='confirmed' AND NEW.attempts_remaining=OLD.attempts_remaining THEN RETURN NEW;END IF;
+    IF OLD.status='pending' AND NEW.status='pending' AND NEW.attempts_remaining=OLD.attempts_remaining-1 THEN RETURN NEW;END IF;
+  END IF;
+  RAISE EXCEPTION 'registration transition frozen' USING ERRCODE='23514';
+END $$;
+
