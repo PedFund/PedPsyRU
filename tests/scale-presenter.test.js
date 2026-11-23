@@ -68,7 +68,7 @@ test("MAIA-R profile uses the reconciled 0..5 answer codes directly", () => {
   assert.equal(presenters.profileFor({id: "unknown_shared", version: "1.0.0"}), null);
 });
 
-test("historical MAIA-R 1..6 form falls back instead of failing the scale", () => {
+test("historical MAIA-R 1..6 form keeps the horizontal 1..6 scale", () => {
   const legacy = {
     id: "maia_r_32_shared",
     version: "1.0.0",
@@ -77,7 +77,13 @@ test("historical MAIA-R 1..6 form falls back instead of failing the scale", () =
       {value: "4", text: "3"}, {value: "5", text: "4"}, {value: "6", text: "Всегда"}
     ]}]
   };
-  assert.equal(presenters.profileFor(legacy), null);
+  const legacyProfile = presenters.profileFor(legacy);
+  assert.ok(legacyProfile);
+  assert.deepEqual(legacyProfile.presenter, {id:"pedpsy/horizontal-scale", version:"1.0.0"});
+  assert.deepEqual(legacyProfile.scale.values, ["1", "2", "3", "4", "5", "6"]);
+  assert.deepEqual(legacyProfile.scale.labels, ["1", "2", "3", "4", "5", "6"]);
+  assert.equal(legacyProfile.scale.minLabel, "Никогда");
+  assert.equal(legacyProfile.scale.maxLabel, "Всегда");
   const current = {
     id: "maia_r_32_shared",
     version: "1.0.0",
@@ -86,7 +92,7 @@ test("historical MAIA-R 1..6 form falls back instead of failing the scale", () =
       {value: "3", text: "3"}, {value: "4", text: "4"}, {value: "5", text: "Всегда"}
     ]}]
   };
-  assert.ok(presenters.profileFor(current));
+  assert.deepEqual(presenters.profileFor(current).scale.values, ["0", "1", "2", "3", "4", "5"]);
 });
 
 test("the component accepts zero as a complete stored answer", () => {
