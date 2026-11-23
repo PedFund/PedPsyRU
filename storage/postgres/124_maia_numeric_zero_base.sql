@@ -1,5 +1,5 @@
 SET LOCAL search_path=pedpsy,pg_catalog;
--- 123: allow a labelled numeric answer scale to start at 0 as well as at 1.
+-- 124: allow a labelled numeric answer scale to start at 0 as well as at 1.
 -- MAIA-R's reconciled passport defines answer codes 0..5. The option array is still
 -- pinned by the release form digest; this only widens the accepted shape.
 CREATE OR REPLACE FUNCTION pinned_numeric_options(options jsonb) RETURNS boolean LANGUAGE sql IMMUTABLE

@@ -1,5 +1,5 @@
 SET LOCAL search_path=pedpsy,pg_catalog;
--- 125: allow stored results for the reconciled MAIA-R 0..5 release.
+-- 126: allow stored results for the reconciled MAIA-R 0..5 release.
 -- Keeps every previously pinned result triple; appends MAIA-R 1.0.1.
 -- every previously accepted identity is kept, the approved ones are appended.
 ALTER TABLE attempt_results DROP CONSTRAINT IF EXISTS result_pinned_payload;
