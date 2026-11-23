@@ -69,3 +69,13 @@
 
 Новый async storage contract—src/ports/participation.ts, identity—src/ports/identity.ts; application service один дляSQLite/PGUnitOfWork. Нельзя смешивать client одной transaction сpool.query, сохранять порты послеcommit, десериализовать actorcontext изbody или менять pinned core. CAS/audit/complete-idempotency/scope/revoke одинаково проверяются общимиtests. Participantv2 HTTP сохраняет immutable original result черезPG; offline snapshot исключаетcredentials/sessions/audit и доказывает точноеdomain/result/digest равенство/restore в новойБД. Ниже прежний пилотный контракт сохраняется для4173. Новый backend не переключает исходнуюSQLite/UI. Приемка/актуальныеcounts—PHASE2_ACCEPTANCE/STATUS, технические reports—ASYNC_STORAGE_VALIDATION/POSTGRES_ADAPTER_VALIDATION/SNAPSHOT_RESTORE_VALIDATION.
 
+
+## Восстановление и неизменяемая история
+
+Различайте offline-перенос доменного snapshot и операционную резервную копию. Доменный snapshot читается из источника без записи; credentials, sessions и аудит не переносятся. Импорт выполняется только в новый пустой target, без overwrite, отключения guards или молчаливого пересчета результатов. Операционный backup/restore проверяется отдельно в изолированной БД.
+
+После `pg_restore --no-privileges` до допуска runtime требуется отозвать PUBLIC/CREATE и восстановить минимальные права через `grantRuntime`. Роль runtime не становится владельцем или BYPASSRLS. Проверяйте состав и значения доменных данных, версии/digest, неизменность результатов, FK, RLS и отрицательные проверки прямого доступа. Проверка backup не разрешает менять рабочую БД.
+
+Проектные требования к будущим заданиям: ограниченный lease, идемпотентность, повтор с сохранением происхождения. `failed`, `paused`, `cancelled` не означают успех. Повторный расчет создает новый `processing_run` с причиной и версиями, не перезаписывает исходный результат. Допустимые необычные значения не удаляются автоматически. Эти требования не утверждают существование готового фонового обработчика.
+
+Будущие сигналы суперадминистратору отправляются после commit через outbox: нейтральное письмо и обычная ссылка на вход. Не включать ФИО, participant IDs, ответы, баллы, паспортные поля или ссылки с сессионным доступом.

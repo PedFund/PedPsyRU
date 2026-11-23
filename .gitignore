@@ -17,3 +17,17 @@ tmp/
 .local/
 *.sqlite
 *.sqlite-*
+
+# Reproducible local reports, caches and database/profile exports.
+/coverage/
+/.cache/
+/.tmp/
+*.dump
+*.sql.gz
+*.sql.gzip
+*.db
+*.db-*
+*.heapsnapshot
+*.cpuprofile
+.DS_Store
+Thumbs.db
