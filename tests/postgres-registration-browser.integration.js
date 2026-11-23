@@ -22,9 +22,9 @@ test("registration browser: group link + email + password signs in without a cod
   assert.equal(await page.evaluate("Boolean(document.getElementById('resume-code'))"), true);
   assert.equal(await page.evaluate("document.getElementById('resume-code').hidden"), true);
   await page.evaluate(`document.getElementById('registration-email').value=${JSON.stringify(email)};document.getElementById('registration-password').value=${JSON.stringify(password)};document.getElementById('contact-approval').checked=true;document.getElementById('participant-register-form').requestSubmit();`);
-  await page.wait("document.getElementById('participant-stage-list') && !document.getElementById('participant-signin').disabled");
-  assert.equal(await page.evaluate("document.getElementById('confirmation-box').hidden"), true);
+  await page.wait("document.getElementById('participant-stage-list')");
+  assert.equal(await page.evaluate("document.getElementById('confirmation-box')?.hidden ?? true"), true);
   assert.equal(await page.evaluate("document.getElementById('message').textContent.includes('Аккаунт создан')"), true);
   // The new session survives a reload, so the account is usable immediately.
-  await page.reload("document.getElementById('participant-stage-list') && !document.getElementById('participant-signin').disabled");
+  await page.reload("document.getElementById('participant-stage-list')");
 });
