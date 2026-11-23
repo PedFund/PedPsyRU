@@ -227,3 +227,11 @@ test("single-choice 0..10 renders one horizontal numeric row",()=>{
   assert.equal(options.children[0].children[1].textContent,"0");
   assert.equal(options.children[10].children[1].textContent,"10");
 });
+
+test("ECV-15 uses the horizontal 0..10 profile without changing stored values",()=>{
+  const form={id:"ecv_15_shared",version:"1.0.0",items:[{options:Array.from({length:11},(_,i)=>({value:String(i+1),text:String(i)}))}]};
+  const profile=presenters.profileFor(form);
+  assert.equal(profile.presenter.id,"pedpsy/horizontal-scale");
+  assert.deepEqual(profile.scale.values,Array.from({length:11},(_,i)=>String(i+1)));
+  assert.deepEqual(profile.scale.labels,Array.from({length:11},(_,i)=>String(i)));
+});
