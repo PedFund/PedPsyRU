@@ -27,7 +27,22 @@
       })
     })]
   ]);
-  function profileFor(form){if(!form||typeof form.id!=="string")return null;return methodProfiles.get(form.id+"@"+(form.version||""))||null;}
+  function profileFor(form){
+    if(!form||typeof form.id!=="string")return null;
+    const profile=methodProfiles.get(form.id+"@"+(form.version||""))||null;
+    if(!profile)return null;
+    // The same pinned form identity is shared by MAIA-R 1.0.0 (stored 1..6)
+    // and 1.0.1 (stored 0..5). Apply the display profile only when the pinned
+    // options actually match it; otherwise fall back to the plain single-choice
+    // renderer so the historical release stays usable instead of throwing.
+    const first=Array.isArray(form.items)?form.items[0]:null;
+    const wanted=profile.scale&&Array.isArray(profile.scale.values)?profile.scale.values:null;
+    if(first&&Array.isArray(first.options)&&wanted){
+      const stored=first.options.map(option=>String(option.value));
+      if(stored.length!==wanted.length||stored.some((value,index)=>value!==wanted[index]))return null;
+    }
+    return profile;
+  }
   const bipolarLabels=new Map([
     ["-3","-3 — абсолютно согласен с первым утверждением"],
     ["-2","-2 — согласен с первым утверждением"],

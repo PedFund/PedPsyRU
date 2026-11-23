@@ -68,6 +68,27 @@ test("MAIA-R profile uses the reconciled 0..5 answer codes directly", () => {
   assert.equal(presenters.profileFor({id: "unknown_shared", version: "1.0.0"}), null);
 });
 
+test("historical MAIA-R 1..6 form falls back instead of failing the scale", () => {
+  const legacy = {
+    id: "maia_r_32_shared",
+    version: "1.0.0",
+    items: [{id: "q01", options: [
+      {value: "1", text: "Никогда"}, {value: "2", text: "1"}, {value: "3", text: "2"},
+      {value: "4", text: "3"}, {value: "5", text: "4"}, {value: "6", text: "Всегда"}
+    ]}]
+  };
+  assert.equal(presenters.profileFor(legacy), null);
+  const current = {
+    id: "maia_r_32_shared",
+    version: "1.0.0",
+    items: [{id: "q01", options: [
+      {value: "0", text: "Никогда"}, {value: "1", text: "1"}, {value: "2", text: "2"},
+      {value: "3", text: "3"}, {value: "4", text: "4"}, {value: "5", text: "Всегда"}
+    ]}]
+  };
+  assert.ok(presenters.profileFor(current));
+});
+
 test("the component accepts zero as a complete stored answer", () => {
   const item = {options: Array.from({length: 6}, (_, index) => ({value: String(index), text: String(index)}))};
   const model = scale.resolveScale(item, {
