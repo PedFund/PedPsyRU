@@ -23,7 +23,7 @@ export function evaluateAutonomy({pr, files, mainSha, protectedMain, ciPassed, i
       }
       if (f.status !== 'modified' && f.status !== 'added') reasons.push('blocked file operation: ' + f.filename);
       if (f.changes > 150 || f.patch == null) reasons.push('too large or missing patch: ' + f.filename);
-      if (f.filename.endsWith('.css') && /^\+[^+].*(?:@import\b|url\s*\(|expression\s*\(|behavior\s*:|-moz-binding\s*:)/im.test(f.patch || '')) {
+      if (f.filename.endsWith('.css') && /^\+(?!\+).*(?:@import\b|url\s*\(|expression\s*\(|behavior\s*:|-moz-binding\s*:)/im.test(f.patch || '')) {
         reasons.push('unsafe CSS added in: ' + f.filename);
       }
     }
