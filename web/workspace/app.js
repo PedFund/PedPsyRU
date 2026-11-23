@@ -7,7 +7,7 @@
   for(const id of ["research-progress-panel","stage-access-panel"])$("study-progress-section").append($(id));
   $("study-participants-section").append($("group-invitations-panel"));
   $("study-design-section").append($("method-search").closest("label"));
-  for(const id of ["method-library-count","method-assignment-toolbar","method-assignment-hint","method-assignment-locked","method-catalog-list"])$("study-design-section").append($(id));
+  for(const id of ["method-library-count","method-assignment-toolbar","method-assignment-hint","method-assignment-locked","method-selected-panel","method-catalog-list"])$("study-design-section").append($(id));
   let realm="",csrf="",pendingCsrf="",session=null,selectedProtocol="",researchers=[],staffStudies=[],design=null,designLocked=false,creationLocked=false;
   const labels={administrator:"Администратор",superadministrator:"Суперадминистратор",researcher:"Исследователь"};
   const studyStates={draft:"Черновик",active:"Активно",closed:"Закрыто"};
@@ -103,16 +103,45 @@
     }
     return [...best.values()].map(item=>item.release);
   }
-  function renderMethodCatalog(){const list=$("method-catalog-list");const draft=design.status==="draft";show("method-assignment-toolbar",draft);show("method-assignment-hint",draft);show("method-assignment-locked",!draft);list.replaceChildren();const query=$("method-search").value.trim().toLocaleLowerCase("ru-RU");let count=0;
-    for(const release of availableCatalog()){const isAssigned=design.assignments.some(a=>a.release_id===release.id&&a.status==="active");if(!draft&&!isAssigned)continue;const m=methodView(release);if(!window.PedPsyMethodSearch.matches(m,query))continue;count++;
-      const author=Array.isArray(m.authors)?m.authors.join(", "):m.authors||"Не указан",card=document.createElement("details"),title=document.createElement("summary");title.textContent=m.title;const selectedBadge=document.createElement("span");selectedBadge.className="method-selected-badge";selectedBadge.textContent="Выбрано";selectedBadge.hidden=!methodSelection.has(release.id);card.classList.toggle("is-selected",!selectedBadge.hidden);title.append(selectedBadge);card.append(title);const paragraph=text=>{const p=document.createElement("p");p.textContent=text;card.append(p);};
-      paragraph("Автор: "+(author||"не указан"));if(m.adaptation)paragraph("Адаптация: "+m.adaptation);if(m.item_count)paragraph(m.item_unit?"Количество: "+m.item_count+" "+m.item_unit:"Вопросов: "+m.item_count);if(m.summary)paragraph(m.summary);
-      const indicators=[...(m.indicators||[]),...(m.subscales||[]).filter(name=>!(m.indicators||[]).includes(name))];if(indicators.length){const h=document.createElement("h4"),ul=document.createElement("ul");h.textContent="Показатели";for(const value of indicators){const li=document.createElement("li");li.textContent=value;ul.append(li);}card.append(h,ul);}
-      const meta=document.createElement("span");meta.className="method-card-meta";const metaParts=[];if(m.item_count)metaParts.push(m.item_count+" "+(m.item_unit||"вопросов"));if(indicators.length)metaParts.push(indicators.length+" "+(indicators.length===1?"показатель":"показателей"));meta.textContent=metaParts.join(" · ");if(metaParts.length)title.insertBefore(meta,selectedBadge);
-      const assigned=design.assignments.filter(a=>a.release_id===release.id&&a.status==="active").map(a=>{const g=design.groups.find(x=>x.id===a.group_id),s=design.stages.find(x=>x.id===a.stage_id);return g&&s?g.name+" / "+s.code:null;}).filter(Boolean);if(assigned.length)paragraph("Назначено: "+assigned.join(", "));
-      if(design.status==="draft"){const label=document.createElement("label"),box=document.createElement("input");label.className="check-label";box.type="checkbox";box.value=release.id;box.checked=methodSelection.has(release.id);box.onchange=()=>{if(box.checked)methodSelection.add(release.id);else methodSelection.delete(release.id);selectedBadge.hidden=!box.checked;card.classList.toggle("is-selected",box.checked);};label.append(box,document.createTextNode("Выбрать для текущей группы и этапа"));card.append(label);}list.append(card);}
-    $("method-library-count").textContent=(draft?"Доступные методики: ":"Назначенные методики: ")+count+".";if(!count)list.textContent=draft?"Методик по этому запросу нет.":"Ни одной методики не назначено.";
+  function renderMethodCatalog(){
+  const list=$("method-catalog-list"),draft=design.status==="draft";
+  show("method-assignment-toolbar",draft);show("method-assignment-hint",draft);show("method-assignment-locked",!draft);
+  const methodIcon=name=>{const ns="http://www.w3.org/2000/svg",svg=document.createElementNS(ns,"svg"),path=document.createElementNS(ns,"path");svg.setAttribute("class","method-icon");svg.setAttribute("viewBox","0 0 24 24");svg.setAttribute("aria-hidden","true");path.setAttribute("fill","none");path.setAttribute("stroke","currentColor");path.setAttribute("stroke-width","1.8");path.setAttribute("stroke-linecap","round");path.setAttribute("d",name==="author"?"M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8Zm-7 8a7 7 0 0 1 14 0":name==="scales"?"M5 19V9m7 10V5m7 14v-7":"M5 6h14M5 12h14M5 18h9");svg.append(path);return svg;};
+  const selectedPanel=$("method-selected-panel"),selectedList=$("method-selected-list");
+  const renderSelected=()=>{
+    const ids=[...methodSelection].filter(id=>(design.catalog||[]).some(release=>release.id===id));
+    selectedPanel.hidden=!draft||!ids.length;
+    $("method-selected-count").textContent=ids.length?"("+ids.length+")":"";
+    selectedList.replaceChildren();
+    for(const id of ids){const release=design.catalog.find(item=>item.id===id),view=methodView(release),item=document.createElement("li"),title=document.createElement("span"),remove=document.createElement("button");title.textContent=view.title;remove.type="button";remove.className="text";remove.textContent="Убрать";remove.setAttribute("aria-label","Убрать методику "+view.title);remove.onclick=()=>{methodSelection.delete(id);renderMethodCatalog();};item.append(title,remove);selectedList.append(item);}
+  };
+  renderSelected();
+  list.replaceChildren();
+  const query=$("method-search").value.trim().toLocaleLowerCase("ru-RU");let count=0;
+  for(const release of availableCatalog()){
+    const isAssigned=design.assignments.some(a=>a.release_id===release.id&&a.status==="active");
+    if(!draft&&!isAssigned)continue;
+    const m=methodView(release);
+    if(!window.PedPsyMethodSearch.matches(m,query))continue;
+    count++;
+    const indicators=[...new Set([...(m.indicators||[]),...(m.subscales||[])])];
+    const authors=Array.isArray(m.authors)?m.authors.filter(Boolean).join(", "):String(m.authors||"").trim();
+    const card=document.createElement("article"),head=document.createElement("div"),main=document.createElement("div"),title=document.createElement("h3"),selectedBadge=document.createElement("span"),authorsLine=document.createElement("p"),meta=document.createElement("p"),actions=document.createElement("div"),selectLabel=document.createElement("label"),checkbox=document.createElement("input"),selectText=document.createElement("span"),toggle=document.createElement("button"),details=document.createElement("div");
+    card.className="method-card";head.className="method-card-head";main.className="method-card-main";title.className="method-card-title";title.textContent=m.title;selectedBadge.className="method-selected-badge";selectedBadge.textContent="Выбрано";selectedBadge.hidden=!methodSelection.has(release.id);card.classList.toggle("is-selected",!selectedBadge.hidden);title.append(selectedBadge);main.append(title);
+    authorsLine.className="method-authors"+(authors?"":" is-missing");authorsLine.append(methodIcon("author"),document.createTextNode(authors?"Авторы: "+authors:"Автор не указан"));main.append(authorsLine);
+    meta.className="method-meta";const questionText=m.item_count?m.item_count+" "+(m.item_unit||"вопросов"):"Вопросы не указаны",indicatorText=indicators.length?indicators.length+" "+(indicators.length===1?"показатель":"показателей"):"Показатели не указаны";const qspan=document.createElement("span"),ispan=document.createElement("span");qspan.className="method-meta-item";qspan.append(methodIcon("questions"),document.createTextNode(questionText));ispan.className="method-meta-item";ispan.append(methodIcon("scales"),document.createTextNode(indicatorText));meta.append(qspan,ispan);main.append(meta);
+    actions.className="method-card-actions";selectLabel.className="method-select-label";checkbox.type="checkbox";checkbox.value=release.id;checkbox.checked=methodSelection.has(release.id);checkbox.disabled=!draft;selectText.textContent=checkbox.checked?"Выбрано":"Выбрать";checkbox.onchange=()=>{if(checkbox.checked)methodSelection.add(release.id);else methodSelection.delete(release.id);renderMethodCatalog();};selectLabel.append(checkbox,selectText);toggle.type="button";toggle.className="secondary method-details-toggle";toggle.textContent="Подробнее";toggle.setAttribute("aria-expanded","false");toggle.onclick=()=>{details.hidden=!details.hidden;toggle.textContent=details.hidden?"Подробнее":"Свернуть";toggle.setAttribute("aria-expanded",String(!details.hidden));};if(draft)actions.append(selectLabel);actions.append(toggle);head.append(main,actions);card.append(head);
+    details.className="method-details";details.hidden=true;
+    if(m.summary){const p=document.createElement("p");p.className="method-description";p.textContent=m.summary;details.append(p);}
+    if(m.adaptation){const p=document.createElement("p");p.className="method-adaptation";p.textContent="Адаптация: "+m.adaptation;details.append(p);}
+    if(indicators.length){const heading=document.createElement("h4"),ol=document.createElement("ol");heading.textContent="Показатели:";for(const value of indicators){const li=document.createElement("li");li.textContent=value;ol.append(li);}details.append(heading,ol);}else{const p=document.createElement("p");p.className="muted";p.textContent="Показатели в паспорте не указаны.";details.append(p);}
+    const assigned=design.assignments.filter(a=>a.release_id===release.id&&a.status==="active").map(a=>{const group=design.groups.find(x=>x.id===a.group_id),stage=design.stages.find(x=>x.id===a.stage_id);return group&&stage?group.name+" / "+(stage.display_name||stage.code):null;}).filter(Boolean);
+    if(assigned.length){const p=document.createElement("p");p.className="method-assigned";p.textContent="Назначено: "+assigned.join("; ");details.append(p);}
+    card.append(details);list.append(card);
   }
+  $("method-library-count").textContent=(draft?"Найдено методик: ":"Назначенные методики: ")+count+".";
+  if(!count)list.textContent=query?"По запросу «"+$("method-search").value.trim()+"» методик не найдено.":(draft?"Доступных методик нет.":"Ни одной методики не назначено.");
+}
   async function saveMethodSelection(){if(!design||design.status!=="draft")throw Error("Дизайн закреплён после активации: состав методик изменить нельзя.");const group=$("method-target-group").value,stage=$("method-target-stage").value;if(!group||!stage)throw Error("Выберите группу и этап.");await workbenchWrite("assign",{all:false,group_id:group,stage_id:stage,release_ids:Array.from(methodSelection)});status("Набор методик сохранён для выбранной группы и этапа.");}
   function editGroup(id=""){const g=design?.groups.find(x=>x.id===id);$("group-edit").value=g?.id||"";$("group-name").value=g?.name||"";$("group-kind").value=g?.kind||"experimental";$("group-note").value=g?design.group_notes?.[g.id]||"":"";show("group-form");}
   function renderStagePreview(){const code=$("stage-code").value||"T0",name=$("stage-display-name").value.trim()||code;$("stage-preview-name").textContent=name;$("stage-preview-code").textContent=code;$("stage-preview-code").hidden=name===code;}
