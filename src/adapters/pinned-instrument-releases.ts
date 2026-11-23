@@ -35,7 +35,16 @@ const displayTitles: Record<string,string> = {
   "ecv_15@1.0.0-staging": "Эмоциональный контроль",
   "genchi_breath_hold@1.0.0": "Проба Генчи"
 };
-const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{const title=displayTitles[methodVersionId];return title?{...form,title:title as string}:form;};
+// Explicit display-only wording approved for the current MAIA-R form. This is
+// not part of the pinned snapshot: it never changes historical releases, options,
+// the scoring key, or the canonical digest verified against PostgreSQL.
+const displayInstructions: Record<string,string> = {
+  "maia_r_32@1.0.1-staging": "В приведенном ниже списке утверждений укажите, насколько часто каждое из них соответствует вашему состоянию. Для ответа используйте шкалу от 0 до 5, где 0 – «Никогда», 5 – «Всегда», а значения 1, 2, 3 и 4 отражают промежуточную частоту."
+};
+const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{
+  const title=displayTitles[methodVersionId],instruction=displayInstructions[methodVersionId];
+  return title||instruction?{...form,...(title?{title}:{}),...(instruction?{instruction}:{})}:form;
+};
 // Pinned release metadata is immutable for the process lifetime; avoid rebuilding it on every save.
 let installedCache:ChoiceRelease[]|undefined;
 function installed():ChoiceRelease[]{
