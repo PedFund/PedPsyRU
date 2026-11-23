@@ -4,7 +4,7 @@
 
 ## 1. Обязательные источники
 
-1. `RESEARCHER_WORKBENCH.md` — согласованные изменения кабинета исследователя.
+1. `docs/product/RESEARCHER_WORKBENCH.md` — согласованные изменения кабинета исследователя.
 2. `docs/APPROVED_EIGHT_METHODS_SPEC_2026-11-23.md` — утверждённые названия и правила отображения.
 3. `agent-instructions/METHODS.md` — что именно нельзя менять в текстах и названиях.
 4. `CURRENT_STATE.md`, `docs/LAUNCH_READINESS.md`, `docs/security/README.md`.

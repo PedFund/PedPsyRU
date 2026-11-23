@@ -12,7 +12,7 @@ npm run build
 npm run start:platform:ui
 ```
 
-Интерфейс откроется на `http://127.0.0.1:4175/workspace`. Это просмотр без БД: операции хранения возвращают 503. Для отдельной синтетической PostgreSQL используйте [LOCAL_DEMO.md](LOCAL_DEMO.md) и `npm run start:platform:demo` (порт 4174). `npm start` запускает прежний учебный пилот на порту 4173.
+Интерфейс откроется на `http://127.0.0.1:4175/workspace`. Это просмотр без БД: операции хранения возвращают 503. Для отдельной синтетической PostgreSQL используйте [LOCAL_DEMO.md](docs/development/LOCAL_DEMO.md) и `npm run start:platform:demo` (порт 4174). `npm start` запускает прежний учебный пилот на порту 4173.
 
 ```sh
 npm run typecheck
@@ -50,14 +50,16 @@ Merge и производственный деплой требуют отдел
 ## Документы
 
 - [CURRENT_STATE.md](CURRENT_STATE.md) – контрольная точка и открытые вопросы; фактические Git/CI проверяются отдельно.
-- [AGENTS.md](AGENTS.md), [agent-instructions/](agent-instructions/) – действующие инструкции агентам.
-- [ARCHITECTURE.md](ARCHITECTURE.md), [DATA_MODEL.md](DATA_MODEL.md), [STORAGE_CONTRACT.md](STORAGE_CONTRACT.md), [ACCESS_POLICY.md](ACCESS_POLICY.md) – устройство, хранение и доступ.
+- [AGENTS.md](AGENTS.md), [agent-instructions/](agent-instructions) – действующие инструкции агентам.
+- [ARCHITECTURE.md](docs/architecture/ARCHITECTURE.md), [модель данных](docs/architecture/ARCHITECTURE.md#данные-и-воспроизводимость), [STORAGE_CONTRACT.md](docs/architecture/STORAGE_CONTRACT.md), [ACCESS_POLICY.md](docs/architecture/ACCESS_POLICY.md) – устройство, хранение и доступ.
 - [methods/README.md](methods/README.md) – библиотека, источники, версии и подключение методик.
 - [Утвержденная спецификация восьми методик](docs/APPROVED_EIGHT_METHODS_SPEC_2026-11-23.md) – каноническое содержательное решение владельца.
-- [METHOD_EXTENSION_CONTRACT.md](METHOD_EXTENSION_CONTRACT.md) – расширение обычными и нестандартными методиками через проверенный код.
+- [METHOD_EXTENSION_CONTRACT.md](docs/methods/METHOD_EXTENSION_CONTRACT.md) – расширение обычными и нестандартными методиками через проверенный код.
 - [docs/security/README.md](docs/security/README.md) – безопасность и зафиксированные пробелы.
-- [ROADMAP.md](ROADMAP.md) – продуктовые цели; актуальные задачи и обсуждения ведутся в GitHub Issues/PR.
+- [ROADMAP.md](docs/product/ROADMAP.md) – продуктовые цели; актуальные задачи и обсуждения ведутся в GitHub Issues/PR.
 
 История разработки доступна в Git и PR. Промежуточные отчеты не нужно возвращать в рабочее дерево. Происхождение текста, ключей и нормативов сохраняется в закрепленных пакетах методик.
 
 Закрепленные формы, ключи, нормы, обработчики, манифесты, миграции и исторические результаты неизменяемы. Исправление выпуска оформляется новой версией. Наличие архивных материалов не разрешает их исполнение или публикацию.
+
+В корне остаются README, AGENTS, CURRENT_STATE и обязательные THIRD_PARTY_NOTICES, а также используемые кодом файлы и конфигурация. Профильные материалы находятся в `docs/architecture`, `docs/methods`, `docs/product`, `docs/development`, `docs/security` и `docs/performance`. Исторические отчеты доступны в Git; их не нужно возвращать в корень.

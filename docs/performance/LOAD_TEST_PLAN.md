@@ -2,7 +2,7 @@
 
 | Параметр | Значение |
 |---|---|
-| Документ | `LOAD_TEST_PLAN.md`, версия 1.0 |
+| Документ | `docs/performance/LOAD_TEST_PLAN.md`, версия 1.0 |
 | Дата | 2026-11-22 |
 | Репозиторий / коммит | `PedPsyRU`, ветка `main`, `863671d` |
 | Набор сценариев | `loadtest/k6/` (k6) |
@@ -139,7 +139,7 @@ Env: `BASE_URL`, `INVITE_TOKEN`, `VUS`, `RUN_ID`, `CONTACT_NOTICE` (`contact-not
 Env: `BASE_URL`, `VUS` (200), `OFFSET`, `MAX_DURATION`. Счётчики `login_throttled`, `login_failed`.
 Команда: `k6 run -e BASE_URL=... -e VUS=200 -e OFFSET=0 login.js`.
 Пороги: `checks>0.95`, `Login p95<30000`, `http_req_failed<0.02`.
-Критерии: база 140/200 и 60 × 429. Режим на момент базовых измерений зафиксирован по окружению процесса: `PEDPSY_PILOT_LOGIN=1`, `PEDPSY_PILOT_LOGIN_LIMIT=900`, `PEDPSY_PILOT_LOGIN_CONCURRENCY=2`, очередь 512, таймаут 30 с (см. `PERFORMANCE_AUDIT.md`, 2.4). Отказ 60/200 — это таймаут очереди scrypt, а не глобальный лимит 900/5 мин; при повторе разложить отказы по `access_audit_events` (7.4) и записать значения этих переменных. Логинов больше 236 за прогон быть не может без повторов аккаунтов (лимит 5/15 мин на аккаунт).
+Критерии: база 140/200 и 60 × 429. Режим на момент базовых измерений зафиксирован по окружению процесса: `PEDPSY_PILOT_LOGIN=1`, `PEDPSY_PILOT_LOGIN_LIMIT=900`, `PEDPSY_PILOT_LOGIN_CONCURRENCY=2`, очередь 512, таймаут 30 с (см. [исходный аудит, раздел 2.4](https://github.com/PedFund/PedPsyRU/blob/fc4b2c25abfe37dc4dcaec6690a87c4d398bbcbf/PERFORMANCE_AUDIT.md#24-ограничения-и-очереди)). Отказ 60/200 — это таймаут очереди scrypt, а не глобальный лимит 900/5 мин; при повторе разложить отказы по `access_audit_events` (7.4) и записать значения этих переменных. Логинов больше 236 за прогон быть не может без повторов аккаунтов (лимит 5/15 мин на аккаунт).
 
 **4.3 Сценарий C — прохождение методики 100/200/300.**
 Исполнение: `exam.js` → `createExam(THINK_MIN, THINK_MAX, OFFSET)`, `ramping-vus`: 5 мин до `VUS`, `HOLD` 15 мин, 1 мин до 0, `gracefulRampDown` 30 с.

@@ -37,7 +37,7 @@
 |---|---|
 | Доступ | RLS на 39 таблицах; SECURITY DEFINER с фиксированным `search_path`; гранты по списку и предпроверка владельцев (PR #145); тесты «чужой участник/чужое исследование» |
 | События | `access_audit_events`, `constructor_audit`, immutable-строки, аудит без ПДн; тест «в progress нет `@`» |
-| Уязвимости | `npm audit` как гейт CI; исправления GHSA в `SECURITY_AND_DEPENDENCIES.md`; `dependency-policy.json` |
+| Уязвимости | `npm audit` как гейт CI; исправления GHSA в `docs/security/SECURITY_AND_DEPENDENCIES.md`; `dependency-policy.json` |
 | Обновления | lockfile, `npm ci --ignore-scripts`, фиксация версий, ручной цикл обновления |
 | SSDLC | ветка→PR→CI→merge только с разрешения; 6 обязательных проверок; append-only миграции; secret scan |
 | Веб/API/почта | TLS, CSP, `__Host-` cookie, rate limits, CSRF/Origin/Host, TTL 24 ч, outbox |

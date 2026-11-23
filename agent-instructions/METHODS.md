@@ -6,7 +6,7 @@
 
 1. `docs/APPROVED_EIGHT_METHODS_SPEC_2026-11-23.md` — каноническая утверждённая спецификация восьми методик; при расхождении имеет приоритет.
 2. `methods/README.md`, `methods/skills/method-intake-SKILL.md`, `docs/APPROVED_METHOD_RUNBOOK.md`.
-3. `METHOD_EXTENSION_CONTRACT.md` — контракт версионированного runtime.
+3. `docs/methods/METHOD_EXTENSION_CONTRACT.md` — контракт версионированного runtime.
 4. `CURRENT_STATE.md`, действующие манифесты и паспорта методик.
 5. `docs/EIGHT_METHODS_TRACKER.md` — состояние внедрения, не источник научного содержания.
 
