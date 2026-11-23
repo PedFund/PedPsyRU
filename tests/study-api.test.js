@@ -24,6 +24,10 @@ test("stage input is strict and accepts custom names without an implicit parent"
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({stage:async(...x)=>calls.push(x)},{assert:()=>{}}),good={code:"T0",ordinal:0,expected_version:0};
   for(const bad of [{...good,based_on_stage_id:id},{...good,ordinal:-1},{...good,ordinal:10000},{...good,ordinal:"0"},{...good,code:"x".repeat(41)}])assert.throws(()=>api.stage("token",id,undefined,bad,"csrf"),e=>e.status===400);
   await api.stage("token",id,undefined,good,"csrf");assert.deepEqual(calls[0],["token",id,undefined,good]);
+  const named={...good,display_name:"  Первичная диагностика  "};
+  for(const bad of [{...named,display_name:"x".repeat(201)},{...named,display_name:"x\n"}])assert.throws(()=>api.stage("token",id,undefined,bad,"csrf"),e=>e.status===400);
+  await api.stage("token",id,undefined,named,"csrf");
+  assert.deepEqual(calls[1],["token",id,undefined,{...good,display_name:"Первичная диагностика"}]);
 });
 test("assignment is a strict bounded set of IDs, not client method content or scores",async()=>{
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({assign:async(...x)=>calls.push(x)},{assert:()=>{}}),good={group_id:id,stage_id:id,release_ids:[id],expected_version:0};
@@ -42,6 +46,9 @@ test("copy cannot carry participants, responses or inferred source",async()=>{
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({copy:async(...x)=>calls.push(x)},{assert:()=>{}}),good={source_stage_id:id,code:"T1",ordinal:1,expected_version:0};
   for(const bad of [{...good,responses:[]},{...good,participants:[]},{...good,source_stage_id:"T0"},{...good,ordinal:1.5}])assert.throws(()=>api.copy("token",id,bad,"csrf"),e=>[400,404].includes(e.status));
   await api.copy("token",id,good,"csrf");assert.deepEqual(calls[0],["token",id,good]);
+  const named={...good,display_name:"Контрольное обследование"};
+  await api.copy("token",id,named,"csrf");assert.deepEqual(calls[1],["token",id,named]);
+  assert.throws(()=>api.copy("token",id,{...named,display_name:"x".repeat(201)},"csrf"),e=>e.status===400);
 });
 test("lifecycle does not accept client quotas or reopen/draft states",async()=>{
   const id="12345678-1234-1234-1234-123456789012",calls=[],api=createStudyApi({lifecycle:async(...x)=>calls.push(x),title:async(...x)=>calls.push(x)},{assert:()=>{}}),good={status:"active",expected_version:0};

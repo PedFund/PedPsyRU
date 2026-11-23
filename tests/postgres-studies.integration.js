@@ -36,8 +36,15 @@ scenario("group kinds, uniqueness, scope and concurrent compare-and-swap",async(
   const y=await studyResearcher(f,s);await assert.rejects(y.studies.group(y.session.token,d.id,undefined,{name:"Foreign",kind:"other",expected_version:d.version}),e=>e.status===404);
 });
 scenario("T0/T1/T2/custom stage ordering and duplicate/cross-study/version denial",async(f,x)=>{
-  let d=await x.studies.create(x.session.token,"Stages");for(const [index,code] of ["T1","T2","Отсроченный этап"].entries())d=await x.studies.stage(x.session.token,d.id,undefined,{code,ordinal:index+1,expected_version:d.version});
+  let d=await x.studies.create(x.session.token,"Stages");
+  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T1",display_name:"Первичная диагностика",ordinal:1,expected_version:d.version});
+  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"T2",display_name:"Контрольное обследование",ordinal:2,expected_version:d.version});
+  d=await x.studies.stage(x.session.token,d.id,undefined,{code:"Отсроченный этап",ordinal:3,expected_version:d.version});
   assert.deepEqual(d.stages.map(s=>s.ordinal),[0,1,2,3]);assert.equal(d.stages.length,4);
+  assert.equal(d.stages[1].display_name,"Первичная диагностика");assert.equal(d.stages[2].display_name,"Контрольное обследование");assert.equal(d.stages[0].display_name,null);
+  const stageCode=d.stages[1].code,stageOrdinal=d.stages[1].ordinal;
+  d=await x.studies.stage(x.session.token,d.id,d.stages[1].id,{code:stageCode,display_name:"Первичное обследование",ordinal:stageOrdinal,expected_version:d.version});
+  assert.equal(d.stages[1].code,stageCode);assert.equal(d.stages[1].display_name,"Первичное обследование");
   for(const input of [{code:"t0",ordinal:4},{code:"Other",ordinal:2}])await assert.rejects(x.studies.stage(x.session.token,d.id,undefined,{...input,expected_version:d.version}),e=>e.code==="DESIGN_DUPLICATE");
   await assert.rejects(x.studies.stage(x.session.token,d.id,f.seed.studies[0].stages[0].id,{code:"Other",ordinal:4,expected_version:d.version}),e=>e.status===404);
   d=await x.studies.stage(x.session.token,d.id,d.stages[3].id,{code:"Отсроченный",ordinal:8,expected_version:d.version});assert.equal(d.stages.at(-1).ordinal,8);

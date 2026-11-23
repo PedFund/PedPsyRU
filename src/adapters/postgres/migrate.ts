@@ -50,7 +50,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT UPDATE(revision,current_item_id,status,completion_result_id,completed_at,updated_at) ON pedpsy.attempts TO "${role}"`);
   await client.query(`GRANT INSERT,DELETE ON pedpsy.responses TO "${role}"`);
   await client.query(`GRANT INSERT ON pedpsy.attempt_results,pedpsy.access_audit_events TO "${role}"`);
-  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.session_actor(),pedpsy.owns_active_attempt(uuid),pedpsy.can_read_attempt(uuid),pedpsy.can_read_release(uuid),pedpsy.touch_session(),pedpsy.own_enrollment_ids() TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.session_actor(),pedpsy.owns_active_attempt(uuid),pedpsy.can_read_attempt(uuid),pedpsy.can_read_release(uuid),pedpsy.touch_session(),pedpsy.own_enrollment_ids(),pedpsy.own_attempt_responses(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.lock_participant_scope(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.participant_login_material(text),pedpsy.finish_participant_login(uuid,integer,text,text),pedpsy.lock_participant_identity(),pedpsy.logout_participant(),pedpsy.record_participant_denial(text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.account_actor(),pedpsy.account_owns_study(uuid),pedpsy.record_account_check(text,boolean,text) TO "${role}"`);
@@ -62,7 +62,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.create_study(uuid,text),pedpsy.read_study_design(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.create_study_for_researcher(uuid,uuid,text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_group(uuid,integer,uuid,text,text,boolean) TO "${role}"`);
-  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_stage(uuid,integer,uuid,text,integer,boolean) TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_stage_named(uuid,integer,uuid,text,integer,text,boolean),pedpsy.copy_study_stage_named(uuid,integer,uuid,uuid,text,integer,text),pedpsy.set_stage_display_name(uuid,uuid,text),pedpsy.configure_study_stage(uuid,integer,uuid,text,integer,boolean) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_assignments(uuid,integer,uuid,uuid,uuid[]) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.copy_study_stage(uuid,integer,uuid,uuid,text,integer) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.change_study_lifecycle(uuid,integer,text),pedpsy.rename_study(uuid,integer,text) TO "${role}"`);
@@ -79,7 +79,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_passport_schema(uuid),pedpsy.configure_passport_schema(uuid,integer,integer,jsonb,jsonb) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_own_passport(),pedpsy.save_own_passport(integer,integer,jsonb),pedpsy.complete_own_passport(integer,integer) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_own_consents(),pedpsy.accept_own_consent(text,text,integer,boolean) TO "${role}"`);
-  await client.query(`REVOKE ALL ON FUNCTION pedpsy.save_own_passport_legacy(integer,integer,jsonb),pedpsy.complete_own_passport_legacy(integer,integer),pedpsy.change_research_workbench_v1(uuid,integer,text,jsonb),pedpsy.research_progress_v1(uuid) FROM "${role}"`);
+  await client.query(`REVOKE ALL ON FUNCTION pedpsy.save_own_passport_legacy(integer,integer,jsonb),pedpsy.complete_own_passport_legacy(integer,integer),pedpsy.change_research_workbench_v1(uuid,integer,text,jsonb),pedpsy.change_research_workbench_v3(uuid,integer,text,jsonb),pedpsy.research_progress_v1(uuid) FROM "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.save_method_library_draft(integer,text,text,jsonb,jsonb),pedpsy.list_method_library(),pedpsy.read_method_library(text,text),pedpsy.read_available_methods(),pedpsy.read_method_planning_catalogue(),pedpsy.method_transfer_status() TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_research_workbench(uuid),pedpsy.change_research_workbench(uuid,integer,text,jsonb),pedpsy.close_research_stage(uuid,integer,uuid),pedpsy.change_research_profile_schema(uuid,integer,jsonb),pedpsy.research_progress(uuid),pedpsy.research_method_progress(uuid),pedpsy.research_method_analytics(uuid,uuid,uuid),pedpsy.research_participant_passport_stats(uuid),pedpsy.own_profile(text,integer,integer,jsonb) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.login_lock_blocked(text,text),pedpsy.login_lock_failure(text,text),pedpsy.login_lock_success(text,text) TO "${role}"`);

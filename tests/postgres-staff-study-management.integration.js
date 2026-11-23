@@ -19,9 +19,10 @@ for(const role of ["administrator","superadministrator"])scenario(role+" execute
   assert.ok((await x.gateway.home(x.session.token)).studies.some(y=>y.id===d.id));
   assert.deepEqual((await f.admin.query("SELECT user_id,role FROM pedpsy.study_memberships WHERE study_id=$1",[d.id])).rows,[{user_id:x.row.user_id,role:"researcher"}]);
   d=await send("/"+d.id+"/groups/"+d.groups[0].id,{name:"ЭГ",kind:"experimental",expected_version:d.version},"PATCH");
-  d=await send("/"+d.id+"/stages/"+d.stages[0].id,{code:"Baseline",ordinal:0,expected_version:d.version},"PATCH");
+  d=await send("/"+d.id+"/stages/"+d.stages[0].id,{code:"Baseline",display_name:"Начальная диагностика",ordinal:0,expected_version:d.version},"PATCH");
+  assert.equal(d.stages[0].display_name,"Начальная диагностика");
   d=await send("/"+d.id+"/assignments",{group_id:d.groups[0].id,stage_id:d.stages[0].id,release_ids:[f.seed.release_id],expected_version:d.version});
-  d=await send("/"+d.id+"/stages/copy",{source_stage_id:d.stages[0].id,code:"T1",ordinal:1,expected_version:d.version});assert.equal(d.assignments.length,2);
+  d=await send("/"+d.id+"/stages/copy",{source_stage_id:d.stages[0].id,code:"T1",display_name:"Повторная диагностика",ordinal:1,expected_version:d.version});assert.equal(d.assignments.length,2);assert.equal(d.stages[1].display_name,"Повторная диагностика");
   d=await send("/"+d.id,{title:"Final title",expected_version:d.version},"PATCH");
   d=await send("/"+d.id+"/lifecycle",{status:"active",expected_version:d.version});
   const invitePath="/"+d.id+"/groups/"+d.groups[0].id+"/invitations",invite=await send(invitePath,{expires_at:Date.now()+86400000});

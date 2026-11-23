@@ -4,7 +4,7 @@ declare const stages:ParticipantStages;
 stages.read("own","foreign");
 // @ts-expect-error This read-only port cannot create attempts or enrollments.
 stages.enroll("own","stage");
-const stage:ParticipantStage={stage_id:"server-stage",code:"T1",ordinal:1,opening_revision:1,assignment_ids:[]};
+const stage:ParticipantStage={stage_id:"server-stage",code:"T1",display_name:null,ordinal:1,opening_revision:1,assignment_ids:[]};
 // @ts-expect-error Absence/revision0 is not an opened stage.
 const unopened:ParticipantStage={...stage,opening_revision:0};
 void unopened;

@@ -4,10 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>МетодТест — кабинет</title>
-  <link rel="stylesheet" href="/workspace/styles.css?v=20261123-2">
+  <link rel="stylesheet" href="/workspace/styles.css?v=20261123-3">
   <script src="/workspace/qr.js?v=20261106-5" defer></script>
-  <script src="/workspace/participant.js?v=20261123-2" defer></script>
-  <script src="/workspace/app.js?v=20261123-2" defer></script>
+  <script src="/workspace/participant.js?v=20261123-3" defer></script>
+  <script src="/workspace/app.js?v=20261123-3" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -87,7 +87,7 @@
         <div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
           <section><h3>Название исследования</h3><form id="rename-study-form"><label>Название<input id="rename-title" required maxlength="200"></label><button type="submit" class="secondary">Сохранить название</button></form></section>
           <section><h3>Группы</h3><div id="group-cards"></div><button id="add-group" type="button" class="secondary">Добавить группу</button><form id="group-form" hidden><input id="group-edit" type="hidden"><label>Название группы<input id="group-name" required maxlength="100" placeholder="Например, Контрольная"></label><label>Тип группы<select id="group-kind"><option value="experimental">Экспериментальная</option><option value="control">Контрольная</option><option value="other">Другая</option></select></label><label>Примечание (необязательно)<input id="group-note" maxlength="500"></label><div class="toolbar"><button type="submit">Сохранить группу</button><button id="cancel-group" type="button" class="text">Отмена</button></div></form></section>
-          <section><h3>Этапы</h3><div id="stage-cards"></div><button id="add-stage" type="button" class="secondary">Добавить этап</button><form id="stage-form" hidden><input id="stage-edit" type="hidden"><label>Этап<input id="stage-code" readonly></label><label>Пояснение (необязательно)<input id="stage-note" maxlength="500" placeholder="Например, до начала программы"></label><input id="stage-ordinal" type="hidden"><div class="toolbar"><button type="submit">Сохранить этап</button><button id="cancel-stage" type="button" class="text">Отмена</button></div></form></section>
+          <section><h3>Этапы</h3><div id="stage-cards"></div><button id="add-stage" type="button" class="secondary">Добавить этап</button><form id="stage-form" hidden><input id="stage-edit" type="hidden"><label>Код этапа<input id="stage-code" readonly></label><label>Название этапа для участника<input id="stage-display-name" maxlength="200" autocomplete="off" placeholder="Например, Первичная диагностика"></label><p class="field-hint">Этот текст будет отображаться в кабинете участника исследования.</p><div class="stage-preview" aria-live="polite"><span class="stage-preview-label">Предпросмотр</span><strong id="stage-preview-name">T0</strong><small id="stage-preview-code">T0</small></div><label>Пояснение (необязательно, служебное)<input id="stage-note" maxlength="500" placeholder="Например, до начала программы"></label><input id="stage-ordinal" type="hidden"><div class="toolbar"><button id="stage-submit" type="submit">Сохранить этап</button><button id="cancel-stage" type="button" class="text">Отмена</button></div></form></section>
           <section hidden><form id="copy-stage-form"><select id="copy-source"></select><input id="copy-code"><input id="copy-ordinal" type="number"></form></section>
         </div></fieldset></div>
         <p class="muted">Перед активацией заполните назначения всех групп и этапов. Активный дизайн закрепляется; закрытие сохраняет записи и освобождает квоту.</p>

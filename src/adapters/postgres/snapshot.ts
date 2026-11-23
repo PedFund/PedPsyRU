@@ -63,8 +63,10 @@ export async function inspectPostgresSnapshot(client: PoolClient): Promise<DemoS
   const tables = {} as DemoSnapshot["tables"];
   for (const table of DOMAIN_TABLES) {
     tables[table] = normalized((await client.query<Row>("SELECT * FROM pedpsy." + table)).rows);
-    // Demo snapshots predate attempt numbering; the column is not part of their shape.
+    // Demo snapshots predate attempt numbering and stage display names; those
+    // columns are not part of their shape. Existing stages fall back to code.
     if (table === "attempts") tables[table] = normalized(tables[table].map(({attempt_no:ignored,...row}) => row));
+    if (table === "research_stages") tables[table] = normalized(tables[table].map(({display_name:ignored,...row}) => row));
   }
   return verified(tables);
 }

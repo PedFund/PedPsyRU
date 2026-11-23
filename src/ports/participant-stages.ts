@@ -1,7 +1,7 @@
 // Read-only discovery, not an enrollment capability. The later enrollment
 // transaction must independently recheck all current requirements and locks.
 export interface ParticipantStage {
-  readonly stage_id:string;readonly code:string;readonly ordinal:number;
+  readonly stage_id:string;readonly code:string;readonly display_name:string|null;readonly ordinal:number;
   readonly opening_revision:1;readonly assignment_ids:readonly string[];
 }
 export interface ParticipantStagesSnapshot {
