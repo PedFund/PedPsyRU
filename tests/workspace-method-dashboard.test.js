@@ -25,7 +25,8 @@ test("method dashboard toggles the panel by id, not by element",()=>{
   assert.match(app,/\["sex","education","city","organization"\]/);
   assert.match(app,/study-participants-section"\)\.append\(\$\("group-invitations-panel"\)\)/);
   assert.doesNotMatch(app,/study-methods-section"\)\.append\(\$\("group-invitations-panel"\)\)/);
-  assert.match(app,/completion-ring/);
+  assert.match(app,/method-result-card/);
+  assert.match(app,/method-result-progress/);
   assert.match(app,/level-columns/);
   assert.match(app,/scale-track/);
   assert.match(app,/analytics-legend/);
