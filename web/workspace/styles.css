@@ -39,7 +39,7 @@
 .scale-row .scale-options{grid-template-columns:repeat(6,minmax(0,1fr));gap:4px}
 .scale-row.scale-count-11 .scale-options{grid-template-columns:repeat(11,minmax(0,1fr))}
 .scale-row .scale-cell{min-height:44px;font-size:16px;padding:4px 1px;border-width:1px;border-radius:8px}
-@media (max-width:900px){.scale-row.scale-count-11 .scale-options{grid-template-columns:repeat(6,minmax(0,1fr))}}
+@media (max-width:700px){.scale-row.scale-count-11 .scale-options{grid-template-columns:repeat(6,minmax(0,1fr))}}
 @media (max-width:374.98px){.scale-row.scale-count-11 .scale-options{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media (max-width:640px){.question-card{padding:12px}.method-instruction{padding:12px 14px}}
 @media (forced-colors:active){.scale-option input:checked+.scale-cell{forced-color-adjust:none;background:Highlight;color:HighlightText;border-color:Highlight}}
