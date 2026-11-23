@@ -88,6 +88,10 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
       return registration.start(registrationToken(invite), registrationStart(input), registrationToken(pendingToken))
         .then(() => ({status: "confirmation_requested" as const}));
     },
+    direct: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
+      protection.assert(pendingToken, csrf);
+      return registration.direct(registrationToken(invite), registrationStart(input), registrationToken(pendingToken));
+    },
     confirm: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
       protection.assert(pendingToken, csrf);
       return registration.confirm(registrationToken(invite), registrationConfirmation(input), registrationToken(pendingToken))

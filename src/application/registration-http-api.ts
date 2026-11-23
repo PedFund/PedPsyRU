@@ -9,7 +9,7 @@ export function createRegistrationHttpApi(registration:ParticipantRegistration,r
   return {
     // Internal token goes into HttpOnly cookie only, never the response JSON.
     preflight:(previous:string)=>{const token=browser.valid(previous)?previous:browser.create();return {token,csrf:browser.csrf(token),expiresAt:browser.expiresAt(token),delivery};},
-    context:test.context,start:core.start,confirm:core.confirm,resend:core.resend,setPassword:core.setPassword,forgotPassword:core.forgotPassword,resetPassword:core.resetPassword,
+    context:test.context,start:core.start,direct:core.direct,confirm:core.confirm,resend:core.resend,setPassword:core.setPassword,forgotPassword:core.forgotPassword,resetPassword:core.resetPassword,
     receipt:async(invite:string,token:string,input:unknown,csrf:string)=>{const dto=await test.receipt(invite,token,input,csrf);return {...dto,expires_at:Math.min(dto.expires_at,browser.expiresAt(token))};},
     login:(input:unknown,token:string,csrf:string)=>{browser.assert(token,csrf);return core.login(input);},
     denied:(reason:string)=>denials.record(reason)

@@ -96,6 +96,9 @@ export interface ParticipantRegistration {
   // Same response for a new or already-known mailbox. Recheck current scope
   // under DB locks, bind pending registration to browser/CSRF, and queue mail.
   start(inviteToken: string, input: RegistrationStart, pendingToken: string): Promise<{status: "confirmation_requested"}>;
+  // Direct registration by the group invitation: the chosen password is set in
+  // the same transaction, without an e-mail code. The code remains for reset.
+  direct(inviteToken: string, input: RegistrationStart, pendingToken: string): Promise<{status: "registered"}>;
   // Repeat delivery for an application that already exists: rotates the one-time
   // code, keeps study/group, answers neutrally for unknown mailboxes.
   resend(inviteToken: string, input: RegistrationResend): Promise<{status: "accepted"}>;
