@@ -27,11 +27,27 @@
   });
   // MAIA-R 1.0.0 stores 1..6, the reconciled 1.0.1 stores 0..5. Both keep the
   // same horizontal scale; only the pinned values differ.
+  const ecvValues=Array.from({length:11},(_,index)=>String(index+1));
+  const ecvLabels=Array.from({length:11},(_,index)=>String(index));
+  const ecvProfile=Object.freeze({
+    presenter:horizontalPresenter,
+    scale:Object.freeze({
+      type:"numeric",
+      values:Object.freeze(ecvValues),
+      labels:Object.freeze(ecvLabels),
+      minLabel:"категорически не согласен",
+      maxLabel:"полностью согласен",
+      layout:"row",
+      required:true,
+      selectedStyle:"filled"
+    })
+  });
   const methodProfiles=new Map([
     ["maia_r_32_shared@1.0.0",Object.freeze([
       maiaScale(["0","1","2","3","4","5"]),
       maiaScale(["1","2","3","4","5","6"])
-    ])]
+    ])],
+    ["ecv_15_shared@1.0.0",Object.freeze([ecvProfile])]
   ]);
   function profileFor(form){
     if(!form||typeof form.id!=="string")return null;
