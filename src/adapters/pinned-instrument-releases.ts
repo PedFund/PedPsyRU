@@ -24,7 +24,17 @@ interface ChoiceRelease {
 type FormShape={id:string;version:string;title?:string;instruction?:string;presentation?:{id:string;version:string};rules?:{require_all?:boolean;quota?:Record<string,number>};items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
 // Pinned packages keep their original titles for verification. These display-only
 // corrections remove technical abbreviations from the participant interface.
-const displayTitles: Record<string,string> = {"pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца", "tki_ru_30_pairs@1.0.0": "Томас–Килманн: стили поведения в конфликте", "ttf_atf_10@1.0.0-staging": "Склонность к прощению и установки по отношению к прощению"};
+const displayTitles: Record<string,string> = {
+  "pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца",
+  "tki_ru_30_pairs@1.0.0": "Томас–Килманн: стили поведения в конфликте",
+  "ttf_atf_10@1.0.0-staging": "Склонность к прощению и установки по отношению к прощению",
+  // Owner-approved participant titles: preserve the original pinned snapshots,
+  // keys, answer values and result histories.
+  "darr_7@1.0.0-staging": "Измерение реакций гнева",
+  "shpana_20@1.0.0-staging": "Шкала позитивного аффекта и негативного аффекта",
+  "ecv_15@1.0.0-staging": "Эмоциональный контроль",
+  "genchi_breath_hold@1.0.0": "Проба Генчи"
+};
 const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{const title=displayTitles[methodVersionId];return title?{...form,title:title as string}:form;};
 // Pinned release metadata is immutable for the process lifetime; avoid rebuilding it on every save.
 let installedCache:ChoiceRelease[]|undefined;
