@@ -30,6 +30,9 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
   async start(inviteToken:string,input:RegistrationStart,pendingToken:string):Promise<{status:"confirmation_requested"}>{
     return this.issuance.start(inviteToken,input,pendingToken);
   }
+  async direct(inviteToken:string,input:RegistrationStart,pendingToken:string):Promise<{status:"registered"}>{
+    return this.issuance.direct(inviteToken,input,pendingToken);
+  }
   async confirm(inviteToken:string,input:RegistrationConfirmation,pendingToken:string):Promise<{status:"sign_in_required"}>{
     if(!validToken(inviteToken)||!validToken(pendingToken)||!input||Array.isArray(input)||Object.keys(input).join(",")!=="confirmation_token"||!validToken(input.confirmation_token))throw new ParticipationError(404,"NOT_AVAILABLE");
     const accepted=await accountTransaction(this.pool,async c=>(await c.query<{accepted:boolean}>("SELECT pedpsy.confirm_registration_email($1,$2,$3) accepted",
