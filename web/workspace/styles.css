@@ -155,3 +155,33 @@
 
 /* One heading per area: the page header carries the section name. */
 #back-study-hub,#study-crumb-sep{display:none!important}
+
+/* Method catalogue: compact expandable cards with visible selection. */
+.method-card{border:1px solid #dbe9ed;border-radius:10px;background:#fff;margin:8px 0;overflow:hidden}
+.method-card.is-selected{border-color:#167a83;box-shadow:0 0 0 1px #167a83 inset}
+.method-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;padding:12px 14px}
+.method-card-main{min-width:0;flex:1}
+.method-card-title{display:flex;align-items:center;flex-wrap:wrap;gap:8px;margin:0 0 4px;font-size:15px;line-height:1.35;color:#123f4c}
+.method-authors{display:flex;align-items:center;gap:5px;margin:0 0 5px;color:#3c5b62;font-size:12px;line-height:1.4}
+.method-authors.is-missing{color:#8a5a16}
+.method-meta{display:flex;flex-wrap:wrap;gap:12px;margin:0;color:#5e7a81;font-size:12px}
+.method-meta-item{display:inline-flex;align-items:center;gap:4px}
+.method-icon{width:14px;height:14px;flex:none;color:#167a83}
+.method-card-actions{display:flex;align-items:center;gap:8px;flex:none}
+.method-select-label{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:#123f4c;cursor:pointer;white-space:nowrap}
+.method-select-label input{width:18px;height:18px;margin:0;accent-color:#167a83}
+.method-details-toggle{padding:5px 10px;font-size:12px}
+.method-details{padding:0 14px 14px;border-top:1px solid #e2edef}
+.method-description{margin:12px 0 8px;color:#3c5b62;font-size:13px;line-height:1.5}
+.method-adaptation{margin:0 0 8px;color:#5e7a81;font-size:12px}
+.method-details h4{margin:12px 0 6px;font-size:13px;color:#123f4c}
+.method-details ol{margin:0;padding-left:22px;color:#173b46;font-size:13px;line-height:1.55}
+.method-details li{margin:2px 0}
+.method-assigned{margin:10px 0 0;color:#5e7a81;font-size:12px}
+.method-selected-panel{margin:10px 0 4px;padding:10px 12px;border:1px solid #cfe0e3;border-radius:10px;background:#f7fbfb}
+.method-selected-panel h4{margin:0 0 6px;font-size:13px;color:#123f4c}
+.method-selected-panel ul{margin:0;padding:0;list-style:none}
+.method-selected-panel li{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;padding:4px 0;border-top:1px solid #e2edef;font-size:13px;line-height:1.4}
+.method-selected-panel li:first-child{border-top:0}
+.method-selected-panel li button{flex:none}
+@media (max-width:640px){.method-card-head{flex-direction:column;gap:8px}.method-card-actions{width:100%;justify-content:space-between}.method-details-toggle{margin-left:auto}}
