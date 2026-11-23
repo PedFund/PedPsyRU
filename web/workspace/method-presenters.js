@@ -11,37 +11,39 @@
   // Display profiles are keyed by the pinned form identity, not by a title or a
   // heuristic. They only describe how the same options are shown; the release,
   // item order, option values, key and scoring remain untouched.
+  const horizontalPresenter=Object.freeze({id:"pedpsy/horizontal-scale",version:"1.0.0"});
+  const maiaScale=values=>Object.freeze({
+    presenter:horizontalPresenter,
+    scale:Object.freeze({
+      type:"numeric",
+      values,
+      labels:values.slice(),
+      minLabel:"Никогда",
+      maxLabel:"Всегда",
+      layout:"auto",
+      required:true,
+      selectedStyle:"filled"
+    })
+  });
+  // MAIA-R 1.0.0 stores 1..6, the reconciled 1.0.1 stores 0..5. Both keep the
+  // same horizontal scale; only the pinned values differ.
   const methodProfiles=new Map([
-    ["maia_r_32_shared@1.0.0",Object.freeze({
-      presenter:Object.freeze({id:"pedpsy/horizontal-scale",version:"1.0.0"}),
-      scale:Object.freeze({
-        type:"numeric",
-        // The reconciled key accepts and stores the authored 0..5 codes directly.
-        values:["0","1","2","3","4","5"],
-        labels:["0","1","2","3","4","5"],
-        minLabel:"Никогда",
-        maxLabel:"Всегда",
-        layout:"auto",
-        required:true,
-        selectedStyle:"filled"
-      })
-    })]
+    ["maia_r_32_shared@1.0.0",Object.freeze([
+      maiaScale(["0","1","2","3","4","5"]),
+      maiaScale(["1","2","3","4","5","6"])
+    ])]
   ]);
   function profileFor(form){
     if(!form||typeof form.id!=="string")return null;
-    const profile=methodProfiles.get(form.id+"@"+(form.version||""))||null;
-    if(!profile)return null;
-    // The same pinned form identity is shared by MAIA-R 1.0.0 (stored 1..6)
-    // and 1.0.1 (stored 0..5). Apply the display profile only when the pinned
-    // options actually match it; otherwise fall back to the plain single-choice
-    // renderer so the historical release stays usable instead of throwing.
+    const candidates=methodProfiles.get(form.id+"@"+(form.version||""))||null;
+    if(!candidates)return null;
     const first=Array.isArray(form.items)?form.items[0]:null;
-    const wanted=profile.scale&&Array.isArray(profile.scale.values)?profile.scale.values:null;
-    if(first&&Array.isArray(first.options)&&wanted){
-      const stored=first.options.map(option=>String(option.value));
-      if(stored.length!==wanted.length||stored.some((value,index)=>value!==wanted[index]))return null;
-    }
-    return profile;
+    if(!first||!Array.isArray(first.options))return candidates[0];
+    const stored=first.options.map(option=>String(option.value));
+    return candidates.find(profile=>{
+      const values=profile.scale&&Array.isArray(profile.scale.values)?profile.scale.values:null;
+      return Boolean(values)&&stored.length===values.length&&stored.every((value,index)=>value===values[index]);
+    })||null;
   }
   const bipolarLabels=new Map([
     ["-3","-3 — абсолютно согласен с первым утверждением"],
