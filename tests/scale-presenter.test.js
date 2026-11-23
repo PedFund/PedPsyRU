@@ -215,3 +215,15 @@ test("the workspace participant bundle includes the scale component", () => {
   assert.match(workspaceAssets().participantJs, /PedPsyScale/);
   assert.match(workspaceAssets().participantJs, /maia_r_32_shared@1\.0\.0/);
 });
+
+test("single-choice 0..10 renders one horizontal numeric row",()=>{
+  const item={id:"q01",text:"Утверждение",options:Array.from({length:11},(_,i)=>({value:String(i+1),text:String(i)}))};
+  const fieldset=container();
+  presenters.singleChoice.mount({container:fieldset,item,selected:null,disabled:false,onChange:()=>{}});
+  const wrap=fieldset.children[0],options=wrap.children[0];
+  assert.match(wrap.className,/scale-row/);
+  assert.match(wrap.className,/scale-count-11/);
+  assert.equal(options.children.length,11);
+  assert.equal(options.children[0].children[1].textContent,"0");
+  assert.equal(options.children[10].children[1].textContent,"10");
+});
