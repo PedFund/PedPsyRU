@@ -92,8 +92,19 @@
   async function workbenchWrite(action,input){if(designLocked)throw Error("Вернитесь в список исследований и откройте исследование снова.");try{const d=await request(workbenchPath()+"/"+action,{...input,expected_version:design.version});if(action!=="remind"){design=d;renderDesign();await loadPassportSchema();syncStudy(design);}return d;}catch(e){if(["DESIGN_CONFLICT","PASSPORT_SCHEMA_CONFLICT","STORAGE_BUSY","INTERNAL_ERROR"].includes(e.code)||!e.code){designLocked=true;renderDesign();}throw e;}}
   function targetAssignments(){const group=$("method-target-group").value,stage=$("method-target-stage").value;return new Set((design?.assignments||[]).filter(a=>a.group_id===group&&a.stage_id===stage&&a.status==="active").map(a=>a.release_id));}
   function resetMethodSelection(){methodSelection=targetAssignments();renderMethodCatalog();}
+  function versionRank(value){return String(value||"").split(/[^0-9]+/).filter(Boolean).map(Number).slice(0,3).reduce((rank,part)=>rank*1000+part,0);}
+  function availableCatalog(){
+    const best=new Map();
+    for(const release of design.catalog||[]){
+      const versions=(planningMethods||[]).filter(method=>method.method_id===release.method_id&&Array.isArray(method.releases)&&method.releases.includes(release.id)).map(method=>method.version).sort((a,b)=>versionRank(b)-versionRank(a));
+      const version=versions[0]||"";
+      const current=best.get(release.method_id);
+      if(!current||versionRank(version)>versionRank(current.version))best.set(release.method_id,{release,version});
+    }
+    return [...best.values()].map(item=>item.release);
+  }
   function renderMethodCatalog(){const list=$("method-catalog-list");const draft=design.status==="draft";show("method-assignment-toolbar",draft);show("method-assignment-hint",draft);show("method-assignment-locked",!draft);list.replaceChildren();const query=$("method-search").value.trim().toLocaleLowerCase("ru-RU");let count=0;
-    for(const release of design.catalog){const isAssigned=design.assignments.some(a=>a.release_id===release.id&&a.status==="active");if(!draft&&!isAssigned)continue;const m=methodView(release);if(!window.PedPsyMethodSearch.matches(m,query))continue;count++;
+    for(const release of availableCatalog()){const isAssigned=design.assignments.some(a=>a.release_id===release.id&&a.status==="active");if(!draft&&!isAssigned)continue;const m=methodView(release);if(!window.PedPsyMethodSearch.matches(m,query))continue;count++;
       const author=Array.isArray(m.authors)?m.authors.join(", "):m.authors||"Не указан",card=document.createElement("details"),title=document.createElement("summary");title.textContent=m.title;const selectedBadge=document.createElement("span");selectedBadge.className="method-selected-badge";selectedBadge.textContent="Выбрано";selectedBadge.hidden=!methodSelection.has(release.id);card.classList.toggle("is-selected",!selectedBadge.hidden);title.append(selectedBadge);card.append(title);const paragraph=text=>{const p=document.createElement("p");p.textContent=text;card.append(p);};
       paragraph("Автор: "+(author||"не указан"));if(m.adaptation)paragraph("Адаптация: "+m.adaptation);if(m.item_count)paragraph(m.item_unit?"Количество: "+m.item_count+" "+m.item_unit:"Вопросов: "+m.item_count);if(m.summary)paragraph(m.summary);
       const indicators=[...(m.indicators||[]),...(m.subscales||[]).filter(name=>!(m.indicators||[]).includes(name))];if(indicators.length){const h=document.createElement("h4"),ul=document.createElement("ul");h.textContent="Показатели";for(const value of indicators){const li=document.createElement("li");li.textContent=value;ul.append(li);}card.append(h,ul);}
