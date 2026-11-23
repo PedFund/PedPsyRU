@@ -675,6 +675,9 @@ const catalog: Catalog = {
     }
   }
 };
+// The 1.0.0 presentation stays available for historical MAIA-R results; the
+// reconciled 0..5 release uses the same labels, levels and footer note.
+catalog.methods["maia_r_32@1.0.1-staging"] = catalog.methods["maia_r_32@1.0.0-staging"]!;
 
 function textFor(view: MethodView, source: {levels?: LevelTable; level_template?: string}, level: string): string | null {
   const direct = source.levels?.[level];

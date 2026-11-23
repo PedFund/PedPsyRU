@@ -13,12 +13,12 @@ const maiaItem = {
   id: "q01",
   text: "Когда я испытываю напряжение, я замечаю, где в теле находится это напряжение.",
   options: [
-    {value: "1", text: "Никогда"},
-    {value: "2", text: "1"},
-    {value: "3", text: "2"},
-    {value: "4", text: "3"},
-    {value: "5", text: "4"},
-    {value: "6", text: "Всегда"}
+    {value: "0", text: "Никогда"},
+    {value: "1", text: "1"},
+    {value: "2", text: "2"},
+    {value: "3", text: "3"},
+    {value: "4", text: "4"},
+    {value: "5", text: "Всегда"}
   ]
 };
 
@@ -55,11 +55,11 @@ function scaleInputs(fieldset) {
   return options.children.map(label => label.children[0]);
 }
 
-test("MAIA-R profile maps the authored 0..5 labels onto the pinned 1..6 codes", () => {
+test("MAIA-R profile uses the reconciled 0..5 answer codes directly", () => {
   const profile = presenters.profileFor({id: "maia_r_32_shared", version: "1.0.0"});
   assert.ok(profile);
-  assert.deepEqual(profile.presenter, {id: "pedpsy/horizontal-scale", version: "1.0.0"});
-  assert.deepEqual(profile.scale.values, ["1", "2", "3", "4", "5", "6"]);
+  assert.deepEqual(profile.presenter, {id:"pedpsy/horizontal-scale", version:"1.0.0"});
+  assert.deepEqual(profile.scale.values, ["0", "1", "2", "3", "4", "5"]);
   assert.deepEqual(profile.scale.labels, ["0", "1", "2", "3", "4", "5"]);
   assert.equal(profile.scale.minLabel, "Никогда");
   assert.equal(profile.scale.maxLabel, "Всегда");
@@ -97,7 +97,7 @@ test("the rendered MAIA-R scale has one radio group, six cells and readable edge
   const model = scale.mount({
     container: fieldset,
     item: maiaItem,
-    selected: "1",
+    selected: "0",
     disabled: false,
     onChange: value => { chosen = value; },
     scale: profile.scale
@@ -113,13 +113,13 @@ test("the rendered MAIA-R scale has one radio group, six cells and readable edge
   assert.equal(options.children.length, 6);
   const inputs = scaleInputs(fieldset);
   assert.equal(inputs[0].checked, true);
-  assert.equal(inputs[0].value, "1");
+  assert.equal(inputs[0].value, "0");
   assert.equal(inputs[0].attributes["aria-label"], "0, Никогда");
   assert.equal(inputs[5].attributes["aria-label"], "5, Всегда");
   assert.equal(inputs[3].attributes["aria-label"], "3");
   assert.equal(inputs[0].required, true);
   inputs[3].listeners.change();
-  assert.equal(chosen, "4");
+  assert.equal(chosen, "3");
   assert.equal(options.children[3].children[1].children[0].textContent, "3");
   assert.equal(root.children[1].className, "scale-endpoints");
   assert.equal(root.children[1].children[0].textContent, "Никогда");

@@ -79,8 +79,8 @@ test("participant result: methods without a catalog keep the legacy shape",async
 
 test("participant result: MAIA-R projects eight approved levels and keeps raw values",async()=>{
   const codes=Object.keys(maiaKey.scales);
-  const metrics=scoreNumericPassport(maiaKey,Array.from({length:32},()=>1)).metrics;
-  const body=await complete(stored("maia_r_32@1.0.0-staging",
+  const metrics=scoreNumericPassport(maiaKey,Array.from({length:32},()=>0)).metrics;
+  const body=await complete(stored("maia_r_32@1.0.1-staging",
     codes.map(code=>measure(code,metrics[code])),
     codes.map(code=>level(code,metrics[code+" – уровень"]))));
   assert.equal(body.presentation.variant,"level-numeric");

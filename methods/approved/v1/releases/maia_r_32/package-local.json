@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "method_id": "maia_r_32",
-  "package_version": "1.0.0",
+  "package_version": "1.0.1",
   "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
   "language": "ru",
   "provenance": {
@@ -35,27 +35,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -66,27 +66,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -97,27 +97,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -128,27 +128,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -159,27 +159,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -190,27 +190,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -221,27 +221,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -252,27 +252,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -283,27 +283,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -314,27 +314,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -345,27 +345,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -376,27 +376,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -407,27 +407,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -438,27 +438,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -469,27 +469,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -500,27 +500,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -531,27 +531,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -562,27 +562,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -593,27 +593,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -624,27 +624,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -655,27 +655,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -686,27 +686,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -717,27 +717,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -748,27 +748,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -779,27 +779,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -810,27 +810,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -841,27 +841,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -872,27 +872,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -903,27 +903,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -934,27 +934,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -965,27 +965,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -996,27 +996,27 @@
       "kind": "single_choice",
       "options": [
         {
-          "value": "1",
+          "value": "0",
           "label": "Никогда"
         },
         {
-          "value": "2",
+          "value": "1",
           "label": "1"
         },
         {
-          "value": "3",
+          "value": "2",
           "label": "2"
         },
         {
-          "value": "4",
+          "value": "3",
           "label": "3"
         },
         {
-          "value": "5",
+          "value": "4",
           "label": "4"
         },
         {
-          "value": "6",
+          "value": "5",
           "label": "Всегда"
         }
       ]
@@ -1100,131 +1100,131 @@
       "responses": [
         {
           "item_id": "q01",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q02",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q03",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q04",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q05",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q06",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q07",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q08",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q09",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q10",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q11",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q12",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q13",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q14",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q15",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q16",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q17",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q18",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q19",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q20",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q21",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q22",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q23",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q24",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q25",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q26",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q27",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q28",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q29",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q30",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q31",
-          "value": "1"
+          "value": "0"
         },
         {
           "item_id": "q32",
-          "value": "1"
+          "value": "0"
         }
       ],
       "expected": [
@@ -1274,14 +1274,14 @@
       "id": "form",
       "path": "form.json",
       "bytes": 21238,
-      "sha256": "47649a322ebf8ef44934ace2091fe50b7dbcd1de3859905b468dbad9a00e9791",
+      "sha256": "5578c4215fba955d6c102cc74f33f50f86cf2d42767b32a728a056a19b59c15a",
       "media_type": "application/json"
     },
     {
       "id": "key",
       "path": "key.json",
-      "bytes": 4813,
-      "sha256": "691a44a03f40dcc26608670f79b5fda3b723c52ce76d56b53361eddd3274ecf2",
+      "bytes": 4720,
+      "sha256": "c1ad2757a7be2f90596feccf022da78f5b2a08218b313685ab53d66d4a53ed45",
       "media_type": "application/json"
     },
     {
@@ -1295,7 +1295,7 @@
       "id": "specification",
       "path": "specification.txt",
       "bytes": 400,
-      "sha256": "a2cc93c17e30c56a6d57e5dbc163fa6dfd24a0dd16987d3ee787630b2dcae840",
+      "sha256": "846b6c07ed2b8f0d918d6e0255744f9016ff30a5aef3ade3fcd03025df793f19",
       "media_type": "text/plain"
     }
   ],

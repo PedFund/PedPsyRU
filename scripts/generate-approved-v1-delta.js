@@ -53,8 +53,10 @@ const identityClause = release => ` OR (method_id='${release.id}' AND method_ver
 
 const cases = pending.map(release =>
   `WHEN (SELECT method_id FROM pedpsy.instrument_releases WHERE id=NEW.release_id)='${release.id}' THEN ${release.itemCount} `).join("");
-const newGuard = guardBody.replace("ELSE 30 END)", cases + "ELSE 30 END)");
-if (newGuard === guardBody) throw new Error("GUARD_CASE_NOT_FOUND");
+// A corrected version of an already-pinned method keeps the same method_id and
+// item count, so the completion guard needs no new CASE arm at all.
+const newGuard = cases ? guardBody.replace("ELSE 30 END)", cases + "ELSE 30 END)") : guardBody;
+if (cases && newGuard === guardBody) throw new Error("GUARD_CASE_NOT_FOUND");
 
 const sql = [
   "SET LOCAL search_path=pedpsy,pg_catalog;",

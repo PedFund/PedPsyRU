@@ -169,10 +169,10 @@ function motkovKey(pkg) {
     crossLevels: {gpk: {left: 'pk_A – уровень', right: 'pk_B – уровень', table: MOTKOV_GPK}}};
 }
 
-// MAIA-R describes its own scoring completely: eight means of recoded items on a
-// 0..5 scale, reverse items 5..9 recoded as "5 - response", and platform intervals
-// per subscale. The participant answers the author's six labelled options; the ui
-// values 1..6 map onto the 0..5 scores, so nothing about the answer set changes.
+// MAIA-R describes its own scoring completely: eight means on the author's 0..5
+// scale, reverse items 5..9 recoded as "5 - response", and platform intervals per
+// subscale. The answer codes are the original scores 0..5 (reconciled with the
+// passport), so no UI shift or answerMap is involved.
 const MAIA_SCALE_IDS = ['noticing', 'not_distracting', 'not_worrying', 'attention_regulation',
   'emotional_awareness_negative', 'emotional_awareness_positive', 'body_listening', 'trusting'];
 
@@ -198,8 +198,8 @@ function maiaKey(pkg) {
   if (reverseItems.size !== 5 || [5, 6, 7, 8, 9].some(number => !reverseItems.has(number))) {
     throw new Error(pkg.id + ':REVERSE_ITEMS_MISMATCH');
   }
-  return {id: pkg.id, key_version: '1.0.0-staging', type: 'passport', items: 32,
-    valid: [1, 2, 3, 4, 5, 6], answerMap: {'1': 0, '2': 1, '3': 2, '4': 3, '5': 4, '6': 5},
+  return {id: pkg.id, key_version: pkg.version || '1.0.1-staging', type: 'passport', items: 32,
+    valid: [0, 1, 2, 3, 4, 5],
     reverseMax: 5, scoreRange: [0, 5], scales, levels, levelRounding};
 }
 
