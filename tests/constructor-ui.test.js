@@ -6,7 +6,7 @@ test("constructor UI IDs/escaping/uncertain-write guards are wired; actual DOM b
   for(const id of ["login-form","accept-form"]){const form=html.match(new RegExp('<form id="'+id+'"[^>]*>(.*?)</form>','s'))[0];assert.match(form,/method="post"/);assert.match(form,/<button[^>]*disabled/);}
   for(const id of ["create-study-form","group-form","stage-form","copy-stage-form","copy-assignments-form","group-cards","stage-cards","method-target-group","method-target-stage","save-method-selection","rename-study-form","study-hub","study-design-section","study-participants-section","study-methods-section","design-lock-note","activate-study","archive-study","staff-studies"])assert.ok(ids.includes(id));
   assert.ok(!/innerHTML|localStorage|sessionStorage|\beval\(/.test(js));assert.match(js,/expected_version:design\.version/);assert.match(js,/designLocked=true/);assert.match(js,/creationLocked=true/);assert.match(js,/textContent=d\.title/);assert.match(js,/if\(design\)await openDesign\(design\.id\)/);assert.doesNotMatch(html,/Полная методическая и эксплуатационная приёмка впереди|Selectel|Учебная платформа/);assert.match(html,/Индивидуальные ответы и баллы исследователю не выдаются/);
-  assert.match(js,/for\(const release of design\.catalog\)/,"server-allowed releases, not optional metadata, drive the catalogue");
+  assert.match(js,/for\(const release of availableCatalog\(\)\)/,"server-allowed releases, not optional metadata, drive the catalogue");
   assert.match(js,/study-link/);assert.match(js,/design-group/);assert.match(js,/design-line/);assert.doesNotMatch(js,/label:"Открыть",fn:\(\)=>openDesign/);
   // After every design render the invitation panel is reloaded, and a create click
   // reloads a stale panel instead of throwing "Перечитайте приглашения".
