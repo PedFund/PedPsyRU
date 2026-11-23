@@ -12,6 +12,11 @@ export function studyId(id:unknown):string{
   if(typeof id!=="string"||!/^[a-f0-9]{8}-(?:[a-f0-9]{4}-){3}[a-f0-9]{12}$/i.test(id))throw new ParticipationError(404,"NOT_AVAILABLE");return id;
 }
 export function studyVersion(version:unknown):number{if(!Number.isInteger(version)||Number(version)<0||Number(version)>2147483646)throw new ParticipationError(400,"INVALID_STUDY_INPUT");return Number(version);}
+export function stageDisplayName(value:unknown):string{
+  if(typeof value!=="string"||value.length>200||/[\u0000-\u001f\u007f]/.test(value))throw new ParticipationError(400,"INVALID_STUDY_INPUT");
+  return value.trim();
+}
+function hasOwn(input:unknown,key:string):boolean{return Boolean(input&&typeof input==="object"&&!Array.isArray(input)&&Object.hasOwn(input,key));}
 export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
   listStaff:(token:string)=>studies.listStaff(token),
   create:(token:string,input:unknown,value:string)=>{csrf.assert(token,value);return studies.create(token,studyText(studyObject(input,["title"]).title));},
@@ -23,9 +28,9 @@ export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
     return studies.group(token,studyId(id),groupId===undefined?undefined:studyId(groupId),{name:studyText(b.name,100),kind:b.kind as GroupDesign["kind"],expected_version:studyVersion(b.expected_version)});
   },
   stage:(token:string,id:string,stageId:string|undefined,input:unknown,value:string)=>{
-    csrf.assert(token,value);const b=studyObject(input,["code","ordinal","expected_version"]);
+    csrf.assert(token,value);const named=hasOwn(input,"display_name"),b=studyObject(input,named?["code","display_name","ordinal","expected_version"]:["code","ordinal","expected_version"]);
     if(!Number.isInteger(b.ordinal)||Number(b.ordinal)<0||Number(b.ordinal)>9999)throw new ParticipationError(400,"INVALID_STUDY_INPUT");
-    return studies.stage(token,studyId(id),stageId===undefined?undefined:studyId(stageId),{code:studyText(b.code,40),ordinal:Number(b.ordinal),expected_version:studyVersion(b.expected_version)});
+    return studies.stage(token,studyId(id),stageId===undefined?undefined:studyId(stageId),{code:studyText(b.code,40),...(named?{display_name:stageDisplayName(b.display_name)}:{}),ordinal:Number(b.ordinal),expected_version:studyVersion(b.expected_version)});
   },
   assign:(token:string,id:string,input:unknown,value:string)=>{
     csrf.assert(token,value);const b=studyObject(input,["group_id","stage_id","release_ids","expected_version"]);
@@ -33,9 +38,9 @@ export function createStudyApi(studies:StudyConstructor,csrf:Csrf){return {
     return studies.assign(token,studyId(id),{group_id:studyId(b.group_id),stage_id:studyId(b.stage_id),release_ids:b.release_ids.map(studyId),expected_version:studyVersion(b.expected_version)});
   },
   copy:(token:string,id:string,input:unknown,value:string)=>{
-    csrf.assert(token,value);const b=studyObject(input,["source_stage_id","code","ordinal","expected_version"]);
+    csrf.assert(token,value);const named=hasOwn(input,"display_name"),b=studyObject(input,named?["source_stage_id","code","display_name","ordinal","expected_version"]:["source_stage_id","code","ordinal","expected_version"]);
     if(!Number.isInteger(b.ordinal)||Number(b.ordinal)<0||Number(b.ordinal)>9999)throw new ParticipationError(400,"INVALID_STUDY_INPUT");
-    return studies.copy(token,studyId(id),{source_stage_id:studyId(b.source_stage_id),code:studyText(b.code,40),ordinal:Number(b.ordinal),expected_version:studyVersion(b.expected_version)});
+    return studies.copy(token,studyId(id),{source_stage_id:studyId(b.source_stage_id),code:studyText(b.code,40),...(named?{display_name:stageDisplayName(b.display_name)}:{}),ordinal:Number(b.ordinal),expected_version:studyVersion(b.expected_version)});
   },
   lifecycle:(token:string,id:string,input:unknown,value:string)=>{
     csrf.assert(token,value);const b=studyObject(input,["status","expected_version"]);

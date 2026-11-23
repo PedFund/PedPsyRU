@@ -28,14 +28,14 @@ export class PostgresStudyConstructor implements StudyConstructor{
   group(token:string,id:string,groupId:string|undefined,input:{name:string;kind:GroupDesign["kind"];expected_version:number}){
     return this.call(token,"studies.configure","SELECT pedpsy.configure_study_group($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,groupId??randomUUID(),input.name,input.kind,groupId===undefined]);
   }
-  stage(token:string,id:string,stageId:string|undefined,input:{code:string;ordinal:number;expected_version:number}){
-    return this.call(token,"studies.configure","SELECT pedpsy.configure_study_stage($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,stageId??randomUUID(),input.code,input.ordinal,stageId===undefined]);
+  stage(token:string,id:string,stageId:string|undefined,input:{code:string;display_name?:string;ordinal:number;expected_version:number}){
+    return this.call(token,"studies.configure","SELECT pedpsy.configure_study_stage_named($1,$2,$3,$4,$5,$6,$7) data",[id,input.expected_version,stageId??randomUUID(),input.code,input.ordinal,input.display_name??null,stageId===undefined]);
   }
   assign(token:string,id:string,input:{group_id:string;stage_id:string;release_ids:string[];expected_version:number}){
     return this.call(token,"studies.configure","SELECT pedpsy.configure_study_assignments($1,$2,$3,$4,$5::uuid[]) data",[id,input.expected_version,input.group_id,input.stage_id,input.release_ids]);
   }
-  copy(token:string,id:string,input:{source_stage_id:string;code:string;ordinal:number;expected_version:number}){
-    return this.call(token,"studies.configure","SELECT pedpsy.copy_study_stage($1,$2,$3,$4,$5,$6) data",[id,input.expected_version,input.source_stage_id,randomUUID(),input.code,input.ordinal]);
+  copy(token:string,id:string,input:{source_stage_id:string;code:string;display_name?:string;ordinal:number;expected_version:number}){
+    return this.call(token,"studies.configure","SELECT pedpsy.copy_study_stage_named($1,$2,$3,$4,$5,$6,$7) data",[id,input.expected_version,input.source_stage_id,randomUUID(),input.code,input.ordinal,input.display_name??null]);
   }
   lifecycle(token:string,id:string,input:{status:"active"|"closed";expected_version:number}){
     return this.call(token,"studies.configure","SELECT pedpsy.change_study_lifecycle($1,$2,$3) data",[id,input.expected_version,input.status]);

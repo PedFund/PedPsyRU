@@ -37,7 +37,10 @@ test("runtime grants apply the full expected set when the role owns the schema f
   assert.ok(grants.some(sql=>sql.startsWith("GRANT USAGE ON SCHEMA pedpsy")),"schema usage");
   assert.ok(grants.some(sql=>sql.includes("pedpsy.research_progress(uuid)")),"progress projection stays callable by the runtime role");
   assert.ok(grants.some(sql=>sql.includes("pedpsy.change_research_workbench(uuid,integer,text,jsonb)")),"workbench stays callable");
+  assert.ok(grants.some(sql=>sql.includes("pedpsy.configure_study_stage_named(uuid,integer,uuid,text,integer,text,boolean)")),"named stage configuration stays callable");
+  assert.ok(grants.some(sql=>sql.includes("pedpsy.copy_study_stage_named(uuid,integer,uuid,uuid,text,integer,text)")),"named stage copy stays callable");
   assert.ok(revokes.some(sql=>sql.includes("pedpsy.research_progress_v1(uuid)")),"internal legacy helpers stay out of the runtime role");
   assert.ok(revokes.some(sql=>sql.includes("pedpsy.change_research_workbench_v1(uuid,integer,text,jsonb)")),"internal workbench helpers stay out of the runtime role");
+  assert.ok(revokes.some(sql=>sql.includes("pedpsy.change_research_workbench_v3(uuid,integer,text,jsonb)")),"renamed internal workbench helper stays out of the runtime role");
   assert.equal(grants.some(sql=>/GRANT ALL|OWNER TO/.test(sql)),false,"never a blanket grant or ownership transfer");
 });

@@ -7,7 +7,7 @@ import type {ParticipantEnrollmentSnapshot} from "../ports/participant-enrollmen
 export type AdmissionHttpApi=ReturnType<typeof createParticipantStageApi>;
 const discovery=(s:ParticipantStagesSnapshot)=>({study_id:s.study_id,group_id:s.group_id,passport_schema_version:s.passport_schema_version,
   passport_completed:s.passport_completed,required_consents_accepted:s.required_consents_accepted,
-  stages:s.stages.map(t=>({stage_id:t.stage_id,code:t.code,ordinal:t.ordinal,opening_revision:t.opening_revision,assignment_ids:[...t.assignment_ids]}))});
+  stages:s.stages.map(t=>({stage_id:t.stage_id,code:t.code,display_name:t.display_name,ordinal:t.ordinal,opening_revision:t.opening_revision,assignment_ids:[...t.assignment_ids]}))});
 const enrollment=(s:ParticipantEnrollmentSnapshot)=>({study_id:s.study_id,group_id:s.group_id,stage_id:s.stage_id,enrollment_id:s.enrollment_id,
   attempts:s.attempts.map(a=>({attempt_id:a.attempt_id,assignment_id:a.assignment_id,release_id:a.release_id,status:a.status,revision:a.revision,current_item_id:a.current_item_id}))});
 export function registerAdmissionRoutes(app:FastifyInstance,origin:string,api?:AdmissionHttpApi):void{

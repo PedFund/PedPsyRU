@@ -9,7 +9,7 @@ const {DOMAIN_TABLES}=require("../dist/src/adapters/postgres/snapshot.js");
 async function configured(f){
  const staff=await verifiedStaff(f),r=await studyResearcher(f,staff);let design=await r.studies.create(r.session.token,"Synthetic stage discovery");
  for(const name of ["КГ","ЭГ"])design=await r.studies.group(r.session.token,design.id,undefined,{name,kind:"other",expected_version:design.version});
- design=await r.studies.stage(r.session.token,design.id,undefined,{code:"T1",ordinal:1,expected_version:design.version});
+ design=await r.studies.stage(r.session.token,design.id,undefined,{code:"T1",display_name:"Повторная диагностика",ordinal:1,expected_version:design.version});
  for(const g of design.groups)for(const s of design.stages)design=await r.studies.assign(r.session.token,design.id,{group_id:g.id,stage_id:s.id,release_ids:[f.seed.release_id],expected_version:design.version});
  design=await r.studies.lifecycle(r.session.token,design.id,{status:"active",expected_version:design.version});
  const invitations=new PostgresGroupInvitations(f.runtime),invite=await invitations.create(r.session.token,design.id,design.groups[0].id,{expires_at:Date.now()+86400000});
@@ -30,7 +30,7 @@ scenario("no manual opening means empty own list; readiness is separate and read
  assert.deepEqual(await read(x),a);
 });
 scenario("opening another group stays invisible; only T1 can appear without fabricated T0",async(t,f,x)=>{
- await open(x,1,0);assert.deepEqual((await read(x)).stages,[]);await open(x,0,1);const a=await read(x);assert.equal(a.stages.length,1);assert.equal(a.stages[0].code,"T1");assert.equal(a.stages[0].stage_id,x.design.stages[1].id);assert.equal(a.stages[0].opening_revision,1);assert.equal(a.stages[0].assignment_ids.length,1);assert.deepEqual(Object.keys(a.stages[0]).sort(),["assignment_ids","code","opening_revision","ordinal","stage_id"]);
+ await open(x,1,0);assert.deepEqual((await read(x)).stages,[]);await open(x,0,1);const a=await read(x);assert.equal(a.stages.length,1);assert.equal(a.stages[0].code,"T1");assert.equal(a.stages[0].display_name,"Повторная диагностика");assert.equal(a.stages[0].stage_id,x.design.stages[1].id);assert.equal(a.stages[0].opening_revision,1);assert.equal(a.stages[0].assignment_ids.length,1);assert.deepEqual(Object.keys(a.stages[0]).sort(),["assignment_ids","code","display_name","opening_revision","ordinal","stage_id"]);
  assert.equal((await f.admin.query("SELECT count(*) n FROM pedpsy.stage_enrollments WHERE study_id=$1",[x.design.id])).rows[0].n,"0");
  await open(x,0,0);assert.deepEqual((await read(x)).stages.map(s=>s.code),["T0","T1"]);
 });

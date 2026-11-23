@@ -12,6 +12,9 @@ test("research workbench rejects forged metadata, arbitrary stages and excessive
   assert.deepEqual(workbenchInput("schema",{expected_version:0,all:true,group_id:null,schema_version:1,basic_fields:["education","sex"],fields:[]}).data.basic_fields,["sex","education"]);
   assert.deepEqual(workbenchInput("stage",{expected_version:1,id:null,code:"T1",note:" После "}).data,{id:null,code:"T1",note:"После"});
   assert.deepEqual(workbenchInput("stage",{expected_version:1,id:null,code:"T49",note:""}).data,{id:null,code:"T49",note:""});
+  assert.deepEqual(workbenchInput("stage",{expected_version:1,id:null,code:"T1",note:"",display_name:"  Первичная диагностика  "}).data,{id:null,code:"T1",note:"",display_name:"Первичная диагностика"});
+  assert.throws(()=>workbenchInput("stage",{expected_version:1,id:null,code:"T1",note:"",display_name:"x".repeat(201)}));
+  assert.throws(()=>workbenchInput("stage",{expected_version:1,id:null,code:"T1",note:"",display_name:"x\n"}));
   assert.deepEqual(workbenchInput("copy_assignments",{expected_version:2,stage_id:id}).data,{stage_id:id});
   assert.throws(()=>workbenchInput("copy_assignments",{expected_version:2,stage_id:"T1"}));
   assert.deepEqual(workbenchInput("delete_stage",{expected_version:2,stage_id:id}).data,{stage_id:id});

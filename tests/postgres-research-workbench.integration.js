@@ -22,8 +22,12 @@ test("PostgreSQL workbench: experimental/T0 defaults, notes, automatic stage ord
   const x=await setup(t);assert.equal(x.d.groups.length,1);assert.equal(x.d.groups[0].name,"Экспериментальная");assert.deepEqual(x.d.stages.map(s=>s.code),["T0"]);
   const methods=new PostgresMethodLibrary(x.f.runtime),available=await methods.catalog(x.r.session.token),planned=await methods.planning(x.r.session.token),release=x.d.catalog.find(r=>r.id===x.f.seed.release_id);assert.equal(available.length,0,"metadata binding is optional in the synthetic TKI-only fixture");assert.equal(release.method_id,"tki_ru_30_pairs");assert.equal(planned.find(m=>m.method_id===release.method_id),undefined,"the allowed release must remain usable without optional planning metadata");
   await change(x,"group",{id:null,name:"Контрольная",kind:"control",note:"Сравнение"});assert.equal(x.d.groups.length,2);
-  for(const code of ["T1","T2"])await change(x,"stage",{id:null,code,note:"Измерение "+code});
+  for(const [code,name] of [["T1","Первичная диагностика"],["T2","Повторная диагностика"]])await change(x,"stage",{id:null,code,note:"Измерение "+code,display_name:name});
   assert.deepEqual(x.d.stages.map(s=>s.ordinal),[0,1,2]);assert.equal(Object.values(x.d.group_notes)[0],"Сравнение");
+  assert.equal(x.d.stages[1].display_name,"Первичная диагностика");assert.equal(x.d.stages[2].display_name,"Повторная диагностика");
+  const t1Code=x.d.stages[1].code,t1Ordinal=x.d.stages[1].ordinal;
+  await change(x,"stage",{id:x.d.stages[1].id,code:t1Code,note:"Измерение T1",display_name:"Первичное обследование"});
+  assert.equal(x.d.stages[1].code,t1Code);assert.equal(x.d.stages[1].ordinal,t1Ordinal);assert.equal(x.d.stages[1].display_name,"Первичное обследование");
   await change(x,"assign",{all:true,group_id:null,stage_id:null,release_ids:[x.f.seed.release_id]});assert.equal(x.d.assignments.length,6);
   await change(x,"schema",{all:false,group_id:x.d.groups[0].id,schema_version:1,basic_fields:["sex","age","city","organization"],fields:[]});
   assert.deepEqual(x.d.profile_schemas[x.d.groups[0].id].fields.map(f=>f.key),["sex","age","city","organization"]);assert.deepEqual(x.d.profile_schemas[x.d.groups[1].id].fields.map(f=>f.key),["sex","age","city"]);
