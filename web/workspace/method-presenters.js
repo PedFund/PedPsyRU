@@ -61,6 +61,13 @@
   function radio(doc,option,selected,disabled,onChange){const input=doc.createElement("input");input.type="radio";input.name="response";input.value=option.value;input.checked=selected===option.value;input.disabled=disabled;input.onchange=()=>onChange(input.value);return input;}
   const singleChoice=Object.freeze({id:"pedpsy/single-choice",version:"1.0",mount({container,item,selected,disabled,onChange}){
     const doc=container.ownerDocument;
+    const numeric=item.options.length>=8&&item.options.every(option=>/^-?\d{1,2}$/.test(String(option.text).trim()));
+    if(numeric){
+      const wrap=doc.createElement("div");wrap.className="scale scale-numeric scale-row scale-count-"+item.options.length;
+      const options=doc.createElement("div");options.className="scale-options";
+      for(const option of item.options){const label=doc.createElement("label");label.className="scale-option";const cell=doc.createElement("span");cell.className="scale-cell";cell.textContent=option.text;label.append(radio(doc,option,selected,disabled,onChange),cell);options.append(label);}
+      wrap.append(options);container.append(wrap);return;
+    }
     if(isBipolar(item)){
       const scale=doc.createElement("div");scale.className="bipolar-scale";
       const poles=doc.createElement("div");poles.className="bipolar-poles";
