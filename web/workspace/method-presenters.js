@@ -16,9 +16,8 @@
       presenter:Object.freeze({id:"pedpsy/horizontal-scale",version:"1.0.0"}),
       scale:Object.freeze({
         type:"numeric",
-        // The pinned key accepts 1..6 and maps them to the authored 0..5 scale.
-        // The participant sees 0..5; the stored protocol code stays 1..6.
-        values:["1","2","3","4","5","6"],
+        // The reconciled key accepts and stores the authored 0..5 codes directly.
+        values:["0","1","2","3","4","5"],
         labels:["0","1","2","3","4","5"],
         minLabel:"Никогда",
         maxLabel:"Всегда",

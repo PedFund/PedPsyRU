@@ -1,6 +1,6 @@
 {
   "id": "maia_r_32",
-  "version": "1.0.0-staging",
+  "version": "1.0.1-staging",
   "library_number": 12,
   "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
   "short_title": "MAIA-R",
@@ -10,27 +10,27 @@
   "instructions": "В приведенном ниже списке утверждений укажите, пожалуйста, как часто каждое из этих утверждений соответствует вашему состоянию в обычной жизни.\n\nОбведите одну цифру на каждой строчке",
   "response_options": [
     {
-      "value": 1,
+      "value": 0,
       "label": "Никогда"
     },
     {
-      "value": 2,
+      "value": 1,
       "label": "1"
     },
     {
-      "value": 3,
+      "value": 2,
       "label": "2"
     },
     {
-      "value": 4,
+      "value": 3,
       "label": "3"
     },
     {
-      "value": 5,
+      "value": 4,
       "label": "4"
     },
     {
-      "value": 6,
+      "value": 5,
       "label": "Всегда"
     }
   ],
@@ -671,6 +671,12 @@
     "raw_passport_file": "MAIA-R_pasport.json",
     "agreement": "MAIA-R_zaklyuchenie.md",
     "revision": 4
+  },
+  "reconciliation": {
+    "status": "verified_against_original",
+    "date": "2026-11-23",
+    "source": "MAIA-R_pasport.json, revision 4; с. 244–245",
+    "statement": "Шкала ответов 0–5 сверена с оригиналом: код ответа равен исходному баллу, подписи 0 — «Никогда», 5 — «Всегда», промежуточные 1–4. Сдвиг ответов 1–6 устранён."
   },
   "review": {
     "status": "staging_for_owner_testing",

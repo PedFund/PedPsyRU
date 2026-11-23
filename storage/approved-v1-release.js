@@ -11,12 +11,15 @@ const {canonicalJson} = require('./releases.js');
 const sha = value => 'sha256:' + createHash('sha256').update(value).digest('hex');
 const HANDLER = 'approved-numeric-1.0.0';
 
-// Migration 055 accepts any labelled numeric scale 1..N (2..20) plus the A/B pair.
-// The exact option array is still pinned by the release form digest.
+// Migration 055 accepts any labelled numeric scale (2..20) plus the A/B pair. A
+// method may start at 0 (MAIA-R) or at 1; the exact array is still pinned by the
+// release form digest.
 function numericScaleValid(options) {
-  return Array.isArray(options) && options.length >= 2 && options.length <= 20 &&
-    options.every((option, index) => option && String(option.value) === String(index + 1) &&
-      typeof option.text === 'string' && option.text.trim().length > 0);
+  if (!Array.isArray(options) || options.length < 2 || options.length > 20) return false;
+  const first = options[0] && Number(options[0].value);
+  if (first !== 0 && first !== 1) return false;
+  return options.every((option, index) => option && String(option.value) === String(first + index) &&
+    typeof option.text === 'string' && option.text.trim().length > 0);
 }
 
 function normalizeOptions(declared, methodId) {

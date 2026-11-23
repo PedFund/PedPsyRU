@@ -106,10 +106,10 @@
     },
     {
       "method_id": "maia_r_32",
-      "key_version": "1.0.0-staging",
-      "key_digest": "sha256:691a44a03f40dcc26608670f79b5fda3b723c52ce76d56b53361eddd3274ecf2",
+      "key_version": "1.0.1-staging",
+      "key_digest": "sha256:c1ad2757a7be2f90596feccf022da78f5b2a08218b313685ab53d66d4a53ed45",
       "package_file": "12_MAIA_R.json",
-      "package_version": "1.0.0-staging",
+      "package_version": "1.0.1-staging",
       "title": "Многомерная оценка интероцептивного осознавания (MAIA-R)",
       "author": "Попова Резеда Равилевна, Лопухова Ольга Геннадьевна",
       "items": 32

@@ -17,8 +17,8 @@ const sha = buffer => "sha256:" + createHash("sha256").update(buffer).digest("he
 const cleanVersion = value => value.replace(/-(staging|draft)(\.\d+)?$/, "");
 
 function boundsOf(key, scale) {
-  // A key with an answerMap scores on different values than it accepts (MAIA-R accepts
-  // ui values 1..6 but scores 0..5), so the declared score range wins for the bounds.
+  // A key may score on different values than it accepts (for example an answerMap),
+  // so the declared score range wins for the bounds.
   const values = Array.isArray(key.scoreRange) ? key.scoreRange.slice() : key.valid.slice().sort((a, b) => a - b);
   const low = values[0], high = values[values.length - 1];
   const reverseMax = scale.reverseMax !== undefined ? scale.reverseMax : key.reverseMax;

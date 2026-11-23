@@ -78,6 +78,12 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
       assert.equal(result.presentation.groups[0].measures.length, 6, 'Ryff keeps six profile scales');
       assert.equal(result.presentation.summary.colors, 3, 'Ryff total has three levels');
     }
+    if (release.id === 'maia_r_32') {
+      const stored = (await f.admin.query('SELECT value FROM pedpsy.responses WHERE study_id=$1 AND attempt_id=$2', [f.studyId, attempt])).rows.map(row => row.value);
+      assert.equal(stored.length, 32);
+      assert.ok(stored.every(value => /^[0-5]$/.test(value)), 'MAIA-R stores reconciled 0..5 codes');
+      assert.ok(stored.includes('0'), 'zero is a stored answer');
+    }
     if (release.id === 'uvlk_shipilov') {
       assert.equal(result.presentation.groups[0].measures.length, 3, 'Shipilov keeps three spheres');
       assert.equal(result.presentation.groups[1].measures.length, 6, 'Shipilov keeps six conflicts');

@@ -61,12 +61,12 @@ test("the level category is the scored level, not a category re-derived from the
 
 test("MAIA-R has all eight official labels, categories and one-decimal values", () => {
   const key = require("../methods/approved/v1/keys/maia_r_32.key.json");
-  const answers = Array.from({length: 32}, () => 1);
+  const answers = Array.from({length: 32}, () => 0);
   const metrics = scoreNumericPassport(key, answers).metrics;
   const codes = Object.keys(key.scales);
   const measures = codes.map(code => ({code, label: code, value: metrics[code]}));
   const levels = new Map(codes.map(code => [code, {value: metrics[code + " – уровень"]}]));
-  const view = buildPresentation("maia_r_32@1.0.0-staging", measures, levels);
+  const view = buildPresentation("maia_r_32@1.0.1-staging", measures, levels);
   assert.ok(view);
   assert.equal(view.variant, "level-numeric");
   assert.equal(view.subtitle, "Уровни выраженности показателей интероцептивного осознавания");
@@ -95,11 +95,11 @@ test("MAIA-R has all eight official labels, categories and one-decimal values", 
 
 test("MAIA-R all-eight result keeps the approved categories on the highest vector", () => {
   const key = require("../methods/approved/v1/keys/maia_r_32.key.json");
-  const metrics = scoreNumericPassport(key, Array.from({length: 32}, () => 6)).metrics;
+  const metrics = scoreNumericPassport(key, Array.from({length: 32}, () => 5)).metrics;
   const codes = Object.keys(key.scales);
   const measures = codes.map(code => ({code, label: code, value: metrics[code]}));
   const levels = new Map(codes.map(code => [code, {value: metrics[code + " – уровень"]}]));
-  const view = buildPresentation("maia_r_32@1.0.0-staging", measures, levels);
+  const view = buildPresentation("maia_r_32@1.0.1-staging", measures, levels);
   assert.deepEqual(view.groups[0].measures.map(measure => measure.level), [
     "Высокий", "Низкий", "Ниже среднего", "Высокий", "Высокий", "Выше среднего", "Высокий", "Выше среднего"
   ]);

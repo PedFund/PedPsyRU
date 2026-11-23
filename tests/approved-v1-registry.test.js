@@ -19,7 +19,7 @@ test("the registry exposes every approved package, CO-36 included", () => {
   assert.equal(approved.length, 16);
   assert.deepEqual(approved.map(d => d.method_version_id).sort(), [
     "co36_kunitsyna_36@1.0.0-staging", "darr_7@1.0.0-staging", "ecv_15@1.0.0-staging", "ffmq_39@1.0.0-staging",
-    "hardiness_leontiev_rasskazova_45@1.0.0-staging", "maia_r_32@1.0.0-staging",
+    "hardiness_leontiev_rasskazova_45@1.0.0-staging", "maia_r_32@1.0.1-staging",
     "motkov_psychological_culture_18@1.0.0-staging",
     "pvq_rr_57@1.0.0-staging", "qlesq_36_vodopyanova@1.1.0-staging", "reflexivity_karpov_27@1.1.0-staging",
     "ryff_pwb_84_shevelenkova_fesenko@1.0.0-staging", "shpana_20@1.0.0-staging", "sjo_20@1.0.0-staging",
