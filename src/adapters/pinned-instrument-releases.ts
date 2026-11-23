@@ -7,6 +7,7 @@ import {umicsReleasePackage} from "../../storage/umics-release.js";
 import {legacyBatchReleases} from "../../storage/legacy-batch-release.js";
 import {karpovReleasePackage} from "../../storage/karpov-release.js";
 import {approvedV1Releases} from "../../storage/approved-v1-release.js";
+import {maiaLegacyRelease} from "../../storage/maia-legacy-release.js";
 import {genchiReleasePackage} from "../../storage/genchi-release.js";
 
 interface ReleaseRow {id:string;method_version_id:string;handler_version:string;contract_version:string;form_id:string;form_version:string;form_snapshot:unknown;form_digest:string;key_digest:string;verification_state:string;publication_state:string}
@@ -29,7 +30,7 @@ const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{const
 let installedCache:ChoiceRelease[]|undefined;
 function installed():ChoiceRelease[]{
   if(installedCache)return installedCache;
-  const t=releasePackage(),k=karpovReleasePackage(),p=prfqReleasePackage(),u=umicsReleasePackage(),g=genchiReleasePackage();
+  const t=releasePackage(),k=karpovReleasePackage(),p=prfqReleasePackage(),u=umicsReleasePackage(),g=genchiReleasePackage(),lm=maiaLegacyRelease();
   const asForm=(f:FormShape):ParticipantForm=>({id:f.id,version:f.version,
     ...(f.title!==undefined?{title:f.title}:{}),...(f.instruction!==undefined?{instruction:f.instruction}:{}),
     ...(f.presentation!==undefined?{presentation:f.presentation}:{}),...(f.rules!==undefined?{rules:f.rules}:{}),
@@ -44,6 +45,7 @@ function installed():ChoiceRelease[]{
     asRelease(u.form as FormShape,{methodVersionId:u.methodVersionId,handlerVersion:u.handlerVersion,verificationState:u.verificationState,formSnapshot:u.formSnapshot,formDigest:u.formDigest,keyDigest:u.keyDigest}),
     ...legacyBatchReleases().map(b=>asRelease(b.form as FormShape,{methodVersionId:b.methodVersionId,handlerVersion:b.handlerVersion,verificationState:b.verificationState,formSnapshot:b.formSnapshot,formDigest:b.formDigest,keyDigest:b.keyDigest})),
     ...approvedV1Releases().releases.map(a=>{const raw=a.form as unknown as FormShape;const form=withDisplayTitle(raw,a.methodVersionId);const rules=raw.rules;return asRelease(form,{methodVersionId:a.methodVersionId,handlerVersion:a.handlerVersion,verificationState:a.verificationState,formSnapshot:a.formSnapshot,formDigest:a.formDigest,keyDigest:a.keyDigest,...(rules&&rules.quota?{quota:rules.quota}:{})});}),
+    asRelease(lm.form as FormShape,{methodVersionId:lm.methodVersionId,handlerVersion:lm.handlerVersion,verificationState:lm.verificationState,formSnapshot:lm.formSnapshot,formDigest:lm.formDigest,keyDigest:lm.keyDigest}),
     asRelease(g.form as unknown as FormShape,{methodVersionId:g.methodVersionId,handlerVersion:g.handlerVersion,verificationState:g.verificationState,formSnapshot:g.formSnapshot,formDigest:g.formDigest,keyDigest:g.keyDigest})
   ];
   installedCache=list;
