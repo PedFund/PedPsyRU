@@ -107,7 +107,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
           await ensure();
           const result = await client.query<AttemptRow>("SELECT id,study_id,release_id,status,revision,current_item_id FROM pedpsy.attempts WHERE id=$1", [id]);
           const row = result.rows[0]; if (!row) throw new ParticipationError(404, "NOT_AVAILABLE");
-          const values = await client.query<InstrumentResponse>("SELECT item_id,value FROM pedpsy.responses WHERE attempt_id=$1 ORDER BY item_id", [id]);
+          const values = await client.query<InstrumentResponse>("SELECT item_id,value FROM pedpsy.own_attempt_responses($1)", [id]);
           const snapshot={id, studyId: row.study_id, participantId: context.participantId, releaseId: row.release_id, status: row.status,
             revision: Number(row.revision), currentItemId: row.current_item_id, responses: values.rows};
           attemptCache={id,snapshot}; return snapshot;
