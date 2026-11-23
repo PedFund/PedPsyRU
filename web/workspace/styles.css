@@ -179,3 +179,6 @@ a:not(.brand):hover{color:#0e4b56}
   .study-header h2{font-size:20px}
 }
 @media(prefers-reduced-motion:reduce){#researcher-home .study-list-item{transition:none}}
+
+/* Attribute visibility must win over tab flex rules. Only one Overview tab is visible. */
+#study-tabs button[hidden],.account-actions[hidden],.study-settings-menu[hidden]{display:none!important}
