@@ -41,12 +41,18 @@
     <section id="recovery-screen" class="card narrow" hidden><h2>Сохраните резервные коды</h2><p>Каждый код используется один раз вместе с паролем. После закрытия они больше не будут показаны.</p><pre id="recovery-codes"></pre><button id="dismiss-recovery" type="button">Коды сохранены — продолжить</button></section>
 
     <section id="workspace-screen" hidden>
-      <div class="toolbar"><button id="refresh" class="secondary">Обновить</button><button id="reauth" class="secondary">Подтвердить MFA заново</button><button id="logout" class="text">Выйти</button></div>
-      <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
+      <details id="account-actions" class="account-actions">
+        <summary><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg><span>Учетная запись</span></summary>
+        <div class="account-action-list"><button id="refresh" type="button" class="secondary">Обновить данные</button><button id="reauth" type="button" class="secondary">Подтвердить MFA заново</button><button id="logout" type="button" class="text">Выйти</button></div>
+        <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
+      </details>
       <section id="researcher-home" class="card" hidden>
-        <h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div>
-        <details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
-        <p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку.</p>
+        <div class="section-top researcher-home-tools">
+          <label>Статус исследования<select id="study-status-filter"><option value="all">Все исследования</option><option value="draft">Черновики</option><option value="active">Активные</option><option value="closed">Закрытые</option></select></label>
+          <details id="home-create-details" class="study-create-control"><summary><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg><span>Создать исследование</span></summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
+        </div>
+        <p id="quota" class="muted" hidden></p><div id="studies"></div>
+        <p class="muted researcher-privacy-note">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку.</p>
       </section>
 
       <div id="staff-home" hidden>
@@ -63,25 +69,25 @@
       <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><span class="crumb-sep" id="study-crumb-sep" aria-hidden="true">/</span><button id="back-study-hub" class="text" type="button" hidden>К запуску</button></nav>
       <header class="study-header">
         <div><h2 id="design-title"></h2><p id="design-meta" class="muted"></p></div>
-        <div class="study-header-actions"><button id="archive-study" class="secondary" type="button" hidden>Закрыть исследование</button></div>
+        <details id="study-settings-menu" class="study-settings-menu"><summary><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v2m0 16v2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M2 12h2m16 0h2M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"/></svg><span>Настройки исследования</span></summary><div class="study-settings-actions"><button id="archive-study" class="secondary" type="button" hidden>Закрыть исследование</button></div></details>
       </header>
       <nav id="study-tabs" class="tabs study-tabs" aria-label="Разделы исследования">
-        <button type="button" id="study-tab-launch" data-study-section-open="launch" hidden>Запуск</button>
-        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden>Ход</button>
-        <button type="button" data-study-section-open="design">Дизайн</button>
-        <button type="button" data-study-section-open="participants">Участники</button>
-        <button type="button" data-study-section-open="methods">Методики</button>
+        <button type="button" id="study-tab-launch" data-study-section-open="launch" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Обзор</span></button>
+        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg><span>Обзор</span></button>
+        <button type="button" data-study-section-open="design"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 7h8M8 12h8M8 17h5"/><circle cx="6" cy="7" r=".5" fill="currentColor"/><circle cx="6" cy="12" r=".5" fill="currentColor"/><circle cx="6" cy="17" r=".5" fill="currentColor"/></svg><span>План исследования</span></button>
+        <button type="button" data-study-section-open="participants"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Участники</span></button>
+        <button type="button" data-study-section-open="methods"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M8 17v-6M13 17V7M18 17v-9"/></svg><span>Методики</span></button>
       </nav>
 
       <section id="study-hub" class="card study-section" hidden>
-        <h2>Запуск исследования</h2>
+        <h2>Готовность к запуску</h2>
         <p class="muted">Проверьте готовность и активируйте исследование. После активации дизайн закрепляется, а исследование открывается на вкладке «Ход».</p>
         <div id="hub-activation" hidden><p id="hub-activation-status" class="muted"></p><ul id="hub-activation-checklist" class="muted"></ul></div>
         <div class="toolbar"><button id="activate-study" type="button" hidden>Активировать исследование</button></div>
       </section>
 
       <section id="study-design-section" class="card study-section" hidden>
-        <h2>Дизайн исследования</h2>
+        <h2>План исследования</h2>
         <div id="design-matrix" class="matrix"></div>
         <p id="design-lock-note" class="error" hidden>Запись остановлена: состояние исследования изменилось. Вернитесь в «Мои исследования» и откройте его снова.</p>
         <div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
