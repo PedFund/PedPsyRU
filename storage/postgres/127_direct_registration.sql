@@ -36,7 +36,9 @@ BEGIN
     VALUES(gen_random_uuid(),x.study_id,participant,p.email_key,p.id,at_ms) RETURNING * INTO contact;
   INSERT INTO pedpsy.participant_contact_acceptances(pending_id,study_id,contact_id,notice_version,confirmed_at_ms)
     VALUES(p.id,x.study_id,contact.id,p.contact_notice_version,at_ms);
-  UPDATE pedpsy.registration_pending SET status='confirmed',confirmed_at_ms=at_ms WHERE id=p.id;
+  UPDATE pedpsy.registration_pending SET status='confirmed',ready_at_ms=at_ms,confirmed_at_ms=at_ms,
+    scheme=new_scheme,salt=new_salt,password_hash=new_password_hash,
+    confirmation_hash='sha256:'||encode(sha256(convert_to('direct:'||p.id::text,'UTF8')),'hex') WHERE id=p.id;
   PERFORM pedpsy.registration_audit('participants.registration.direct',x.study_id,p.id,true);
   RETURN true;
 END $$;
