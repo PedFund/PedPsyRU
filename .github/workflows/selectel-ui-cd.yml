@@ -138,7 +138,7 @@ jobs:
           destination="$SELECTEL_USER@$SELECTEL_HOST"
           remote_stage="$(ssh "${ssh_args[@]}" "$destination" "mktemp -d /tmp/mettest-ui-cd.XXXXXXXXXX")"
           [[ "$remote_stage" =~ ^/tmp/mettest-ui-cd\.[A-Za-z0-9]+$ ]] || exit 2
-          trap 'ssh "${ssh_args[@]}" "$destination" "rm -f \'$remote_stage/styles.css\'; rmdir \'$remote_stage\'" || true' EXIT
+          trap 'ssh "${ssh_args[@]}" "$destination" "rm -f $remote_stage/styles.css; rmdir $remote_stage" || true' EXIT
           scp "${scp_args[@]}" web/workspace/styles.css "$destination:$remote_stage/styles.css"
           ssh "${ssh_args[@]}" "$destination" "bash -s -- apply '$SELECTEL_APP_ROOT' '$SELECTEL_SERVICE' '$BASE_SHA' '$TARGET_SHA' '$OLD_HASH' '$NEW_HASH' '$remote_stage'" < scripts/selectel-ui-remote.sh
           {
