@@ -52,6 +52,8 @@
   function profileFor(form){
     if(!form||typeof form.id!=="string")return null;
     const candidates=methodProfiles.get(form.id+"@"+(form.version||""))||null;
+    const firstItem=Array.isArray(form.items)?form.items[0]:null;
+    if(!candidates&&firstItem&&Array.isArray(firstItem.options)&&firstItem.options.length===11&&firstItem.options.every((option,index)=>String(option.value)===String(index+1)))return ecvProfile;
     if(!candidates)return null;
     const first=Array.isArray(form.items)?form.items[0]:null;
     if(!first||!Array.isArray(first.options))return candidates[0];
