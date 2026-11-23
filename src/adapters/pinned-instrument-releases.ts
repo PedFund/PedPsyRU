@@ -74,9 +74,18 @@ export function verifyPinnedChoiceRelease(row:ReleaseRow|undefined,items:readonl
 export function pinnedParticipantForm(release:PinnedRelease):ParticipantForm {
   const p=resolve(release.methodVersionId,release.handlerVersion);
   if(p.keyDigest!==release.keyDigest)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
-  // A presentational correction never changes items or options: it only replaces the
-  // title and the instruction shown above the stimulus.
+  // Display-only corrections must never change stored option *values*. The
+  // scoring keys continue to interpret ECV 1..11 as 0..10 and DAR-R 1..5 as
+  // 0..4. Pinned snapshots and historical versions remain untouched.
   const correction=release.presentation;
-  if(!correction)return p.form;
-  return {...p.form,...(correction.title?{title:correction.title}:{}),...(correction.instruction!==undefined?{instruction:correction.instruction}:{})};
+  const original=correction?{...p.form,...(correction.title?{title:correction.title}:{}),...(correction.instruction!==undefined?{instruction:correction.instruction}:{})}:p.form;
+  const id=release.methodVersionId;
+  if(id!=="ecv_15@1.0.0-staging"&&id!=="darr_7@1.0.0-staging")return original;
+  return {...original,items:original.items.map(item=>({...item,options:item.options.map(option=>{
+    const raw=Number(option.value);
+    if(!Number.isSafeInteger(raw))return option;
+    if(id==="ecv_15@1.0.0-staging"&&raw>=1&&raw<=11)return {...option,text:String(raw-1)};
+    if(id==="darr_7@1.0.0-staging"&&raw>=1&&raw<=5)return {...option,text:String(raw-1)+" – "+option.text};
+    return option;
+  })}))};
 }
