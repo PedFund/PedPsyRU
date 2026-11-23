@@ -51,3 +51,56 @@
 .participant-stages-card h2{margin-bottom:4px}.participant-stage-list{display:flex;flex-direction:column;gap:10px}.participant-stage{display:flex;align-items:center;justify-content:space-between;gap:16px;min-width:0;padding:14px 16px;border:1px solid #dbe9ed;border-radius:12px;background:#f8fbfc}.participant-stage-text{display:flex;flex-direction:column;gap:2px;min-width:0}.participant-stage-name{font-size:16px;font-weight:700;line-height:1.35;overflow-wrap:anywhere}.participant-stage-code{color:#5e7a81;font-size:12px;font-weight:400}.participant-stage-action{flex:none;min-height:44px;padding:10px 16px;font-weight:700}.participant-status-row{align-items:center}.participant-status{display:block;margin-top:2px;color:#5e7a81;font-size:13px;line-height:1.4}.participant-status.is-action{color:#9f293a;font-weight:650}.participant-card.is-action-required{border-color:#e0b4bb}
 #message:empty{display:none}
 @media (max-width:640px){.participant-stage{flex-direction:column;align-items:stretch;gap:10px}.participant-stage-action{width:100%}}
+
+
+/* Researcher navigation: retain the established teal palette, with
+   semantic text colors and sufficient contrast for information hierarchy. */
+:root{
+  --ui-text-heading:#173b46;
+  --ui-text-main:#244c57;
+  --ui-text-secondary:#426873;
+  --ui-text-meta:#55737e;
+  --ui-text-action:#126874;
+  --ui-focus:#167a83;
+  --ui-divider:#d8e5e8;
+}
+#researcher-home .researcher-home-tools{align-items:flex-start;gap:16px;margin-bottom:20px}
+#researcher-home .researcher-home-tools>label{margin:0;min-width:210px;color:var(--ui-text-secondary);font-weight:600}
+#study-status-filter{background:#f8fcfd;border-color:var(--ui-divider);font-weight:500;color:var(--ui-text-heading)}
+#researcher-home .study-create-control{margin:0;border:0;align-self:flex-start;min-width:min(100%,270px)}
+#researcher-home .study-create-control>summary{display:block;list-style:none;cursor:pointer;border:1px solid #167a83;border-radius:8px;background:#167a83;color:#fff;font-size:14px;font-weight:650;padding:12px 16px;text-align:center}
+#researcher-home .study-create-control>summary::-webkit-details-marker{display:none}
+#researcher-home .study-create-control>summary:hover{background:#0d626c}
+#researcher-home .study-create-control>summary:focus-visible,.account-actions summary:focus-visible,.study-settings-menu summary:focus-visible{outline:3px solid #82c9d6;outline-offset:3px}
+#researcher-home .study-create-control form{padding:12px 0}
+#researcher-home .study-create-control form label{color:var(--ui-text-main)}
+#researcher-home .study-list-item{gap:12px}
+#researcher-home .study-list-item .study-link{font-weight:650}
+#researcher-home .researcher-privacy-note{border-top:1px solid var(--ui-divider);padding-top:16px;margin-top:24px;color:var(--ui-text-meta)}
+.study-status{display:inline-block;margin-top:7px;padding:4px 10px;font-size:12px;font-weight:650;border-radius:999px;width:max-content}
+.study-status-draft{color:#795013;background:#fff3d9}
+.study-status-active{color:#12645d;background:#def4ee}
+.study-status-closed,.study-status-unknown{color:#536471;background:#eaf0f4}
+.account-actions{margin:0 0 20px auto;border:0;max-width:400px}
+.account-actions>summary{cursor:pointer;color:var(--ui-text-action);font-size:13px;font-weight:650;text-align:right}
+.account-action-list{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:10px}
+.account-action-list button{font-size:13px}
+.account-actions #researcher-login-line{font-size:12px;color:var(--ui-text-meta);margin-top:10px;text-align:right}
+.study-settings-menu{margin:0;border:0;flex-shrink:0}
+.study-settings-menu>summary{color:var(--ui-text-action);font-size:13px;font-weight:650}
+.study-settings-actions{margin-top:10px}
+.study-settings-actions button{color:var(--ui-text-main)}
+.study-open main>header{display:none}
+#study-tabs button{font-weight:600}
+#study-tabs button:not(.active){color:var(--ui-text-main)}
+#study-tabs button.active{background:#167a83;color:#fff}
+#design-title{color:var(--ui-text-heading)}
+#design-meta{color:var(--ui-text-secondary)}
+@media(max-width:640px){
+  #researcher-home .researcher-home-tools{flex-direction:column;align-items:stretch}
+  #researcher-home .researcher-home-tools>label{min-width:0;width:100%}
+  #researcher-home .study-create-control{width:100%;max-width:none}
+  .account-actions{max-width:100%}
+  .study-header{position:relative;top:auto;flex-wrap:wrap}
+  .study-tabs{top:0}
+}
