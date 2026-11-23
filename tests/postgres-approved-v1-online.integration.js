@@ -6,7 +6,7 @@ const {postgresFixture} = require('./postgres-fixture.js'), {verifiedStaff} = re
   {studyResearcher} = require('./study-fixture.js'), {workspaceFixture, headers} = require('./workspace-fixture.js'),
   {csrfFor} = require('../storage/access.js');
 const {PostgresResearchWorkbench} = require('../dist/src/adapters/postgres/research-workbench.js');
-const {importApprovedV1Local} = require('../scripts/import-approved-v1-local.js');
+const {importApprovedV1Local, OWNER_CORRECTIONS} = require('../scripts/import-approved-v1-local.js');
 const {approvedV1Releases} = require('../storage/approved-v1-release.js');
 
 test('PostgreSQL approved releases: idempotent import, assignment, pinned form, draft, completion and scoring', async t => {
@@ -24,6 +24,10 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
       assert.ok(Array.isArray(authors) && authors.length, "catalog authors for " + id);
       assert.doesNotMatch(JSON.stringify(authors), /Issue #69/, "no service citation as author for " + id);
     }
+    // The owner-approved MAIA-R wording is a presentation correction; the pinned
+    // form and key are not rewritten.
+    const wording = (await client.query("SELECT c.instruction FROM pedpsy.release_presentation_corrections c JOIN pedpsy.instrument_releases r ON r.id=c.release_id WHERE r.method_id='maia_r_32' ORDER BY c.created_at_ms DESC,c.id DESC LIMIT 1")).rows[0];
+    assert.equal(wording.instruction, OWNER_CORRECTIONS.maia_r_32.instruction);
     await client.query('COMMIT');
   } finally { client.release(); }
   const {releases} = approvedV1Releases();

@@ -179,13 +179,48 @@
     });
   }
   function renderQuestion(){
-    if(form.presentation&&form.presentation.id==="pedpsy/ranking-grid")return renderRanking();if(form.presentation&&form.presentation.id==="pedpsy/breath-hold")return renderMeasurement();const q=question(form,draft),c=$("participant-content");c.innerHTML='<section class="card"><h2 id="method-title"></h2><p id="method-instruction" class="muted"></p><p id="method-scale-help" class="muted" hidden></p><p id="method-question"></p><label for="question-progress">Ваш прогресс</label><progress id="question-progress"></progress><p id="question-number"></p><fieldset id="question-pair" class="question-pair"><legend>Выберите один вариант</legend></fieldset><div class="toolbar"><button id="question-prev" class="secondary">Назад</button><button id="question-next">Далее</button><button id="question-complete" hidden>Завершить и получить результат</button></div><button id="question-reload" class="text">Перечитать прохождение</button><button id="question-overview" class="text">К этапам</button></section>';$("method-title").textContent=form.title||"Тест Томаса—Килманна";$("method-instruction").textContent=displayInstruction(form)||"Выберите более подходящее утверждение. Это учебное прохождение, не научно утверждённое заключение.";$("method-question").textContent=q.item.text||"";$("method-question").hidden=!q.item.text;
+    if(form.presentation&&form.presentation.id==="pedpsy/ranking-grid")return renderRanking();
+    if(form.presentation&&form.presentation.id==="pedpsy/breath-hold")return renderMeasurement();
+    const q=question(form,draft),c=$("participant-content");
+    const profile=typeof window.PedPsyMethodPresenters.profileFor==="function"?window.PedPsyMethodPresenters.profileFor(form):null;
+    const presenter=(profile&&profile.presenter)||form.presentation||{id:"pedpsy/single-choice",version:"1.0"};
+    const scale=profile&&profile.scale;
+    const required=!scale||scale.required!==false;
+    // The instruction belongs to the start of the attempt, not to every slide.
+    const instruction=displayInstruction(form)||"Выберите более подходящее утверждение. Это учебное прохождение, не научно утверждённое заключение.";
+    const showInstruction=q.index===0;
+    c.innerHTML='<section class="card question-card"><h2 id="method-title"></h2>'+
+      (showInstruction?'<section class="method-instruction" aria-labelledby="method-instruction-heading"><h3 id="method-instruction-heading">Инструкция</h3><p id="method-instruction"></p></section>':'')+
+      '<p id="method-scale-help" class="muted" hidden></p><p id="method-question"></p><label for="question-progress">Ваш прогресс</label><progress id="question-progress"></progress><p id="question-number"></p><fieldset id="question-pair" class="question-pair" aria-label="Ответ на вопрос"></fieldset><div class="toolbar"><button id="question-prev" class="secondary">Назад</button><button id="question-next">Далее</button><button id="question-complete" hidden>Завершить и получить результат</button></div><button id="question-reload" class="text">Перечитать прохождение</button><button id="question-overview" class="text">К этапам</button></section>';
+    $("method-title").textContent=form.title||"Тест Томаса—Килманна";
+    if(showInstruction)$("method-instruction").textContent=instruction;
+    $("method-question").textContent=q.item.text||"";
+    $("method-question").hidden=!q.item.text;
     const stimulusText=String(q.item.text||"").trim();
     $("method-question").classList.toggle("method-stimulus",stimulusText.length>0&&stimulusText.length<=40&&!/\s/.test(stimulusText));
-    const bipolar=q.item.options.some(o=>String(o.text).replace(/−/g,"-").trim()==="-3");$("method-scale-help").hidden=!bipolar;$("method-scale-help").textContent=bipolar?"−3…−1 — согласие с первым утверждением, 0 — оба верны, 1…3 — со вторым.":"";
-    $("question-progress").max=q.total;$("question-progress").value=draft.responses.length;$("question-number").textContent="Вопрос "+(q.index+1)+" из "+q.total;
-    const selected=draft.responses.find(r=>r.item_id===q.item.id)?.value;window.PedPsyMethodPresenters.mount(form.presentation||{id:"pedpsy/single-choice",version:"1.0"},{container:$("question-pair"),item:q.item,selected,disabled:locked,onChange:value=>{if(locked)return;draft={...draft,responses:draftChoice(draft,q.item.id,value,q.item.id,q.item.options.map(o=>o.value)).responses};const selectedNow=draft.responses.some(r=>r.item_id===q.item.id);blocked("question-next",q.index===q.total-1||!selectedNow||locked);blocked("question-complete",draft.responses.length!==q.total||locked);}});
-    blocked("question-prev",q.index===0||locked);blocked("question-next",q.index===q.total-1||!selected||locked);$("question-complete").hidden=q.index!==q.total-1;blocked("question-complete",draft.responses.length!==q.total||locked);async function move(index){if(locked)throw Error("Перечитайте прохождение.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:form.items[index].id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderQuestion();}bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-reload",async()=>{form=await request("participant/attempts/"+attempt+"/form");draft=await request("participant/attempts/"+attempt);locked=false;renderQuestion();});bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
+    const bipolar=q.item.options.some(o=>String(o.text).replace(/−/g,"-").trim()==="-3");
+    $("method-scale-help").hidden=!bipolar;
+    $("method-scale-help").textContent=bipolar?"−3…−1 — согласие с первым утверждением, 0 — оба верны, 1…3 — со вторым.":"";
+    $("question-progress").max=q.total;
+    $("question-progress").value=draft.responses.length;
+    $("question-number").textContent="Вопрос "+(q.index+1)+" из "+q.total;
+    const selected=draft.responses.find(r=>r.item_id===q.item.id)?.value;
+    const hasSelected=selected!==undefined&&selected!==null;
+    const nextBlocked=hasAnswer=>q.index===q.total-1||(required&&!hasAnswer)||locked;
+    window.PedPsyMethodPresenters.mount(presenter,{container:$("question-pair"),item:q.item,selected,disabled:locked,scale,onChange:value=>{
+      if(locked)return;
+      draft={...draft,responses:draftChoice(draft,q.item.id,value,q.item.id,q.item.options.map(o=>o.value)).responses};
+      const hasAnswer=draft.responses.some(r=>r.item_id===q.item.id);
+      $("question-progress").value=draft.responses.length;
+      blocked("question-next",nextBlocked(hasAnswer));
+      blocked("question-complete",draft.responses.length!==q.total||locked);
+    }});
+    blocked("question-prev",q.index===0||locked);
+    blocked("question-next",nextBlocked(hasSelected));
+    $("question-complete").hidden=q.index!==q.total-1;
+    blocked("question-complete",draft.responses.length!==q.total||locked);
+    async function move(index){if(locked)throw Error("Перечитайте прохождение.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:form.items[index].id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderQuestion();}
+    bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-reload",async()=>{form=await request("participant/attempts/"+attempt+"/form");draft=await request("participant/attempts/"+attempt);locked=false;renderQuestion();});bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
   }
   async function backToMethods(){if(!activeStageId){await reload();return;}const s=await request("participant/stages");const stage=(s.stages||[]).find(x=>x.stage_id===activeStageId);if(!stage){await reload();return;}stages=s;try{await openStage(stage);}catch{await reload();}}
   async function markInvalidated(){if(!attempt)return;const info=await request("participant/attempts/"+attempt+"/invalidated");if(!info.invalidated)return;
