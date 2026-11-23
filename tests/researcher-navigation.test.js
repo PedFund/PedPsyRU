@@ -49,7 +49,7 @@ test("color hierarchy retains existing teal accents and distinct semantic text r
 });
 
 test("vector icons inherit semantic UI text color without external dependencies",()=>{
-  assert.match(html,/<nav id="study-tabs"[\\s\\S]*?<svg viewBox="0 0 24 24"/);
+  assert.match(html,/<nav id="study-tabs"[\s\S]*?<svg viewBox="0 0 24 24"/);
   assert.match(css,/#study-tabs button svg\{stroke:currentColor\}/);
   assert.match(css,/#study-tabs button\.active\{background:#167a83;color:#fff/);
   assert.match(css,/#researcher-home \.study-list-item:has\(\.study-status-active\)/);
