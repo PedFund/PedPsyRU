@@ -20,7 +20,7 @@ export function workspaceCookies(origin:string){return new URL(origin).protocol=
   {staff:"__Host-pedpsy_staff",pending:"__Host-pedpsy_pending",researcher:"__Host-pedpsy_researcher"}:
   {staff:"pedpsy_staff_demo",pending:"pedpsy_pending_demo",researcher:"pedpsy_researcher_demo"};}
 function staticRoutes(app:FastifyInstance,assets:WorkspaceAssets){
-  app.addHook("onSend",async(_request,reply,payload)=>{reply.header("Content-Security-Policy","default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");reply.header("Referrer-Policy","no-referrer");return payload;});
+  app.addHook("onSend",async(_request,reply,payload)=>{reply.header("Cache-Control","no-store");reply.header("Content-Security-Policy","default-src 'none'; script-src 'self'; style-src 'self'; connect-src 'self'; img-src 'self' blob:; frame-ancestors 'none'; base-uri 'none'; form-action 'self'");reply.header("Referrer-Policy","no-referrer");return payload;});
   app.get("/workspace",async(_r,reply)=>reply.type("text/html; charset=utf-8").send(assets.html));
   app.get("/workspace/app.js",async(_r,reply)=>reply.type("text/javascript; charset=utf-8").send(assets.js));
   app.get("/workspace/styles.css",async(_r,reply)=>reply.type("text/css; charset=utf-8").send(assets.css));
