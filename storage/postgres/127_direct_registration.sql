@@ -54,6 +54,10 @@ BEGIN
     IS DISTINCT FROM (OLD.id,OLD.study_id,OLD.group_id,OLD.invitation_id,OLD.invitation_revision,OLD.browser_hash,OLD.email_key,OLD.contact_notice_version,OLD.created_at_ms)
     THEN RAISE EXCEPTION 'registration scope frozen' USING ERRCODE='23514';END IF;
   IF OLD.status='reserved' AND NEW.status='pending' AND NEW.attempts_remaining=OLD.attempts_remaining THEN RETURN NEW;END IF;
+  IF OLD.status='pending' AND NEW.status='pending' AND NEW.confirmation_hash IS DISTINCT FROM OLD.confirmation_hash
+    AND (NEW.scheme,NEW.salt,NEW.password_hash,NEW.ready_at_ms,NEW.expires_at_ms,NEW.attempts_remaining)
+      IS NOT DISTINCT FROM (OLD.scheme,OLD.salt,OLD.password_hash,OLD.ready_at_ms,OLD.expires_at_ms,OLD.attempts_remaining)
+    THEN RETURN NEW;END IF;
   IF OLD.status='reserved' AND NEW.status='confirmed' AND NEW.attempts_remaining=OLD.attempts_remaining
     AND NEW.scheme IS NOT NULL AND NEW.salt IS NOT NULL AND NEW.password_hash IS NOT NULL
     AND NEW.confirmation_hash IS NOT NULL AND NEW.ready_at_ms IS NOT NULL AND NEW.confirmed_at_ms IS NOT NULL
