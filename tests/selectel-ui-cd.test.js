@@ -25,6 +25,6 @@ test('parse Git zero-delimited status lines, and hashes are stable',()=>{
   assert.throws(()=>parseGitNameStatus('M\0'));
   assert.equal(hash(Buffer.from('a')),'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb');
 });
-test('remote deployment script parses as bash',()=>{
+test('remote deployment script parses as bash',{skip:process.platform==='win32'},()=>{
   execFileSync('bash',['-n','scripts/selectel-ui-remote.sh'],{stdio:'pipe'});
 });
