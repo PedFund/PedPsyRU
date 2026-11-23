@@ -53,7 +53,7 @@ export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"
       const salt=randomBytes(16),bytes=await this.derivePassword(input.password,salt,64,SCRYPT);let passwordHash:string;
       try{passwordHash=bytes.toString("hex");}finally{bytes.fill(0);}
       await accountTransaction(this.pool,async c=>{await c.query("SELECT pedpsy.complete_registration_direct($1,$2,$3,$4,$5)",
-        [id,tokenHash(pendingToken),SCRYPT,salt.toString("hex"),passwordHash]);});
+        [id,tokenHash(pendingToken),"scrypt-N131072-r8-p1-dk64",salt.toString("hex"),passwordHash]);});
       return {status:"registered"};
     });
   }

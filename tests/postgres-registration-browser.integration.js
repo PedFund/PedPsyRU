@@ -16,7 +16,7 @@ async function scope(t) {
 }
 test("registration browser: group link + email + password signs in without a code", {timeout:120000}, async t => {
   const {x, browser} = await scope(t);
-  const email = "browser.direct@example.test", password = "synthetic direct registration password";
+  const email = "browser.direct@example.test", password = "Synthetic-Direct-2026!x";
   const page = await browser.tab("http://127.0.0.1:4174/workspace#join=" + x.invite.invite_token);
   await page.wait("document.getElementById('participant-register-form') && !document.getElementById('participant-signin').disabled");
   assert.equal(await page.evaluate("Boolean(document.getElementById('resume-code'))"), true);
