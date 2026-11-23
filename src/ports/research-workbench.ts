@@ -1,6 +1,6 @@
 import type {PassportField} from "./passport-schema.js";
 import type {StudyDesign} from "./studies.js";
-export type WorkbenchAction = "initialize"|"group"|"stage"|"delete_stage"|"assign"|"copy_assignments"|"schema"|"remind";
+export type WorkbenchAction = "initialize"|"group"|"stage"|"stage_name"|"delete_stage"|"assign"|"copy_assignments"|"schema"|"remind";
 export interface WorkbenchSchema {schema_version:number;fields:readonly PassportField[];frozen:boolean;study_version:number;study_id:string}
 export interface WorkbenchDesign extends StudyDesign {group_notes:Record<string,string>;stage_notes:Record<string,string>;profile_schemas:Record<string,WorkbenchSchema>}
 // Pseudonymous progress projection: no contact email ever leaves PostgreSQL.
