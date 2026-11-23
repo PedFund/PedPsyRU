@@ -33,20 +33,27 @@ test("the researcher stage form has the exact label, hint and live preview", () 
   assert.match(html, /Название этапа для участника/);
   assert.match(html, /Этот текст будет отображаться в кабинете участника исследования/);
   assert.match(html, /id="stage-display-name"[^>]*maxlength="200"/);
+  assert.match(html, /id="stage-submit"/);
   assert.match(html, /stage-preview-name/);
   assert.match(html, /stage-preview-code/);
   assert.match(app, /function renderStagePreview\(\)/);
   assert.match(app, /display_name:\$\("stage-display-name"\)\.value/);
   assert.match(app, /stage\.display_name\|\|stage\.code/);
+  assert.match(app, /Название для участника/);
+  assert.match(app, /workbenchWrite\("stage_name"/);
+  assert.match(app, /stageNameOnly/);
 });
 
 test("the storage migration is additive and keeps the old snapshot composition", () => {
-  const sql = file("storage/postgres/122_stage_display_names.sql");
+  const sql = file("storage/postgres/123_stage_display_names.sql");
   assert.match(sql, /ALTER TABLE research_stages ADD COLUMN display_name text/);
   assert.match(sql, /CREATE OR REPLACE FUNCTION study_base_snapshot/);
   assert.match(sql, /'display_name',t\.display_name/);
   assert.match(sql, /CREATE FUNCTION configure_study_stage_named/);
   assert.match(sql, /CREATE FUNCTION copy_study_stage_named/);
+  assert.match(sql, /CREATE FUNCTION set_stage_display_name/);
+  assert.match(sql, /constructor_audit\('studies\.stage\.display_name'/);
+  assert.match(sql, /action='stage_name'/);
   assert.match(sql, /ALTER FUNCTION change_research_workbench\(uuid,integer,text,jsonb\) RENAME TO change_research_workbench_v3/);
 });
 

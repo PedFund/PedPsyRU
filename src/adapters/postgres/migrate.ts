@@ -50,7 +50,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT UPDATE(revision,current_item_id,status,completion_result_id,completed_at,updated_at) ON pedpsy.attempts TO "${role}"`);
   await client.query(`GRANT INSERT,DELETE ON pedpsy.responses TO "${role}"`);
   await client.query(`GRANT INSERT ON pedpsy.attempt_results,pedpsy.access_audit_events TO "${role}"`);
-  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.session_actor(),pedpsy.owns_active_attempt(uuid),pedpsy.can_read_attempt(uuid),pedpsy.can_read_release(uuid),pedpsy.touch_session(),pedpsy.own_enrollment_ids() TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.session_actor(),pedpsy.owns_active_attempt(uuid),pedpsy.can_read_attempt(uuid),pedpsy.can_read_release(uuid),pedpsy.touch_session(),pedpsy.own_enrollment_ids(),pedpsy.own_attempt_responses(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.lock_participant_scope(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.participant_login_material(text),pedpsy.finish_participant_login(uuid,integer,text,text),pedpsy.lock_participant_identity(),pedpsy.logout_participant(),pedpsy.record_participant_denial(text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.account_actor(),pedpsy.account_owns_study(uuid),pedpsy.record_account_check(text,boolean,text) TO "${role}"`);
@@ -62,7 +62,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.create_study(uuid,text),pedpsy.read_study_design(uuid) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.create_study_for_researcher(uuid,uuid,text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_group(uuid,integer,uuid,text,text,boolean) TO "${role}"`);
-  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_stage_named(uuid,integer,uuid,text,integer,text,boolean),pedpsy.copy_study_stage_named(uuid,integer,uuid,uuid,text,integer,text),pedpsy.configure_study_stage(uuid,integer,uuid,text,integer,boolean) TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_stage_named(uuid,integer,uuid,text,integer,text,boolean),pedpsy.copy_study_stage_named(uuid,integer,uuid,uuid,text,integer,text),pedpsy.set_stage_display_name(uuid,uuid,text),pedpsy.configure_study_stage(uuid,integer,uuid,text,integer,boolean) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.configure_study_assignments(uuid,integer,uuid,uuid,uuid[]) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.copy_study_stage(uuid,integer,uuid,uuid,text,integer) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.change_study_lifecycle(uuid,integer,text),pedpsy.rename_study(uuid,integer,text) TO "${role}"`);

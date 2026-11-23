@@ -57,6 +57,13 @@ test("PostgreSQL workbench: group schemas, voluntary profile versions, pinned at
   await change(x,"assign",{all:true,release_ids:[x.f.seed.release_id]});
   await change(x,"schema",{all:true,group_id:null,schema_version:1,basic_fields:["sex","age","city"],fields:[extra]});
   x.d=await x.r.studies.lifecycle(x.r.session.token,x.d.id,{expected_version:x.d.version,status:"active"});x.d=await x.store.read(x.r.session.token,x.d.id);
+  const stageBefore=x.d.stages[0],versionBefore=x.d.version;
+  await change(x,"stage_name",{id:stageBefore.id,display_name:"  Первичная диагностика  "});
+  assert.equal(x.d.stages.find(s=>s.id===stageBefore.id).display_name,"Первичная диагностика");
+  assert.equal(x.d.version,versionBefore,"renaming for participants does not bump design_version");
+  assert.equal(x.d.stages.find(s=>s.id===stageBefore.id).code,stageBefore.code);
+  assert.equal(x.d.stages.find(s=>s.id===stageBefore.id).ordinal,stageBefore.ordinal);
+  assert.equal((await x.f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE action='studies.stage.display_name' AND resource_id=$1 AND outcome='allow'",[x.d.id])).rows[0].n,1);
   await assert.rejects(x.store.change(x.r.session.token,x.d.id,x.d.version,"remind",{group_id:x.d.groups[0].id,stage_id:x.d.stages[0].id,request_id:randomUUID()}),e=>e.status===404);
   const p=await participant(x);let profile=await p.profile.read(p.session.token);assert.equal(profile.fields.length,4);
   const {PostgresParticipantPassports}=require("../dist/src/adapters/postgres/participant-passports.js");
