@@ -46,6 +46,7 @@ test("color hierarchy retains existing teal accents and distinct semantic text r
   assert.match(css,/\.study-status-draft\{color:/);
   assert.match(css,/#study-tabs button\.active\{background:#167a83;color:#fff\}/);
   assert.match(css,/@media\(max-width:640px\)/);
+  assert.match(css,/#study-tabs button\[hidden\][^\n]*\{display:none!important\}/);
 });
 
 test("vector icons inherit semantic UI text color without external dependencies",()=>{
