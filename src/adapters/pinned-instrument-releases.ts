@@ -24,7 +24,17 @@ interface ChoiceRelease {
 type FormShape={id:string;version:string;title?:string;instruction?:string;presentation?:{id:string;version:string};rules?:{require_all?:boolean;quota?:Record<string,number>};items:{id:string;number:number;text?:string;options:{value:string;text:string}[]}[]};
 // Pinned packages keep their original titles for verification. These display-only
 // corrections remove technical abbreviations from the participant interface.
-const displayTitles: Record<string,string> = {"pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца", "tki_ru_30_pairs@1.0.0": "Томас–Килманн: стили поведения в конфликте", "ttf_atf_10@1.0.0-staging": "Склонность к прощению и установки по отношению к прощению"};
+const displayTitles: Record<string,string> = {
+  "pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца",
+  "tki_ru_30_pairs@1.0.0": "Томас–Килманн: стили поведения в конфликте",
+  "ttf_atf_10@1.0.0-staging": "Склонность к прощению и установки по отношению к прощению",
+  // Owner-approved participant titles: preserve the original pinned snapshots,
+  // keys, answer values and result histories.
+  "darr_7@1.0.0-staging": "Измерение реакций гнева",
+  "shpana_20@1.0.0-staging": "Шкала позитивного аффекта и негативного аффекта",
+  "ecv_15@1.0.0-staging": "Эмоциональный контроль",
+  "genchi_breath_hold@1.0.0": "Проба Генчи"
+};
 // Explicit display-only wording approved for the current MAIA-R form. This is
 // not part of the pinned snapshot: it never changes historical releases, options,
 // the scoring key, or the canonical digest verified against PostgreSQL.
@@ -73,9 +83,18 @@ export function verifyPinnedChoiceRelease(row:ReleaseRow|undefined,items:readonl
 export function pinnedParticipantForm(release:PinnedRelease):ParticipantForm {
   const p=resolve(release.methodVersionId,release.handlerVersion);
   if(p.keyDigest!==release.keyDigest)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
-  // A presentational correction never changes items or options: it only replaces the
-  // title and the instruction shown above the stimulus.
+  // Display-only corrections must never change stored option *values*. The
+  // scoring keys continue to interpret ECV 1..11 as 0..10 and DAR-R 1..5 as
+  // 0..4. Pinned snapshots and historical versions remain untouched.
   const correction=release.presentation;
-  if(!correction)return p.form;
-  return {...p.form,...(correction.title?{title:correction.title}:{}),...(correction.instruction!==undefined?{instruction:correction.instruction}:{})};
+  const original=correction?{...p.form,...(correction.title?{title:correction.title}:{}),...(correction.instruction!==undefined?{instruction:correction.instruction}:{})}:p.form;
+  const id=release.methodVersionId;
+  if(id!=="ecv_15@1.0.0-staging"&&id!=="darr_7@1.0.0-staging")return original;
+  return {...original,items:original.items.map(item=>({...item,options:item.options.map(option=>{
+    const raw=Number(option.value);
+    if(!Number.isSafeInteger(raw))return option;
+    if(id==="ecv_15@1.0.0-staging"&&raw>=1&&raw<=11)return {...option,text:String(raw-1)};
+    if(id==="darr_7@1.0.0-staging"&&raw>=1&&raw<=5)return {...option,text:String(raw-1)+" – "+option.text};
+    return option;
+  })}))};
 }
