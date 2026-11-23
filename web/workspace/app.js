@@ -71,7 +71,7 @@
     show("study-progress-section",section==="progress");
     const secondary=section!=="launch"&&section!=="progress";
     show("back-study-hub",secondary&&realm==="researcher");show("study-crumb-sep",secondary&&realm==="researcher");
-    $("back-study-hub").textContent=draft?"К запуску":"К ходу";
+    $("back-study-hub").textContent=draft?"К запуску":"К обзору";
     for(const b of document.querySelectorAll("#study-tabs [data-study-section-open]")){const active=b.dataset.studySectionOpen===section;b.classList.toggle("active",active);b.setAttribute("aria-selected",active?"true":"false");}
     if(section==="design"){const active=!!design&&design.status!=="draft";const comparable=!!design&&((design.groups||[]).length>1||(design.stages||[]).length>1);show("design-compare-panel",active&&comparable);show("compare-unavailable",active&&!comparable);if(active&&comparable)populateCompareOptions();if(design)renderMethodCatalog();}
     if(section==="methods"){renderMethodCatalog();if(design&&design.status!=="draft")run(loadMethodProgress);}
