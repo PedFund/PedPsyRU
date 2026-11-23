@@ -41,12 +41,18 @@
     <section id="recovery-screen" class="card narrow" hidden><h2>Сохраните резервные коды</h2><p>Каждый код используется один раз вместе с паролем. После закрытия они больше не будут показаны.</p><pre id="recovery-codes"></pre><button id="dismiss-recovery" type="button">Коды сохранены — продолжить</button></section>
 
     <section id="workspace-screen" hidden>
-      <div class="toolbar"><button id="refresh" class="secondary">Обновить</button><button id="reauth" class="secondary">Подтвердить MFA заново</button><button id="logout" class="text">Выйти</button></div>
-      <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
+      <details id="account-actions" class="account-actions">
+        <summary>Учетная запись</summary>
+        <div class="account-action-list"><button id="refresh" type="button" class="secondary">Обновить данные</button><button id="reauth" type="button" class="secondary">Подтвердить MFA заново</button><button id="logout" type="button" class="text">Выйти</button></div>
+        <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
+      </details>
       <section id="researcher-home" class="card" hidden>
-        <h2>Мои исследования</h2><p id="quota" class="muted"></p><div id="studies"></div>
-        <details><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
-        <p class="muted">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку.</p>
+        <div class="section-top researcher-home-tools">
+          <label>Статус исследования<select id="study-status-filter"><option value="all">Все исследования</option><option value="draft">Черновики</option><option value="active">Активные</option><option value="closed">Закрытые</option></select></label>
+          <details id="home-create-details" class="study-create-control"><summary>+ Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
+        </div>
+        <p id="quota" class="muted" hidden></p><div id="studies"></div>
+        <p class="muted researcher-privacy-note">Индивидуальные ответы и баллы исследователю не выдаются. После активации создайте общую групповую ссылку.</p>
       </section>
 
       <div id="staff-home" hidden>
@@ -63,25 +69,25 @@
       <nav class="study-navigation" aria-label="Навигация по исследованию"><button id="close-design" class="text" type="button">← Мои исследования</button><span class="crumb-sep" id="study-crumb-sep" aria-hidden="true">/</span><button id="back-study-hub" class="text" type="button" hidden>К запуску</button></nav>
       <header class="study-header">
         <div><h2 id="design-title"></h2><p id="design-meta" class="muted"></p></div>
-        <div class="study-header-actions"><button id="archive-study" class="secondary" type="button" hidden>Закрыть исследование</button></div>
+        <details id="study-settings-menu" class="study-settings-menu"><summary>Настройки исследования</summary><div class="study-settings-actions"><button id="archive-study" class="secondary" type="button" hidden>Закрыть исследование</button></div></details>
       </header>
       <nav id="study-tabs" class="tabs study-tabs" aria-label="Разделы исследования">
-        <button type="button" id="study-tab-launch" data-study-section-open="launch" hidden>Запуск</button>
-        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden>Ход</button>
-        <button type="button" data-study-section-open="design">Дизайн</button>
+        <button type="button" id="study-tab-launch" data-study-section-open="launch" hidden>Обзор</button>
+        <button type="button" id="study-tab-progress" data-study-section-open="progress" hidden>Обзор</button>
+        <button type="button" data-study-section-open="design">План исследования</button>
         <button type="button" data-study-section-open="participants">Участники</button>
         <button type="button" data-study-section-open="methods">Методики</button>
       </nav>
 
       <section id="study-hub" class="card study-section" hidden>
-        <h2>Запуск исследования</h2>
+        <h2>Готовность к запуску</h2>
         <p class="muted">Проверьте готовность и активируйте исследование. После активации дизайн закрепляется, а исследование открывается на вкладке «Ход».</p>
         <div id="hub-activation" hidden><p id="hub-activation-status" class="muted"></p><ul id="hub-activation-checklist" class="muted"></ul></div>
         <div class="toolbar"><button id="activate-study" type="button" hidden>Активировать исследование</button></div>
       </section>
 
       <section id="study-design-section" class="card study-section" hidden>
-        <h2>Дизайн исследования</h2>
+        <h2>План исследования</h2>
         <div id="design-matrix" class="matrix"></div>
         <p id="design-lock-note" class="error" hidden>Запись остановлена: состояние исследования изменилось. Вернитесь в «Мои исследования» и откройте его снова.</p>
         <div id="design-edit" hidden><fieldset id="design-fields"><div class="design-grid">
