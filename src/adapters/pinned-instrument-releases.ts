@@ -25,7 +25,16 @@ type FormShape={id:string;version:string;title?:string;instruction?:string;prese
 // Pinned packages keep their original titles for verification. These display-only
 // corrections remove technical abbreviations from the participant interface.
 const displayTitles: Record<string,string> = {"pvq_rr_57@1.0.0-staging": "Портретный ценностный опросник Шварца", "tki_ru_30_pairs@1.0.0": "Томас–Килманн: стили поведения в конфликте", "ttf_atf_10@1.0.0-staging": "Склонность к прощению и установки по отношению к прощению"};
-const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{const title=displayTitles[methodVersionId];return title?{...form,title:title as string}:form;};
+// Explicit display-only wording approved for the current MAIA-R form. This is
+// not part of the pinned snapshot: it never changes historical releases, options,
+// the scoring key, or the canonical digest verified against PostgreSQL.
+const displayInstructions: Record<string,string> = {
+  "maia_r_32@1.0.1-staging": "В приведенном ниже списке утверждений укажите, насколько часто каждое из них соответствует вашему состоянию. Для ответа используйте шкалу от 0 до 5, где 0 – «Никогда», 5 – «Всегда», а значения 1, 2, 3 и 4 отражают промежуточную частоту."
+};
+const withDisplayTitle=(form:FormShape,methodVersionId:string):FormShape=>{
+  const title=displayTitles[methodVersionId],instruction=displayInstructions[methodVersionId];
+  return title||instruction?{...form,...(title?{title}:{}),...(instruction?{instruction}:{})}:form;
+};
 // Pinned release metadata is immutable for the process lifetime; avoid rebuilding it on every save.
 let installedCache:ChoiceRelease[]|undefined;
 function installed():ChoiceRelease[]{
