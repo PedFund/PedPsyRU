@@ -90,7 +90,7 @@
     if(horizontalText){
       const wrap=doc.createElement("div");wrap.className="scale scale-text scale-count-"+item.options.length;
       const options=doc.createElement("div");options.className="scale-options";
-      for(const option of item.options){const label=doc.createElement("label");label.className="scale-option question-option";const cell=doc.createElement("span");cell.className="scale-cell";cell.textContent=option.text;label.append(radio(doc,option,selected,disabled,onChange),cell);options.append(label);}
+      for(const option of item.options){const label=doc.createElement("label");label.className="scale-option";const cell=doc.createElement("span");cell.className="scale-cell";cell.textContent=option.text;label.append(radio(doc,option,selected,disabled,onChange),cell);options.append(label);}
       wrap.append(options);container.append(wrap);return;
     }
     if(isBipolar(item)){
