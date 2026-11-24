@@ -8,7 +8,7 @@
 2. `agent-instructions/METHODS.md` — контрольные правила расчёта.
 3. `docs/LAUNCH_READINESS.md` — обязательный E2E и go/no-go.
 4. `docs/PILOT_200_LOGIN.md` — лимиты входа и smoke на 200 участников.
-5. `RESEARCHER_WORKBENCH.md` — статусы, приглашения, напоминания, доступ.
+5. `docs/product/RESEARCHER_WORKBENCH.md` — статусы, приглашения, напоминания, доступ.
 6. `CURRENT_STATE.md`, `AGENTS.md` — границы данных и доступа.
 
 Ожидаемые значения берутся только из утверждённых правил. Если правило отсутствует — это пробел, а не повод придумать ожидание.

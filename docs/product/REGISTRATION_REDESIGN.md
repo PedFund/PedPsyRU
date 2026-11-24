@@ -1,6 +1,6 @@
 # Регистрация без обязательного ожидания письма: целевая модель
 
-> **Статус: проект.** Ничего из нижеописанного не реализовано: код, схема и рабочая БД не изменялись. База анализа — локальное `main` `863671d` (контрольная точка [CURRENT_STATE.md](CURRENT_STATE.md) фиксирует `50825b6`), head миграций `120`; ссылки на строки относятся к этому состоянию. Все изменения схемы предлагаются только новыми append-only миграциями `122+` (121 занята P0-1, PR #196); прикладной код (adapters / application / http / web) меняется отдельными PR по разделу 10.
+> **Статус: проект.** Ничего из нижеописанного не реализовано: код, схема и рабочая БД не изменялись. База анализа — локальное `main` `863671d` (контрольная точка [CURRENT_STATE.md](../../CURRENT_STATE.md) фиксирует `50825b6`), head миграций `120`; ссылки на строки относятся к этому состоянию. Все изменения схемы предлагаются только новыми append-only миграциями `122+` (121 занята P0-1, PR #196); прикладной код (adapters / application / http / web) меняется отдельными PR по разделу 10.
 >
 > **Д-1 решён владельцем 22.11.2026:** принята **Policy-2** — подтверждённый адрес не является условием допуска, участник начинает тестирование сразу после регистрации; защита неподтверждённых — разделы 2, 3 (Т-18) и 5.2. Остальные решения (Д-2…Д-10) требуют подтверждения по разделу 11.
 
@@ -20,10 +20,10 @@
 
 | Шаг | Маршрут | Что фактически происходит |
 |---|---|---|
-| preflight | `GET …/preflight` | подписанный browser-токен в HttpOnly cookie, CSRF = HMAC от него; `delivery: synthetic \| email` ([registration-routes.ts](src/http/registration-routes.ts)) |
+| preflight | `GET …/preflight` | подписанный browser-токен в HttpOnly cookie, CSRF = HMAC от него; `delivery: synthetic \| email` ([registration-routes.ts](../../src/http/registration-routes.ts)) |
 | context | `GET …/context` | `registration_context`, только чтение публичных метаданных; invite в заголовке `X-Pedpsy-Invite` |
-| start | `POST …/start` | `reserve_registration_start_v2` резервирует `registration_pending`, затем Node считает scrypt и `queue_registration_confirmation_v2` пишет хеш пароля в pending и шифрованный код в outbox ([registration-start.ts](src/adapters/postgres/registration-start.ts), 087, 089) |
-| выдача кода | `POST …/receipt` или письмо | synthetic-контур расшифровывает код из outbox (024); в mail-режиме receipt отключён ([registration-receipt.ts](src/adapters/postgres/registration-receipt.ts)) |
+| start | `POST …/start` | `reserve_registration_start_v2` резервирует `registration_pending`, затем Node считает scrypt и `queue_registration_confirmation_v2` пишет хеш пароля в pending и шифрованный код в outbox ([registration-start.ts](../../src/adapters/postgres/registration-start.ts), 087, 089) |
+| выдача кода | `POST …/receipt` или письмо | synthetic-контур расшифровывает код из outbox (024); в mail-режиме receipt отключён ([registration-receipt.ts](../../src/adapters/postgres/registration-receipt.ts)) |
 | confirm | `POST …/confirm` | `confirm_registration_email` **создаёт** `participants`, `participant_group_bindings`, `participant_credentials`, `participant_contacts` (023:78–86) |
 | login | `POST …/login` | `participant_email_login_material_v2` + scrypt в Node + `finish_participant_email_login` |
 
@@ -235,7 +235,7 @@ admitted|active --email/change/confirm--> тот же participant_id, новый
 | 130 `participant_registration_state` | представление над `participant_contacts`, `stage_admissions`, `stage_enrollments`, `attempts` | — | `participant_registration_state(study, participant)`; `reaccept_contact_notice(version)` для смены версии уведомления |
 | 131 `registration_policy` | `registration_policy(kind, limit_n, window_ms)` с `CHECK` на допустимые диапазоны (creation 1..1200, verification mail 1..1000) | PK `(kind)` | чтение политики функциями 124/123; жёсткие receipt-лимиты 024 **не** трогаются |
 
-Требования к каждой миграции: `SET LOCAL search_path`, `SECURITY DEFINER` с фиксированным `search_path`, `REVOKE ALL FROM PUBLIC`, RLS на новых таблицах, `GRANT EXECUTE` только нужных функций в `grantRuntime` ([migrate.ts](src/adapters/postgres/migrate.ts)), неизменные байты миграций `001–120`.
+Требования к каждой миграции: `SET LOCAL search_path`, `SECURITY DEFINER` с фиксированным `search_path`, `REVOKE ALL FROM PUBLIC`, RLS на новых таблицах, `GRANT EXECUTE` только нужных функций в `grantRuntime` ([migrate.ts](../../src/adapters/postgres/migrate.ts)), неизменные байты миграций `001–120`.
 
 ### 6.1 Почему отдельные таблицы, а не расширение `registration_pending`
 
