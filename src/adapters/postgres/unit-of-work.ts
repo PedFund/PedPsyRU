@@ -123,7 +123,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
           let cached = this.releaseCache.get(id);
           if (!cached || cached.key !== key) {
             const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);
-            const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.release_items WHERE release_id=$1 ORDER BY ordinal",[id]);
+            const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.read_attempt_release_items($1,$2)",[attemptScope,id]);
             cached={key,release:verifyPinnedChoiceRelease(release.rows[0],items.rows)};
             if(this.releaseCache.size>100)this.releaseCache.clear();
             this.releaseCache.set(id,cached);
