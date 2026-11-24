@@ -51,7 +51,9 @@
     const items=[
       (groups.length?"✓":"✗")+" активных групп: "+groups.length,
       (stages.length?"✓":"✗")+" активных этапов: "+stages.length,
-      (missing.length?"✗":"✓")+" пар «группа × этап» без назначений: "+missing.length+(missing.length?" — "+missing.join(", "):"")
+      missing.length
+        ? "✗ Не хватает назначений: "+missing.length+" сочетаний группы и этапа — "+missing.join(", ")
+        : "✓ Назначения методик есть у всех групп и этапов"
     ];
     $("hub-activation-checklist").replaceChildren(...items.map(text=>{const li=document.createElement("li");li.textContent=text;return li;}));
     $("hub-activation-status").textContent="Состояние: "+(studyStates[design.status]||design.status)+(draft?"":" — дизайн закреплён");
