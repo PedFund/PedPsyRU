@@ -193,3 +193,9 @@
 .method-selected-panel li:first-child{border-top:0}
 .method-selected-panel li button{flex:none}
 @media (max-width:640px){.method-card-head{flex-direction:column;gap:8px}.method-card-actions{width:100%;justify-content:space-between}.method-details-toggle{margin-left:auto}}
+#method-question{font-size:22px;line-height:1.5;font-weight:600;margin:14px 0}
+.scale-numeric:not(.scale-layout-row) .scale-endpoints{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px;margin-top:8px}
+.scale-numeric:not(.scale-layout-row) .scale-endpoints .scale-end{max-width:none;text-align:center}
+.scale-numeric:not(.scale-layout-row) .scale-endpoints .scale-end-min{grid-column:1;justify-self:center}
+.scale-numeric:not(.scale-layout-row) .scale-endpoints .scale-end-max{grid-column:6;justify-self:center;text-align:center}
+@media (max-width:640px){#method-question{font-size:19px}}
