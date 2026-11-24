@@ -5,7 +5,7 @@ const {workspaceAssets}=require("../dist/src/bootstrap/workspace-assets.js");
 const {createAccountApi}=require("../dist/src/application/account-api.js");
 const {ParticipationError}=require("../dist/src/ports/errors.js");
 const {csrfFor,validToken,equalText}=require("../storage/access.js");
-const assets={html:"<!doctype html><title>МетодТест</title>",js:"'use strict';",css:"body{}"};
+const assets={html:"<!doctype html><title>Апробация: тесты (альфа-тестирование)</title>",js:"'use strict';",css:"body{}"};
 const origin="http://127.0.0.1:4174",headers={host:"127.0.0.1:4174",origin};
 function fixture(){const denied=[],pending="p".repeat(43),staff="s".repeat(43),researcher="r".repeat(43);
   const auth=()=>{throw new ParticipationError(401,"AUTH_REQUIRED");};
@@ -19,7 +19,7 @@ function fixture(){const denied=[],pending="p".repeat(43),staff="s".repeat(43),r
   const participant={denied:async(t,r)=>denied.push([t,r]),login:auth,session:auth,logout:auth,form:auth,read:auth,save:auth,complete:auth,result:auth};return {account,participant,denied,pending,staff,researcher};}
 test("workspace assets are bounded, no-store, CSP protected; preview cannot authenticate",async t=>{
   const app=createWorkspacePreviewApp(assets);t.after(()=>app.close());
-  const r=await app.inject({url:"/workspace"});assert.equal(r.statusCode,200);assert.match(r.body,/МетодТест/);assert.doesNotMatch(r.body,/ПедПси|ПЕДПСИ/);assert.equal(r.headers["cache-control"],"no-store");assert.match(r.headers["content-security-policy"],/frame-ancestors 'none'/);assert.match(r.headers["content-security-policy"],/script-src 'self'/);assert.equal(r.headers["referrer-policy"],"no-referrer");
+  const r=await app.inject({url:"/workspace"});assert.equal(r.statusCode,200);assert.match(r.body,/Апробация: тесты/);assert.doesNotMatch(r.body,/ПедПси|ПЕДПСИ/);assert.equal(r.headers["cache-control"],"no-store");assert.match(r.headers["content-security-policy"],/frame-ancestors 'none'/);assert.match(r.headers["content-security-policy"],/script-src 'self'/);assert.equal(r.headers["referrer-policy"],"no-referrer");
   const actual=workspaceAssets();assert.match(actual.html,/План исследования/);assert.match(actual.html,/Результаты/);assert.match(actual.html,/Участники/);assert.match(actual.html,/data-study-filter="all"/);assert.match(actual.html,/data-study-filter="active"/);assert.doesNotMatch(actual.html,/Дизайн исследования|Сведения об участниках/);assert.doesNotMatch(actual.html+actual.js,/Перечитать дизайн|Что получится после обработки|Можно назначить участникам|href="https?:/);
   for(const url of ["/workspace/private","/storage/access.js","/methods/tki/keys"])assert.equal((await app.inject({url})).statusCode,404);
   assert.deepEqual((await app.inject({method:"POST",url:"/api/v2/staff/password",payload:{}})).json(),{error:"DATABASE_NOT_CONFIGURED"});
