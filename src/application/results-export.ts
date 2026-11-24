@@ -229,7 +229,9 @@ export async function resultsXlsx(data:ResearchResultsExport):Promise<Buffer>{
     '<fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'+
     '<fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF2"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF2CC"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDDEBF7"/></patternFill></fill></fills>'+
     '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'+
-    '<cellXfs count="6"><xf/><xf fontId="1" fillId="2" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="3" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="4" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="3" fillId="3" applyFont="1" applyFill="1"><alignment vertical="top" wrapText="1"/></xf><xf applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs></styleSheet>';
+    '<cellStyleXfs count="1"><xf/></cellStyleXfs>'+
+    '<cellXfs count="6"><xf/><xf fontId="1" fillId="2" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="3" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="4" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="3" fillId="3" applyFont="1" applyFill="1"><alignment vertical="top" wrapText="1"/></xf><xf applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs>'+
+    '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
   return zipStore([
     {name:"[Content_Types].xml",data:Buffer.from(contentTypes,"utf8")},
     {name:"_rels/.rels",data:Buffer.from(rootRels,"utf8")},
