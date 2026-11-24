@@ -12,7 +12,7 @@ function enrollWith(x,schemaVersion,policyRevision=0,stage=0){return x.enrollmen
 function setup(fn){return async t=>{const f=await postgresFixture({runtimePoolSize:3});t.after(()=>f.close());await fn(f,await stageSetup(f));};}
 test("PostgreSQL admission age: an adult legacy passport is admitted and pinned",setup(async(f,x)=>{
   const p=await x.passports.read(x.session.token);
-  const saved=await x.passports.save(x.session.token,{schema_version:p.schema_version,expected_revision:p.revision,values:{sex:"female",age:18}});
+  const saved=await x.passports.save(x.session.token,{schema_version:p.schema_version,expected_revision:p.revision,values:{sex:"female",age:18,education:"higher"}});
   await x.passports.complete(x.session.token,{schema_version:saved.schema_version,expected_revision:saved.revision});
   await acceptParticipation(x);await openStage(x);
   const admitted=await enrollWith(x,saved.schema_version);

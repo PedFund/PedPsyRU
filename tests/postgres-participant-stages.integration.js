@@ -35,7 +35,7 @@ scenario("opening another group stays invisible; only T1 can appear without fabr
  await open(x,0,0);assert.deepEqual((await read(x)).stages.map(s=>s.code),["T0","T1"]);
 });
 scenario("completed current passport and explicit study consent set readiness; optional science not required",async(t,f,x)=>{
- await open(x);const draft=await x.passports.read(x.session.token),saved=await x.passports.save(x.session.token,{schema_version:draft.schema_version,expected_revision:draft.revision,values:{sex:"female",age:30}});
+ await open(x);const draft=await x.passports.read(x.session.token),saved=await x.passports.save(x.session.token,{schema_version:draft.schema_version,expected_revision:draft.revision,values:{sex:"female",age:30,education:"higher"}});
  await x.passports.complete(x.session.token,{schema_version:saved.schema_version,expected_revision:saved.revision});assert.equal((await read(x)).passport_completed,true);assert.equal((await read(x)).required_consents_accepted,false);
  await x.consents.accept(x.session.token,{purpose:"study_participation",document_version:"demo-participation-2",expected_policy_revision:0,accept:true});const a=await read(x);assert.equal(a.required_consents_accepted,true);assert.equal(a.passport_completed,true);assert.equal(a.stages.length,1);assert.equal((await x.consents.read(x.session.token)).documents.find(d=>d.purpose==="secondary_research").accepted_at_ms,null);
  const rotated=await x.registration.login({study_id:x.design.id,email:x.email,password:x.password});assert.deepEqual(await new PostgresParticipantStages(f.runtime).read(rotated.token),a);await assert.rejects(read(x),e=>e.status===401);

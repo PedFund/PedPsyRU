@@ -6,7 +6,7 @@ const {PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/p
 const {ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js"),{tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
 const {migratePostgres,grantRuntime}=require("../dist/src/adapters/postgres/migrate.js"),{dockerTool}=require("./pg-container-fixture.js");
 const extra=[{key:"extra_context",label:"Контекст",kind:"text",required:true,max_length:40},{key:"extra_years",label:"Стаж",kind:"integer",required:false,min:-10,max:50},{key:"extra_setting",label:"Среда",kind:"single_choice",required:false,options:[{value:"school",label:"Школа"}]}];
-const full={sex:"female",age:42,city:"Synthetic town",extra_context:"Synthetic context"};
+const full={sex:"female",age:42,city:"Synthetic town",education:"higher",extra_context:"Synthetic context"};
 async function identity(f,x,email="own@example.test"){
   const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"demo-contact-3",accept_contact_notice:true};
   await x.registration.start(x.i.invite_token,body,browser);
