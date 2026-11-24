@@ -34,8 +34,8 @@ BEGIN
     IF key=ANY(seen) THEN
       result:=result||CASE key
         WHEN 'sex' THEN '[{"key":"sex","label":"Пол","required":true,"kind":"single_choice","options":[{"value":"female","label":"Женский"},{"value":"male","label":"Мужской"}]}]'::jsonb
-        WHEN 'age' THEN '[{"key":"age","label":"Возраст","required":true,"kind":"integer","min":0,"max":130}]'::jsonb
-        WHEN 'city' THEN '[{"key":"city","label":"Город","required":false,"kind":"text","max_length":100}]'::jsonb
+        WHEN 'age' THEN '[{"key":"age","label":"Возраст","required":true,"kind":"integer","min":18,"max":99}]'::jsonb
+        WHEN 'city' THEN '[{"key":"city","label":"Населенный пункт","required":false,"kind":"text","max_length":100}]'::jsonb
         WHEN 'organization' THEN '[{"key":"organization","label":"Организация","required":false,"kind":"text","max_length":200}]'::jsonb
         ELSE pedpsy.passport_education_field()
       END;
