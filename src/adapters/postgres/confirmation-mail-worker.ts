@@ -16,6 +16,7 @@ export interface ConfirmationMailSettings {
 interface OutboxRow {
   id: string;
   pending_id: string;
+  study_id: string;
   recipient: string;
   token_envelope: string;
   expires_at_ms: string;
@@ -90,6 +91,7 @@ export class ConfirmationMailWorker {
     const title = row.study_title.length > 120 ? row.study_title.slice(0, 117) + "..." : row.study_title;
     const group = row.group_name.length > 100 ? row.group_name.slice(0, 97) + "..." : row.group_name;
     const expires = new Date(Number(row.expires_at_ms)).toLocaleString("ru-RU", {timeZone: "Europe/Moscow", dateStyle: "short", timeStyle: "short"});
+    const studyUrl = this.appUrl.replace(/\/+$/, "") + "/workspace#study=" + row.study_id;
     return {
       to: row.recipient,
       subject: "Подтверждение участия — " + title,
@@ -98,10 +100,11 @@ export class ConfirmationMailWorker {
         "",
         "Вы регистрируетесь в исследовании «" + title + "» (группа «" + group + "»).",
         "",
+        "Ссылка на исследование: " + studyUrl,
+        "",
         "Код подтверждения: " + code,
         "",
-        "Вернитесь на страницу регистрации по исходной групповой ссылке и введите этот код.",
-        "Платформа: " + this.appUrl,
+        "Откройте ссылку и введите этот код, чтобы завершить регистрацию.",
         "",
         "Код действует до " + expires + " (МСК).",
         "Если вы не регистрировались, просто проигнорируйте это письмо."
