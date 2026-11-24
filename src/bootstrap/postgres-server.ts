@@ -34,6 +34,7 @@ import {admissionBoundary} from "./admission-boundary.js";
 import {ContactTokenVault} from "../adapters/security/contact-token-vault.js";
 import {SmtpTransport} from "../adapters/smtp/transport.js";
 import {ConfirmationMailWorker} from "../adapters/postgres/confirmation-mail-worker.js";
+import {ResearchReminderWorker} from "../adapters/postgres/research-reminder-worker.js";
 import {participantAdmissionPolicy} from "./login-policy.js";
 import {mailDeliveryConfig} from "./mail-config.js";
 import {accessLogConfig,createAccessLog} from "../http/access-log.js";
@@ -55,13 +56,15 @@ async function main(): Promise<void> {
     const inviteKey=process.env.PEDPSY_CONTACT_KEY?Buffer.from(process.env.PEDPSY_CONTACT_KEY,"base64"):undefined;
     const invitations=createGroupInvitationApi(new PostgresGroupInvitations(pool,inviteKey),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
     const stageAccess=createStageAccessApi(new PostgresStageAccess(pool),{assert:(token,value)=>{if(!validToken(token)||!equalText(value,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");}});
-    const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined,mailWorker:ConfirmationMailWorker|undefined;
+    const contactKey=contactDemoKey(process.env);let registration:ReturnType<typeof registrationBoundary>|undefined,mailWorker:ConfirmationMailWorker|undefined,reminderWorker:ResearchReminderWorker|undefined;
     const origin=production?config!.origin:"http://127.0.0.1:4174";
     try{
       if(contactKey){
         registration=registrationBoundary(pool,contactKey,origin,process.env.PEDPSY_PILOT_REAL_EMAIL==="1",admission,mail!==null,mail?new SmtpTransport(mail.smtp):undefined);
         if(mail)mailWorker=new ConfirmationMailWorker(pool,new ContactTokenVault(contactKey),new SmtpTransport(mail.smtp),
           {batch:mail.batch,pollMs:mail.pollMs,allowlist:mail.allowlist,rateLimit:mail.rateLimit,rateWindowMs:mail.rateWindowMs},origin);
+        if(mail)reminderWorker=new ResearchReminderWorker(pool,new SmtpTransport(mail.smtp),
+          {batch:mail.batch,pollMs:mail.pollMs,allowlist:mail.allowlist,rateLimit:mail.rateLimit,rateWindowMs:mail.rateWindowMs});
       }else if(mail)throw new Error("MAIL_REQUIRES_REGISTRATION");
     }finally{contactKey?.fill(0);}
     const passports=registration?passportBoundary(pool):undefined;
@@ -69,10 +72,10 @@ async function main(): Promise<void> {
     const admissions=registration?admissionBoundary(pool):undefined;
     const accessLog=accessLogConfig(process.env);
     const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool),accessLog?createAccessLog(accessLog):undefined);
-    app.addHook("onClose",async()=>{mailWorker?.stop();await pool?.end();});
+    app.addHook("onClose",async()=>{mailWorker?.stop();reminderWorker?.stop();await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:production?config!.host:"127.0.0.1",port:production?config!.port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}
-    mailWorker?.start();
+    mailWorker?.start();reminderWorker?.start();
   } catch {await pool?.end().catch(()=>{});process.exitCode=1;console.error("Synthetic PostgreSQL configuration required or unavailable; no data migrated.");}
 }
 void main();
