@@ -7,10 +7,11 @@ import {scorePrfq,KEY_DIGEST as PRFQ_DIGEST} from "../../core/prfq-contract.js";
 import {scoreUmics,KEY_DIGEST as UMICS_DIGEST} from "../../core/umics-contract.js";
 import {scoreLegacyNumeric} from "../../core/legacy-batch-contract.js";
 import {entries as legacyNumericEntries} from "../../core/legacy-batch-data.js";
-import {entries as approvedV1Entries} from "../../core/approved-v1-data.js";
+import {entries as approvedV1Entries,historicalEntries as approvedHistoricalEntries} from "../../core/approved-v1-data.js";
 import {createApprovedNumericScorer, HANDLER_VERSION as APPROVED_NUMERIC_HANDLER} from "../../core/approved-v1-contract.js";
 import {genchiMeasurementModule} from "./genchi-measurement.js";
-const scoreApprovedNumeric=createApprovedNumericScorer(approvedV1Entries);
+const runtimeApprovedEntries=[...approvedV1Entries,...approvedHistoricalEntries];
+const scoreApprovedNumeric=createApprovedNumericScorer(runtimeApprovedEntries);
 const TKI_DIGEST="sha256:45bc0c8a1b3f154fb3da5df629da6c42613609633594c4f5f54014a301cded7d";
 
 // Compatibility modules for the existing v1 choice-attempt protocol. A v2 module
@@ -38,7 +39,7 @@ export const builtinInstrumentRegistry=createMethodRuntimeRegistry([
   // Approved-library packages (Issue #69 content, draft publication state). CO-36 is
   // deliberately absent: its required answer quotas need a ranking screen, not a
   // single-choice form, and must not become assignable as if it were one.
-  ...approvedV1Entries.map(entry=>{
+  ...runtimeApprovedEntries.map(entry=>{
     const key=entry.key as {scales?:Record<string,unknown>;derived?:Record<string,unknown>;levels?:Record<string,unknown>};
     const names=[...Object.keys(key.scales||{}),...Object.keys(key.derived||{}),...Object.keys(key.levels||{})];
     const unique=names.filter((name,index)=>names.indexOf(name)===index);

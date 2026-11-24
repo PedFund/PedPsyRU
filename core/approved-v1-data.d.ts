@@ -12,3 +12,4 @@ export interface ApprovedEntry {
   readonly search: readonly string[];
 }
 export const entries: readonly ApprovedEntry[];
+export const historicalEntries: readonly ApprovedEntry[];
