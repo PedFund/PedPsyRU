@@ -1,6 +1,7 @@
 import type {FastifyInstance,FastifyRequest} from "fastify";
 import type {createResearchWorkbenchApi,createParticipantProfileApi} from "../application/research-workbench-api.js";
 import type {WorkbenchAction} from "../ports/research-workbench.js";
+import {resultsCsv,resultsExcel} from "../application/results-export.js";
 import {readParticipantCookie} from "./participant-app.js";
 import {ParticipationError} from "../ports/errors.js";
 export interface ResearchWorkbenchApis {research:ReturnType<typeof createResearchWorkbenchApi>;profile:ReturnType<typeof createParticipantProfileApi>}
@@ -15,10 +16,20 @@ export function registerResearchWorkbench(app:FastifyInstance,origin:string,apis
   app.get(base+"/progress",async r=>apis.research.progress(token(r,researcher),id(r)));
   app.get(base+"/progress/participants",async r=>apis.research.participantStats(token(r,researcher),id(r)));
   app.get(base+"/export",async(r,reply)=>{
+    const query=r.query as Record<string,unknown>;
+    if(Object.keys(query).some(key=>key!=="format"))throw new ParticipationError(400,"INVALID_REQUEST");
+    const format=query.format===undefined?"xlsx":query.format;
+    if(format!=="xlsx"&&format!=="csv")throw new ParticipationError(400,"INVALID_REQUEST");
     const study=id(r),data=await apis.research.exportResults(readParticipantCookie(r.headers.cookie,researcher),study);
-    reply.header("Content-Disposition",'attachment; filename="study-'+study+'-results.json"');
+    const suffix=format==="csv"?"csv":"xls";
+    reply.header("Content-Disposition",'attachment; filename="study-'+study+'-results.'+suffix+'"');
     reply.header("Cache-Control","no-store");
-    return data;
+    if(format==="csv"){
+      reply.type("text/csv; charset=utf-8");
+      return reply.send(resultsCsv(data));
+    }
+    reply.type("application/vnd.ms-excel; charset=utf-8");
+    return reply.send(resultsExcel(data));
   });  app.get(base+"/progress/methods",async r=>{
     const q=r.query as Record<string,unknown>;
     if(Object.keys(q).some(k=>k!=="group_id"&&k!=="stage_id"))throw new ParticipationError(400,"INVALID_REQUEST");
