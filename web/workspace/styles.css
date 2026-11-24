@@ -219,3 +219,7 @@ aside .brand{font-size:26px;line-height:1.15}
 .scale-text .scale-cell{flex:1;height:100%;min-height:64px;padding:10px 12px;font-size:14px;line-height:1.25;font-weight:600;overflow-wrap:anywhere}
 @media (min-width:900px){.scale-text .scale-cell{min-height:68px;font-size:15px}}
 .question-pair > .question-option{width:100%;min-height:48px;align-items:center}
+.scale-track{height:12px;overflow:visible}
+.scale-tick{position:absolute;top:-4px;width:2px;height:20px;border-radius:2px;background:#123f4c;opacity:.62;box-shadow:0 0 0 1px #fff;transform:translateX(-50%);z-index:1}
+.scale-mean-marker{width:12px;height:12px;top:-4px;border:2px solid #fff;border-radius:50%;background:#123f4c;box-shadow:0 0 0 1px #123f4c;z-index:2;transform:translateX(-50%)}
+.analytics-scale-line .analytics-mean{font-variant-numeric:tabular-nums;color:#173b46}
