@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path"),os=require("node:os"),{randomUUID,randomBytes}=require("node:crypto");
 const {postgresFixture}=require("./postgres-fixture.js"),{migratePostgres,grantRuntime}=require("../dist/src/adapters/postgres/migrate.js"),{tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
 const {ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js"),{PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/participant-registration.js"),{derive,SCRYPT}=require("../storage/access.js");
@@ -11,7 +11,7 @@ test("PostgreSQL registration migration: full upgrade preserves existing022 encr
     await c.query("INSERT INTO pedpsy.users(id) VALUES($1)",[user]);await c.query("INSERT INTO pedpsy.researcher_credentials(id,user_id,login_id,scheme,salt,password_hash) VALUES($1,$2,'SYNTHETIC-CONTACT-UPGRADE','scrypt-N131072-r8-p1-dk64',$3,$4)",[credential,user,randomBytes(16).toString("hex"),randomBytes(64).toString("hex")]);
     await c.query("INSERT INTO pedpsy.studies(id,title,status) VALUES($1,'Synthetic pending upgrade','active')",[study]);await c.query("INSERT INTO pedpsy.research_groups(id,study_id,name,kind) VALUES($1,$2,'Existing group','control')",[group,study]);
     await c.query("INSERT INTO pedpsy.group_invitations(id,study_id,group_id,token_hash,created_by,created_at_ms,expires_at_ms) VALUES($1,$2,$3,$4,$5,$6,$7)",[invite,study,group,tokenHash(raw),credential,at,at+86400000]);
-    await c.query("INSERT INTO pedpsy.registration_pending(id,study_id,group_id,invitation_id,invitation_revision,browser_hash,email_key,contact_notice_version,status,scheme,salt,password_hash,confirmation_hash,created_at_ms,ready_at_ms,expires_at_ms) VALUES($1,$2,$3,$4,0,$5,'Upgrade.Owner@example.test','personal-data-consent-2026-11-24','pending','scrypt-N131072-r8-p1-dk64',$6,$7,$8,$9,$9,$10)",[pending,study,group,invite,tokenHash(browser),salt.toString("hex"),passwordHash,tokenHash(confirmation),at,at+1800000]);
+    await c.query("INSERT INTO pedpsy.registration_pending(id,study_id,group_id,invitation_id,invitation_revision,browser_hash,email_key,contact_notice_version,status,scheme,salt,password_hash,confirmation_hash,created_at_ms,ready_at_ms,expires_at_ms) VALUES($1,$2,$3,$4,0,$5,'Upgrade.Owner@example.test','demo-contact-1','pending','scrypt-N131072-r8-p1-dk64',$6,$7,$8,$9,$9,$10)",[pending,study,group,invite,tokenHash(browser),salt.toString("hex"),passwordHash,tokenHash(confirmation),at,at+1800000]);
     await c.query("INSERT INTO pedpsy.contact_confirmation_outbox(id,pending_id,recipient,token_envelope,created_at_ms,expires_at_ms,next_attempt_at_ms) VALUES($1,$2,'Upgrade.Owner@example.test',$3,$4,$5,$4)",[delivery,pending,vault.seal(delivery,confirmation),at,at+1800000]);
     const before=(await c.query("SELECT p.*,o.token_envelope FROM pedpsy.registration_pending p JOIN pedpsy.contact_confirmation_outbox o ON o.pending_id=p.id WHERE p.id=$1",[pending])).rows[0];const latest=fs.readdirSync(source).filter(n=>/^\d{3}_[a-z0-9_]+\.sql$/.test(n)).length;
     assert.equal(await migratePostgres(c,source),latest-22);assert.equal(await migratePostgres(c,source),0);const after=(await c.query("SELECT p.*,o.token_envelope FROM pedpsy.registration_pending p JOIN pedpsy.contact_confirmation_outbox o ON o.pending_id=p.id WHERE p.id=$1",[pending])).rows[0];assert.ok(JSON.stringify(before)===JSON.stringify(after),"upgrade changed pending material");
@@ -19,3 +19,4 @@ test("PostgreSQL registration migration: full upgrade preserves existing022 encr
     await assert.rejects(f.runtime.query("SELECT * FROM pedpsy.participant_contacts"),e=>e.code==="42501");assert.equal((await c.query("SELECT count(*)::integer n FROM public.pedpsy_schema_migrations")).rows[0].n,latest);
   }finally{c.release();}
 });
+
