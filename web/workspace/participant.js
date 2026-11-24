@@ -267,15 +267,15 @@
     else if(result.method_version_id==="reflexivity_karpov_27@1.0.0-local")note="Учебный результат. Стен и уровень рассчитаны по таблице исходного процессора; применимость норм отдельно не утверждена.";
     else if(String(result.method_version_id).startsWith("genchi_breath_hold@"))note="Результат не является психологическим диагнозом.";
     else if(String(result.method_version_id).startsWith("ecv_15@"))note="Результат не является психологическим диагнозом.";
-    else if(String(result.method_version_id).startsWith("shpana_20@"))note="Сырые баллы: по 10 пунктов в каждой шкале, диапазон 10–50. Утверждённых норм для этой адаптации нет, поэтому ниже — только описательное соотношение шкал, не диагноз.";
+    else if(String(result.method_version_id).startsWith("shpana_20@"))note="Ниже — только описательное соотношение шкал, не диагноз.";
     else if(hasLevels)note="Уровень определяется как положение балла относительно количественных границ ключа. Не является психологическим диагнозом.";
-    else note="Сырые баллы. Нормативная интерпретация для этой методики не утверждена.";
+    else note="Результат не является психологическим диагнозом.";
     $("result-note").textContent=note;
     $("own-measures").classList.add("results-centered");
     const toneForLevel=value=>{const text=String(value||"").toLowerCase();if(text.includes("крайне")||text.includes("очень низ"))return "very-low";if(text.includes("очень высок"))return "very-high";if(text.includes("низ"))return "low";if(text.includes("ниже"))return "below";if(text.includes("сред"))return "medium";if(text.includes("выше"))return "above";if(text.includes("высок"))return "high";return "neutral";};
     const addTile=(label,value,level,detail,outOf)=>{const tile=document.createElement("article"),head=document.createElement("div"),title=document.createElement("h3"),badge=document.createElement("span"),score=document.createElement("div"),strong=document.createElement("strong"),unit=document.createElement("span");tile.className="results-tile tone-"+toneForLevel(level);head.className="results-tile-head";title.className="results-tile-title";title.textContent=label;badge.className="results-badge";badge.textContent=level||"";badge.hidden=!level;head.append(title,badge);score.className="results-tile-score"+(outOf?" is-out-of":"");strong.textContent=value;unit.textContent=outOf||"балл";score.append(strong,unit);tile.append(head,score);if(detail){const text=document.createElement("p");text.className="results-tile-text";text.textContent=detail;tile.append(text);}$("own-measures").append(tile);};
     const ecvResult=String(result.method_version_id).startsWith("ecv_15@");
-    for(const m of result.measures){const level=levels.get(m.code);addTile(m.label,m.value,level,ecvResult?"":(level?"Уровень определён по ключу методики.":(!hasLevels&&!classifications.length?"Нормативная интерпретация не утверждена.":"")),ecvResult?"из 60":null);}
+    for(const m of result.measures){const level=levels.get(m.code);addTile(m.label,m.value,level,ecvResult?"":(level?"Уровень определён по ключу методики.":""),ecvResult?"из 60":null);}
     for(const m of classifications.filter(x=>!String(x.code).endsWith(suffix))){addTile(m.label,m.value,"","");}
     if(String(result.method_version_id).startsWith("shpana_20@")){const val=code=>Number((result.measures.find(m=>m.code===code)||{}).value),pa=val("PA"),na=val("NA");
       if(Number.isFinite(pa)&&Number.isFinite(na)){const p=document.createElement("p");p.className="muted";p.id="shpana-interpretation";
