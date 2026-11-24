@@ -40,4 +40,21 @@ export class PostgresRegistrationStart implements Pick<ParticipantRegistration,"
       return {status:"confirmation_requested"};
     });
   }
+  async direct(inviteToken:string,input:RegistrationStart,pendingToken:string):Promise<{status:"registered"}>{
+    if(!validToken(inviteToken)||!validToken(pendingToken))throw new ParticipationError(404,"NOT_AVAILABLE");
+    if(!input||Array.isArray(input)||Object.keys(input).sort().join(",")!=="accept_contact_notice,contact_notice_version,email,password"||input.accept_contact_notice!==true||
+      typeof input.contact_notice_version!=="string"||!/^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$/.test(input.contact_notice_version)||!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
+    const email=participantEmail(input.email);
+    if(!email.endsWith("@example.test")&&!this.allowRealEmail)throw new ParticipationError(400,"SYNTHETIC_CONTACT_REQUIRED");
+    return this.gate.run(async()=>{
+      const id=await accountTransaction(this.pool,async c=>(await c.query<{id:string|null}>("SELECT pedpsy.reserve_registration_start_v2($1,$2,$3,$4,$5,$6,$7) id",
+        [tokenHash(inviteToken),tokenHash(pendingToken),email,input.contact_notice_version,this.allowRealEmail,this.admission.globalLimit,this.admission.globalWindowMs])).rows[0]!.id);
+      if(!id)throw new ParticipationError(429,"REGISTRATION_THROTTLED");
+      const salt=randomBytes(16),bytes=await this.derivePassword(input.password,salt,64,SCRYPT);let passwordHash:string;
+      try{passwordHash=bytes.toString("hex");}finally{bytes.fill(0);}
+      await accountTransaction(this.pool,async c=>{await c.query("SELECT pedpsy.complete_registration_direct($1,$2,$3,$4,$5)",
+        [id,tokenHash(pendingToken),"scrypt-N131072-r8-p1-dk64",salt.toString("hex"),passwordHash]);});
+      return {status:"registered"};
+    });
+  }
 }

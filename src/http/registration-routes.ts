@@ -18,6 +18,7 @@ export function registerRegistrationRoutes(app:FastifyInstance,origin:string,api
     reply.header("Set-Cookie",cookie(name,p.token,p.expiresAt));return {csrf:p.csrf,expires_at:p.expiresAt,synthetic:p.delivery==="synthetic",delivery:p.delivery};});
   app.get("/api/v2/registration/context",async r=>{const a=configured();noQuery(r);return a.context(invite(r));});
   app.post("/api/v2/registration/start",async r=>{const a=configured();noQuery(r);return a.start(invite(r),r.body,token(r),csrf(r));});
+  app.post("/api/v2/registration/direct",async r=>{const a=configured();noQuery(r);return a.direct(invite(r),r.body,token(r),csrf(r));});
   app.post("/api/v2/registration/receipt",async r=>{const a=configured();noQuery(r);return a.receipt(invite(r),token(r),r.body,csrf(r));});
   app.post("/api/v2/registration/confirm",async r=>{const a=configured();noQuery(r);return a.confirm(invite(r),r.body,token(r),csrf(r));});
   app.post("/api/v2/registration/resend",async r=>{const a=configured();noQuery(r);return a.resend(invite(r),r.body);});
