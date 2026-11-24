@@ -198,7 +198,9 @@ function sheetXml(columns:readonly Column[],participants:readonly ResultExportPa
     '<autoFilter ref="A1:'+columnLetter(Math.max(0,columns.length-1))+'1"/></worksheet>';
 }
 function safeSheetName(title:string,used:Set<string>):string{
-  let base=title.replace(/\s*\([^)]*\)/g,"").replace(/[\\/*?:[\]]/g," ").replace(/'+$/,"").trim()||"Методика";
+  const code=(title.match(/\(([^)]+)\)/)?.[1]??"").split(/[,;]/)[0]?.trim()??"";
+  let base=/^[A-Za-zА-Яа-я0-9][A-Za-zА-Яа-я0-9 ._-]{1,30}$/.test(code)&&!/редакц|версия/i.test(code)?code:title;
+  base=base.replace(/\s*\([^)]*\)/g,"").replace(/[\\/*?:[\]]/g," ").replace(/'+$/,"").trim()||"Методика";
   if(base.length>31)base=base.slice(0,31).trim();
   let name=base,index=2;
   while(used.has(name.toLowerCase())){const suffix=" "+index++;name=base.slice(0,Math.max(1,31-suffix.length))+suffix;}
