@@ -61,7 +61,7 @@ export class ResearchReminderWorker {
         if (!this.rate.take()) break;
         await this.transport.send({
           to: row.email,
-          subject: "Напоминание о прохождении исследования — МетодТест",
+          subject: "Апробация: тесты — напоминание о прохождении исследования",
           text: row.message
         });
         await this.pool.query(
