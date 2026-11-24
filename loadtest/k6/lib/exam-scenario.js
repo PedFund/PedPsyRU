@@ -6,7 +6,7 @@ import {json, loginParticipant, newSession, request, PASSWORD} from "./common.js
 
 const attempts = JSON.parse(open("../fixtures/attempts.json"));
 
-export function createExam(thinkMin, thinkMax, offset = 0) {
+export function createExam(thinkMin, thinkMax, offset = 0, source = attempts) {
   let session = null, participant = null, form = null, draft = null, cursor = 0, failures = 0;
   const conflict = new Counter("draft_revision_conflict");
   const rejected = new Counter("draft_rejected");
@@ -20,7 +20,7 @@ export function createExam(thinkMin, thinkMax, offset = 0) {
 
   function ensureSession() {
     if (!(session && session.csrf)) {
-      participant = attempts[(offset + __VU - 1) % attempts.length];
+      participant = source[(offset + __VU - 1) % source.length];
       session = newSession();
       const login = loginParticipant(session, participant.email, PASSWORD);
       if (login.response.status !== 200 || !session.csrf) { session = null; return false; }
