@@ -84,7 +84,7 @@
   function tileMarkup(card) {
     const tone = levelTone(card.level);
     const percent = scorePercent(card);
-    const badge = `<span class="results-badge">${escapeHtml(card.level || "—")}</span>`;
+    const badge = card.level ? `<span class="results-badge">${escapeHtml(card.level)}</span>` : "";
     const scale = percent === null
       ? ""
       : `<div class="results-scale" role="img" aria-label="Положение балла на шкале показателя"><span class="results-scale-marker" style="left:${percent.toFixed(1)}%"></span></div>`;
