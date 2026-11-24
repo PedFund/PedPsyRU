@@ -1,7 +1,7 @@
 SET LOCAL search_path=pedpsy,pg_catalog;
 -- 138: reminder delivery state and narrow runtime functions for the mail worker.
 -- The immutable reminder outbox stays untouched; delivery is recorded separately.
-CREATE TABLE pedpsy.research_reminder_deliveries(
+CREATE TABLE IF NOT EXISTS pedpsy.research_reminder_deliveries(
   study_id uuid NOT NULL,
   request_id uuid NOT NULL,
   participant_id uuid NOT NULL,
@@ -10,10 +10,11 @@ CREATE TABLE pedpsy.research_reminder_deliveries(
   PRIMARY KEY(study_id,request_id,participant_id),
   FOREIGN KEY(study_id,request_id) REFERENCES pedpsy.research_reminder_batches(study_id,request_id)
 );
+DROP TRIGGER IF EXISTS research_reminder_delivery_immutable ON pedpsy.research_reminder_deliveries;
 CREATE TRIGGER research_reminder_delivery_immutable BEFORE UPDATE OR DELETE
   ON pedpsy.research_reminder_deliveries FOR EACH ROW EXECUTE FUNCTION pedpsy.immutable_row();
 
-CREATE FUNCTION pedpsy.read_pending_research_reminders(batch_size integer)
+CREATE OR REPLACE FUNCTION pedpsy.read_pending_research_reminders(batch_size integer)
 RETURNS TABLE(study_id uuid,request_id uuid,participant_id uuid,stage_id uuid,email text,message text,created_at_ms bigint)
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 BEGIN
@@ -28,7 +29,7 @@ BEGIN
     LIMIT batch_size;
 END $$;
 
-CREATE FUNCTION pedpsy.mark_research_reminder_sent(
+CREATE OR REPLACE FUNCTION pedpsy.mark_research_reminder_sent(
   target_study uuid,target_request uuid,target_participant uuid,target_stage uuid,sent_at bigint)
 RETURNS boolean LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 BEGIN
