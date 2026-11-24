@@ -1,7 +1,7 @@
 SET LOCAL search_path=pedpsy,pg_catalog;
 -- 131: education is a required basic passport field with a fixed answer scale.
--- New and draft schemas use this definition; already pinned schema versions and
--- completed passports are intentionally untouched.
+-- It becomes part of a schema when the researcher selects "Образование".
+-- Already pinned schema versions and completed passports are not rewritten.
 CREATE FUNCTION pedpsy.passport_education_field() RETURNS jsonb
 LANGUAGE sql IMMUTABLE SET search_path=pg_catalog AS $$
   SELECT jsonb_build_array(jsonb_build_object(
@@ -43,29 +43,3 @@ BEGIN
   END LOOP;
   RETURN result;
 END $$;
-
-CREATE OR REPLACE FUNCTION pedpsy.passport_basic_fields(city_required boolean DEFAULT false) RETURNS jsonb
-LANGUAGE sql IMMUTABLE SET search_path=pg_catalog AS $$
-  SELECT '[{"key":"sex","label":"Пол","required":true,"kind":"single_choice","options":[{"value":"female","label":"Женский"},{"value":"male","label":"Мужской"}]},{"key":"age","label":"Возраст","required":true,"kind":"integer","min":18,"max":99}]'::jsonb
-    ||jsonb_build_array(jsonb_build_object('key','city','label','Населенный пункт','required',city_required,'kind','text','max_length',100))
-    ||pedpsy.passport_education_field()
-$$;
-
--- Keep legacy three-field passport schemas valid after passport_basic_fields()
--- grows to four fields. The first three fields are still sex, age and city.
-CREATE OR REPLACE FUNCTION pedpsy.passport_fields_valid(fields jsonb) RETURNS boolean
-LANGUAGE plpgsql IMMUTABLE SET search_path=pg_catalog,pedpsy AS $$
-DECLARE f jsonb;key text;selected jsonb:='[]'::jsonb;extra jsonb:='[]'::jsonb;in_extra boolean:=false;expected jsonb;basic jsonb;
-BEGIN
-  IF fields IS NULL OR jsonb_typeof(fields)<>'array' OR jsonb_array_length(fields)>10 THEN RETURN false;END IF;
-  FOR f IN SELECT value FROM jsonb_array_elements(fields) LOOP key:=f->>'key';IF key IN ('sex','age','city','organization','education') THEN IF in_extra THEN RETURN false;END IF;selected:=selected||jsonb_build_array(key);ELSE in_extra:=true;extra:=extra||jsonb_build_array(f);END IF;END LOOP;
-  BEGIN expected:=pedpsy.passport_selected_basic_fields(selected);EXCEPTION WHEN SQLSTATE '22023' THEN RETURN false;END;
-  IF (fields=expected||extra OR fields=pedpsy.passport_legacy_selected_basic_fields(selected)||extra) AND pedpsy.passport_additional_valid(extra) THEN RETURN true;END IF;
-  basic:=pedpsy.passport_basic_fields(false);
-  IF jsonb_array_length(fields) BETWEEN 3 AND 8 AND jsonb_typeof(fields->2->'required')='boolean'
-    AND (jsonb_build_array(fields->0,fields->1,fields->2)=jsonb_build_array(basic->0,basic->1,basic->2)
-      OR jsonb_build_array(fields->0,fields->1,fields->2)=pedpsy.passport_legacy_basic_fields((fields->2->>'required')::boolean)) THEN
-    SELECT coalesce(jsonb_agg(value ORDER BY ordinal),'[]'::jsonb) INTO extra FROM jsonb_array_elements(fields) WITH ORDINALITY a(value,ordinal) WHERE ordinal>3;RETURN pedpsy.passport_additional_valid(extra);
-  END IF;RETURN false;
-END $$;
-
