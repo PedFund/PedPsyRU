@@ -27,9 +27,11 @@
   }
   function measureMarkup(measure,compact){
     const level=measure.level?'<span class="result-level">'+escape(measure.level)+'</span>':"";
+    const raw=Number(measure.value),valueText=Number.isFinite(raw)?String(Math.round(raw*10)/10):"";
+    const value=valueText?'<span class="result-measure-value">'+escape(valueText)+'</span>':"";
     const description=measure.description?'<p class="result-description">'+escape(measure.description)+'</p>':"";
     const levelText=!compact&&measure.level_text?'<p class="result-level-text">'+escape(measure.level_text)+'</p>':"";
-    return '<div class="result-measure"><div class="result-measure-head"><span class="result-measure-label">'+escape(measure.label)+'</span>'+level+'</div>'+barMarkup(measure)+description+levelText+'</div>';
+    return '<div class="result-measure"><div class="result-measure-head"><span class="result-measure-label">'+escape(measure.label)+'</span><span class="result-measure-right">'+value+level+'</span></div>'+barMarkup(measure)+description+levelText+'</div>';
   }
   function summaryMarkup(summary){
     if(!summary)return "";
