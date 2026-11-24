@@ -54,6 +54,10 @@ $body$, '\s+', ' ', 'g'),
 )
 ON CONFLICT (purpose,version) DO NOTHING;
 
+UPDATE pedpsy.study_consent_policies
+SET participation_version='informed-consent-2026-11-24', revision=revision+1
+WHERE participation_version LIKE 'demo-participation-%';
+
 CREATE OR REPLACE FUNCTION pedpsy.default_study_consent_policy() RETURNS trigger
 LANGUAGE plpgsql SET search_path=pg_catalog,pedpsy AS $$
 BEGIN

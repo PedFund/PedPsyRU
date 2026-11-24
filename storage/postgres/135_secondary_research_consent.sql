@@ -60,6 +60,10 @@ VALUES (
 $body$, '\s+', ' ', 'g'), 'owner_provided')
 ON CONFLICT (purpose,version) DO NOTHING;
 
+UPDATE pedpsy.study_consent_policies
+SET secondary_version='secondary-research-2026-11-24', revision=revision+1
+WHERE secondary_version LIKE 'demo-secondary-%';
+
 CREATE OR REPLACE FUNCTION pedpsy.default_study_consent_policy() RETURNS trigger
 LANGUAGE plpgsql SET search_path=pg_catalog,pedpsy AS $$
 BEGIN

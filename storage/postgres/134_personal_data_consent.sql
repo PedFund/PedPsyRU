@@ -49,6 +49,10 @@ VALUES ('personal-data-consent-2026-11-24', regexp_replace($body$
 $body$, '\s+', ' ', 'g'), 'owner_provided')
 ON CONFLICT (version) DO NOTHING;
 
+UPDATE pedpsy.study_contact_policies
+SET notice_version='personal-data-consent-2026-11-24'
+WHERE notice_version IN ('demo-contact-1','demo-contact-2','demo-contact-3');
+
 CREATE OR REPLACE FUNCTION pedpsy.initialize_study_contact_policy() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 BEGIN
