@@ -43,3 +43,5 @@ BEGIN
   END LOOP;
   RETURN result;
 END $$;
+
+REVOKE ALL ON FUNCTION pedpsy.passport_education_field() FROM PUBLIC;
