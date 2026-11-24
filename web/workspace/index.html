@@ -6,8 +6,8 @@
   <title>МетодТест — кабинет</title>
   <link rel="stylesheet" href="/workspace/styles.css?v=20261123-3">
   <script src="/workspace/qr.js?v=20261106-5" defer></script>
-  <script src="/workspace/participant.js?v=20261124-8" defer></script>
-  <script src="/workspace/app.js?v=20261124-8" defer></script>
+  <script src="/workspace/participant.js?v=20261124-9" defer></script>
+  <script src="/workspace/app.js?v=20261124-9" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -21,6 +21,7 @@
     <p id="message" role="status" aria-live="polite"></p>
     <section id="participant-screen" hidden></section>
     <dialog id="participant-confirm-dialog"><form method="dialog"><h3>Подтвердите действие</h3><p id="participant-confirm-text"></p><div class="toolbar"><button value="ok">Подтвердить</button><button value="cancel" class="secondary">Отмена</button></div></form></dialog>
+ <dialog id="participant-document-dialog"><form method="dialog"><h3 id="participant-document-title"></h3><div id="participant-document-body" class="document-body"></div><div class="toolbar"><button value="close">Закрыть</button></div></form></dialog>
 
     <section id="login-screen" class="card narrow">
       <h2>Добро пожаловать</h2>
