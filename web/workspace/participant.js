@@ -147,7 +147,7 @@
     const c=$("participant-content"),quota=(form.rules&&form.rules.quota)||{};
     const answers=new Map(draft.responses.map(r=>[r.item_id,r.value]));
     const counted={};for(const v of answers.values())counted[v]=(counted[v]||0)+1;
-    c.innerHTML='<section class="card"><h2 id="method-title"></h2><p id="method-instruction" class="muted"></p><p id="ranking-progress" class="muted"></p><div id="ranking-grid" class="ranking-grid"></div><div class="toolbar"><button id="ranking-complete">Завершить и получить результат</button></div><button id="question-reload" class="text">Перечитать прохождение</button><button id="question-overview" class="text">← Назад</button></section>';
+    c.innerHTML='<section class="card"><h2 id="method-title"></h2><p id="method-instruction" class="muted"></p><p id="ranking-progress" class="muted"></p><div id="ranking-grid" class="ranking-grid"></div><div class="toolbar"><button id="ranking-complete">Завершить и получить результат</button></div><button id="question-overview" class="text">← Назад</button></section>';
     $("method-title").textContent=form.title||"";
     $("method-instruction").textContent=displayInstruction(form)||"";
     const exhausted=v=>quota[v]!==undefined&&(counted[v]||0)>=quota[v];
@@ -177,7 +177,6 @@
     $("ranking-progress").textContent="Оценено "+answers.size+" из "+form.items.length+". "+
       Object.entries(quota).map(([rank,allowed])=>"ранг "+rank+": "+(counted[rank]||0)+"/"+allowed).join(", ");
     blocked("ranking-complete",!complete||locked);
-    bind("question-reload",async()=>{form=await request("participant/attempts/"+attempt+"/form");draft=await request("participant/attempts/"+attempt);locked=false;renderRanking();});
     bind("question-overview",reload);
     bind("ranking-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
   }
@@ -216,9 +215,9 @@
     // The instruction belongs to the start of the attempt, not to every slide.
     const instruction=displayInstruction(form)||"Выберите более подходящее утверждение. Это учебное прохождение, не научно утверждённое заключение.";
     const showInstruction=q.index===0;
-    c.innerHTML='<section class="card question-card"><h2 id="method-title"></h2>'+
+    c.innerHTML='<section class="card question-card"><h2 id="method-title" hidden></h2>'+
       (showInstruction?'<section class="method-instruction" aria-labelledby="method-instruction-heading"><h3 id="method-instruction-heading">Инструкция</h3><p id="method-instruction"></p></section>':'')+
-      '<p id="method-scale-help" class="muted" hidden></p><p id="method-question"></p><label for="question-progress">Ваш прогресс</label><progress id="question-progress"></progress><p id="question-number"></p><fieldset id="question-pair" class="question-pair" aria-label="Ответ на вопрос"></fieldset><div class="toolbar"><button id="question-prev" class="secondary">Назад</button><button id="question-next">Далее</button><button id="question-complete" hidden>Завершить и получить результат</button></div><button id="question-reload" class="text">Перечитать прохождение</button><button id="question-overview" class="text">← Назад</button></section>';
+      '<p id="method-scale-help" class="muted" hidden></p><p id="method-question"></p><label for="question-progress">Ваш прогресс</label><progress id="question-progress"></progress><p id="question-number"></p><fieldset id="question-pair" class="question-pair" aria-label="Ответ на вопрос"></fieldset><div class="toolbar"><button id="question-prev" class="secondary">Назад</button><button id="question-next">Далее</button><button id="question-complete" hidden>Завершить и получить результат</button></div><button id="question-overview" class="text">← Назад</button></section>';
     $("method-title").textContent=form.title||"Тест Томаса—Килманна";
     if(showInstruction)$("method-instruction").textContent=instruction;
     $("method-question").textContent=q.item.text||"";
@@ -247,7 +246,7 @@
     $("question-complete").hidden=q.index!==q.total-1;
     blocked("question-complete",draft.responses.length!==q.total||locked);
     async function move(index){if(locked)throw Error("Перечитайте прохождение.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:form.items[index].id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderQuestion();}
-    bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-reload",async()=>{form=await request("participant/attempts/"+attempt+"/form");draft=await request("participant/attempts/"+attempt);locked=false;renderQuestion();});bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
+    bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
   }
   async function backToMethods(){showParticipantToolbar();if(!activeStageId){await reload();return;}const s=await request("participant/stages");const stage=(s.stages||[]).find(x=>x.stage_id===activeStageId);if(!stage){await reload();return;}stages=s;try{await openStage(stage);}catch{await reload();}}
   async function markInvalidated(){if(!attempt)return;const info=await request("participant/attempts/"+attempt+"/invalidated");if(!info.invalidated)return;
