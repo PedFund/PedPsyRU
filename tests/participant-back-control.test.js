@@ -9,7 +9,8 @@ test("the participant stage screen uses a clear back control instead of a bottom
   assert.match(script, /id="methods-back" class="back-button"/);
   assert.match(script, /aria-label="Назад к этапам"/);
   assert.match(script, /← Назад/);
-  assert.doesNotMatch(script, />К этапам</);
+  const stageScreen=script.slice(script.indexOf("async function openStage("),script.indexOf("async function openAttempt("));
+  assert.doesNotMatch(stageScreen, />К этапам</, "the stage list has one clear top back control");
   const css = fs.readFileSync(path.join(__dirname, "..", "web", "workspace", "styles.css"), "utf8");
   assert.match(css, /\.back-button\{/);
 });

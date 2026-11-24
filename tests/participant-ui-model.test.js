@@ -55,3 +55,16 @@ test("participant UI: presentation note replaces the level note when there are n
   assert.doesNotMatch(html,/Уровень определяется как положение балла/);
   assert.equal(html.includes(">6<"),false);
 });
+
+test("participant UI: STAI section instructions preserve pinned wording and exact boundaries",()=>{
+  const form=require("../methods/approved/v1/releases/stai_ru_40_barkanova/form.json");
+  const before=JSON.stringify(form);
+  const firstText="Прочитайте внимательно каждое из приведенных ниже утверждений. Зачеркните цифру в соответствующей графе справа в зависимости от того, как Вы себя чувствуете в данный момент. Над заданиями долго не задумывайтесь, так как правильных или неправильных ответов нет.";
+  const secondText="Для шкалы личностной тревожности отвечайте, исходя из того, как Вы чувствуете себя обычно.";
+  for(const index of [0,19])assert.deepEqual(m.instructionSection(form,index),{start:0,title:"Как вы чувствуете себя сейчас",text:firstText});
+  for(const index of [20,39])assert.deepEqual(m.instructionSection(form,index),{start:20,title:"Как вы чувствуете себя обычно",text:secondText});
+  assert.equal(firstText+" "+secondText,form.instruction,"both instructions retain the full authored text");
+  assert.equal(JSON.stringify(form),before,"presentation must not mutate the pinned form");
+  for(const wrong of [{...form,id:"other_shared"},{...form,version:"1.0.1"}])assert.equal(m.instructionSection(wrong,20),null);
+  for(const index of [-1,40,NaN,1.5,"20",null])assert.equal(m.instructionSection(form,index),null);
+});

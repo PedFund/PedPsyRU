@@ -44,4 +44,22 @@ const entries = manifest.keys.map(item => {
   };
 });
 
-module.exports = {entries};
+// Compatibility entries are calculation-only. They do not enter the current
+// release manifest/catalog and never replace or recalculate a stored result.
+const legacyMaiaKey = require('../methods/approved/v1/legacy/maia_r_32_1_0/key.json');
+const legacyMaiaDigest = sha(JSON.stringify(legacyMaiaKey));
+if (legacyMaiaDigest !== 'sha256:10d1e33e0ee34a3c61a2e33e89063b6ca0ddf341d266748c6b9fcb96a6a8043f') {
+  throw new Error('MAIA_LEGACY_KEY_DIGEST_MISMATCH');
+}
+const currentMaia = entries.find(entry => entry.id === 'maia_r_32');
+if (!currentMaia) throw new Error('MAIA_CURRENT_ENTRY_MISSING');
+const historicalEntries = [{...currentMaia,
+  version: legacyMaiaKey.key_version,
+  methodVersionId: 'maia_r_32@' + legacyMaiaKey.key_version,
+  key: legacyMaiaKey,
+  pins: {key: legacyMaiaDigest},
+  itemCount: legacyMaiaKey.items,
+  valid: legacyMaiaKey.valid.map(String)
+}];
+
+module.exports = {entries, historicalEntries};

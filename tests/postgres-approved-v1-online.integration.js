@@ -100,6 +100,43 @@ test('PostgreSQL approved releases: idempotent import, assignment, pinned form, 
     assert.deepEqual((await w.app.inject({url: base + '/result', headers: participantHeaders})).json(), result, release.id);
   }
 
+  // Existing studies retain MAIA-R 1.0.0 (1..6). Form verification and the
+  // runtime must both resolve that pinned release after 1.0.1 becomes current.
+  const historical = require('../storage/maia-legacy-release.js').maiaLegacyRelease();
+  const historicalRelease = randomUUID(), historicalAssignment = randomUUID(), historicalAttempt = randomUUID();
+  await f.admin.query("INSERT INTO pedpsy.instrument_releases(id,method_id,form_id,form_version,method_version_id,handler_version,contract_version,form_digest,key_digest,verification_state,publication_state,artifact_ref,form_snapshot) VALUES($1,'maia_r_32',$2,$3,$4,$5,'1.0',$6,$7,'legacy_checked','draft','repo:methods/approved/v1/legacy/maia_r_32_1_0',$8::jsonb)",
+    [historicalRelease, historical.form.id, historical.form.version, historical.methodVersionId, historical.handlerVersion, historical.formDigest, historical.keyDigest, historical.formSnapshot]);
+  for (const item of historical.form.items) await f.admin.query('INSERT INTO pedpsy.release_items VALUES($1,$2,$3,$4::jsonb)',
+    [historicalRelease, item.id, item.number, JSON.stringify(item.options)]);
+  await f.admin.query('INSERT INTO pedpsy.assignments(id,study_id,group_id,stage_id,release_id) VALUES($1,$2,$3,$4,$5)',
+    [historicalAssignment, f.studyId, group.id, stage.id, historicalRelease]);
+  await f.admin.query("INSERT INTO pedpsy.attempts(id,study_id,enrollment_id,assignment_id,group_id,stage_id,release_id,current_item_id) VALUES($1,$2,$3,$4,$5,$6,$7,'q01')",
+    [historicalAttempt, f.studyId, enrollment.id, historicalAssignment, group.id, stage.id, historicalRelease]);
+  const historicalBase = '/api/v2/participant/attempts/' + historicalAttempt;
+  const historicalForm = await w.app.inject({url: historicalBase + '/form', headers: participantHeaders});
+  assert.equal(historicalForm.statusCode, 200);
+  assert.deepEqual(historicalForm.json().items[0].options.map(option => String(option.value)), ['1','2','3','4','5','6']);
+  const historicalAnswers = historical.form.items.map(item => ({item_id: item.id, value: '2'}));
+  const historicalSave = await w.app.inject({method: 'PUT', url: historicalBase + '/draft', headers: participantHeaders,
+    payload: {expected_revision: 0, current_item_id: 'q32', responses: historicalAnswers}});
+  assert.equal(historicalSave.statusCode, 200, JSON.stringify(historicalSave.json()));
+  const historicalComplete = await w.app.inject({method: 'POST', url: historicalBase + '/complete', headers: participantHeaders, payload: {expected_revision: 1}});
+  assert.equal(historicalComplete.statusCode, 200, JSON.stringify(historicalComplete.json()));
+  assert.deepEqual(historicalComplete.json().measures.map(measure => measure.value), [1,4,3,1,1,1,1,1]);
+  const historicalStored = (await f.admin.query('SELECT payload FROM pedpsy.attempt_results WHERE study_id=$1 AND attempt_id=$2', [f.studyId, historicalAttempt])).rows;
+  assert.equal(historicalStored.length, 1);
+  assert.equal(historicalStored[0].payload.method_version_id, historical.methodVersionId);
+  assert.equal(historicalStored[0].payload.calculation.key_digest, historical.keyDigest);
+  const historicalRepeat = await w.app.inject({method: 'POST', url: historicalBase + '/complete', headers: participantHeaders, payload: {expected_revision: 0}});
+  assert.equal(historicalRepeat.statusCode, 200);
+  assert.deepEqual(historicalRepeat.json(), historicalComplete.json());
+  const historicalRead = await w.app.inject({url: historicalBase + '/result', headers: participantHeaders});
+  assert.equal(historicalRead.statusCode, 200);
+  assert.deepEqual(historicalRead.json(), historicalComplete.json());
+  assert.deepEqual((await f.admin.query('SELECT payload FROM pedpsy.attempt_results WHERE study_id=$1 AND attempt_id=$2', [f.studyId, historicalAttempt])).rows, historicalStored, 'repeated completion preserves the stored historical result');
+  const historicalResponses = (await f.admin.query('SELECT item_id,value FROM pedpsy.responses WHERE study_id=$1 AND attempt_id=$2 ORDER BY item_id', [f.studyId, historicalAttempt])).rows;
+  assert.deepEqual(historicalResponses, historicalAnswers, 'historical answer codes remain unchanged');
+
   // Negative and idempotent cases on the attempt completed in the first iteration.
   assert.ok(firstBase, 'the first release must have produced an attempt');
   const reopen = await w.app.inject({method: 'PUT', url: firstBase + '/draft', headers: participantHeaders,

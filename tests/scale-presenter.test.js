@@ -182,10 +182,12 @@ test("a mismatched method profile fails closed instead of showing foreign option
   assert.throws(() => scale.resolveScale(maiaItem, {captions: ["a", "b"]}), /SCALE_CAPTIONS_MISMATCH/);
 });
 
-test("the participant screen shows the instruction once, has no choice legend and uses the profile", () => {
+test("the participant screen separates the instruction, removes reload actions and uses the profile", () => {
   const js = fs.readFileSync(path.join(__dirname, "../web/workspace/participant.js"), "utf8");
   assert.match(js, /profileFor\(form\)/);
-  assert.match(js, /const showInstruction=q\.index===0/);
+  assert.match(js, /id="method-start"/);
+  assert.doesNotMatch(js, /id="method-title"/);
+  assert.doesNotMatch(js, /question-reload|Перечита(?:ть|йте) прохождение/i);
   assert.match(js, /disabled:locked,scale,onChange/);
   assert.match(js, /required&&!hasAnswer/);
   assert.doesNotMatch(js, /<legend>Выберите один вариант<\/legend>/);

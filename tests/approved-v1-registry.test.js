@@ -15,8 +15,15 @@ const requestFor = (entry, value) => ({contract_version: "1.0", method_version_i
 
 test("the registry exposes every approved package, CO-36 included", () => {
   const descriptors = builtinInstrumentRegistry.descriptors();
-  const approved = descriptors.filter(d => d.handler_version === "approved-numeric-1.0.0");
+  const allApproved = descriptors.filter(d => d.handler_version === "approved-numeric-1.0.0");
+  const currentIds=new Set(entries.map(entry=>entry.methodVersionId));
+  const approved=allApproved.filter(d=>currentIds.has(d.method_version_id));
+  const historical=allApproved.filter(d=>!currentIds.has(d.method_version_id));
   assert.equal(approved.length, 16);
+  assert.deepEqual(historical.map(d=>({contract_version:d.contract_version,method_version_id:d.method_version_id,handler_version:d.handler_version,key_digest:d.key_digest})),[{
+    contract_version:"1.0",method_version_id:"maia_r_32@1.0.0-staging",handler_version:"approved-numeric-1.0.0",
+    key_digest:"sha256:10d1e33e0ee34a3c61a2e33e89063b6ca0ddf341d266748c6b9fcb96a6a8043f"
+  }],"the sole historical runtime entry preserves its original pinned identity");
   assert.deepEqual(approved.map(d => d.method_version_id).sort(), [
     "co36_kunitsyna_36@1.0.0-staging", "darr_7@1.0.0-staging", "ecv_15@1.0.0-staging", "ffmq_39@1.0.0-staging",
     "hardiness_leontiev_rasskazova_45@1.0.0-staging", "maia_r_32@1.0.1-staging",
