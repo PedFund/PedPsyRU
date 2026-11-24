@@ -75,6 +75,7 @@
 .results-centered .results-tile{text-align:center}
 .results-centered .results-tile-head{justify-content:center}
 .results-centered .results-tile-score{justify-content:center}
+.results-centered .measure{text-align:center;align-items:center}
 .results-tile-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .results-tile-title{margin:0;font-size:14px;font-weight:650;line-height:1.35;color:#173b46;overflow-wrap:anywhere}
 .results-badge{flex:none;display:inline-flex;align-items:center;padding:3px 8px;border-radius:999px;font-size:11px;font-weight:700;line-height:1.3;white-space:nowrap;background:#e8f1f2;color:#0d626c}
