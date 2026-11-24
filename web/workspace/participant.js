@@ -281,7 +281,7 @@
       if(Number.isFinite(pa)&&Number.isFinite(na)){const p=document.createElement("p");p.className="muted";p.id="shpana-interpretation";
         p.textContent=(pa>na?"Позитивный аффект выражен сильнее негативного: в последние недели вы чаще отмечали интерес, энергию и удовольствие, чем напряжение и раздражение."
           :pa<na?"Негативный аффект выражен сильнее позитивного: в последние недели чаще отмечались напряжение, раздражение или тревога, чем интерес и удовольствие."
-          :"Обе шкалы выражены одинаково.")+" Это описательное соотношение сырых баллов, а не норма и не диагноз: утверждённых норм для этой адаптации нет.";
+          :"Обе шкалы выражены одинаково.")+" Это описательное соотношение шкал, а не диагноз.";
         c.querySelector("section.card").append(p);}}
     bind("result-methods",backToMethods);}
   function clear(){for(const i of root.querySelectorAll('input[type="password"]'))i.value="";csrf="";pendingCsrf="";invite="";sessionStorage.removeItem("pedpsy_invite");context=null;passport=null;consents=null;stages=null;form=null;draft=null;profileValues={};root.replaceChildren();}
