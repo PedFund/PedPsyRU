@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 const fs = require("node:fs");
 const path = require("node:path");
 const {execFileSync} = require("node:child_process");
@@ -25,4 +25,5 @@ const copyTree = source => {
   }
 };
 copyTree(approvedSource);
+const sha=(()=>{try{return process.env.GITHUB_SHA||execFileSync("git",["rev-parse","HEAD"],{cwd:root,encoding:"utf8"}).trim()}catch{return "unknown"}})();fs.writeFileSync(path.join(root,"dist","build-info.json"),JSON.stringify({sha,built_at:new Date().toISOString()},null,2)+"\n");
 console.log("Strict TypeScript build complete; original scoring files copied byte-for-byte.");
