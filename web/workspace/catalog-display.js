@@ -114,7 +114,7 @@
     },
     genchi_breath_hold:{
       title:"Проба Генчи",
-      authors:[],
+      authors:["Генчи"],
       item_count:0,
       item_unit:"измерение",
       indicators:["Время задержки дыхания, с"]
