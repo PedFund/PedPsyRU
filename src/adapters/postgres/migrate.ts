@@ -75,6 +75,7 @@ export async function grantRuntime(client: PoolClient, role: string): Promise<vo
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.participant_login_material_v2(text,integer,bigint),pedpsy.participant_email_login_material_v2(uuid,text,boolean,integer,bigint),pedpsy.reserve_registration_start_v2(text,text,text,text,boolean,integer,bigint) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.registration_context(text),pedpsy.registration_receipt_material(text,text),pedpsy.finish_registration_receipt(text,text,uuid,text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.claim_registration_confirmations(integer),pedpsy.finish_registration_confirmation(uuid,boolean,bigint,text),pedpsy.fail_stale_registration_confirmations() TO "${role}"`);
+  await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_pending_research_reminders(integer),pedpsy.mark_research_reminder_sent(uuid,uuid,uuid,uuid,bigint) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.queue_registration_confirmation_v2(uuid,text,text,text,text,uuid,text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.record_registration_http_denial(text) TO "${role}"`);
   await client.query(`GRANT EXECUTE ON FUNCTION pedpsy.read_passport_schema(uuid),pedpsy.configure_passport_schema(uuid,integer,integer,jsonb,jsonb) TO "${role}"`);
