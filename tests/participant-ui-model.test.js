@@ -13,7 +13,7 @@ test("participant UI: own role, in-page confirmation and explicit missing normat
 
 test("participant UI: Genchi reads sex from the passport and never asks again",()=>{const js=fs.readFileSync(path.join(__dirname,"../web/workspace/participant.js"),"utf8");assert.doesNotMatch(js,/measurement-sex/);assert.match(js,/passport\.values\[sexKey\]/);assert.match(js,/Пол не указан в паспортичке/);assert.doesNotMatch(js,/\|\|!e\.code/,"local validation must not lock the form");assert.match(js,/Только целые секунды/);});
 
-test("participant UI: presentation result draws gradient bars, levels and no scores",()=>{
+test("participant UI: presentation result draws gradient bars, levels and scores",()=>{
   const view={title:"Психологическая культура личности",item_count:57,palette:"negative",summary_position:"bottom",groups:[{title:"Самопознание",description:"Понимать свои желания.",measures:[{code:"I_A",label:"Стремление",value:4.8,min:1,max:5,colors:4,description:null,level:"высокий",level_index:2,level_text:"По вашим ответам это стремление выражено сильно."},{code:"positive_relations",label:"Отношения",value:50,min:14,max:84,colors:2,description:"Теплота и доверие.",level:null,level_index:-1,level_text:null}]}],summary:{title:"Общий уровень гармоничности",colors:4,measures:[],level:{code:"gpk",value:"псевдовысокий",text:"Общий уровень учитывает силу стремлений.",index:3,count:4}}};
   const html=m.resultMarkup(view);
   assert.match(html,/result-card palette-negative/);
@@ -28,8 +28,8 @@ test("participant UI: presentation result draws gradient bars, levels and no sco
   assert.match(html,/Ваш результат/);
   assert.match(html,/57 пунктов/);
   assert.match(html,/Уровень определяется как положение балла относительно количественных границ ключа/);
-  assert.equal(html.includes("4.8"),false);
-  assert.equal(html.includes(">50<"),false);
+  assert.match(html,/4\.8/);
+  assert.match(html,/>50</);
 });
 
 test("participant UI: email delivery asks for the code and keeps the synthetic receipt separate",()=>{
@@ -53,5 +53,5 @@ test("participant UI: presentation note replaces the level note when there are n
   const html=m.resultMarkup({title:"ЦО-36, семейные ценности",note:"Нормативные уровни для этой методики не утверждены.",palette:"positive",summary_position:"top",groups:[{title:"Ценности",description:null,measures:[{code:"family_safety",label:"Безопасность семьи",value:6,min:1,max:12,colors:2,description:null,level:null,level_index:-1,level_text:null}]}],summary:null});
   assert.match(html,/Нормативные уровни для этой методики не утверждены/);
   assert.doesNotMatch(html,/Уровень определяется как положение балла/);
-  assert.equal(html.includes(">6<"),false);
+  assert.match(html,/>6</);
 });

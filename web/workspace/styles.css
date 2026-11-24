@@ -203,3 +203,5 @@
 .scale-numeric:not(.scale-layout-row) .scale-endpoints .scale-end-min{grid-column:1;justify-self:center}
 .scale-numeric:not(.scale-layout-row) .scale-endpoints .scale-end-max{grid-column:6;justify-self:center;text-align:center}
 @media (max-width:640px){#method-question{font-size:19px}}
+.result-measure-right{display:inline-flex;align-items:baseline;gap:8px;margin-left:auto}
+.result-measure-value{font-size:18px;font-weight:750;color:#123f4c;line-height:1.2}
