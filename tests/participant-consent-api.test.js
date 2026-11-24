@@ -2,11 +2,11 @@
 const {test}=require("node:test"),assert=require("node:assert/strict");
 const {createParticipantConsentApi,consentAcceptance}=require("../dist/src/application/participant-consent-api.js");
 const {ParticipationError}=require("../dist/src/ports/errors.js");
-const valid={expected_policy_revision:0,purpose:"study_participation",document_version:"demo-participation-1",accept:true};
+const valid={expected_policy_revision:0,purpose:"study_participation",document_version:"informed-consent-2026-11-24",accept:true};
 const invalid=fn=>assert.throws(fn,e=>e.status===400&&e.code==="INVALID_CONSENT_INPUT");
 test("consent DTO: exact own explicit purpose/version/policy, copied without inferring other consent",()=>{
   assert.deepEqual(consentAcceptance(valid),valid);assert.notEqual(consentAcceptance(valid),valid);
-  const secondary={...valid,purpose:"secondary_research",document_version:"demo-secondary-1"};assert.deepEqual(consentAcceptance(secondary),secondary);assert.deepEqual(valid,{expected_policy_revision:0,purpose:"study_participation",document_version:"demo-participation-1",accept:true});
+  const secondary={...valid,purpose:"secondary_research",document_version:"secondary-research-2026-11-24"};assert.deepEqual(consentAcceptance(secondary),secondary);assert.deepEqual(valid,{expected_policy_revision:0,purpose:"study_participation",document_version:"informed-consent-2026-11-24",accept:true});
 });
 test("consent DTO: false/missing approval, contact notice and caller identity are never acceptances",()=>{
   for(const input of [null,[],{},true,{...valid,accept:false},{...valid,accept:"true"},{...valid,accept:null},{...valid,purpose:"contact_processing"},{...valid,purpose:"unknown"},{...valid,purpose:{}},{...valid,purpose:["study_participation"]},{...valid,study_id:"foreign"},{...valid,participant_id:"foreign"},{...valid,role:"superadministrator"},{...valid,accepted_at_ms:0}])invalid(()=>consentAcceptance(input));
@@ -31,5 +31,5 @@ test("consent API: CSRF before malformed input or persistence, no automatic acce
 test("consent API: application never grants participation or secondary acceptance from contact/password",async()=>{
   const calls=[],snapshot={study_id:"synthetic",policy_revision:0,documents:[],required_consents_accepted:false};
   const api=createParticipantConsentApi({read:async()=>snapshot,accept:async(t,v)=>{calls.push(v);return snapshot;}},{assert:()=>{}});
-  await api.read("own");assert.deepEqual(calls,[]);await api.accept("own",{...valid,purpose:"secondary_research",document_version:"demo-secondary-1"},"proof");assert.equal(calls.length,1);assert.equal(calls[0].purpose,"secondary_research");assert.equal(snapshot.required_consents_accepted,false);
+  await api.read("own");assert.deepEqual(calls,[]);await api.accept("own",{...valid,purpose:"secondary_research",document_version:"secondary-research-2026-11-24"},"proof");assert.equal(calls.length,1);assert.equal(calls[0].purpose,"secondary_research");assert.equal(snapshot.required_consents_accepted,false);
 });

@@ -9,7 +9,7 @@ test("PostgreSQL confirmation: a rotated browser cookie still accepts the e-mail
   const f = await postgresFixture({runtimePoolSize:3}); t.after(() => f.close());
   const x = await stageSetup(f);
   const start = await x.registration.start(x.invite.invite_token, {email: "rotation@example.test", password: "synthetic rotation password",
-    contact_notice_version: "demo-contact-3", accept_contact_notice: true}, browserA);
+    contact_notice_version: "personal-data-consent-2026-11-24", accept_contact_notice: true}, browserA);
   assert.ok(["confirmation_requested", "sign_in_required"].includes(start.status));
   const pending = (await f.admin.query("SELECT id FROM pedpsy.registration_pending WHERE email_key='rotation@example.test' ORDER BY created_at_ms DESC LIMIT 1")).rows[0];
   const out = (await f.admin.query("SELECT id,token_envelope FROM pedpsy.contact_confirmation_outbox WHERE pending_id=$1 ORDER BY created_at_ms DESC LIMIT 1", [pending.id])).rows[0];
@@ -25,7 +25,7 @@ test("PostgreSQL confirmation: a wrong code still fails and consumes an attempt"
   const f = await postgresFixture({runtimePoolSize:3}); t.after(() => f.close());
   const x = await stageSetup(f);
   await x.registration.start(x.invite.invite_token, {email: "wrong.code@example.test", password: "synthetic wrong code password",
-    contact_notice_version: "demo-contact-3", accept_contact_notice: true}, browserC);
+    contact_notice_version: "personal-data-consent-2026-11-24", accept_contact_notice: true}, browserC);
   await assert.rejects(x.registration.confirm(x.invite.invite_token, {confirmation_token: "Z".repeat(43)}, browserC), e => e.status === 404);
   const row = (await f.admin.query("SELECT attempts_remaining FROM pedpsy.registration_pending WHERE email_key='wrong.code@example.test'")).rows[0];
   assert.equal(row.attempts_remaining, 4);

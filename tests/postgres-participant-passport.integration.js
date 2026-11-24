@@ -8,7 +8,7 @@ const {migratePostgres,grantRuntime}=require("../dist/src/adapters/postgres/migr
 const extra=[{key:"extra_context",label:"Контекст",kind:"text",required:true,max_length:40},{key:"extra_years",label:"Стаж",kind:"integer",required:false,min:-10,max:50},{key:"extra_setting",label:"Среда",kind:"single_choice",required:false,options:[{value:"school",label:"Школа"}]}];
 const full={sex:"female",age:42,city:"Synthetic town",extra_context:"Synthetic context"};
 async function identity(f,x,email="own@example.test"){
-  const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"demo-contact-3",accept_contact_notice:true};
+  const browser=randomBytes(32).toString("base64url"),password="synthetic passport password",body={email,password,contact_notice_version:"personal-data-consent-2026-11-24",accept_contact_notice:true};
   await x.registration.start(x.i.invite_token,body,browser);
   const outbox=(await f.admin.query("SELECT o.id,o.token_envelope FROM pedpsy.contact_confirmation_outbox o JOIN pedpsy.registration_pending p ON p.id=o.pending_id WHERE p.study_id=$1 AND p.browser_hash=$2 AND p.status='pending'",[x.design.id,tokenHash(browser)])).rows[0];
   await x.registration.confirm(x.i.invite_token,{confirmation_token:x.vault.open(outbox.id,outbox.token_envelope)},browser);
