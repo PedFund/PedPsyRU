@@ -1,4 +1,4 @@
-// Scenario B: simultaneous e-mail + password login of existing participants.
+﻿// Scenario B: simultaneous e-mail + password login of existing participants.
 // Each VU logs in exactly one account (the per-account bucket allows five
 // attempts per fifteen minutes, so a login is not repeated inside a run).
 import {check} from "k6";
@@ -19,7 +19,7 @@ export const options = {
   },
   thresholds: {
     checks: ["rate>0.95"],
-    "http_req_duration{name:Login}": ["p(95)<30000"],
+    "http_req_duration{name:Login}": ["p(95)<2000"],
     http_req_failed: ["rate<0.02"],
   },
 };
@@ -37,3 +37,4 @@ export default function () {
   if (status === 429) throttled.add(1);
   else if (status !== 200) failed.add(1);
 }
+

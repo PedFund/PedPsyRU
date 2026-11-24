@@ -1,4 +1,4 @@
-// Shared configuration and HTTP helpers for the МетодТест k6 suite.
+﻿// Shared configuration and HTTP helpers for the РњРµС‚РѕРґРўРµСЃС‚ k6 suite.
 // Deliberately small: every script still owns its scenario, thresholds and tags.
 import http from "k6/http";
 import {fail} from "k6";
@@ -68,7 +68,7 @@ export function request(session, method, path, body, options = {}) {
   const cookie = applyCookies(session.cookies);
   if (cookie) headers.Cookie = cookie;
   const response = http.request(method, `${BASE}${path}`, body === undefined ? null : JSON.stringify(body), {
-    headers, tags: options.tags || {name: path}, responseCallback: http.expectedStatuses(200, 201, 204, 400, 401, 403, 404, 409, 422, 429, 503),
+    headers, tags: options.tags || {name: path}, responseCallback: http.expectedStatuses(200, 201, 204, 400, 401, 403, 404, 409, 422, 429),
   });
   storeCookies(session.cookies, response);
   return response;
@@ -125,3 +125,4 @@ export function loginParticipant(session, email, password) {
   if (login.status === 200 && body) session.csrf = body.csrf;
   return {step: login.status === 200 ? "ok" : "login", response: login};
 }
+
