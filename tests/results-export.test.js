@@ -16,6 +16,7 @@ const data={study_id:"study-1",participants:[
 test("results CSV: anonymous id, profile, consents, indicator before raw score",()=>{
   const csv=resultsCsv(data);
   assert.match(csv,/ID участника;Пол;Возраст;Согласие:/);
+  assert.match(csv,/Согласие: Обработка персональных данных/);
   assert.match(csv,/Шкала тревожности — Показатель: Ситуативная/);
   assert.match(csv,/Шкала тревожности — Сырой балл: СТ/);
   assert.match(csv,/Женский;34;Да;Да;/);

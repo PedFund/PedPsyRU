@@ -11,7 +11,7 @@ BEGIN
       'profile',jsonb_build_object(
         'schema_version',prof.schema_version,'status',prof.status,
         'fields',coalesce(prof.fields,'[]'::jsonb),'values',coalesce(prof.answers,'{}'::jsonb)),
-      'consents',coalesce(cons.consents,'[]'::jsonb),
+      'consents',coalesce(cons.consents,'[]'::jsonb)||coalesce(contact.consent,'[]'::jsonb),
       'results',coalesce(res.results,'[]'::jsonb)
     ) ORDER BY b.participant_id),'[]'::jsonb)
   INTO data
@@ -43,6 +43,15 @@ BEGIN
     ) a
   ) cons ON true
   LEFT JOIN LATERAL (
+    SELECT jsonb_build_array(jsonb_build_object(
+      'purpose','contact_processing','document_version',ca.notice_version,'accepted_at_ms',ca.confirmed_at_ms
+    )) AS consent
+    FROM pedpsy.participant_contact_acceptances ca
+    JOIN pedpsy.participant_contacts pc ON (pc.study_id,pc.id)=(ca.study_id,ca.contact_id)
+    WHERE pc.study_id=b.study_id AND pc.participant_id=b.participant_id AND pc.status='active'
+    ORDER BY ca.confirmed_at_ms DESC LIMIT 1
+  ) contact ON true
+  LEFT JOIN LATERAL (
     SELECT jsonb_agg(jsonb_build_object(
       'release_id',x.release_id,'method_id',r.method_id,
       'method_title',coalesce(c.title,r.method_id),
@@ -71,4 +80,4 @@ BEGIN
   PERFORM pedpsy.constructor_audit('studies.results.export',study);
   RETURN jsonb_build_object('study_id',study,'participants',data);
 END $$;
-REVOKE ALL ON FUNCTION research_results_export(uuid) FROM PUBLIC;
+REVOKE ALL ON FUNCTION pedpsy.research_results_export(uuid) FROM PUBLIC;
