@@ -20,7 +20,8 @@ export interface ResultExportProfile {schema_version:number;status:string;fields
 export interface ResultExportConsent {purpose:string;document_version:string;accepted_at_ms:number}
 export interface ResultExportMeasure {code?:string;label?:string;value:unknown}
 export interface ResultExportClassification {code?:string;label?:string;value:unknown}
-export interface ResultExportResult {release_id:string;method_id:string;method_title:string;method_version_id:string;attempt_id:string;completed_at:string;measures:readonly ResultExportMeasure[];classifications:readonly ResultExportClassification[]}
+export interface ResultExportResponse {item_id:string;ordinal:number;value:string;label:string}
+export interface ResultExportResult {release_id:string;method_id:string;method_title:string;method_version_id:string;attempt_id:string;completed_at:string;measures:readonly ResultExportMeasure[];classifications:readonly ResultExportClassification[];responses:readonly ResultExportResponse[]}
 export interface ResultExportParticipant {participant_id:string;profile:ResultExportProfile|null;consents:readonly ResultExportConsent[];results:readonly ResultExportResult[]}
 export interface ResearchResultsExport {study_id:string;participants:readonly ResultExportParticipant[]}
 export interface ResearchWorkbench {
