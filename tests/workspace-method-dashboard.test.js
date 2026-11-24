@@ -29,7 +29,10 @@ test("method dashboard toggles the panel by id, not by element",()=>{
   assert.match(app,/method-result-card/);
   assert.match(app,/method-result-progress/);
   assert.match(app,/level-columns/);
-  assert.match(app,/scale-track/);
+  assert.match(app,/scale-tick/);
+  assert.match(app,/scale-mean-marker/);
+  assert.match(app,/METHOD_MEASURE_RANGES/);
+  assert.match(app,/scaleLine\(measure,item\.method_id\)/);
   assert.match(app,/analytics-legend/);
   assert.match(app,/скрыто \(<3\)/);
   assert.match(app,/function participantCode\(id\)\{return String\(id\|\|""\)\.replace/);
