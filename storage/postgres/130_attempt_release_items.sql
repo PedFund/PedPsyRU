@@ -1,4 +1,4 @@
-﻿SET LOCAL search_path=pedpsy,pg_catalog;
+SET LOCAL search_path=pedpsy,pg_catalog;
 -- 130: read the pinned items of an attempt's release after one authorization
 -- check. Previously the participant form query evaluated can_read_release for
 -- every release_items row, which made the first form load after a restart
