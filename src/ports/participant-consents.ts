@@ -2,7 +2,7 @@ import type {ConsentPurpose} from "./participant-registration.js";
 export type ExplicitConsentPurpose = Exclude<ConsentPurpose,"contact_processing">;
 export interface ParticipantConsentDocument {
   readonly purpose:ConsentPurpose;readonly version:string;readonly text:string;
-  readonly legal_status:"synthetic_only";readonly required:boolean;
+  readonly legal_status:"synthetic_only"|"owner_provided";readonly required:boolean;
   readonly accepted_at_ms:number|null;
   readonly provenance:"contact_notice_confirmation"|"explicit_participant_acceptance";
 }

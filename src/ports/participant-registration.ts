@@ -77,7 +77,7 @@ export interface GroupInvitations {
 export interface RegistrationLanding {
   readonly study_title: string;
   readonly group_name: string;
-  readonly contact_notice: {readonly version: string; readonly text: string; readonly legal_status: "synthetic_only"};
+  readonly contact_notice: {readonly version: string; readonly text: string; readonly legal_status: "synthetic_only"|"owner_provided"};
 }
 export interface RegistrationStart {
   readonly email: string;
