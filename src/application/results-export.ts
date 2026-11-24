@@ -198,7 +198,9 @@ function sheetXml(columns:readonly Column[],participants:readonly ResultExportPa
     '<autoFilter ref="A1:'+columnLetter(Math.max(0,columns.length-1))+'1"/></worksheet>';
 }
 function safeSheetName(title:string,used:Set<string>):string{
-  let base=title.replace(/\s*\([^)]*\)/g,"").replace(/[\\/*?:[\]]/g," ").replace(/'+$/,"").trim()||"Методика";
+  const code=(title.match(/\(([^)]+)\)/)?.[1]??"").split(/[,;]/)[0]?.trim()??"";
+  let base=/^[A-Za-zА-Яа-я0-9][A-Za-zА-Яа-я0-9 ._-]{1,30}$/.test(code)&&!/редакц|версия/i.test(code)?code:title;
+  base=base.replace(/\s*\([^)]*\)/g,"").replace(/[\\/*?:[\]]/g," ").replace(/'+$/,"").trim()||"Методика";
   if(base.length>31)base=base.slice(0,31).trim();
   let name=base,index=2;
   while(used.has(name.toLowerCase())){const suffix=" "+index++;name=base.slice(0,Math.max(1,31-suffix.length))+suffix;}
@@ -229,7 +231,9 @@ export async function resultsXlsx(data:ResearchResultsExport):Promise<Buffer>{
     '<fonts count="4"><font><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font><font><b/><color rgb="FFFFFFFF"/><sz val="11"/><name val="Calibri"/></font><font><b/><sz val="11"/><name val="Calibri"/></font></fonts>'+
     '<fills count="5"><fill><patternFill patternType="none"/></fill><fill><patternFill patternType="gray125"/></fill><fill><patternFill patternType="solid"><fgColor rgb="FFE8EEF2"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFFFF2CC"/></patternFill></fill><fill><patternFill patternType="solid"><fgColor rgb="FFDDEBF7"/></patternFill></fill></fills>'+
     '<borders count="1"><border><left/><right/><top/><bottom/><diagonal/></border></borders>'+
-    '<cellXfs count="6"><xf/><xf fontId="1" fillId="2" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="3" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="4" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="3" fillId="3" applyFont="1" applyFill="1"><alignment vertical="top" wrapText="1"/></xf><xf applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs></styleSheet>';
+    '<cellStyleXfs count="1"><xf/></cellStyleXfs>'+
+    '<cellXfs count="6"><xf/><xf fontId="1" fillId="2" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="3" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="1" fillId="4" applyFont="1" applyFill="1"><alignment vertical="center" wrapText="1"/></xf><xf fontId="3" fillId="3" applyFont="1" applyFill="1"><alignment vertical="top" wrapText="1"/></xf><xf applyAlignment="1"><alignment vertical="top" wrapText="1"/></xf></cellXfs>'+
+    '<cellStyles count="1"><cellStyle name="Normal" xfId="0" builtinId="0"/></cellStyles></styleSheet>';
   return zipStore([
     {name:"[Content_Types].xml",data:Buffer.from(contentTypes,"utf8")},
     {name:"_rels/.rels",data:Buffer.from(rootRels,"utf8")},
