@@ -1,4 +1,4 @@
-"use strict";
+﻿"use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict"),fs=require("node:fs"),path=require("node:path"),os=require("node:os"),{randomUUID,randomBytes}=require("node:crypto");
 const {postgresFixture}=require("./postgres-fixture.js"),{migratePostgres,grantRuntime}=require("../dist/src/adapters/postgres/migrate.js"),{tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
 const {ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js"),{PostgresParticipantRegistration}=require("../dist/src/adapters/postgres/participant-registration.js"),{derive,SCRYPT}=require("../storage/access.js");
@@ -19,3 +19,4 @@ test("PostgreSQL registration migration: full upgrade preserves existing022 encr
     await assert.rejects(f.runtime.query("SELECT * FROM pedpsy.participant_contacts"),e=>e.code==="42501");assert.equal((await c.query("SELECT count(*)::integer n FROM public.pedpsy_schema_migrations")).rows[0].n,latest);
   }finally{c.release();}
 });
+

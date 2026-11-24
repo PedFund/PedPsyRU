@@ -4,7 +4,7 @@
 const {test} = require("node:test"), assert = require("node:assert/strict"), {randomBytes} = require("node:crypto");
 const {postgresFixture} = require("./postgres-fixture.js"), {stageSetup} = require("./participant-enrollment-fixture.js");
 const token = () => randomBytes(32).toString("base64url");
-const body = (email, password) => ({email, password, contact_notice_version: "demo-contact-3", accept_contact_notice: true});
+const body = (email, password) => ({email, password, contact_notice_version: "personal-data-consent-2026-11-24", accept_contact_notice: true});
 async function codeFor(f, x, email) {
   const pending = (await f.admin.query("SELECT id FROM pedpsy.registration_pending WHERE email_key=$1 AND status='pending' ORDER BY created_at_ms DESC LIMIT 1", [email])).rows[0];
   const out = (await f.admin.query("SELECT id,token_envelope FROM pedpsy.contact_confirmation_outbox WHERE pending_id=$1 ORDER BY created_at_ms DESC LIMIT 1", [pending.id])).rows[0];

@@ -8,7 +8,7 @@ export function createRegistrationReceiptApi(receipts:RegistrationReceipt,protec
     context:async(invite:string)=>{
       const dto=await receipts.context(registrationToken(invite));
       return {study_id:studyId(dto.study_id),study_title:dto.study_title,group_name:dto.group_name,
-        contact_notice:{version:dto.contact_notice.version,text:dto.contact_notice.text,legal_status:"synthetic_only" as const}};
+        contact_notice:{version:dto.contact_notice.version,text:dto.contact_notice.text,legal_status:dto.contact_notice.legal_status}};
     },
     // Future HTTP route must be POST/same-origin, with its own HttpOnly cookie.
     receipt:(invite:string,browser:string,input:unknown,csrf:string)=>{

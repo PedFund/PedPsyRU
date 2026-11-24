@@ -5,7 +5,7 @@ const {PostgresRegistrationStart}=require("../dist/src/adapters/postgres/registr
 const {ContactTokenVault}=require("../dist/src/adapters/security/contact-token-vault.js");
 const {ConfirmationMailWorker}=require("../dist/src/adapters/postgres/confirmation-mail-worker.js");
 const {tokenHash}=require("../dist/src/adapters/postgres/account-transaction.js");
-const body={email:"mail.worker@example.test",password:"synthetic participant email password",contact_notice_version:"demo-contact-3",accept_contact_notice:true};
+const body={email:"mail.worker@example.test",password:"synthetic participant email password",contact_notice_version:"personal-data-consent-2026-11-24",accept_contact_notice:true};
 const token=()=>randomBytes(32).toString("base64url");
 async function configured(f){
   const s=await verifiedStaff(f),x=await invitationResearcher(f,s);

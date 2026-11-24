@@ -2,12 +2,12 @@
 const {test}=require("node:test"),assert=require("node:assert/strict"),{randomUUID}=require("node:crypto");
 const {createWorkspaceApp}=require("../dist/src/http/workspace-app.js"),{createParticipantConsentApi}=require("../dist/src/application/participant-consent-api.js"),{ParticipationError}=require("../dist/src/ports/errors.js"),{csrfFor}=require("../storage/access.js");
 const origin="http://127.0.0.1:4174",assets={html:"<!doctype html><title>Workspace</title>",js:"'use strict';",css:"body{}"},id=randomUUID(),own="p".repeat(43),staff="s".repeat(43),researcher="r".repeat(43);
-const approval={purpose:"study_participation",document_version:"demo-participation-1",expected_policy_revision:0,accept:true};
+const approval={purpose:"study_participation",document_version:"informed-consent-2026-11-24",expected_policy_revision:0,accept:true};
 function fixture({enabled=true,customOrigin=origin,auditFailure=false}={}){
  const calls=[],audit=[],deny=()=>{throw new ParticipationError(401,"AUTH_REQUIRED");};
- const documents=[{purpose:"contact_processing",version:"demo-contact-1",text:"Synthetic contact notice",required:true,accepted_at_ms:1,provenance:"contact_notice_confirmation"},
-  {purpose:"study_participation",version:"demo-participation-1",text:"Synthetic participation notice",required:true,accepted_at_ms:null,provenance:"explicit_participant_acceptance"},
-  {purpose:"secondary_research",version:"demo-secondary-1",text:"Synthetic optional notice",required:false,accepted_at_ms:null,provenance:"explicit_participant_acceptance"}].map(d=>({...d,legal_status:"synthetic_only",password:"private"}));
+ const documents=[{purpose:"contact_processing",version:"personal-data-consent-2026-11-24",text:"Synthetic contact notice",required:true,accepted_at_ms:1,provenance:"contact_notice_confirmation"},
+  {purpose:"study_participation",version:"informed-consent-2026-11-24",text:"Synthetic participation notice",required:true,accepted_at_ms:null,provenance:"explicit_participant_acceptance"},
+  {purpose:"secondary_research",version:"secondary-research-2026-11-24",text:"Synthetic optional notice",required:false,accepted_at_ms:null,provenance:"explicit_participant_acceptance"}].map(d=>({...d,legal_status:"synthetic_only",password:"private"}));
  const snapshot={study_id:id,policy_revision:0,required_consents_accepted:false,documents,email:"private@example.test",secret:"private"};
  const api=createParticipantConsentApi({read:async t=>{calls.push(["read",t]);return snapshot;},accept:async(t,b)=>{calls.push(["accept",t,b]);return {...snapshot,required_consents_accepted:b.purpose==="study_participation",documents:documents.map(d=>d.purpose===b.purpose?{...d,accepted_at_ms:2}:d)};}},{assert:(t,c)=>{if(c!==csrfFor(t))throw new ParticipationError(403,"CSRF_REJECTED");}});
  const denied=async(token,reason)=>{if(auditFailure)throw Error("private audit detail");audit.push([token,reason]);},participant={session:async t=>{if(t!==own)deny();return {csrf:csrfFor(t),attempts:[]};},denied},accounts={staffSession:async t=>{if(t!==staff)deny();return {};},researcherSession:async t=>{if(t!==researcher)deny();return {};},denied};

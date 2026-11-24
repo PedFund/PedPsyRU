@@ -5,7 +5,7 @@ const {test} = require("node:test"), assert = require("node:assert/strict"), {ra
 const {postgresFixture} = require("./postgres-fixture.js"), {stageSetup} = require("./participant-enrollment-fixture.js");
 const token = () => randomBytes(32).toString("base64url");
 const hash = value => "sha256:" + createHash("sha256").update(value).digest("hex");
-const body = (email, password) => ({email, password, contact_notice_version: "demo-contact-3", accept_contact_notice: true});
+const body = (email, password) => ({email, password, contact_notice_version: "personal-data-consent-2026-11-24", accept_contact_notice: true});
 test("PostgreSQL registration: password reset by e-mailed code replaces the credential", async t => {
   const f = await postgresFixture({runtimePoolSize: 3}); t.after(() => f.close());
   const x = await stageSetup(f), email = "reset.participant@example.test", browser = "B".repeat(43);

@@ -81,7 +81,7 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
     landing: async (invite: string) => {
       const dto = await registration.landing(registrationToken(invite));
       return {study_title: dto.study_title, group_name: dto.group_name,
-        contact_notice: {version: dto.contact_notice.version, text: dto.contact_notice.text, legal_status: "synthetic_only" as const}};
+        contact_notice: {version: dto.contact_notice.version, text: dto.contact_notice.text, legal_status: dto.contact_notice.legal_status}};
     },
     start: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
       protection.assert(pendingToken, csrf);

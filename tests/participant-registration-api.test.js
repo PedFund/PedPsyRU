@@ -95,12 +95,12 @@ test("landing and login projection do not forward contact lists, secrets or admi
   let resolved = false;
   const api = createParticipantRegistrationApi({
     landing: async () => {resolved = true; return {study_title: "Демо", group_name: "КГ", contacts: ["not-public"],
-      contact_notice: {version: "contact-1", text: "Учебный текст", legal_status: "approved", secret: "not-public"}};},
+      contact_notice: {version: "contact-1", text: "Учебный текст", legal_status: "owner_provided", secret: "not-public"}};},
     login: async () => ({token: pending, csrf: "csrf", expiresAt: 1234, role: "superadministrator", email: good.email})
   }, {assert: () => {}});
   await assert.rejects(api.landing("bad-token"), unavailable); assert.equal(resolved, false);
   assert.deepEqual(await api.landing(invite), {study_title: "Демо", group_name: "КГ", contact_notice:
-    {version: "contact-1", text: "Учебный текст", legal_status: "synthetic_only"}});
+    {version: "contact-1", text: "Учебный текст", legal_status: "owner_provided"}});
   assert.deepEqual(await api.login({study_id: id, email: good.email, password: good.password}), {token: pending, csrf: "csrf", expiresAt: 1234});
 });
 test("invitation management rejects client owner/scope/token and coerced CAS/expiry before calling adapter", async () => {

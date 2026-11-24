@@ -5,7 +5,7 @@ const {test} = require("node:test"), assert = require("node:assert/strict");
 const {postgresFixture} = require("./postgres-fixture.js"), {stageSetup} = require("./participant-enrollment-fixture.js");
 const {tokenHash} = require("../dist/src/adapters/postgres/account-transaction.js");
 const browserA = "A".repeat(43), browserB = "B".repeat(43);
-const body = email => ({email, password: "synthetic resend password", contact_notice_version: "demo-contact-3", accept_contact_notice: true});
+const body = email => ({email, password: "synthetic resend password", contact_notice_version: "personal-data-consent-2026-11-24", accept_contact_notice: true});
 async function pendingOf(f, email) {
   return (await f.admin.query("SELECT id,expires_at_ms FROM pedpsy.registration_pending WHERE email_key=$1 AND status='pending' ORDER BY created_at_ms DESC LIMIT 1", [email])).rows[0];
 }
