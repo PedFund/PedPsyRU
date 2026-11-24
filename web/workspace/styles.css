@@ -214,3 +214,8 @@ aside .brand{font-size:26px;line-height:1.15}
 .document-body{max-height:65vh;overflow:auto;line-height:1.7}
 .document-body p{margin:0 0 14px}
 .document-body p:first-child{font-weight:600}
+.scale-text .scale-options{align-items:stretch}
+.scale-text .scale-option{display:flex!important;width:100%;min-width:0;height:100%}
+.scale-text .scale-cell{flex:1;height:100%;min-height:64px;padding:10px 12px;font-size:14px;line-height:1.25;font-weight:600;overflow-wrap:anywhere}
+@media (min-width:900px){.scale-text .scale-cell{min-height:68px;font-size:15px}}
+.question-pair > .question-option{width:100%;min-height:48px;align-items:center}
