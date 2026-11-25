@@ -24,6 +24,10 @@ ON CONFLICT(study_id) DO NOTHING;
 CREATE OR REPLACE FUNCTION pedpsy.initialize_research_profile_schema() RETURNS trigger
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 BEGIN
+  INSERT INTO pedpsy.passport_schema_versions(study_id,schema_version,fields)
+    VALUES(NEW.id,1,pedpsy.passport_basic_fields(false)) ON CONFLICT(study_id,schema_version) DO NOTHING;
+  INSERT INTO pedpsy.study_passport_schemas(study_id,schema_version)
+    VALUES(NEW.id,1) ON CONFLICT(study_id) DO NOTHING;
   INSERT INTO pedpsy.research_profile_schemas(study_id,version,fields)
     VALUES(NEW.id,1,pedpsy.passport_basic_fields(false)) ON CONFLICT(study_id,version) DO NOTHING;
   INSERT INTO pedpsy.research_profile_defaults(study_id,version)
