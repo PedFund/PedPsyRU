@@ -100,7 +100,7 @@ export function validateAuthoringDefinition(raw:unknown):{valid:boolean;errors:s
   if(maximum<=minimum)errors.push("Максимум должен быть больше минимума");
   if(step>0&&(maximum-minimum)%step!==0)errors.push("Разница максимума и минимума должна делиться на шаг");
   const count=step>0?Math.floor((maximum-minimum)/step)+1:0;
-  if(count<2||count>20)errors.push("Количество вариантов ответа должно быть от 2 до 20");
+  if(count<2||count>10)errors.push("Количество вариантов ответа должно быть от 2 до 10");
   const hasLabels=scale.has_labels===true;
   const labels:AuthoringLabel[]=[];
   if(hasLabels){
@@ -113,7 +113,7 @@ export function validateAuthoringDefinition(raw:unknown):{valid:boolean;errors:s
     }
   }
   const questions=Array.isArray(input.questions)?input.questions:[];
-  if(questions.length<1||questions.length>30)errors.push("Количество вопросов должно быть от 1 до 30");
+  if(questions.length<1||questions.length>150)errors.push("Количество вопросов должно быть от 1 до 150");
   const questionIds=new Set<string>(),normalizedQuestions:AuthoringQuestion[]=[];
   questions.forEach((question,index)=>{
     if(!question||typeof question!=="object"){errors.push("Вопрос "+(index+1)+": некорректный объект");return;}
@@ -124,7 +124,7 @@ export function validateAuthoringDefinition(raw:unknown):{valid:boolean;errors:s
     normalizedQuestions.push({id,text,reverse:question.reverse===true});
   });
   const indicators=Array.isArray(input.indicators)?input.indicators:[];
-  if(indicators.length<1||indicators.length>100)errors.push("Количество показателей должно быть от 1 до 100");
+  if(indicators.length<1||indicators.length>30)errors.push("Количество показателей должно быть от 1 до 30");
   const codes=new Set<string>(),normalizedIndicators:AuthoringIndicator[]=[];
   for(const [index,indicator] of indicators.entries()){
     if(!indicator||typeof indicator!=="object"){errors.push("Показатель "+(index+1)+": некорректный объект");continue;}
