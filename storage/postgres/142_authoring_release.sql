@@ -12,13 +12,17 @@ LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
       AND r.authoring_definition IS NOT NULL)
 $$;
 
+DO $$
+BEGIN
+  IF to_regprocedure('pedpsy.constructor_release_allowed_approved(uuid)') IS NULL THEN
+    ALTER FUNCTION pedpsy.constructor_release_allowed(uuid) RENAME TO constructor_release_allowed_approved;
+  END IF;
+END $$;
 CREATE OR REPLACE FUNCTION pedpsy.constructor_release_allowed(release uuid) RETURNS boolean
 LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
-  SELECT pedpsy.constructor_release_allowed_base(release)
-      OR pedpsy.genchi_release_allowed(release)
+  SELECT pedpsy.constructor_release_allowed_approved(release)
       OR pedpsy.authoring_release_allowed(release)
 $$;
-
 CREATE OR REPLACE FUNCTION pedpsy.lock_authoring() RETURNS void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 DECLARE a record;at_ms bigint;
