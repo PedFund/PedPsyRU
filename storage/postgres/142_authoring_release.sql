@@ -23,6 +23,7 @@ LANGUAGE sql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
   SELECT pedpsy.constructor_release_allowed_approved(release)
       OR pedpsy.authoring_release_allowed(release)
 $$;
+REVOKE ALL ON FUNCTION pedpsy.constructor_release_allowed(uuid) FROM PUBLIC;
 CREATE OR REPLACE FUNCTION pedpsy.lock_authoring() RETURNS void
 LANGUAGE plpgsql SECURITY DEFINER SET search_path=pg_catalog,pedpsy,pg_temp AS $$
 DECLARE a record;at_ms bigint;
