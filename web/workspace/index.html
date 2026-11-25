@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/workspace/styles.css?v=20261124-2">
   <script src="/workspace/qr.js?v=20261106-5" defer></script>
   <script src="/workspace/participant.js?v=20261124-13" defer></script>
-  <script src="/workspace/app.js?v=20261124-17" defer></script>
+  <script src="/workspace/app.js?v=20261124-18" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -59,11 +59,39 @@
       </section>
 
       <div id="staff-home" hidden>
-        <nav class="tabs" aria-label="Разделы кабинета"><button data-tab="researchers-panel">Исследователи</button><button data-tab="study-directory-panel">Исследования</button><button data-tab="protocols-panel">Протоколы и результаты</button><button id="method-transfer-tab" data-tab="method-transfer-panel" hidden>Перенос методик</button><button id="staff-tab" data-tab="staff-panel" hidden>Административные роли</button></nav>
+        <nav class="tabs" aria-label="Разделы кабинета"><button data-tab="researchers-panel">Исследователи</button><button data-tab="study-directory-panel">Исследования</button><button data-tab="protocols-panel">Протоколы и результаты</button><button data-tab="method-authoring-panel">Добавить методику</button><button data-tab="method-transfer-panel" id="method-transfer-tab" hidden>Перенос методик</button><button id="staff-tab" data-tab="staff-panel" hidden>Административные роли</button></nav>
         <section id="study-directory-panel" class="card panel" hidden><h2>Все исследования</h2><p class="muted">В MVP администратор и суперадминистратор могут вести исследования за исследователя. Действия записываются от имени сотрудника; квота остаётся у владельца. Активный дизайн не редактируется.</p><details><summary>Создать исследование для исследователя</summary><form id="staff-create-study-form"><fieldset id="staff-create-fields"><label>Владелец исследования<select id="study-owner" required></select></label><label>Название<input id="staff-study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик для исследователя</button></fieldset></form></details><div id="staff-studies"></div></section>
         <section id="researchers-panel" class="card panel"><div class="section-top"><h2>Исследователи</h2><button id="invite">Пригласить исследователя</button></div><div id="invite-preview" class="callout" hidden><h3>Одноразовое учебное приглашение</h3><p>Передайте исследователю ссылку. Email не отправляется.</p><pre id="invite-details"></pre><button id="copy-invite-link" class="secondary" type="button">Скопировать ссылку</button><button id="clear-invite" class="secondary">Скрыть данные</button></div><div id="researchers"></div></section>
         <section id="protocols-panel" class="card panel" hidden><div class="section-top"><h2>Протоколы и результаты</h2><button id="export-all">Скачать все в JSON</button></div><p class="muted">Область: все исследования. Ответы и сохранённые результаты доступны обеим административным ролям. Не более 500 протоколов / 4 МБ за выгрузку.</p><div id="protocols"></div><section id="protocol-view" hidden><h3>Сохранённый протокол</h3><div id="result-view"></div><pre id="answers-view"></pre><button id="export-one" class="secondary">Скачать этот протокол</button><button id="clear-protocol" class="text">Закрыть</button></section></section>
         <section id="method-transfer-panel" class="card panel" hidden><div class="section-top"><h2>Перенос методик</h2><button id="reload-method-transfer" class="secondary" type="button">Перечитать состояние</button></div><p class="muted">Постоянный раздел суперадминистратора. Здесь виден контролируемый перенос исходной библиотеки в назначаемые версии. Платформа принимает только заранее подготовленные пакеты с закреплёнными формой, ключом и контрольными расчётами; произвольный код и файлы респондентов не исполняются и не загружаются.</p><div id="method-transfer-counts" class="measures"></div><p id="method-transfer-note" class="callout"></p></section>
+        <section id="method-authoring-panel" class="card panel" hidden>
+          <h2>Добавить методику</h2>
+          <p class="muted">Числовой опросник с одним ответом. После публикации создаётся неизменяемый релиз, доступный для назначения на этап.</p>
+          <form id="method-authoring-form">
+            <div class="grid">
+              <label>Код методики<input id="authoring-code" required maxlength="64" pattern="[a-z][a-z0-9_]{1,63}" placeholder="my_scale"></label>
+              <label>Название<input id="authoring-title" required maxlength="200"></label>
+              <label>Краткое название<input id="authoring-short-title" maxlength="40"></label>
+              <label>Автор(ы) через запятую<input id="authoring-authors" required></label>
+            </div>
+            <label>Инструкция<textarea id="authoring-instruction" required rows="3" maxlength="8000"></textarea></label>
+            <label>Описание<textarea id="authoring-description" rows="2" maxlength="2000"></textarea></label>
+            <div class="grid">
+              <label>Минимум<input id="authoring-minimum" type="number" required value="0"></label>
+              <label>Максимум<input id="authoring-maximum" type="number" required value="4"></label>
+              <label>Шаг<input id="authoring-step" type="number" required value="1"></label>
+              <label class="check-label"><input id="authoring-has-labels" type="checkbox" checked>Есть подписи ответов</label>
+            </div>
+            <label>Подписи ответов — по одной на строку (если включены)<textarea id="authoring-labels" rows="3" placeholder="Нет&#10;Скорее нет&#10;Нейтрально&#10;Скорее да&#10;Да"></textarea></label>
+            <label>Вопросы — по одному на строку<textarea id="authoring-questions" required rows="5" placeholder="Я спокоен&#10;Я напряжён"></textarea></label>
+            <label>Обратные вопросы — номера через запятую<input id="authoring-reverse" placeholder="2, 5"></label>
+            <label>Показатели — по одному на строку: код | название | номера вопросов | sum или mean<textarea id="authoring-indicators" required rows="3" placeholder="total | Общий балл | 1,2 | sum"></textarea></label>
+            <label>Уровни — по одному на строку: код показателя | от | до | название<textarea id="authoring-levels" required rows="4" placeholder="total | 0 | 2 | Низкий&#10;total | 3 | 5 | Средний&#10;total | 6 | 8 | Высокий"></textarea></label>
+            <label class="check-label"><input id="authoring-rights" type="checkbox">Подтверждаю, что права и источник методики проверены</label>
+            <div class="toolbar"><button id="authoring-publish" type="submit">Опубликовать методику</button></div>
+            <p id="authoring-status" class="callout" hidden></p>
+          </form>
+        </section>
         <section id="staff-panel" class="card panel" hidden><h2>Административные роли</h2><p class="muted">Назначение доступно только суперадминистратору после свежей MFA. Прежние сессии будут отозваны; свою роль менять нельзя.</p><form id="role-form"><label>Аккаунт<select id="target-user" required></select></label><label>Новая роль<select id="target-role"><option value="administrator">Администратор</option><option value="superadministrator">Суперадминистратор</option></select></label><button type="submit">Назначить роль</button></form><div id="staff-directory"></div></section>
       </div>
     </section>

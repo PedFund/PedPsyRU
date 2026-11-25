@@ -10,7 +10,7 @@ import {approvedV1Releases} from "../../storage/approved-v1-release.js";
 import {maiaLegacyRelease} from "../../storage/maia-legacy-release.js";
 import {genchiReleasePackage} from "../../storage/genchi-release.js";
 
-interface ReleaseRow {id:string;method_version_id:string;handler_version:string;contract_version:string;form_id:string;form_version:string;form_snapshot:unknown;form_digest:string;key_digest:string;verification_state:string;publication_state:string}
+interface ReleaseRow {id:string;method_version_id:string;handler_version:string;contract_version:string;form_id:string;form_version:string;form_snapshot:unknown;form_digest:string;key_digest:string;verification_state:string;publication_state:string;authoring_definition?:unknown}
 interface ItemRow {item_id:string;ordinal:number;options:unknown}
 interface ChoiceRelease {
   methodVersionId:string;handlerVersion:string;verificationState:string;
@@ -76,11 +76,21 @@ function resolve(methodVersionId:string,handlerVersion:string):ChoiceRelease {
 }
 export function verifyPinnedChoiceRelease(row:ReleaseRow|undefined,items:readonly ItemRow[]):PinnedRelease {
   if(!row)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
+  if(row.handler_version==="authoring-numeric-1.0.0")return verifyAuthoringRelease(row,items);
   const p=resolve(row.method_version_id,row.handler_version);
   if(row.contract_version!=="1.0"||row.form_id!==p.form.id||row.form_version!==p.form.version||canonicalJson(row.form_snapshot)!==p.formSnapshot||row.form_digest!==p.formDigest||row.key_digest!==p.keyDigest||row.verification_state!==p.verificationState||row.publication_state!=="draft"||items.length!==p.form.items.length||items.some((i,n)=>i.item_id!==p.form.items[n]?.id||i.ordinal!==n+1||canonicalJson(i.options)!==canonicalJson(p.itemSnapshots[n])))throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
   return {id:row.id,contractVersion:"1.0",methodVersionId:p.methodVersionId,handlerVersion:p.handlerVersion,keyDigest:p.keyDigest,itemIds:items.map(i=>i.item_id),choiceValues:p.choiceValues,...(p.quota?{quota:p.quota}:{})};
 }
+function verifyAuthoringRelease(row:ReleaseRow,items:readonly ItemRow[]):PinnedRelease {
+  const raw=row.form_snapshot as {id?:unknown;version?:unknown;title?:unknown;instruction?:unknown;presentation?:unknown;rules?:unknown;items?:unknown};
+  if(!raw||typeof raw!=="object"||!Array.isArray(raw.items)||!raw.items.length||!row.authoring_definition)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
+  const formItems=raw.items as {id:string;number:number;text?:string;options:{value:string;text:string}[]}[];
+  if(formItems.length!==items.length||formItems.some((item,index)=>item.id!==items[index]?.item_id||item.number!==index+1||!Array.isArray(item.options)||item.options.length<2))throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
+  const form:ParticipantForm={id:String(raw.id),version:String(raw.version),...(typeof raw.title==="string"?{title:raw.title}:{}),...(typeof raw.instruction==="string"?{instruction:raw.instruction}:{}),...(raw.presentation&&typeof raw.presentation==="object"?{presentation:raw.presentation as {id:string;version:string}}:{}),...(raw.rules&&typeof raw.rules==="object"?{rules:raw.rules as {require_all?:boolean;quota?:Record<string,number>}}:{}),items:formItems.map(item=>({id:item.id,number:item.number,...(typeof item.text==="string"?{text:item.text}:{}),options:item.options.map(option=>({value:String(option.value),text:String(option.text)}))}))};
+  return {id:row.id,contractVersion:"1.0",methodVersionId:row.method_version_id,handlerVersion:row.handler_version,keyDigest:row.key_digest,itemIds:items.map(item=>item.item_id),choiceValues:formItems[0]!.options.map(option=>String(option.value)),form,authoring:row.authoring_definition};
+}
 export function pinnedParticipantForm(release:PinnedRelease):ParticipantForm {
+  if(release.form)return release.form as ParticipantForm;
   const p=resolve(release.methodVersionId,release.handlerVersion);
   if(p.keyDigest!==release.keyDigest)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
   // Display-only corrections must never change stored option *values*. The

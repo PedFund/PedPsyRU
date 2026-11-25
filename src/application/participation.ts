@@ -8,7 +8,7 @@ export interface ParticipationDependencies {
   readonly newId: () => string;
   readonly now: () => string;
   readonly digest: (itemIds: readonly string[], responses: readonly InstrumentResponse[]) => string;
-  readonly score?: (input: InstrumentRequest) => InstrumentResult;
+  readonly score?: (input: InstrumentRequest, authoring?: unknown, keyDigest?: string) => InstrumentResult;
 }
 export function createParticipationService(uow: UnitOfWork, dependencies: ParticipationDependencies) {
   const score = dependencies.score ?? calculatePinnedInstrument;
@@ -51,7 +51,7 @@ export function createParticipationService(uow: UnitOfWork, dependencies: Partic
         const release = await ports.releases.getPinned(state.releaseId);
         if (state.responses.length !== release.itemIds.length) throw new ParticipationError(422, "INCOMPLETE_RESPONSES");
         const payload = score({contract_version: release.contractVersion, method_version_id: release.methodVersionId,
-          handler_version: release.handlerVersion, responses: state.responses});
+          handler_version: release.handlerVersion, responses: state.responses}, release.authoring, release.keyDigest);
         if (payload.status !== "scored" || payload.contract_version !== release.contractVersion ||
           payload.method_version_id !== release.methodVersionId || payload.handler_version !== release.handlerVersion ||
           payload.calculation.key_digest !== release.keyDigest || !payload.quality.complete || !payload.quality.usable_for_aggregation)

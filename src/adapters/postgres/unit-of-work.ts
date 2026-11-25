@@ -1,4 +1,5 @@
 import {verifyPinnedChoiceRelease} from "../pinned-instrument-releases.js";
+import {canonicalJson} from "../../../storage/releases.js";
 import type {InstrumentResponse,InstrumentResult} from "../../ports/instruments.js";
 import {AsyncLocalStorage} from "node:async_hooks";
 import {createHash, randomUUID} from "node:crypto";
@@ -117,9 +118,9 @@ export class PostgresUnitOfWork implements UnitOfWork {
           if (!attemptScope) throw new ParticipationError(404, "NOT_AVAILABLE");
           const owned = await client.query("SELECT 1 FROM pedpsy.attempts WHERE id=$1 AND release_id=$2", [attemptScope, id]);
           if (!owned.rowCount) throw new ParticipationError(404, "NOT_AVAILABLE");
-          const meta = await client.query<{form_digest:string;key_digest:string;method_version_id:string;handler_version:string;publication_state:string;verification_state:string}>("SELECT form_digest,key_digest,method_version_id,handler_version,publication_state,verification_state FROM pedpsy.instrument_releases WHERE id=$1", [id]);
+          const meta = await client.query<{form_digest:string;key_digest:string;method_version_id:string;handler_version:string;publication_state:string;verification_state:string;authoring_definition?:unknown}>("SELECT form_digest,key_digest,method_version_id,handler_version,publication_state,verification_state,authoring_definition FROM pedpsy.instrument_releases WHERE id=$1", [id]);
           const m = meta.rows[0]; if (!m) throw new ParticipationError(503, "RELEASE_UNAVAILABLE");
-          const key = [id,m.form_digest,m.key_digest,m.method_version_id,m.handler_version,m.publication_state,m.verification_state].join(":");
+          const key = [id,m.form_digest,m.key_digest,m.method_version_id,m.handler_version,m.publication_state,m.verification_state,canonicalJson(m.authoring_definition??null)].join(":");
           let cached = this.releaseCache.get(id);
           if (!cached || cached.key !== key) {
             const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);

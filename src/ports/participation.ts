@@ -28,6 +28,8 @@ export interface AttemptSnapshot {
 }
 export interface PinnedRelease {
   readonly id: string;
+  readonly authoring?: unknown;
+  readonly form?: unknown;
   readonly contractVersion: "1.0";
   readonly methodVersionId: string;
   readonly handlerVersion: string;
