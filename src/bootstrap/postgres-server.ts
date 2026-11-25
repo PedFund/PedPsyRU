@@ -45,6 +45,8 @@ async function main(): Promise<void> {
     const production=process.env.PEDPSY_ENV==="production",config=production?productionConfig(process.env):undefined;
     const admission=participantAdmissionPolicy(process.env),mail=mailDeliveryConfig(process.env);
     pool=new Pool(production?config!.db:demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
+    // A database restart or an idle-client reset must not terminate the HTTP server.
+    pool.on("error",error=>{console.error("PG_POOL_ERROR",error instanceof Error?error.message:"unknown");});
     const api=createParticipantApi(new PostgresParticipantGateway(pool,uow,undefined,admission),createParticipationService(uow,
       {newId:randomUUID,now:()=>new Date().toISOString(),digest:(ids,values)=>instrumentResponsesDigest(ids,values)}));
     const encoded=production?config!.mfaKey:process.env.PEDPSY_MFA_KEY;
