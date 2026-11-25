@@ -67,6 +67,7 @@ export async function inspectPostgresSnapshot(client: PoolClient): Promise<DemoS
     // columns are not part of their shape. Existing stages fall back to code.
     if (table === "attempts") tables[table] = normalized(tables[table].map(({attempt_no:ignored,...row}) => row));
     if (table === "research_stages") tables[table] = normalized(tables[table].map(({display_name:ignored,...row}) => row));
+    if (table === "instrument_releases") tables[table] = normalized(tables[table].map(({authoring_definition:ignored,...row}) => row));
   }
   return verified(tables);
 }

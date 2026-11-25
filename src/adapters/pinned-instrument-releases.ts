@@ -90,7 +90,7 @@ function verifyAuthoringRelease(row:ReleaseRow,items:readonly ItemRow[]):PinnedR
   return {id:row.id,contractVersion:"1.0",methodVersionId:row.method_version_id,handlerVersion:row.handler_version,keyDigest:row.key_digest,itemIds:items.map(item=>item.item_id),choiceValues:formItems[0]!.options.map(option=>String(option.value)),form,authoring:row.authoring_definition};
 }
 export function pinnedParticipantForm(release:PinnedRelease):ParticipantForm {
-  if(release.form)return release.form;
+  if(release.form)return release.form as ParticipantForm;
   const p=resolve(release.methodVersionId,release.handlerVersion);
   if(p.keyDigest!==release.keyDigest)throw new ParticipationError(503,"RELEASE_UNAVAILABLE");
   // Display-only corrections must never change stored option *values*. The

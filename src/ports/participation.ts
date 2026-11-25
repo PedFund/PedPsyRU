@@ -1,5 +1,4 @@
 import type {InstrumentResponse,InstrumentResult} from "./instruments.js";
-import type {ParticipantForm} from "./identity.js";
 export type {TkiRequest, TkiResponse, TkiResult} from "../../core/tki-contract.js";
 
 // Internal context, created from a verified server session, never a request DTO.
@@ -30,7 +29,7 @@ export interface AttemptSnapshot {
 export interface PinnedRelease {
   readonly id: string;
   readonly authoring?: unknown;
-  readonly form?: ParticipantForm;
+  readonly form?: unknown;
   readonly contractVersion: "1.0";
   readonly methodVersionId: string;
   readonly handlerVersion: string;

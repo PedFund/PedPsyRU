@@ -1,6 +1,6 @@
 "use strict";
 const {test}=require("node:test"),assert=require("node:assert/strict");
-const {validateAuthoringDefinition,scoreAuthoringNumeric}=require("../dist/src/application/authoring-method.js");
+const {validateAuthoringDefinition,scoreAuthoringNumeric}=require("../dist/src/adapters/authoring-method.js");
 const definition={schema_version:1,type:"single_choice_numeric",
   method:{code:"demo_scale",title:"Демонстрационная шкала",short_title:"Демо",authors:["Автор"],instruction:"Оцените утверждения.",rights_confirmed:true},
   answer_scale:{minimum:0,maximum:4,step:1,has_labels:true,labels:[
