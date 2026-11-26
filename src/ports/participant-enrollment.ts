@@ -6,6 +6,7 @@ export interface EnrollmentSelection {
 export interface EnrolledAttempt {
   readonly attempt_id:string;readonly assignment_id:string;readonly release_id:string;
   readonly status:"draft"|"completed";readonly revision:number;readonly current_item_id:string;
+  readonly title:string;readonly item_count:number;readonly presentation_id?:string;
 }
 export interface ParticipantEnrollmentSnapshot {
   readonly study_id:string;readonly group_id:string;readonly stage_id:string;
