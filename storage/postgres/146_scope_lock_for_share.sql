@@ -12,3 +12,13 @@ BEGIN
     EXECUTE d;
   END IF;
 END $$;
+DO $$
+DECLARE d text;
+BEGIN
+  SELECT pg_get_functiondef('pedpsy.lock_participant_identity()'::regprocedure) INTO d;
+  IF d IS NULL THEN RAISE EXCEPTION 'IDENTITY_LOCK_MISSING';END IF;
+  IF d LIKE '%participant_sessions WHERE token_hash=current_setting(''app.session_hash'',true) FOR UPDATE%' THEN
+    d:=replace(d,'participant_sessions WHERE token_hash=current_setting(''app.session_hash'',true) FOR UPDATE','participant_sessions WHERE token_hash=current_setting(''app.session_hash'',true) FOR SHARE');
+    EXECUTE d;
+  END IF;
+END $$;
