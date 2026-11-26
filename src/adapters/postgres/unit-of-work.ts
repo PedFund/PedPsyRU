@@ -80,7 +80,10 @@ export class PostgresUnitOfWork implements UnitOfWork {
       throw mapPostgresError(error);
     } finally { client.release(); }
   }
-  async run<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>, shared?: {client: PoolClient}): Promise<T> {
+  async runRead<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>): Promise<T> {
+    return this.run(context, callback, undefined, false);
+  }
+  async run<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>, shared?: {client: PoolClient}, touch = true): Promise<T> {
     if (this.local.getStore()) throw new Error("NESTED_TRANSACTION");
     const hash = this.contexts.get(context); if (!hash) throw new ParticipationError(401, "AUTH_REQUIRED");
     const client = shared ? shared.client : await this.pool.connect(); let open = false;
@@ -131,8 +134,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
           }
           const correction=await client.query<{title:string|null;instruction:string|null;indicators:unknown}>("SELECT title,instruction,indicators FROM pedpsy.release_presentation_corrections WHERE release_id=$1 ORDER BY created_at_ms DESC, id DESC LIMIT 1",[id]);
           const c=correction.rows[0];
-          let labels=Array.isArray(c?.indicators)?c.indicators.filter((value):value is string=>typeof value==="string"):undefined;
-          if(!labels&&cached.release.authoring){const catalog=await client.query<{indicators:unknown}>("SELECT indicators FROM pedpsy.method_library_catalog WHERE release_id=$1",[id]);labels=Array.isArray(catalog.rows[0]?.indicators)?catalog.rows[0].indicators.filter((value):value is string=>typeof value==="string"):undefined;}
+          const labels=Array.isArray(c?.indicators)?c.indicators.filter((value):value is string=>typeof value==="string"):undefined;
           const authoring=cached.release.authoring&&labels?{...(cached.release.authoring as Record<string,unknown>),indicator_labels:labels}:cached.release.authoring;
           return {...cached.release,...(authoring?{authoring}:{}),...(c?{presentation:{...(c.title?{title:c.title}:{}),...(c.instruction?{instruction:c.instruction}:{})}}:{})};
         };
@@ -198,7 +200,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
         try {
           await ensure(); const result = await callback(ports); await ensure();
           if (pendingAudit.size) throw new Error("MANDATORY_AUDIT_MISSING");
-          await client.query("SELECT pedpsy.touch_session()");
+          if (touch) await client.query("SELECT pedpsy.touch_session()");
           if (!shared) { await client.query("COMMIT"); open = false; }
           return result;
         } finally {live = false;}

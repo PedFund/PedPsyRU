@@ -81,6 +81,8 @@ export interface TransactionPorts {
 }
 export interface UnitOfWork {
   run<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>): Promise<T>;
+  // Read-only participant path: no last_seen update, no write-scope lock.
+  runRead?<T>(context: ParticipantContext, callback: (ports: TransactionPorts) => Promise<T>): Promise<T>;
   // Resolve the participant session and run the callback in one transaction.
   runWithToken<T>(token: string, callback: (ports: TransactionPorts) => Promise<T>): Promise<T>;
 }
