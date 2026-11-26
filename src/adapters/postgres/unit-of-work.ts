@@ -100,11 +100,11 @@ export class PostgresUnitOfWork implements UnitOfWork {
             throw new ParticipationError(401, "AUTH_REQUIRED");
           return actor;
         };
-        const get = async (id: string): Promise<AttemptSnapshot> => {
+        const get = async (id: string, readOnly = false): Promise<AttemptSnapshot> => {
           if (attemptCache && attemptCache.id === id) return attemptCache.snapshot;
           await ensure(); if (!uuid(id)) throw new ParticipationError(404, "NOT_AVAILABLE");
           if (attemptScope && attemptScope !== id) throw new Error("ONE_ATTEMPT_PER_TRANSACTION");
-          if (!attemptScope) {await client.query("SELECT pedpsy.lock_participant_scope($1)", [id]); attemptScope = id;}
+          if (!attemptScope) {if (readOnly) await client.query("SELECT set_config('app.participant_read','1',true)"); await client.query("SELECT pedpsy.lock_participant_scope($1)", [id]); attemptScope = id;}
           await ensure();
           const result = await client.query<AttemptRow>("SELECT id,study_id,release_id,status,revision,current_item_id FROM pedpsy.attempts WHERE id=$1", [id]);
           const row = result.rows[0]; if (!row) throw new ParticipationError(404, "NOT_AVAILABLE");
