@@ -5,6 +5,8 @@ export interface ParticipantForm {id: string; version: string; title?:string; in
 export interface ParticipantGateway {
   login(input: unknown): Promise<LoginSession>;
   session(token: string): Promise<{context: ParticipantContext; csrf: string; attempts: PublicAttempt[]}>;
+  // Authentication only: no attempts read, audit or last_seen update.
+  auth?(token: string): Promise<{context: ParticipantContext; csrf: string}>;
   logout(token: string, csrf: string): Promise<void>;
   assertCsrf(token: string, csrf: string): void;
   form(token: string, attemptId: string): Promise<ParticipantForm>;

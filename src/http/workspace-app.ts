@@ -121,15 +121,16 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
         app.get(base,async r=>{const p=r.params as {id:string;group:string};return stageAccess.list(token(r,name),p.id,p.group);});
         app.post(base+"/:stage/open",async r=>{const p=r.params as {id:string;group:string;stage:string};return stageAccess.open(token(r,name),p.id,p.group,p.stage,r.body,csrf(r));});
       }}
-      // Cookie names alone do not bind a bearer to its realm. This trusted
-      // identity read prevents renamed staff/researcher cookies crossing routes;
-      // the write adapter still rechecks current authority atomically under locks.
+      // Staff/researcher cookie realms need this trusted identity read because
+      // they can otherwise be renamed into another realm. Participant routes
+      // use a lightweight auth check: no attempts read, audit or touch.
+      const participantAuth=(token:string)=>typeof participant.assertSession==="function"?participant.assertSession(token):participant.session(token);
       app.addHook("preHandler",async r=>{
         if(/^\/api\/v2\/researcher\/(?:studies(?:\/|$)|methods(?:[/?]|$)|method-library(?:[/?]|$))/.test(r.url))await accounts.researcherSession(token(r,names.researcher));
         if(/^\/api\/v2\/staff\/(?:studies(?:\/|$)|methods(?:[/?]|$)|method-library(?:[/?]|$)|method-authoring(?:[/?]|$))/.test(r.url))await accounts.staffSession(token(r,names.staff));
-        if(/^\/api\/v2\/participant\/(?:passport|profile)(?:\/|$)/.test(r.url))await participant.session(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
-        if(/^\/api\/v2\/participant\/consents(?:\/|$)/.test(r.url))await participant.session(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
-        if(/^\/api\/v2\/participant\/stages(?:\/|$)/.test(r.url))await participant.session(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
+        if(/^\/api\/v2\/participant\/(?:passport|profile)(?:\/|$)/.test(r.url))await participantAuth(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
+        if(/^\/api\/v2\/participant\/consents(?:\/|$)/.test(r.url))await participantAuth(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
+        if(/^\/api\/v2\/participant\/stages(?:\/|$)/.test(r.url))await participantAuth(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"));
       });
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }
