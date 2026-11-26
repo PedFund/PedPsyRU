@@ -7,6 +7,7 @@ import type {Pool, PoolClient} from "pg";
 import {ParticipationError} from "../../ports/errors.js";
 import {validateDraft} from "../../ports/validation.js";
 import type {UnitOfWork, ParticipantContext, TransactionPorts, AttemptSnapshot, PinnedRelease, StoredResult} from "../../ports/participation.js";
+import type {RequestMetricsPort} from "../../ports/request-metrics.js";
 interface Actor {credential_id: string; study_id: string; participant_id: string; actor_role: string; credential_version: number}
 interface AttemptRow {id: string; study_id: string; release_id: string; status: "draft" | "completed"; revision: string; current_item_id: string}
 interface ResultRow {id: string; attempt_id: string; input_revision: string; responses_digest: string; calculated_at: Date; payload: InstrumentResult}
@@ -32,7 +33,7 @@ export class PostgresUnitOfWork implements UnitOfWork {
   private readonly local = new AsyncLocalStorage<boolean>();
   // Verified release definitions are immutable; presentation corrections are always read fresh.
   private readonly releaseCache = new Map<string,{key:string;release:PinnedRelease}>();
-  constructor(private readonly pool: Pool) {}
+  constructor(private readonly pool: Pool, private readonly metrics?: RequestMetricsPort) {}
   private async assertRuntime(client: PoolClient): Promise<void> {
     await assertRuntimeClient(client);
   }
@@ -122,6 +123,8 @@ export class PostgresUnitOfWork implements UnitOfWork {
           const m = meta.rows[0]; if (!m) throw new ParticipationError(503, "RELEASE_UNAVAILABLE");
           const key = [id,m.form_digest,m.key_digest,m.method_version_id,m.handler_version,m.publication_state,m.verification_state,canonicalJson(m.authoring_definition??null)].join(":");
           let cached = this.releaseCache.get(id);
+          const hit = Boolean(cached && cached.key === key);
+          this.metrics?.releaseCache(hit);
           if (!cached || cached.key !== key) {
             const release = await client.query("SELECT * FROM pedpsy.instrument_releases WHERE id=$1", [id]);
             const items=await client.query<{item_id:string;ordinal:number;options:unknown}>("SELECT item_id,ordinal,options FROM pedpsy.read_attempt_release_items($1,$2)",[attemptScope,id]);
