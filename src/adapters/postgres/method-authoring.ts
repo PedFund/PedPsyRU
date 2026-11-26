@@ -20,4 +20,13 @@ export class PostgresMethodAuthoring {
       return result.rows[0]!.data;
     });
   }
+  async correctIndicators(token:string,proof:string,input:{method_id:string;labels:readonly string[];reason?:string}):Promise<{release_id:string;method_id:string;labels:readonly string[]}>{
+    if(!/^[A-Za-z0-9_-]{43}$/.test(token))throw new ParticipationError(401,"AUTH_REQUIRED");
+    if(!equalText(proof,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");
+    return accountTransaction(this.pool,async c=>{
+      await c.query("SELECT set_config('app.session_hash',$1,true)",[tokenHash(token)]);
+      const result=await c.query<{data:{release_id:string;method_id:string;labels:readonly string[]}}>("SELECT pedpsy.correct_authoring_indicators($1,$2::jsonb,$3) data",[input.method_id,JSON.stringify(input.labels),input.reason??"owner_correction"]);
+      return result.rows[0]!.data;
+    });
+  }
 }
