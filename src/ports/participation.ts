@@ -48,7 +48,7 @@ export interface StoredResult {
   readonly payload: InstrumentResult;
 }
 export interface AttemptRepository {
-  getAuthorized(id: string): Promise<AttemptSnapshot | null>;
+  getAuthorized(id: string, readOnly?: boolean): Promise<AttemptSnapshot | null>;
   compareAndSave(id: string, input: DraftInput): Promise<AttemptSnapshot>;
   markCompleted(id: string, expectedRevision: number, resultId: string, calculatedAt: string): Promise<void>;
   // A completed attempt may be marked unusable; only then may the participant start

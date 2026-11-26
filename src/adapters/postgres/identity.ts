@@ -88,7 +88,7 @@ export class PostgresParticipantGateway implements ParticipantGateway {
   async form(token: string, id: string): Promise<ParticipantForm> {
     const context = await this.uow.context(token);
     return this.uow.run(context,async ports => {
-      const state = await ports.attempts.getAuthorized(id); if (!state) throw new ParticipationError(404,"NOT_AVAILABLE");
+      const state = await ports.attempts.getAuthorized(id,true); if (!state) throw new ParticipationError(404,"NOT_AVAILABLE");
       const pinned=await ports.releases.getPinned(state.releaseId);
       await ports.audit.appendRequired({event:"draft_read",resourceId:id});
       return pinnedParticipantForm(pinned);
