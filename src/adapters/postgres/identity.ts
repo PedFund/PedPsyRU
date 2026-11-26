@@ -64,6 +64,10 @@ export class PostgresParticipantGateway implements ParticipantGateway {
       return callback(client);
     });
   }
+  async auth(token: string): Promise<{context: ParticipantContext; csrf: string}> {
+    const context = await this.uow.context(token);
+    return {context, csrf: csrfFor(token)};
+  }
   async session(token: string): Promise<{context: ParticipantContext; csrf: string; attempts: PublicAttempt[]}> {
     const context = await this.uow.context(token);
     const attempts = await this.withSession(token, async client => {

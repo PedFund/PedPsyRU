@@ -5,6 +5,7 @@ export function createParticipantApi(identity: ParticipantGateway, service: Part
   return {
     login: (input: unknown) => identity.login(input),
     session: async (token: string) => {const state=await identity.session(token);return {csrf:state.csrf,attempts:state.attempts};},
+    assertSession: (token: string) => identity.auth ? identity.auth(token) : identity.session(token),
     logout: (token: string, csrf: string) => identity.logout(token,csrf),
     form: (token: string, id: string) => identity.form(token,id),
     read: async (token: string,id: string) => service.read((await identity.session(token)).context,id),
