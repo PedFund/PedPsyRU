@@ -39,12 +39,15 @@ import {ResearchReminderWorker} from "../adapters/postgres/research-reminder-wor
 import {participantAdmissionPolicy} from "./login-policy.js";
 import {mailDeliveryConfig} from "./mail-config.js";
 import {accessLogConfig,createAccessLog} from "../http/access-log.js";
+import {RequestMetrics} from "../http/request-metrics.js";
+import {instrumentPool} from "./instrumented-pool.js";
 async function main(): Promise<void> {
   let pool:Pool|undefined;
   try {
     const production=process.env.PEDPSY_ENV==="production",config=production?productionConfig(process.env):undefined;
     const admission=participantAdmissionPolicy(process.env),mail=mailDeliveryConfig(process.env);
-    pool=new Pool(production?config!.db:demoConfig(process.env));const uow=new PostgresUnitOfWork(pool);
+    const accessLog=accessLogConfig(process.env),metrics=accessLog?new RequestMetrics():undefined;
+    pool=new Pool(production?config!.db:demoConfig(process.env));if(metrics)instrumentPool(pool,metrics);const uow=new PostgresUnitOfWork(pool,metrics);
     // A database restart or an idle-client reset must not terminate the HTTP server.
     pool.on("error",error=>{console.error("PG_POOL_ERROR",error instanceof Error?error.message:"unknown");});
     const api=createParticipantApi(new PostgresParticipantGateway(pool,uow,undefined,admission),createParticipationService(uow,
@@ -73,9 +76,8 @@ async function main(): Promise<void> {
     const passports=registration?passportBoundary(pool):undefined;
     const consents=registration?consentBoundary(pool):undefined;
     const admissions=registration?admissionBoundary(pool):undefined;
-    const accessLog=accessLogConfig(process.env);
-    const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool),accessLog?createAccessLog(accessLog):undefined,methodAuthoringBoundary(pool));
-    app.addHook("onClose",async()=>{mailWorker?.stop();reminderWorker?.stop();await pool?.end();});
+    const app=createWorkspaceApp(api,accounts,origin,workspaceAssets(),studies,invitations,stageAccess,registration,passports,consents,admissions,researchWorkbenchBoundary(pool),methodLibraryBoundary(pool),accessLog?createAccessLog(accessLog,undefined,metrics):undefined,methodAuthoringBoundary(pool),metrics);
+    app.addHook("onClose",async()=>{mailWorker?.stop();reminderWorker?.stop();metrics?.close();await pool?.end();});
     const close=():void=>{void app.close();};process.once("SIGINT",close);process.once("SIGTERM",close);
     try {await app.listen({host:production?config!.host:"127.0.0.1",port:production?config!.port:4174});} catch {await app.close();throw new Error("DEMO_START_FAILED");}
     mailWorker?.start();reminderWorker?.start();

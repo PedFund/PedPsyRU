@@ -1,5 +1,6 @@
 import type {FastifyRequest,FastifyInstance} from "fastify";
 import {createBaseApp, type AccessLogHook} from "./app.js";
+import type {RequestMetrics} from "./request-metrics.js";
 import type {createParticipantApi} from "../application/participant-api.js";
 import {ParticipationError} from "../ports/errors.js";
 import type {AttemptSnapshot,StoredResult} from "../ports/participation.js";
@@ -59,7 +60,7 @@ const resultDto = (r: StoredResult) => {
   if (presentation) dto.presentation = presentation;
   return dto;
 };
-export function createParticipantApp(api: Api, origin: string,extension?:{register:(app:FastifyInstance)=>void;denied:(request:FastifyRequest,reason:string)=>Promise<void>},accessLog?:AccessLogHook) {
+export function createParticipantApp(api: Api, origin: string,extension?:{register:(app:FastifyInstance)=>void;denied:(request:FastifyRequest,reason:string)=>Promise<void>},accessLog?:AccessLogHook,metrics?:RequestMetrics) {
   const url=new URL(origin),secure=url.protocol==="https:";
   if (url.origin!==origin || !secure && !(url.protocol==="http:" && ["127.0.0.1","localhost"].includes(url.hostname))) throw new Error("EXPLICIT_SAFE_ORIGIN_REQUIRED");
   const cookieName=secure?"__Host-pedpsy":"pedpsy_v2_demo";
@@ -67,6 +68,7 @@ export function createParticipantApp(api: Api, origin: string,extension?:{regist
   const token=(r:FastifyRequest):string=>readParticipantCookie(r.headers.cookie,cookieName);
   const csrf=(r:FastifyRequest):string=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
   const cookie=(value:string,age:number):string=>`${cookieName}=${value}; Path=/; HttpOnly; SameSite=Strict; Max-Age=${age}${secure?"; Secure":""}`;
+  if(metrics)app.addHook("onRequest",metrics.onRequest);
   app.addHook("onRequest",async request=>{
     const source=request.headers.origin,site=request.headers["sec-fetch-site"];
     if(request.headers.host!==url.host || source!==undefined && source!==origin || site!==undefined && !["same-origin","none"].includes(String(site)) ||

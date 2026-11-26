@@ -36,3 +36,13 @@ test("the handler writes one line through the injected sink",()=>{
   assert.equal(row.route,"/health");assert.equal(row.status,200);assert.equal(row.duration_ms,3);
   assert.ok(!lines[0].includes("198.51.100.9"));
 });
+test("request metrics add only counters and timings to the access log",()=>{
+  const line=accessLogLine({method:"GET",route:"/api/v2/participant/attempts/:id/form",status:200,durationMs:25,ip:"203.0.113.7",salt,now:1763500000000,
+    metrics:{request_id:"00000000-0000-4000-8000-000000000000",pool_wait_ms:3,db_ms:18,db_queries:7,db_tx:2,db_tx_ms:16,release_cache_hits:1,release_cache_misses:0,event_loop_p95_ms:4.25}});
+  const row=JSON.parse(line);
+  assert.equal(row.request_id,"00000000-0000-4000-8000-000000000000");
+  assert.equal(row.pool_wait_ms,3);assert.equal(row.db_ms,18);assert.equal(row.db_queries,7);
+  assert.equal(row.db_tx,2);assert.equal(row.db_tx_ms,16);assert.equal(row.release_cache_hits,1);
+  assert.equal(row.release_cache_misses,0);assert.equal(row.event_loop_p95_ms,4.25);
+  assert.ok(!line.includes("SELECT"));
+});

@@ -3,6 +3,7 @@ import {registerMethodAuthoring} from "./method-authoring-routes.js";
 import type {AccessLogHook} from "./app.js";
 import {registerResearchWorkbench,type ResearchWorkbenchApis} from "./research-workbench-routes.js";
 import type {FastifyInstance,FastifyRequest} from "fastify";
+import type {RequestMetrics} from "./request-metrics.js";
 import type {createAccountApi} from "../application/account-api.js";
 import type {createStudyApi} from "../application/study-api.js";
 import type {createParticipantApi} from "../application/participant-api.js";
@@ -34,7 +35,7 @@ export function createWorkspacePreviewApp(assets:WorkspaceAssets){
   app.setNotFoundHandler(async(_r,reply)=>reply.code(404).send({error:"NOT_AVAILABLE"}));
   app.setErrorHandler(async(_e,_r,reply)=>reply.code(500).send({error:"INTERNAL_ERROR"}));return app;
 }
-export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>,passports?:PassportHttpApis,consents?:ConsentHttpApi,admissions?:AdmissionHttpApi,workbench?:ResearchWorkbenchApis,library?:MethodLibraryHttpApi,accessLog?:AccessLogHook,authoring?:ReturnType<typeof import("../application/method-authoring-api.js").createMethodAuthoringApi>){
+export function createWorkspaceApp(participant:ReturnType<typeof createParticipantApi>,accounts:ReturnType<typeof createAccountApi>,origin:string,assets:WorkspaceAssets,studies?:ReturnType<typeof createStudyApi>,invitations?:ReturnType<typeof createGroupInvitationApi>,stageAccess?:ReturnType<typeof createStageAccessApi>,registration?:ReturnType<typeof createRegistrationHttpApi>,passports?:PassportHttpApis,consents?:ConsentHttpApi,admissions?:AdmissionHttpApi,workbench?:ResearchWorkbenchApis,library?:MethodLibraryHttpApi,accessLog?:AccessLogHook,authoring?:ReturnType<typeof import("../application/method-authoring-api.js").createMethodAuthoringApi>,metrics?:RequestMetrics){
   const names=workspaceCookies(origin),secure=new URL(origin).protocol==="https:";
   const token=(r:FastifyRequest,name:string)=>readParticipantCookie(r.headers.cookie,name);
   const csrf=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
@@ -44,8 +45,7 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
     denied:async(r,reason)=>{if(r.url.startsWith("/api/v2/registration/")){if(registration)await registration.denied(reason);else await accounts.denied("",reason);}
       else if(r.url.startsWith("/api/v2/participant/"))await participant.denied(token(r,secure?"__Host-pedpsy":"pedpsy_v2_demo"),reason);
       else await accounts.denied(token(r,r.url.startsWith("/api/v2/researcher/")?names.researcher:names.staff),reason);},
-    register:app=>{
-      staticRoutes(app,assets);
+    register:app=>{      staticRoutes(app,assets);
       registerRegistrationRoutes(app,origin,registration);
       registerPassportRoutes(app,origin,names,passports);
       registerConsentRoutes(app,origin,consents);
@@ -133,5 +133,5 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
       });
       app.post("/api/v2/researcher/logout",async(r,reply)=>{empty(r.body);await accounts.researcherLogout(token(r,names.researcher),csrf(r));reply.header("Set-Cookie",cookie(names.researcher,"",0));return {status:"signed_out"};});
     }
-  }, accessLog);
+  }, accessLog, metrics);
 }
