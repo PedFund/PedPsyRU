@@ -12,7 +12,7 @@ export function enrollmentSelection(input:unknown):EnrollmentSelection {
     expected_consent_policy_revision:b.expected_consent_policy_revision as number};
 }
 const snapshot=(s:ParticipantEnrollmentSnapshot):ParticipantEnrollmentSnapshot=>({study_id:s.study_id,group_id:s.group_id,stage_id:s.stage_id,enrollment_id:s.enrollment_id,
-  attempts:s.attempts.map(a=>({attempt_id:a.attempt_id,assignment_id:a.assignment_id,release_id:a.release_id,status:a.status,revision:a.revision,current_item_id:a.current_item_id}))});
+  attempts:s.attempts.map(a=>({attempt_id:a.attempt_id,assignment_id:a.assignment_id,release_id:a.release_id,status:a.status,revision:a.revision,current_item_id:a.current_item_id,title:a.title,item_count:a.item_count,...(a.presentation_id?{presentation_id:a.presentation_id}:{})}))});
 export function createParticipantEnrollmentApi(enrollment:ParticipantEnrollment,csrf:{assert(token:string,proof:string):void}) {return {
   enroll:(token:string,input:unknown,proof:string)=>{csrf.assert(token,proof);return enrollment.enroll(token,enrollmentSelection(input)).then(snapshot);}
 };}

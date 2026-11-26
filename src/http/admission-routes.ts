@@ -9,7 +9,7 @@ const discovery=(s:ParticipantStagesSnapshot)=>({study_id:s.study_id,group_id:s.
   passport_completed:s.passport_completed,required_consents_accepted:s.required_consents_accepted,
   stages:s.stages.map(t=>({stage_id:t.stage_id,code:t.code,display_name:t.display_name,ordinal:t.ordinal,opening_revision:t.opening_revision,assignment_ids:[...t.assignment_ids]}))});
 const enrollment=(s:ParticipantEnrollmentSnapshot)=>({study_id:s.study_id,group_id:s.group_id,stage_id:s.stage_id,enrollment_id:s.enrollment_id,
-  attempts:s.attempts.map(a=>({attempt_id:a.attempt_id,assignment_id:a.assignment_id,release_id:a.release_id,status:a.status,revision:a.revision,current_item_id:a.current_item_id}))});
+  attempts:s.attempts.map(a=>({attempt_id:a.attempt_id,assignment_id:a.assignment_id,release_id:a.release_id,status:a.status,revision:a.revision,current_item_id:a.current_item_id,title:a.title,item_count:a.item_count,...(a.presentation_id?{presentation_id:a.presentation_id}:{})}))});
 export function registerAdmissionRoutes(app:FastifyInstance,origin:string,api?:AdmissionHttpApi):void{
   const name=new URL(origin).protocol==="https:"?"__Host-pedpsy":"pedpsy_v2_demo";
   const configured=()=>{if(!api)throw new ParticipationError(503,"ADMISSION_NOT_CONFIGURED");return api;};
