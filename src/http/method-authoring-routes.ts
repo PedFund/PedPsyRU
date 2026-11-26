@@ -10,4 +10,5 @@ export function registerMethodAuthoring(app:FastifyInstance,origin:string,api?:M
   const proof=(r:FastifyRequest)=>typeof r.headers["x-pedpsy-csrf"]==="string"?r.headers["x-pedpsy-csrf"]:"";
   app.post("/api/v2/staff/method-authoring/validate",async r=>{noQuery(r);return api.validate(r.body);});
   app.post("/api/v2/staff/method-authoring/publish",async r=>{noQuery(r);return api.publish(token(r),proof(r),r.body);});
+  app.post("/api/v2/staff/method-authoring/indicators",async r=>{noQuery(r);return api.correctIndicators(token(r),proof(r),r.body);});
 }

@@ -129,9 +129,12 @@ export class PostgresUnitOfWork implements UnitOfWork {
             if(this.releaseCache.size>100)this.releaseCache.clear();
             this.releaseCache.set(id,cached);
           }
-          const correction=await client.query<{title:string|null;instruction:string|null}>("SELECT title,instruction FROM pedpsy.release_presentation_corrections WHERE release_id=$1 ORDER BY created_at_ms DESC, id DESC LIMIT 1",[id]);
+          const correction=await client.query<{title:string|null;instruction:string|null;indicators:unknown}>("SELECT title,instruction,indicators FROM pedpsy.release_presentation_corrections WHERE release_id=$1 ORDER BY created_at_ms DESC, id DESC LIMIT 1",[id]);
           const c=correction.rows[0];
-          return c?{...cached.release,presentation:{...(c.title?{title:c.title}:{}),...(c.instruction?{instruction:c.instruction}:{})}}:cached.release;
+          let labels=Array.isArray(c?.indicators)?c.indicators.filter((value):value is string=>typeof value==="string"):undefined;
+          if(!labels&&cached.release.authoring){const catalog=await client.query<{indicators:unknown}>("SELECT indicators FROM pedpsy.method_library_catalog WHERE release_id=$1",[id]);labels=Array.isArray(catalog.rows[0]?.indicators)?catalog.rows[0].indicators.filter((value):value is string=>typeof value==="string"):undefined;}
+          const authoring=cached.release.authoring&&labels?{...(cached.release.authoring as Record<string,unknown>),indicator_labels:labels}:cached.release.authoring;
+          return {...cached.release,...(authoring?{authoring}:{}),...(c?{presentation:{...(c.title?{title:c.title}:{}),...(c.instruction?{instruction:c.instruction}:{})}}:{})};
         };
         const stored = async (id: string): Promise<StoredResult | null> => {
           await get(id); const result = await client.query<ResultRow>("SELECT id,attempt_id,input_revision,responses_digest,calculated_at,payload FROM pedpsy.attempt_results WHERE attempt_id=$1", [id]);
