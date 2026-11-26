@@ -4,8 +4,9 @@ interface Key {
   readonly answerMap:Readonly<Record<string,number>>;
   readonly reverseMin:number;
   readonly reverseMax:number;
-  readonly scales:Readonly<Record<string,{direct:readonly number[];reverse?:readonly number[];aggregate:"sum"|"mean"}>>;
+  readonly scales:Readonly<Record<string,{direct:readonly number[];reverse?:readonly number[];aggregate:"sum"|"mean";label?:string}>>;
   readonly levels:Readonly<Record<string,readonly [number,number,string][]>>;
+  readonly labels?:readonly string[];
 }
 export function scoreAuthoringNumeric(input:InstrumentRequest,key:Key,keyDigest:string):InstrumentResult {
   const base:InstrumentResult={contract_version:"1.0",method_version_id:input.method_version_id,handler_version:"authoring-numeric-1.0.0",
@@ -22,14 +23,15 @@ export function scoreAuthoringNumeric(input:InstrumentRequest,key:Key,keyDigest:
   }
   base.quality={valid_response_count:input.responses.length,complete:true,usable_for_aggregation:true};
   base.status="scored";
-  for(const [code,scale] of Object.entries(key.scales)){
+  for(const [index,[code,scale]] of Object.entries(key.scales).entries()){
     const direct=scale.direct.map(index=>adjusted[index]!);
     const values=[...direct,...(scale.reverse||[]).map(index=>key.reverseMin+key.reverseMax-adjusted[index]!)];
     if(!values.length)continue;
     const value=scale.aggregate==="sum"?values.reduce((sum,item)=>sum+item,0):values.reduce((sum,item)=>sum+item,0)/values.length;
-    base.measures.push({code,label:code,value,value_type:"number",representation:"raw",precision:2});
+    const label=scale.label||key.labels?.[index]||code;
+    base.measures.push({code,label,value,value_type:"number",representation:"raw",precision:2});
     const level=(key.levels[code]||[]).find(([from,to])=>value>=from&&value<=to);
-    base.classifications.push({code:code+"_level",label:code+" — уровень",value:level?level[2]:"Не определён",basis:"authoring_contract"});
+    base.classifications.push({code:code+"_level",label:label+" — уровень",value:level?level[2]:"Не определён",basis:"authoring_contract"});
   }
   return base;
 }

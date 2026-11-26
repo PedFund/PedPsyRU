@@ -29,7 +29,7 @@ export interface AuthoringKey {
   readonly reverseMin:number;
   readonly reverseMax:number;
   readonly scoreRange:readonly [number,number];
-  readonly scales:Readonly<Record<string,{direct:readonly number[];reverse?:readonly number[];aggregate:"sum"|"mean"}>>;
+  readonly scales:Readonly<Record<string,{direct:readonly number[];reverse?:readonly number[];aggregate:"sum"|"mean";label?:string}>>;
   readonly levels:Readonly<Record<string,readonly [number,number,string][]>>;
 }
 export interface AuthoringCompiled {
@@ -183,12 +183,13 @@ export function validateAuthoringDefinition(raw:unknown):{valid:boolean;errors:s
   };
   const answerMap:Record<string,number>={};
   for(let index=0;index<count;index++)answerMap[String(index+1)]=minimum+index*step;
-  const scales:Record<string,{direct:number[];reverse:number[];aggregate:"sum"|"mean"}>={};
+  const scales:Record<string,{direct:number[];reverse:number[];aggregate:"sum"|"mean";label:string}>={};
   for(const indicator of normalizedIndicators){
     scales[indicator.code]={
       direct:indicator.items.filter(item=>!normalizedQuestions.find(question=>question.id===item)?.reverse).map(item=>Number(item.slice(1))),
       reverse:indicator.items.filter(item=>normalizedQuestions.find(question=>question.id===item)?.reverse).map(item=>Number(item.slice(1))),
-      aggregate:indicator.aggregate
+      aggregate:indicator.aggregate,
+      label:indicator.label
     };
   }
   const key:AuthoringKey={id:methodId,key_version:"1.0.0",type:"passport",items:normalizedQuestions.length,
@@ -227,7 +228,7 @@ export function scoreAuthoringNumeric(input:InstrumentRequest,key:AuthoringKey):
     const values=[...directValues,...(scale.reverse||[]).map(index=>key.reverseMin+key.reverseMax-adjusted[index]!)];
     if(!values.length)continue;
     const value=scale.aggregate==="sum"?values.reduce((sum,item)=>sum+item,0):values.reduce((sum,item)=>sum+item,0)/values.length;
-    const label=code;
+    const label=scale.label||code;
     base.measures.push({code,label,value,value_type:"number",representation:"raw",precision:2});
     const ranges=key.levels[code]||[];
     const level=ranges.find(([from,to])=>value>=from&&value<=to);

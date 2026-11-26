@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="/workspace/styles.css?v=20261124-14">
   <script src="/workspace/qr.js?v=20261106-5" defer></script>
   <script src="/workspace/participant.js?v=20261124-15" defer></script>
-  <script src="/workspace/app.js?v=20261124-19" defer></script>
+  <script src="/workspace/app.js?v=20261124-20" defer></script>
 </head>
 <body>
 <div class="shell">
@@ -91,6 +91,16 @@
             <div class="toolbar"><button id="authoring-publish" type="submit">Опубликовать методику</button></div>
             <p id="authoring-status" class="callout" hidden></p>
           </form>
+          <section class="card" style="margin-top:24px">
+            <h3>Исправить подписи показателей</h3>
+            <p class="muted">Меняется только отображаемое название показателя. Релиз, вопросы и ключ расчёта остаются неизменяемыми; прежние результаты не перезаписываются.</p>
+            <form id="authoring-labels-form">
+              <label>Код методики<input id="authoring-edit-code" required maxlength="64" pattern="authoring_[a-z][a-z0-9_]{1,63}" placeholder="authoring_who_5"></label>
+              <label>Названия показателей — по одному на строку<textarea id="authoring-edit-labels" required rows="3" placeholder="Общий уровень субъективного психологического благополучия"></textarea></label>
+              <div class="toolbar"><button id="authoring-edit-save" type="submit">Сохранить подписи</button></div>
+              <p id="authoring-edit-status" class="callout" hidden></p>
+            </form>
+          </section>
         </section>
         <section id="staff-panel" class="card panel" hidden><h2>Административные роли</h2><p class="muted">Назначение доступно только суперадминистратору после свежей MFA. Прежние сессии будут отозваны; свою роль менять нельзя.</p><form id="role-form"><label>Аккаунт<select id="target-user" required></select></label><label>Новая роль<select id="target-role"><option value="administrator">Администратор</option><option value="superadministrator">Суперадминистратор</option></select></label><button type="submit">Назначить роль</button></form><div id="staff-directory"></div></section>
       </div>
