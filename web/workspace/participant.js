@@ -71,6 +71,43 @@
   async function run(fn){if(busy)return;busy=true;for(const b of root.querySelectorAll("button"))b.disabled=true;try{status("");await fn();}catch(e){const recovered=await recoverAfterError(e);if(!recovered&&["REVISION_CONFLICT","PASSPORT_CONFLICT","PARTICIPATION_REQUIREMENTS_CHANGED","STORAGE_BUSY","INTERNAL_ERROR"].includes(e.code))locked=true;if(e.code==="AUTH_REQUIRED"){csrf="";form=null;draft=null;attempt="";renderLogin();}status(recovered?"Состояние перечитано; проверьте значения и повторите сохранение.":e.message,true);}finally{busy=false;for(const b of root.querySelectorAll("button"))b.disabled=b.dataset.blocked==="true";}}
   const bind=(id,fn)=>{$(id)?.addEventListener("click",()=>run(fn));};
   const blocked=(id,yes)=>{const b=$(id);if(b){b.dataset.blocked=String(Boolean(yes));b.disabled=Boolean(yes);}};
+  // The draft is saved in the background: the next question is drawn before the server answers.
+  // `expected_revision` still serializes writes, so the storage contract does not change.
+  const draftSync={state:"saved",dirty:false,running:null,failures:0};let draftSaves=0;
+  function draftBody(){return {expected_revision:draft.revision,current_item_id:draft.current_item_id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))};}
+  function paintDraftSync(){
+    const el=$("draft-sync");
+    if(el){el.hidden=draftSync.state==="saved";el.dataset.state=draftSync.state;el.dataset.saves=String(draftSaves);el.textContent=draftSync.state==="saving"?"Сохраняем ответ…":draftSync.state==="error"?"Не сохранено. Проверьте связь и нажмите «Повторить».":"";}
+    const retry=$("draft-retry");if(retry)retry.hidden=draftSync.state!=="error";
+    if(draft&&form&&document.getElementById("question-complete"))blocked("question-complete",draft.responses.length!==form.items.length||locked||draftSync.state!=="saved");
+  }
+  async function drainDraftSync(){
+    while(draftSync.dirty){
+      draftSync.dirty=false;draftSync.state="saving";paintDraftSync();
+      try{
+        const fresh=await request("participant/attempts/"+attempt+"/draft",draftBody(),"PUT");
+        draft={...draft,revision:fresh.revision};draftSaves++;draftSync.failures=0;
+        draftSync.state=draftSync.dirty?"saving":"saved";paintDraftSync();
+      }catch(e){
+        if(e.code==="AUTH_REQUIRED"){draftSync.dirty=false;draftSync.state="saved";paintDraftSync();csrf="";form=null;draft=null;attempt="";renderLogin();throw e;}
+        if(["REVISION_CONFLICT","STORAGE_BUSY","INTERNAL_ERROR"].includes(e.code)){draftSync.dirty=false;draftSync.state="error";locked=true;paintDraftSync();status(e.message,true);return;}
+        draftSync.failures++;
+        if(draftSync.failures>5){draftSync.dirty=false;draftSync.state="error";paintDraftSync();status("Не удалось сохранить ответ. Проверьте связь и повторите.",true);return;}
+        draftSync.dirty=true;await new Promise(r=>setTimeout(r,1200));
+      }
+    }
+  }
+  function queueDraftSync(){draftSync.dirty=true;if(!draftSync.running)draftSync.running=drainDraftSync().catch(()=>{}).finally(()=>{draftSync.running=null;});return draftSync.running;}
+  async function flushDraftSync(){
+    for(let i=0;i<3;i++){
+      if(draftSync.running)await draftSync.running;
+      if(!draftSync.dirty&&draftSync.state==="saved")return true;
+      if(draftSync.state==="error")return false;
+      queueDraftSync();
+    }
+    return !draftSync.dirty&&draftSync.state==="saved";
+  }
+  function retryDraftSync(){draftSync.failures=0;draftSync.state="saving";paintDraftSync();return queueDraftSync();}
   async function preflight(){const p=await request("registration/preflight",undefined,undefined,true);pendingCsrf=p.csrf;delivery=p.delivery==="email"?"email":"synthetic";}
   function entryTab(mode){const register=mode==="register",r=$("entry-tab-register"),l=$("entry-tab-login");if(r){r.className="entry-tab"+(register?" active":"");r.setAttribute("aria-selected",String(register));}if(l){l.className="entry-tab"+(register?"":" active");l.setAttribute("aria-selected",String(!register));}const panel=$("entry-register-panel"),login=$("participant-login-form");if(panel)panel.hidden=!register;if(login)login.hidden=register;}
   function renderLogin(){root.innerHTML='<section class="card narrow"><h2 id="join-title">Вход участника</h2><p id="join-group" class="muted"></p><div class="entry-tabs" id="entry-tabs" role="tablist"><button type="button" id="entry-tab-register" class="entry-tab" role="tab" aria-selected="true">Первый раз — регистрация</button><button type="button" id="entry-tab-login" class="entry-tab" role="tab" aria-selected="false">Уже есть аккаунт — вход</button></div><p id="entry-register-hint" class="muted" hidden></p><div id="registration-box" hidden></div><form id="participant-login-form" hidden><label>Email (логин)<input id="participant-email" type="email" autocomplete="email" required maxlength="254"></label><label>Пароль<input id="participant-password" type="password" autocomplete="current-password" required minlength="12" maxlength="256"></label><button id="participant-signin" type="submit">Войти</button></form><p id="participant-link-help" class="muted"></p></section>';
@@ -225,7 +262,7 @@ async function openStage(stage){if(locked)throw Error("Перечитайте с
     const showInstruction=q.index===0;
     c.innerHTML='<section class="card question-card"><h2 id="method-title" hidden></h2>'+
       (showInstruction?'<section class="method-instruction" aria-labelledby="method-instruction-heading"><h3 id="method-instruction-heading">Инструкция</h3><p id="method-instruction"></p></section>':'')+
-      '<p id="method-scale-help" class="muted" hidden></p><p id="method-question"></p><label for="question-progress">Ваш прогресс</label><progress id="question-progress"></progress><p id="question-number"></p><fieldset id="question-pair" class="question-pair" aria-label="Ответ на вопрос"></fieldset><div class="toolbar"><button id="question-prev" class="secondary">Назад</button><button id="question-next">Далее</button><button id="question-complete" hidden>Завершить и получить результат</button></div><button id="question-overview" class="text">← Назад</button></section>';
+      '<p id="method-scale-help" class="muted" hidden></p><p id="method-question"></p><label for="question-progress">Ваш прогресс</label><progress id="question-progress"></progress><p id="question-number"></p><p id="draft-sync" class="muted draft-sync" hidden></p><button id="draft-retry" class="text" type="button" hidden>Повторить сохранение</button><fieldset id="question-pair" class="question-pair" aria-label="Ответ на вопрос"></fieldset><div class="toolbar"><button id="question-prev" class="secondary">Назад</button><button id="question-next">Далее</button><button id="question-complete" hidden>Завершить и получить результат</button></div><button id="question-overview" class="text">← Назад</button></section>';
     $("method-title").textContent=cleanTitle(form.title)||"Тест Томаса—Килманна";
     if(showInstruction)$("method-instruction").textContent=instruction;
     $("method-question").textContent=q.item.text||"";
@@ -253,8 +290,9 @@ async function openStage(stage){if(locked)throw Error("Перечитайте с
     blocked("question-next",nextBlocked(hasSelected));
     $("question-complete").hidden=q.index!==q.total-1;
     blocked("question-complete",draft.responses.length!==q.total||locked);
-    async function move(index){if(locked)throw Error("Перечитайте прохождение.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:form.items[index].id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderQuestion();}
-    bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("question-overview",reload);bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");draft=await request("participant/attempts/"+attempt+"/draft",{expected_revision:draft.revision,current_item_id:q.item.id,responses:draft.responses.map(r=>({item_id:r.item_id,value:r.value}))},"PUT");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
+    paintDraftSync();
+    function move(index){if(locked)throw Error("Перечитайте прохождение.");draft={...draft,current_item_id:form.items[index].id};renderQuestion();queueDraftSync().catch(()=>{});}
+    bind("question-prev",()=>move(q.index-1));bind("question-next",()=>move(q.index+1));bind("draft-retry",()=>{retryDraftSync();});bind("question-overview",async()=>{await flushDraftSync();await reload();});bind("question-complete",async()=>{if(locked)throw Error("Перечитайте прохождение.");if(draft.responses.length!==q.total)throw Error("Ответьте на все вопросы.");queueDraftSync();if(!(await flushDraftSync()))throw Error("Ответы не сохранены на сервере. Проверьте связь и повторите.");renderResult(await request("participant/attempts/"+attempt+"/complete",{expected_revision:draft.revision}));});
   }
   async function backToMethods(){showParticipantToolbar();if(!activeStageId){await reload();return;}const s=await request("participant/stages");const stage=(s.stages||[]).find(x=>x.stage_id===activeStageId);if(!stage){await reload();return;}stages=s;try{await openStage(stage);}catch{await reload();}}
   async function markInvalidated(){if(!attempt)return;const info=await request("participant/attempts/"+attempt+"/invalidated");if(!info.invalidated)return;
