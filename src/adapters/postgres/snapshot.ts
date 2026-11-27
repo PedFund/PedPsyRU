@@ -68,6 +68,9 @@ export async function inspectPostgresSnapshot(client: PoolClient): Promise<DemoS
     if (table === "attempts") tables[table] = normalized(tables[table].map(({attempt_no:ignored,...row}) => row));
     if (table === "research_stages") tables[table] = normalized(tables[table].map(({display_name:ignored,...row}) => row));
     if (table === "instrument_releases") tables[table] = normalized(tables[table].map(({authoring_definition:ignored,...row}) => row));
+    // The display name is a presentation attribute of an account, not research
+    // data, and demo snapshots predate it. Keep it out of the snapshot shape.
+    if (table === "users") tables[table] = normalized(tables[table].map(({display_name:ignored,...row}) => row));
   }
   return verified(tables);
 }

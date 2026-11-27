@@ -76,6 +76,7 @@ export function createWorkspaceApp(participant:ReturnType<typeof createParticipa
       app.post("/api/v2/researcher/accept",async r=>{const accepted=await accounts.researcherAccept(r.body);return {status:"accepted",login_id:accepted.login_id};});
       app.post("/api/v2/researcher/login",async(r,reply)=>{const s=await accounts.researcherLogin(r.body);reply.header("Set-Cookie",[cookie(names.researcher,s.token,s.expiresAt),cookie(names.staff,"",0),cookie(names.pending,"",0)]);return {csrf:s.csrf,expires_at:s.expiresAt};});
       app.get("/api/v2/researcher/session",async r=>accounts.researcherSession(token(r,names.researcher)));
+      app.patch("/api/v2/researcher/profile",async r=>accounts.researcherRename(token(r,names.researcher),r.body,csrf(r)));
       if(studies){
         app.get("/api/v2/staff/studies",async r=>studies.listStaff(token(r,names.staff)));
         app.post("/api/v2/researcher/studies",async r=>studies.create(token(r,names.researcher),r.body,csrf(r)));

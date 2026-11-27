@@ -25,6 +25,23 @@ scenario("invite/accept/researcher own metadata, no private answers, block and a
   assert.equal((await w.app.inject({method:"POST",url:"/api/v2/staff/researchers/"+r.id+"/block",headers:s.headers,payload:{}})).statusCode,200);assert.equal((await w.app.inject({url:"/api/v2/researcher/session",headers:rh})).statusCode,401);
   assert.ok((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE action='http_denied'")).rows[0].n>0);assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.attempts")).rows[0].n,18);
 });
+scenario("researcher names themselves, the name reaches the cabinet and the staff directory",async(f,w)=>{
+  const s=await staffHttp(f,w,"administrator"),i=(await w.app.inject({method:"POST",url:"/api/v2/staff/researchers/invite",headers:s.headers,payload:{}})).json(),password=randomBytes(24).toString("base64url");
+  assert.equal((await w.app.inject({method:"POST",url:"/api/v2/researcher/accept",headers,payload:{invite_code:i.invite_code,password}})).statusCode,200);
+  const login=await w.app.inject({method:"POST",url:"/api/v2/researcher/login",headers,payload:{login_id:i.login_id,password}});assert.equal(login.statusCode,200);
+  const rh={...headers,cookie:cookie(login,"pedpsy_researcher_demo"),"x-pedpsy-csrf":login.json().csrf};
+  assert.equal((await w.app.inject({url:"/api/v2/researcher/session",headers:rh})).json().home.display_name,null);
+  assert.equal((await w.app.inject({method:"PATCH",url:"/api/v2/researcher/profile",headers:rh,payload:{display_name:"   "}})).statusCode,400);
+  assert.equal((await w.app.inject({method:"PATCH",url:"/api/v2/researcher/profile",headers:rh,payload:{display_name:"я".repeat(81)}})).statusCode,400);
+  assert.equal((await w.app.inject({method:"PATCH",url:"/api/v2/researcher/profile",headers:rh,payload:{display_name:"Анна",extra:1}})).statusCode,400);
+  assert.equal((await w.app.inject({method:"PATCH",url:"/api/v2/researcher/profile",headers:{...rh,"x-pedpsy-csrf":"wrong"},payload:{display_name:"Анна"}})).statusCode,403);
+  const renamed=await w.app.inject({method:"PATCH",url:"/api/v2/researcher/profile",headers:rh,payload:{display_name:"Анна Петрова"}});
+  assert.equal(renamed.statusCode,200);assert.equal(renamed.json().display_name,"Анна Петрова");
+  assert.equal((await w.app.inject({url:"/api/v2/researcher/session",headers:rh})).json().home.display_name,"Анна Петрова");
+  const directory=(await w.app.inject({url:"/api/v2/staff/researchers",headers:s.headers})).json();
+  assert.equal(directory.find(r=>r.login_id===i.login_id).display_name,"Анна Петрова");
+  assert.ok((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.access_audit_events WHERE action='researcher.renamed'")).rows[0].n>=1);
+});
 scenario("super-only role change, server-side fresh MFA, CSRF/origin and audit fail closed",async(f,w)=>{
   const s=await staffHttp(f,w),a=await staffHttp(f,w,"administrator");
   assert.equal((await w.app.inject({method:"POST",url:"/api/v2/staff/accounts/role",headers:s.headers,payload:{user_id:a.user,role:"superadministrator"}})).statusCode,200);assert.equal((await w.app.inject({url:"/api/v2/staff/session",headers:a.headers})).statusCode,401);
