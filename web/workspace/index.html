@@ -46,6 +46,8 @@
       <button id="refresh" class="secondary" hidden type="button">Обновить</button>
       <p id="researcher-login-line" class="muted" hidden>Ваш логин: <strong id="researcher-login-value"></strong> <button id="copy-researcher-login" type="button" class="text">Скопировать</button></p>
       <section id="researcher-home" class="card" hidden>
+        <p id="researcher-name-line" class="muted" hidden>Ваше имя: <strong id="researcher-name-value"></strong></p>
+        <form id="researcher-name-form" class="researcher-name"><label>Как к вам обращаться<input id="researcher-name" maxlength="80" autocomplete="name" placeholder="Например: Анна Петрова"></label><button id="researcher-name-save" type="submit">Сохранить имя</button></form>
         <p id="quota" class="muted" hidden></p>
         <details class="create-study"><summary>Создать исследование</summary><form id="create-study-form"><fieldset id="create-study-fields"><label>Название<input id="study-title" required maxlength="200" autocomplete="off"></label><button type="submit">Создать черновик</button></fieldset></form></details>
         <nav id="study-filters" class="tabs study-filters" aria-label="Фильтр исследований">

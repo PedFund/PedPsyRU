@@ -63,6 +63,17 @@ export class PostgresResearcherGateway implements ResearcherGateway{
       await c.query("SELECT set_config('app.session_hash',$1,true)",[tokenHash(token)]);return (await c.query<{data:ResearcherHome}>("SELECT pedpsy.researcher_home() data")).rows[0]!.data;
     });
   }
+  async rename(token:string,input:unknown):Promise<{display_name:string}>{
+    if(!validToken(token))throw new ParticipationError(401,"AUTH_REQUIRED");
+    if(!input||typeof input!=="object"||Array.isArray(input)||Object.keys(input).sort().join(",")!=="display_name")throw new ParticipationError(400,"INVALID_DISPLAY_NAME");
+    const value=(input as Record<string,unknown>).display_name;
+    if(typeof value!=="string"||value!==value.trim()||value.length<1||value.length>80)throw new ParticipationError(400,"INVALID_DISPLAY_NAME");
+    return accountTransaction(this.pool,async c=>{
+      await c.query("SELECT set_config('app.session_hash',$1,true)",[tokenHash(token)]);
+      const row=await c.query<{display_name:string}>("SELECT pedpsy.rename_own_researcher($1) display_name",[value]);
+      return {display_name:row.rows[0]!.display_name};
+    });
+  }
   async logout(token:string,csrf:string):Promise<void>{
     if(!validToken(token)||!equalText(csrf,csrfFor(token)))throw new ParticipationError(403,"CSRF_REJECTED");await accountTransaction(this.pool,async c=>{
       await c.query("SELECT set_config('app.session_hash',$1,true)",[tokenHash(token)]);await c.query("SELECT pedpsy.logout_researcher()");

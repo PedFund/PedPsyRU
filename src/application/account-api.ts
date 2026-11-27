@@ -21,6 +21,7 @@ export function createAccountApi(d:Dependencies,csrf:Csrf){
     staffSession,staffLogout:(token:string,value:string)=>d.auth.logout(token,value),
     researcherSession:async(token:string)=>{const home=await d.researchers.home(token),s=await d.access.session(token);if(s.role!=="researcher")throw new ParticipationError(401,"AUTH_REQUIRED");return {...s,csrf:csrf.forToken(token),home};},
     researcherAccept:(input:unknown)=>d.researchers.accept(input),researcherLogin:(input:unknown)=>d.researchers.login(input),researcherLogout:(token:string,value:string)=>d.researchers.logout(token,value),
+    researcherRename:(token:string,value:unknown,header:string)=>mutate(token,header,()=>d.researchers.rename(token,value)),
     listResearchers:(token:string)=>d.researcherManagement.list(token),
     inviteResearcher:(token:string,value:string)=>mutate(token,value,()=>d.researcherManagement.invite(token)),
     blockResearcher:(token:string,id:string,value:string)=>mutate(token,value,()=>d.researcherManagement.block(token,id)),
