@@ -49,7 +49,8 @@ scenario("a new study owns a participant profile schema before the first save",a
   const rh={...headers,cookie:cookie(login,"pedpsy_researcher_demo"),"x-pedpsy-csrf":login.json().csrf};
   const created=await w.app.inject({method:"POST",url:"/api/v2/researcher/studies",headers:rh,payload:{title:"Схема сведений по умолчанию"}});
   assert.equal(created.statusCode,200);const id=created.json().id;assert.ok(id);
-  assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.research_profile_schemas WHERE study_id=$1",[id])).rows[0].n,1);
+  const pointer=(await f.admin.query("SELECT schema_version FROM pedpsy.study_passport_schemas WHERE study_id=$1",[id])).rows[0];
+  assert.equal(pointer?.schema_version,1);
   assert.equal((await f.admin.query("SELECT count(*)::integer n FROM pedpsy.passport_schema_versions WHERE study_id=$1",[id])).rows[0].n,1);
   const schema=(await f.admin.query("SELECT pedpsy.research_schema($1,NULL) AS s",[id])).rows[0].s;
   assert.ok(schema&&Array.isArray(schema.fields)&&schema.fields.length>0,JSON.stringify(schema).slice(0,300));
