@@ -83,24 +83,33 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
     return {status:"password_set"};
   }
   async forgotPassword(inviteToken:string,input:PasswordResetRequest,pendingToken:string,csrf:string):Promise<{status:"accepted"}>{
-    void csrf;if(!validToken(inviteToken)||!validToken(pendingToken)||!input||Array.isArray(input)||Object.keys(input).join(",")!=="email")
+    void csrf;
+    // The invitation is optional here: the address identifies the account and the
+    // e-mailed code proves the mailbox. A page without the group link (bookmark,
+    // phone, after sign-out) must still be able to start the recovery.
+    if((inviteToken&&!validToken(inviteToken))||!validToken(pendingToken)||!input||Array.isArray(input)||Object.keys(input).join(",")!=="email")
       throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
     const email=participantEmail(input.email),code=randomBytes(32).toString("base64url");
-    const created=await accountTransaction(this.pool,async c=>(await c.query<{created:boolean}>(
-      "SELECT pedpsy.create_password_reset($1,$2,$3,$4) created",
-      [tokenHash(inviteToken),email,tokenHash(code),1800000])).rows[0]?.created);
-    if(created&&this.mailer){
+    const created=await accountTransaction(this.pool,async c=>(await c.query<{study_id:string|null;outcome:string}>(
+      "SELECT study_id,outcome FROM pedpsy.create_password_reset_v3($1,$2,$3,$4)",
+      [validToken(inviteToken)?tokenHash(inviteToken):null,email,tokenHash(code),1800000])).rows[0]);
+    if(created?.outcome==="ambiguous")throw new ParticipationError(409,"AMBIGUOUS_PARTICIPANT_STUDY");
+    if(created?.outcome==="ok"&&this.mailer){
+      let delivered=true;
       try{await this.mailer.send({to:email,subject:"Сброс пароля — МетодТест",text:[
         "Здравствуйте!","","Код для смены пароля: "+code,"",
-        "Вернитесь на страницу входа по групповой ссылке исследования, выберите «Забыли пароль?» и введите этот код вместе с новым паролем.",
+        "Вернитесь на страницу входа, выберите «Забыли пароль?» и введите этот код вместе с новым паролем.",
         "Код действует 30 минут и допускает пять попыток.",
         "Если вы не запрашивали смену пароля, просто проигнорируйте письмо."].join("\r\n")});}
-      catch{/* delivery is best effort; the response stays neutral */}
+      catch{delivered=false;}
+      // A failed send used to vanish silently; the outcome is audited either way.
+      await accountTransaction(this.pool,async c=>{await c.query("SELECT pedpsy.reset_email_audit($1,$2)",[created.study_id,delivered]);});
     }
     return {status:"accepted"};
   }
   async resetPassword(inviteToken:string,input:PasswordResetConfirmation,pendingToken:string,csrf:string):Promise<{status:"password_reset"}>{
-    void csrf;    if(!validToken(inviteToken)||!validToken(pendingToken)||!input||Array.isArray(input)||
+    void csrf;
+    if((inviteToken&&!validToken(inviteToken))||!validToken(pendingToken)||!input||Array.isArray(input)||
       Object.keys(input).sort().join(",")!=="code,email,password")
       throw new ParticipationError(400,"INVALID_REGISTRATION_INPUT");
     if(!/^[A-Za-z0-9_-]{20,80}$/.test(input.code)||!validPassword(input.password)||/[\u0000-\u001f\u007f]/.test(input.password))
@@ -108,8 +117,8 @@ export class PostgresParticipantRegistration implements ParticipantRegistration 
     const salt=randomBytes(16),bytes=await this.derivePassword(input.password,salt,64,SCRYPT);let hash:string;
     try{hash=bytes.toString("hex");}finally{bytes.fill(0);}
     const outcome=await accountTransaction(this.pool,async c=>(await c.query<{outcome:string}>(
-      "SELECT pedpsy.consume_password_reset($1,$2,$3,$4,$5,$6) outcome",
-      [tokenHash(inviteToken),participantEmail(input.email),tokenHash(input.code),"scrypt-N131072-r8-p1-dk64",salt.toString("hex"),hash])).rows[0]?.outcome);
+      "SELECT pedpsy.consume_password_reset_v3($1,$2,$3,$4,$5,$6) outcome",
+      [validToken(inviteToken)?tokenHash(inviteToken):null,participantEmail(input.email),tokenHash(input.code),"scrypt-N131072-r8-p1-dk64",salt.toString("hex"),hash])).rows[0]?.outcome);
     if(outcome!=="ok")throw new ParticipationError(404,"NOT_AVAILABLE");
     return {status:"password_reset"};
   }
