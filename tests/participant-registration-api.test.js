@@ -133,3 +133,19 @@ test("registration password step requires a code and a policy password", () => {
     assert.throws(() => registrationPassword(bad), e => e.code === "INVALID_REGISTRATION_INPUT");
   assert.throws(() => registrationPassword({confirmation_token: "bad", password: "synthetic chosen password"}), e => e.code === "NOT_AVAILABLE");
 });
+
+test("password recovery works without a group link and still refuses a malformed one", async () => {
+  const calls = [], api = createParticipantRegistrationApi({
+    forgotPassword: async (...args) => {calls.push(args); return {status: "accepted"};},
+    resetPassword: async (...args) => {calls.push(args); return {status: "password_reset"};}
+  }, {assert: () => {}});
+  const request = {email: good.email}, confirmationInput = {email: good.email, code: "c".repeat(40), password: "synthetic new password"};
+  assert.deepEqual(await api.forgotPassword("", request, pending, "csrf"), {status: "accepted"});
+  assert.deepEqual(await api.forgotPassword(invite, request, pending, "csrf"), {status: "accepted"});
+  assert.deepEqual(await api.resetPassword("", confirmationInput, pending, "csrf"), {status: "password_reset"});
+  assert.deepEqual(calls.map(call => call[0]), ["", invite, ""]);
+  for (const bad of ["bad-token", "x".repeat(42), " https://example.test/"]) {
+    assert.throws(() => api.forgotPassword(bad, request, pending, "csrf"), unavailable);
+    assert.throws(() => api.resetPassword(bad, confirmationInput, pending, "csrf"), unavailable);
+  }
+});

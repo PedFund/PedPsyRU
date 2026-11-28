@@ -21,6 +21,13 @@ export function registrationToken(input: unknown): string {
     throw new ParticipationError(404, "NOT_AVAILABLE");
   return input as string;
 }
+// Password recovery must also work from a page that no longer carries the group
+// link (bookmark, phone, after sign-out): the address identifies the account and
+// the e-mailed code proves the mailbox. An empty value means "no invitation".
+export function optionalRegistrationToken(input: unknown): string {
+  if (input === undefined || input === null || input === "") return "";
+  return registrationToken(input);
+}
 function password(input: unknown): string {
   // Existing scrypt size bounds: >=12 code units, <=256 UTF-8 bytes.
   // A pure count avoids importing Buffer/runtime modules. Never trim passwords.
@@ -109,11 +116,11 @@ export function createParticipantRegistrationApi(registration: ParticipantRegist
     },
     forgotPassword: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
       protection.assert(pendingToken, csrf);
-      return registration.forgotPassword(registrationToken(invite), passwordResetRequest(input), registrationToken(pendingToken), csrf);
+      return registration.forgotPassword(optionalRegistrationToken(invite), passwordResetRequest(input), registrationToken(pendingToken), csrf);
     },
     resetPassword: (invite: string, input: unknown, pendingToken: string, csrf: string) => {
       protection.assert(pendingToken, csrf);
-      return registration.resetPassword(registrationToken(invite), passwordResetConfirmation(input), registrationToken(pendingToken), csrf);
+      return registration.resetPassword(optionalRegistrationToken(invite), passwordResetConfirmation(input), registrationToken(pendingToken), csrf);
     },
     login: async (input: unknown) => {
       const session = await registration.login(participantEmailLogin(input));
